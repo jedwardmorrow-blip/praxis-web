@@ -4,24 +4,30 @@ import { motion, useReducedMotion } from "framer-motion"
 import type { HTMLMotionProps } from "framer-motion"
 
 const fadeUpVariants = {
-  hidden: { opacity: 0, y: 22 },
-  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 16, scale: 0.99 },
+  visible: { opacity: 1, y: 0, scale: 1 },
+}
+
+const fadeInVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
 }
 
 interface FadeUpProps extends HTMLMotionProps<"div"> {
   delay?: number
+  fade?: boolean
   children: React.ReactNode
 }
 
-export function FadeUp({ delay = 0, children, ...props }: FadeUpProps) {
+export function FadeUp({ delay = 0, fade = false, children, ...props }: FadeUpProps) {
   const reduced = useReducedMotion()
   return (
     <motion.div
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-60px" }}
-      variants={reduced ? {} : fadeUpVariants}
-      transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1], delay }}
+      variants={reduced ? {} : (fade ? fadeInVariants : fadeUpVariants)}
+      transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1], delay }}
       {...props}
     >
       {children}
@@ -31,7 +37,7 @@ export function FadeUp({ delay = 0, children, ...props }: FadeUpProps) {
 
 const staggerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
+  visible: { transition: { staggerChildren: 0.07 } },
 }
 
 interface StaggerProps {
@@ -60,7 +66,7 @@ export function StaggerItem({ children, className }: { children: React.ReactNode
   return (
     <motion.div
       variants={reduced ? {} : fadeUpVariants}
-      transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+      transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
       className={className}
     >
       {children}

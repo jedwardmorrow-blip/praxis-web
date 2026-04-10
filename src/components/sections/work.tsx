@@ -35,8 +35,8 @@ export function Work() {
           </p>
           <h2
             id="work-heading"
-            className="font-heading font-bold tracking-[0.02em] leading-[1.05] text-foreground"
-            style={{ fontSize: "clamp(2rem, 4.5vw, 3.25rem)" }}
+            className="font-heading font-bold tracking-[-0.01em] leading-[1.04] text-foreground"
+            style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)" }}
           >
             What we&apos;ve built.
           </h2>

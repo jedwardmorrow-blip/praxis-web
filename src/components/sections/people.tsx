@@ -31,8 +31,8 @@ export function People() {
           </p>
           <h2
             id="people-heading"
-            className="font-heading font-bold tracking-[0.02em] leading-[1.05] text-foreground"
-            style={{ fontSize: "clamp(2rem, 4.5vw, 3.25rem)" }}
+            className="font-heading font-bold tracking-[-0.01em] leading-[1.04] text-foreground"
+            style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)" }}
           >
             Operators, not consultants.
           </h2>

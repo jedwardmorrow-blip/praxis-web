@@ -27,8 +27,8 @@ export function Intake() {
           </p>
           <h2
             id="intake-heading"
-            className="font-heading font-bold tracking-[0.02em] leading-[1.06] text-foreground mb-3.5"
-            style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.8rem)" }}
+            className="font-heading font-bold tracking-[-0.01em] leading-[1.04] text-foreground mb-3.5"
+            style={{ fontSize: "clamp(2.2rem, 4.2vw, 3.6rem)" }}
           >
             Tell us about your operation.
           </h2>

@@ -20,7 +20,7 @@ export function Hero() {
 
       <div className="relative z-10 flex flex-col">
         {/* Wordmark */}
-        <FadeUp className="mb-14">
+        <FadeUp className="mb-12">
           <div className="flex items-end leading-none">
             <span
               className="font-heading font-bold tracking-[0.05em] leading-[0.88] text-foreground"
@@ -49,10 +49,11 @@ export function Hero() {
         {/* Headline */}
         <FadeUp delay={0.1}>
           <h1
-            className="font-heading font-bold tracking-[0.02em] leading-[1.1] text-foreground max-w-2xl mb-4"
-            style={{ fontSize: "clamp(1.8rem, 3.2vw, 2.8rem)" }}
+            className="font-heading font-bold tracking-[-0.01em] leading-[1.03] text-foreground mb-6"
+            style={{ fontSize: "clamp(2.4rem, 4.8vw, 4.6rem)" }}
           >
-            We don&apos;t write reports.<br />We build the software.
+            We don&apos;t write reports.<br />
+            We build the software.
           </h1>
         </FadeUp>
 
