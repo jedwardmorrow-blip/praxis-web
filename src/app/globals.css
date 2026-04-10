@@ -203,8 +203,17 @@
   transition-duration: 400ms;
 }
 
+/* ── Live dot pulse ── */
+@keyframes praxis-dot-pulse {
+  0%, 100% { opacity: 0.80; }
+  50%       { opacity: 0.25; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee {
     animation: none;
+  }
+  [style*="praxis-dot-pulse"] {
+    animation: none !important;
   }
 }

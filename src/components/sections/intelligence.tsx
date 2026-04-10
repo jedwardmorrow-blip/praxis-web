@@ -236,6 +236,7 @@ function ContextDB() {
                 style={{
                   background: live ? "oklch(0.52 0.165 22)" : "oklch(0.38 0.003 80)",
                   opacity: live ? 0.8 : 0.4,
+                  animation: live ? "praxis-dot-pulse 2.4s ease-in-out infinite" : undefined,
                 }}
               />
               <span className="flex-1 text-[0.78rem] text-muted-foreground">{name}</span>
@@ -288,6 +289,18 @@ function AgenticLoop() {
           style={{ width: "100%", maxWidth: 280, height: "auto" }}
           aria-hidden="true"
         >
+          <style>{`
+            @keyframes praxis-dash-flow {
+              to { stroke-dashoffset: -8.5; }
+            }
+            .praxis-loop-arc {
+              animation: praxis-dash-flow 1.8s linear infinite;
+            }
+            @media (prefers-reduced-motion: reduce) {
+              .praxis-loop-arc { animation: none; }
+            }
+          `}</style>
+
           <defs>
             {/* Open chevron arrowhead */}
             <marker
@@ -310,13 +323,14 @@ function AgenticLoop() {
             </marker>
           </defs>
 
-          {/* Dashed arcs */}
+          {/* Animated dashed arcs */}
           {LOOP_ARCS.map((d, i) => (
             <path
               key={i}
               d={d}
+              className="praxis-loop-arc"
               stroke="#C8433A"
-              strokeOpacity="0.38"
+              strokeOpacity="0.42"
               strokeWidth="1.5"
               strokeDasharray="5 3.5"
               fill="none"
