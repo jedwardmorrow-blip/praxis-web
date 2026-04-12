@@ -100,7 +100,7 @@ export async function POST(req: Request) {
 
   try {
     await resend.emails.send({
-      from: "PRAXIS Intake <onboarding@resend.dev>",
+      from: "PRAXIS Intake <noreply@gopraxis.ai>",
       to: NOTIFY_EMAILS,
       subject,
       html: emailLines.join("\n"),
