@@ -4,10 +4,24 @@ import { useState } from "react"
 
 export function CannabisIntakeForm() {
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    setLoading(true)
+    const form = e.currentTarget
+    const data = Object.fromEntries(new FormData(form)) as Record<string, string>
+    try {
+      await fetch("/api/intake", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, form_type: "cannabis" }),
+      })
+    } catch {
+      // Fail silently — still show confirmation
+    }
     setSubmitted(true)
+    setLoading(false)
   }
 
   if (submitted) {
@@ -55,6 +69,19 @@ export function CannabisIntakeForm() {
           />
         </Field>
       </div>
+
+      {/* Email */}
+      <Field id="email" label="Your email">
+        <input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="you@company.com"
+          required
+          className="w-full bg-card border border-border/80 text-foreground text-[0.92rem] px-4 py-3 outline-none transition-colors placeholder:text-muted-foreground"
+          style={{ borderRadius: "var(--radius)" }}
+        />
+      </Field>
 
       {/* States */}
       <Field id="states" label="What state(s) are you operating in?">
@@ -108,10 +135,11 @@ export function CannabisIntakeForm() {
 
       <button
         type="submit"
-        className="self-start mt-1 inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white text-[0.78rem] font-semibold tracking-[0.12em] uppercase px-8 py-4 transition-all duration-200 hover:-translate-y-px"
+        disabled={loading}
+        className="self-start mt-1 inline-flex items-center gap-2 bg-brand hover:bg-brand-hover disabled:opacity-60 text-white text-[0.78rem] font-semibold tracking-[0.12em] uppercase px-8 py-4 transition-all duration-200 hover:-translate-y-px"
         style={{ borderRadius: "var(--radius)" }}
       >
-        Send it →
+        {loading ? "Sending…" : "Send it →"}
       </button>
     </form>
   )

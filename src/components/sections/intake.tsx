@@ -8,10 +8,24 @@ import { Textarea } from "@/components/ui/textarea"
 
 export function Intake() {
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    setLoading(true)
+    const form = e.currentTarget
+    const data = Object.fromEntries(new FormData(form)) as Record<string, string>
+    try {
+      await fetch("/api/intake", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, form_type: "main" }),
+      })
+    } catch {
+      // Fail silently — still show confirmation
+    }
     setSubmitted(true)
+    setLoading(false)
   }
 
   return (
@@ -66,6 +80,17 @@ export function Intake() {
                 />
               </FormField>
 
+              <FormField id="email" label="Your email">
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="you@company.com"
+                  required
+                  className="bg-card border-border/80 focus:border-brand/55 text-foreground placeholder:text-muted-foreground rounded-sm"
+                />
+              </FormField>
+
               <FormField id="size" label="How many people are on your team?">
                 <select
                   id="size"
@@ -114,9 +139,10 @@ export function Intake() {
 
               <button
                 type="submit"
-                className="self-start mt-2 inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white text-[0.78rem] font-semibold tracking-[0.12em] uppercase px-8 py-4 transition-all duration-200 hover:-translate-y-px rounded-sm"
+                disabled={loading}
+                className="self-start mt-2 inline-flex items-center gap-2 bg-brand hover:bg-brand-hover disabled:opacity-60 text-white text-[0.78rem] font-semibold tracking-[0.12em] uppercase px-8 py-4 transition-all duration-200 hover:-translate-y-px rounded-sm"
               >
-                Submit →
+                {loading ? "Sending…" : "Submit →"}
               </button>
             </form>
           )}
