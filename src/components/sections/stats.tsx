@@ -19,10 +19,10 @@ export function Stats() {
           <StaggerItem key={label}>
             <div className="group relative p-10 border-r border-t border-border overflow-hidden max-sm:p-7">
               {/* accent left rule on hover */}
-              <span className="absolute top-0 left-0 w-0.5 h-0 bg-brand transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:h-full" aria-hidden="true" />
+              <span className="absolute top-0 left-0 w-0.5 h-0 bg-border transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:h-full" aria-hidden="true" />
               <div className="font-heading font-bold leading-none tracking-[0.02em] text-foreground" style={{ fontSize: "clamp(2.2rem, 3.5vw, 3rem)" }}>
                 {number}
-                <span className="text-brand" style={{ fontSize: "0.65em" }}>{suffix}</span>
+                <span className="text-muted-foreground" style={{ fontSize: "0.65em" }}>{suffix}</span>
               </div>
               <p className="mt-2.5 text-[0.72rem] text-muted-foreground leading-[1.5] tracking-[0.06em]">
                 {label}

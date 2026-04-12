@@ -4,17 +4,17 @@ const steps = [
   {
     num: "01",
     title: "We Listen.",
-    body: "Before we write a line of code, we map your operation. Your team structure. Your workflows. Your constraints. Your goals. We've run operationally complex businesses — we know what to ask and how to hear the answer.",
+    body: "Before we write a line of code, we map your operation — how decisions get made, where information lives, where work slows down. We've run operationally complex businesses ourselves. We know the questions to ask and, more importantly, how to hear what you're actually telling us.",
   },
   {
     num: "02",
     title: "We Build Context.",
-    body: "Everything we learn gets encoded into a persistent intelligence layer — a Context Database that compounds over time. AI agents read it before every session. Your business is never explained twice.",
+    body: "Everything we learn gets encoded into a persistent intelligence layer — a Context Database that grows with your operation. Every agent, every session, every build starts from that foundation. Your business is never explained twice.",
   },
   {
     num: "03",
     title: "We Ship.",
-    body: "Software, systems, and AI agents built specifically for your operation. Not templates, not off-the-shelf. Purpose-built tools that fit how your business actually runs — and scale with it.",
+    body: "Software, systems, and AI agents built for the exact way your operation runs — not adapted from something built for someone else. Shipped in weeks, not quarters. And because we built context first, everything compounds from day one.",
   },
 ]
 
@@ -55,7 +55,7 @@ export function HowWeWork() {
             <StaggerItem key={num}>
               <div className="group relative p-12 bg-card overflow-hidden h-full">
                 <span
-                  className="absolute top-0 left-0 w-0.5 h-0 bg-brand transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:h-full"
+                  className="absolute top-0 left-0 w-0.5 h-0 bg-border transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:h-full"
                   aria-hidden="true"
                 />
                 <div
@@ -79,49 +79,46 @@ export function HowWeWork() {
 
 /* ─────────────────────────────────────────────────────────────
    Flow diagram: Your operation → PRAXIS → outputs
-   ViewBox 716×200. Pill width=116, pill height=36.
-   Left pills: x=10. Hub: cx=358, cy=100. Right pills: x=590.
+   ViewBox 760×220. Wider pills to fit real labels.
+   Left pills: x=8. Hub: cx=380, cy=110. Right pills: x=624.
+   Pill width=130, pill height=40.
 ───────────────────────────────────────────────────────────── */
 
-const VB_W = 716
-const VB_H = 200
-const PW   = 116   // pill width
-const PH   = 36    // pill height
-const LX   = 10    // left pill x origin
-const RX   = 590   // right pill x origin
-const HCX  = 358   // hub center x
-const HCY  = 100   // hub center y
-const HR   = 40    // hub radius
+const VB_W = 760
+const VB_H = 220
+const PW   = 130   // pill width
+const PH   = 40    // pill height
+const LX   = 8     // left pill x origin
+const RX   = 622   // right pill x origin
+const HCX  = 380   // hub center x
+const HCY  = 110   // hub center y
+const HR   = 44    // hub radius
 
-const INPUT_PILLS  = [
-  { label: "YOUR OPS",   y: 44  },
-  { label: "YOUR TEAM",  y: 100 },
-  { label: "YOUR TOOLS", y: 156 },
+const INPUT_PILLS = [
+  { label: "DAILY OPS",      sub: "how the work runs",  y: 50  },
+  { label: "TEAM KNOWLEDGE", sub: "tacit expertise",    y: 110 },
+  { label: "EXISTING TOOLS", sub: "data in motion",     y: 170 },
 ]
 const OUTPUT_PILLS = [
-  { label: "SOFTWARE",     y: 44  },
-  { label: "AI AGENTS",    y: 100 },
-  { label: "INTELLIGENCE", y: 156 },
+  { label: "CUSTOM SOFTWARE", sub: "for your workflows",  y: 50  },
+  { label: "LIVE AI AGENTS",  sub: "not generic prompts", y: 110 },
+  { label: "DAILY BRIEFINGS", sub: "this morning's work", y: 170 },
 ]
 
-// Left pill right edge → hub left edge
-const PILL_RE  = LX + PW          // 126
-const HUB_LE   = HCX - HR         // 318
+const PILL_RE = LX + PW          // 138
+const HUB_LE  = HCX - HR         // 336
 
-// Paths from input pills to hub (converging)
 const INPUT_PATHS = [
-  `M ${PILL_RE},44  C 210,44  ${HUB_LE},100 ${HUB_LE},100`,
-  `M ${PILL_RE},100 L ${HUB_LE},100`,
-  `M ${PILL_RE},156 C 210,156 ${HUB_LE},100 ${HUB_LE},100`,
+  `M ${PILL_RE},50  C 230,50  ${HUB_LE},110 ${HUB_LE},110`,
+  `M ${PILL_RE},110 L ${HUB_LE},110`,
+  `M ${PILL_RE},170 C 230,170 ${HUB_LE},110 ${HUB_LE},110`,
 ]
 
-// Hub right edge → right pills (diverging)
-const HUB_RE   = HCX + HR         // 398
-// Paths from hub to output pills
+const HUB_RE = HCX + HR          // 424
 const OUTPUT_PATHS = [
-  `M ${HUB_RE},100 C 460,100 510,44  ${RX},44`,
-  `M ${HUB_RE},100 L ${RX},100`,
-  `M ${HUB_RE},100 C 460,100 510,156 ${RX},156`,
+  `M ${HUB_RE},110 C 490,110 540,50  ${RX},50`,
+  `M ${HUB_RE},110 L ${RX},110`,
+  `M ${HUB_RE},110 C 490,110 540,170 ${RX},170`,
 ]
 
 function FlowDiagram() {
@@ -135,8 +132,8 @@ function FlowDiagram() {
         @keyframes praxis-flow-lr {
           to { stroke-dashoffset: -9; }
         }
-        .pf-in  { animation: praxis-flow-lr 2.4s linear infinite; }
-        .pf-out { animation: praxis-flow-lr 1.8s linear infinite; }
+        .pf-in  { animation: praxis-flow-lr 2.6s linear infinite; }
+        .pf-out { animation: praxis-flow-lr 1.9s linear infinite; }
         @media (prefers-reduced-motion: reduce) {
           .pf-in, .pf-out { animation: none; }
         }
@@ -146,134 +143,159 @@ function FlowDiagram() {
         <marker id="flow-arr" markerWidth="7" markerHeight="7" refX="5.5" refY="3.5" orient="auto">
           <polyline
             points="1,1 6,3.5 1,6"
-            stroke="#C8433A"
+            stroke="rgba(255,255,255,0.35)"
             strokeWidth="1.5"
             fill="none"
             strokeLinecap="round"
             strokeLinejoin="round"
-            opacity="0.55"
           />
         </marker>
+        <radialGradient id="hub-radial" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="rgba(255,255,255,0.06)" />
+          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+        </radialGradient>
       </defs>
 
-      {/* ── Input paths (converging into hub) ── */}
+      {/* ── Input paths ── */}
       {INPUT_PATHS.map((d, i) => (
         <path
           key={`in-${i}`}
           d={d}
           className="pf-in"
-          stroke="#C8433A"
-          strokeOpacity="0.30"
+          stroke="rgba(255,255,255,0.18)"
           strokeWidth="1.5"
           strokeDasharray="5 4"
           fill="none"
           markerEnd="url(#flow-arr)"
-          style={{ animationDelay: `${i * 0.28}s` }}
+          style={{ animationDelay: `${i * 0.30}s` }}
         />
       ))}
 
-      {/* ── Output paths (diverging from hub) ── */}
+      {/* ── Output paths ── */}
       {OUTPUT_PATHS.map((d, i) => (
         <path
           key={`out-${i}`}
           d={d}
           className="pf-out"
-          stroke="#C8433A"
-          strokeOpacity="0.48"
+          stroke="rgba(255,255,255,0.30)"
           strokeWidth="1.5"
           strokeDasharray="5 4"
           fill="none"
           markerEnd="url(#flow-arr)"
-          style={{ animationDelay: `${i * 0.28}s` }}
+          style={{ animationDelay: `${i * 0.30}s` }}
         />
       ))}
 
       {/* ── Input pills ── */}
-      {INPUT_PILLS.map(({ label, y }) => (
+      {INPUT_PILLS.map(({ label, sub, y }) => (
         <g key={label}>
           <rect
             x={LX} y={y - PH / 2}
             width={PW} height={PH} rx={3}
-            fill="rgba(255,255,255,0.025)"
-            stroke="rgba(255,255,255,0.08)"
+            fill="rgba(255,255,255,0.022)"
+            stroke="rgba(255,255,255,0.07)"
             strokeWidth="1"
           />
           <text
-            x={LX + PW / 2} y={y + 1}
+            x={LX + PW / 2} y={y - 4}
             textAnchor="middle"
             dominantBaseline="middle"
-            fontSize="8"
-            fontWeight="600"
+            fontSize="8.5"
+            fontWeight="700"
             letterSpacing="0.09em"
             fill="#9A9792"
-            fontFamily="Oswald, sans-serif"
+            fontFamily="Bebas Neue, ui-sans-serif, sans-serif"
           >
             {label}
+          </text>
+          <text
+            x={LX + PW / 2} y={y + 9}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="6"
+            letterSpacing="0.04em"
+            fill="#4A4745"
+            fontFamily="Inter, sans-serif"
+          >
+            {sub}
           </text>
         </g>
       ))}
 
       {/* ── Output pills ── */}
-      {OUTPUT_PILLS.map(({ label, y }) => (
+      {OUTPUT_PILLS.map(({ label, sub, y }) => (
         <g key={label}>
           <rect
             x={RX} y={y - PH / 2}
             width={PW} height={PH} rx={3}
-            fill="rgba(200,67,58,0.06)"
-            stroke="rgba(200,67,58,0.22)"
+            fill="rgba(255,255,255,0.035)"
+            stroke="rgba(255,255,255,0.12)"
             strokeWidth="1"
           />
           <text
-            x={RX + PW / 2} y={y + 1}
+            x={RX + PW / 2} y={y - 4}
             textAnchor="middle"
             dominantBaseline="middle"
-            fontSize="8"
-            fontWeight="600"
+            fontSize="8.5"
+            fontWeight="700"
             letterSpacing="0.09em"
-            fill="#C8433A"
-            fontFamily="Oswald, sans-serif"
-            opacity="0.9"
+            fill="oklch(0.88 0.004 80)"
+            fontFamily="Bebas Neue, ui-sans-serif, sans-serif"
           >
             {label}
+          </text>
+          <text
+            x={RX + PW / 2} y={y + 9}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="6"
+            letterSpacing="0.04em"
+            fill="#6B6865"
+            fontFamily="Inter, sans-serif"
+          >
+            {sub}
           </text>
         </g>
       ))}
 
-      {/* ── Hub ── */}
-      {/* Outer glow ring */}
+      {/* ── Hub glow ── */}
+      <circle cx={HCX} cy={HCY} r={HR + 18} fill="url(#hub-radial)" />
+
+      {/* ── Hub outer ring ── */}
       <circle
-        cx={HCX} cy={HCY} r={HR + 8}
+        cx={HCX} cy={HCY} r={HR + 9}
         fill="none"
-        stroke="rgba(200,67,58,0.10)"
+        stroke="rgba(255,255,255,0.05)"
         strokeWidth="1"
-        strokeDasharray="2 3"
+        strokeDasharray="2 4"
       />
-      {/* Main hub circle */}
+
+      {/* ── Hub main circle ── */}
       <circle
         cx={HCX} cy={HCY} r={HR}
-        fill="rgba(200,67,58,0.12)"
-        stroke="rgba(200,67,58,0.55)"
+        fill="rgba(255,255,255,0.04)"
+        stroke="rgba(255,255,255,0.18)"
         strokeWidth="1.5"
       />
       <text
-        x={HCX} y={HCY - 5}
+        x={HCX} y={HCY - 7}
         textAnchor="middle"
         dominantBaseline="middle"
-        fontSize="13"
+        fontSize="14"
         fontWeight="700"
         letterSpacing="0.06em"
-        fill="#C8433A"
-        fontFamily="Oswald, sans-serif"
+        fill="oklch(0.88 0.004 80)"
+        fontFamily="Bebas Neue, ui-sans-serif, sans-serif"
       >
         PRAXIS
       </text>
       <text
-        x={HCX} y={HCY + 10}
+        x={HCX} y={HCY + 8}
         textAnchor="middle"
         dominantBaseline="middle"
         fontSize="6"
-        letterSpacing="0.12em"
-        fill="#9A9792"
+        letterSpacing="0.13em"
+        fill="#6B6865"
         fontFamily="Inter, sans-serif"
       >
         CONTEXT DB

@@ -1,11 +1,12 @@
 const industries = [
+  "Cannabis",
+  "Distribution",
+  "Specialty Trades",
+  "Hospitality",
   "Agriculture",
   "Manufacturing",
-  "Distribution",
-  "Multi-Site Retail",
-  "Hospitality",
+  "Logistics",
   "Professional Services",
-  "Inventory Management",
 ]
 
 export function Industries() {
@@ -32,7 +33,7 @@ export function Industries() {
               <span className="text-[0.68rem] font-medium tracking-[0.18em] uppercase text-muted-foreground">
                 {name}
               </span>
-              <span className="h-[3px] w-[3px] rounded-full bg-brand opacity-50 flex-shrink-0" aria-hidden="true" />
+              <span className="h-[3px] w-[3px] rounded-full flex-shrink-0" style={{ background: "oklch(0.95 0 0 / 0.18)" }} aria-hidden="true" />
             </li>
           ))}
         </ul>

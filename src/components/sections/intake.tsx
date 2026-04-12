@@ -33,8 +33,11 @@ export function Intake() {
             Tell us about your operation.
           </h2>
           <p className="text-[0.95rem] text-muted-foreground leading-[1.75] mb-14">
-            We take on a limited number of engagements. If what you&apos;re building sounds like
-            what we do, we want to hear about it. Five questions. No sales call required to start.
+            We take on a limited number of engagements per year. The operators we work with
+            are running 20 to 100 people, have outgrown off-the-shelf tools, and want
+            something built for the exact way their operation runs — not adapted from
+            something built for someone else. Fee-based engagements. Real scope. No SDRs,
+            no retainer pitches, no hourly billing. If that&apos;s you, tell us about it.
           </p>
 
           {submitted ? (

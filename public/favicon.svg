@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Dark background -->
+  <rect width="32" height="32" fill="#0e0e0e"/>
+  <!-- P lettermark — bold geometric sans, built from paths -->
+  <!-- Vertical stem -->
+  <rect x="7" y="6" width="4" height="20" fill="#f2ede4"/>
+  <!-- Top horizontal bar of P -->
+  <rect x="7" y="6" width="10" height="3.5" fill="#f2ede4"/>
+  <!-- Middle horizontal bar of P -->
+  <rect x="7" y="15" width="10" height="3.5" fill="#f2ede4"/>
+  <!-- Right curve of P (top arc) -->
+  <path d="M17 6 Q24 6 24 11.25 Q24 16.5 17 16.5 L17 15 Q22 15 22 11.25 Q22 7.5 17 7.5 Z" fill="#f2ede4"/>
+  <!-- Brand red dot -->
+  <circle cx="25" cy="26" r="3" fill="#C8433A"/>
+</svg>

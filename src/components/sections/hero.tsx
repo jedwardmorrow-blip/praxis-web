@@ -52,16 +52,17 @@ export function Hero() {
             className="font-heading font-bold tracking-[-0.01em] leading-[1.03] text-foreground mb-6"
             style={{ fontSize: "clamp(2.4rem, 4.8vw, 4.6rem)" }}
           >
-            We don&apos;t write reports.<br />
-            We build the software.
+            Operators who build.
           </h1>
         </FadeUp>
 
         {/* Copy */}
         <FadeUp delay={0.18}>
           <p className="text-[1.05rem] text-muted-foreground max-w-[500px] leading-[1.78] mb-11">
-            We work with operators running medium-complex businesses — the ones who&apos;ve outgrown
-            their tools but haven&apos;t yet built the systems they actually need.
+            We ran complex operations ourselves, built the software we needed,
+            and now we build for the founders doing the same. Not a dev shop.
+            Not a consultancy. An operator-led firm with a limited number of
+            client engagements per year.
           </p>
         </FadeUp>
 

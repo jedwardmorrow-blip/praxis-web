@@ -14,7 +14,7 @@ const workItems = [
     id: "aspire",
     tag: "Strategy & Web",
     title: "Powered by Aspire",
-    body: "A positioning and web project for a professional development firm targeting hospitality leadership. We mapped the audience, built the strategy, and shipped a site designed to attract the operators Aspire's curriculum is built for. Discovery-led, strategic through to launch.",
+    body: "Aspire has spent 30 years engineering revenue behavior for some of the world's most demanding hospitality brands. We built their digital infrastructure to match — positioning, custom site, SEO foundation — designed to find the operators their work was built for. Discovery-led. Shipped in days, not months.",
     tags: ["Hospitality", "Professional Services", "Strategy", "Web"],
     gradient: "linear-gradient(140deg, #090c0a 0%, #0b140d 100%)",
     visual: "aspire",
@@ -68,7 +68,7 @@ function WorkCard({
 
       {/* Body */}
       <div className="flex flex-col flex-1 p-9">
-        <p className="text-[0.62rem] font-semibold tracking-[0.18em] uppercase text-brand mb-2.5">{tag}</p>
+        <p className="text-[0.62rem] font-semibold tracking-[0.18em] uppercase text-muted-foreground mb-2.5">{tag}</p>
         <h3 className="font-heading font-bold text-[1.35rem] tracking-[0.03em] text-foreground mb-3">{title}</h3>
         <p className="text-[0.88rem] text-muted-foreground leading-[1.72] flex-1">{body}</p>
         <div className="flex gap-2 flex-wrap mt-5 pt-5 border-t border-border">
@@ -92,19 +92,18 @@ function CultopsPreview() {
       className="flex flex-col"
       style={{
         width: "80%", height: "75%",
-        border: "1px solid oklch(0.52 0.165 22 / 0.20)",
+        border: "1px solid oklch(0.95 0 0 / 0.08)",
         borderRadius: "3px",
-        background: "oklch(0.52 0.165 22 / 0.03)",
+        background: "oklch(0.95 0 0 / 0.02)",
         padding: "12px",
         gap: "8px",
-        boxShadow: "0 0 40px oklch(0.52 0.165 22 / 0.06)",
       }}
     >
       <div className="flex items-center gap-1.5 mb-1">
-        {[1, 0.5, 0.25].map((op, i) => (
-          <span key={i} className="h-1.5 w-1.5 rounded-full" style={{ background: "oklch(0.52 0.165 22)", opacity: op }} />
+        {[0.22, 0.12, 0.07].map((op, i) => (
+          <span key={i} className="h-1.5 w-1.5 rounded-full" style={{ background: `oklch(0.95 0 0 / ${op})` }} />
         ))}
-        <span className="flex-1 h-0.5 rounded-sm" style={{ background: "oklch(0.52 0.165 22 / 0.15)" }} />
+        <span className="flex-1 h-0.5 rounded-sm" style={{ background: "oklch(0.95 0 0 / 0.05)" }} />
       </div>
       <div className="flex flex-col gap-1 flex-1">
         {[
@@ -117,7 +116,7 @@ function CultopsPreview() {
             className="h-1.5 rounded-sm"
             style={{
               width: w,
-              background: accent ? "oklch(0.52 0.165 22 / 0.14)" : "oklch(0.95 0 0 / 0.04)",
+              background: accent ? "oklch(0.95 0 0 / 0.10)" : "oklch(0.95 0 0 / 0.04)",
             }}
           />
         ))}
