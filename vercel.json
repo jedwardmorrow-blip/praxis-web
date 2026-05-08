@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    { "source": "/world-model", "destination": "/world-model.html" },
+    { "source": "/world-model/3d", "destination": "/world-model-3d.html" },
+    { "source": "/system", "destination": "/system.html" },
+    { "source": "/artifacts", "destination": "/artifacts.html" },
+    { "source": "/animation", "destination": "/animation.html" }
+  ],
+  "redirects": [
+    { "source": "/atom", "destination": "/world-model", "permanent": true },
+    { "source": "/brand", "destination": "/system", "permanent": true },
+    { "source": "/3d", "destination": "/world-model/3d", "permanent": true },
+    { "source": "/gopraxis-v4-motion", "destination": "/", "permanent": true },
+    { "source": "/concept-5-system", "destination": "/system", "permanent": true },
+    { "source": "/system-artifacts", "destination": "/artifacts", "permanent": true },
+    { "source": "/signature-animation", "destination": "/animation", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    },
+    {
+      "source": "/assets/(.*).svg",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(favicon|apple-touch-icon).svg",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    }
+  ]
+}

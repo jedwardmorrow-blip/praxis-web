@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRAXIS · Animated Signature Atom · Preview</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --canvas: #0a2545;
+    --canvas-deep: #061a33;
+    --navy: #14365E;
+    --paper: #F1E8D2;
+    --paper-dim: rgba(241,232,210,0.78);
+    --paper-mute: rgba(241,232,210,0.55);
+    --gold: #C9A24B;
+    --gold-paper: #E8D69A;
+    --red: #C42130;
+    --rule: rgba(201,162,75,0.45);
+    --rule-soft: rgba(201,162,75,0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--canvas);
+    color: var(--paper);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header { padding: 16px 56px; border-bottom: 0.5px solid var(--rule); display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(8px); background: var(--canvas); position: sticky; top: 0; z-index: 50; }
+  .header .left { display: flex; align-items: center; gap: 14px; }
+  .h-badge { width: 36px; height: 36px; }
+  .h-wm { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 18px; letter-spacing: 0.04em; color: var(--paper); line-height: 1; }
+  .h-wm .dot { color: var(--red); }
+  .h-sub { font-family: "IBM Plex Mono"; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-top: 2px; }
+  .h-meta { font-family: "IBM Plex Mono"; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-mute); display: flex; gap: 14px; }
+  .h-meta a { color: var(--paper); text-decoration: none; border-bottom: 0.5px solid var(--paper); padding-bottom: 1px; }
+
+  .intro { padding: 56px 56px 28px; max-width: 1200px; margin: 0 auto; }
+  .intro .eye { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+  .intro h1 { font-family: "Big Shoulders Display"; font-weight: 900; font-size: clamp(56px, 6.5vw, 96px); line-height: 0.92; letter-spacing: 0.005em; color: var(--paper); margin-top: 16px; text-transform: uppercase; }
+  .intro h1 .red { color: var(--red); }
+  .intro h1 .gold { color: var(--gold); }
+  .intro .lede { font-family: "IBM Plex Sans"; font-size: 16px; line-height: 1.6; color: var(--paper-dim); max-width: 760px; margin-top: 22px; }
+  .intro .lede em { color: var(--gold); font-style: normal; font-weight: 600; }
+
+  /* Scale demonstration */
+  .scale-stage { padding: 32px 56px 56px; max-width: 1200px; margin: 0 auto; }
+  .scale-frame { background: var(--paper); padding: 64px 32px; border: 1px solid var(--rule); display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; align-items: end; justify-items: center; }
+  .scale-cell { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .scale-cell .frame {
+    background: #ffffff; border: 0.5px solid var(--navy); padding: 2px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .scale-cell .lab { font-family: "IBM Plex Mono"; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--navy); }
+  .scale-cell .px { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 18px; color: var(--red); line-height: 1; }
+
+  /* Email mock */
+  .mock-section { padding: 32px 56px 64px; max-width: 1200px; margin: 0 auto; }
+  .section-tag { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); padding-top: 28px; border-top: 0.5px solid var(--rule); margin-bottom: 18px; display: flex; justify-content: space-between; }
+  .section-tag .red { color: var(--red); }
+
+  .email-window { background: #f8f7f4; border: 1px solid var(--rule); box-shadow: 0 8px 22px rgba(0,0,0,0.35); }
+  .email-toolbar { background: #14365E; padding: 12px 18px; display: flex; gap: 12px; align-items: center; }
+  .email-toolbar .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .email-toolbar .dot.r { background: #ff5f57; }
+  .email-toolbar .dot.y { background: #ffbd2e; }
+  .email-toolbar .dot.g { background: #28c840; }
+  .email-toolbar .title { font-family: "IBM Plex Mono"; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-paper); margin-left: 14px; }
+
+  .email-content { padding: 24px 28px 32px; }
+  .email-meta { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; padding-bottom: 14px; border-bottom: 0.5px solid #e0d8c2; margin-bottom: 18px; }
+  .email-meta .row { display: grid; grid-template-columns: 60px 1fr; gap: 12px; padding: 2px 0; font-size: 13px; color: #2A241B; }
+  .email-meta .k { color: #6e6555; text-transform: uppercase; font-size: 11px; letter-spacing: 1.4px; align-self: center; }
+  .email-meta .from .v { color: #14365E; font-weight: 600; }
+  .email-subj { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; font-size: 19px; color: #14365E; font-weight: 600; padding: 14px 0 18px; border-bottom: 0.5px solid #e0d8c2; }
+  .email-body { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; font-size: 14.5px; color: #2A241B; padding: 22px 0; line-height: 1.6; }
+  .email-body p { margin-bottom: 12px; }
+
+  /* Compatibility table */
+  .compat { padding: 32px 56px 64px; max-width: 1200px; margin: 0 auto; }
+  .compat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .compat-card { background: rgba(241,232,210,0.04); border: 0.5px solid var(--rule); padding: 22px 20px; }
+  .compat-card .name { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 22px; letter-spacing: 0.005em; text-transform: uppercase; color: var(--paper); }
+  .compat-card .status { font-family: "IBM Plex Mono"; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; margin-top: 4px; }
+  .compat-card .status.yes { color: #4ade80; }
+  .compat-card .status.partial { color: var(--gold); }
+  .compat-card .status.fallback { color: var(--paper-mute); }
+  .compat-card .desc { font-family: "IBM Plex Sans"; font-size: 13px; line-height: 1.55; color: var(--paper-dim); margin-top: 12px; padding-top: 10px; border-top: 0.5px dashed var(--rule-soft); }
+
+  /* Downloads */
+  .download-row { padding: 28px 56px 60px; max-width: 1200px; margin: 0 auto; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; border-top: 0.5px solid var(--rule); margin-top: 24px; padding-top: 28px; }
+  .download {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px; background: var(--navy); color: var(--paper); text-decoration: none;
+    font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    border: 0.5px solid var(--gold); transition: all 0.2s;
+  }
+  .download:hover { background: var(--red); border-color: var(--red); }
+  .download .arr { color: var(--gold); }
+  .download:hover .arr { color: var(--paper); }
+  .download-row .lab { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-right: 16px; }
+
+  .gif-callout { padding: 24px 56px; max-width: 1200px; margin: 0 auto 0; background: rgba(196,33,48,0.05); border-left: 3px solid var(--red); margin-top: 32px; }
+  .gif-callout .lab { font-family: "IBM Plex Mono"; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .gif-callout h4 { font-family: "Big Shoulders Display"; font-weight: 700; font-size: 22px; line-height: 1.1; text-transform: uppercase; color: var(--paper); }
+  .gif-callout p { font-family: "IBM Plex Sans"; font-size: 14px; line-height: 1.6; color: var(--paper-dim); margin-top: 10px; max-width: 800px; }
+  .gif-callout p strong { color: var(--paper); }
+  .gif-callout p code { font-family: "IBM Plex Mono"; font-size: 12.5px; color: var(--gold-paper); background: rgba(0,0,0,0.4); padding: 1px 5px; }
+
+  footer { background: #000; color: var(--paper); padding: 36px 56px 28px; border-top: 1px solid var(--gold); margin-top: 28px; }
+  footer .inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; font-family: "IBM Plex Mono"; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+  footer .inner a { color: var(--paper); text-decoration: none; border-bottom: 0.5px solid var(--paper); margin-left: 14px; }
+
+  @media (max-width: 1100px) {
+    .scale-frame { grid-template-columns: 1fr 1fr; }
+    .compat-grid { grid-template-columns: 1fr 1fr; }
+    .header, .intro, .scale-stage, .mock-section, .compat, .download-row, .gif-callout, footer { padding-left: 24px; padding-right: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="left">
+    <div class="h-badge">
+      <svg viewBox="0 0 360 360"><circle cx="180" cy="180" r="172" fill="#C9A24B"/><g fill="#C9A24B"><g id="hht"><rect x="174" y="0" width="12" height="14"/></g><use href="#hht" transform="rotate(30 180 180)"/><use href="#hht" transform="rotate(60 180 180)"/><use href="#hht" transform="rotate(90 180 180)"/><use href="#hht" transform="rotate(120 180 180)"/><use href="#hht" transform="rotate(150 180 180)"/><use href="#hht" transform="rotate(180 180 180)"/><use href="#hht" transform="rotate(210 180 180)"/><use href="#hht" transform="rotate(240 180 180)"/><use href="#hht" transform="rotate(270 180 180)"/><use href="#hht" transform="rotate(300 180 180)"/><use href="#hht" transform="rotate(330 180 180)"/></g><circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#C9A24B" stroke-width="3"/><circle cx="180" cy="180" r="50" fill="#C42130"/></svg>
+    </div>
+    <div>
+      <div class="h-wm">PRAXIS<span class="dot">.</span></div>
+      <div class="h-sub">Signature Atom · Animated</div>
+    </div>
+  </div>
+  <div class="h-meta">
+    <a href="artifacts.html">← Artifacts</a>
+    <a href="world-model-3d.html">Full World Model</a>
+  </div>
+</header>
+
+<section class="intro">
+  <div class="eye">FIG. 04 · ANIMATED SIGNATURE ATOM · 2026-04-30</div>
+  <h1>The world model<span class="red">,</span> <span class="gold">miniaturized</span> for email.</h1>
+  <p class="lede">A scaled-down version of the operating atom that lives inside the existing badge frame and animates whenever the email client supports it. Three rotating orbital rings, a pulsing red nucleus, all contained inside the gold cog you already have. <em>Static fallback in clients that don't support animation looks like the regular badge, so nothing breaks.</em></p>
+</section>
+
+<!-- Scale demo -->
+<section class="scale-stage">
+  <div class="scale-frame">
+    <div class="scale-cell">
+      <div class="frame" style="width: 32px; height: 32px;">
+        <img src="assets/signature-atom-animated.svg" width="28" height="28" alt="Animated atom 28px">
+      </div>
+      <div class="lab">Mobile</div>
+      <div class="px">28<span style="color:var(--navy)">px</span></div>
+    </div>
+    <div class="scale-cell">
+      <div class="frame" style="width: 60px; height: 60px;">
+        <img src="assets/signature-atom-animated.svg" width="56" height="56" alt="Animated atom 56px">
+      </div>
+      <div class="lab">Signature · default</div>
+      <div class="px">56<span style="color:var(--navy)">px</span></div>
+    </div>
+    <div class="scale-cell">
+      <div class="frame" style="width: 124px; height: 124px;">
+        <img src="assets/signature-atom-animated.svg" width="120" height="120" alt="Animated atom 120px">
+      </div>
+      <div class="lab">Inspect view</div>
+      <div class="px">120<span style="color:var(--navy)">px</span></div>
+    </div>
+    <div class="scale-cell">
+      <div class="frame" style="width: 244px; height: 244px;">
+        <img src="assets/signature-atom-animated.svg" width="240" height="240" alt="Animated atom 240px">
+      </div>
+      <div class="lab">Full view</div>
+      <div class="px">240<span style="color:var(--navy)">px</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Email mock with live animated signature -->
+<section class="mock-section">
+  <div class="section-tag"><span class="red">§ 02 · Live signature preview</span><span>Justin's outbound · in context</span></div>
+
+  <div class="email-window">
+    <div class="email-toolbar">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <div class="title">PRAXIS · Outbound · Apple Mail</div>
+    </div>
+    <div class="email-content">
+      <div class="email-meta">
+        <div class="row from"><span class="k">From</span><span class="v"><strong>Justin Morrow</strong> &lt;justin@gopraxis.ai&gt;</span></div>
+        <div class="row"><span class="k">To</span><span>Renie Cavallari &lt;renie@aspire.com&gt;</span></div>
+        <div class="row"><span class="k">Date</span><span>April 30, 2026 at 11:42 AM</span></div>
+      </div>
+      <div class="email-subj">Praxis Discovery Sprint · v2 findings deck attached</div>
+      <div class="email-body">
+        <p>Renie,</p>
+        <p>Attached is the v2 findings deck for the Cliff House MD focus group. The page-three diagnostic narrative now reads as you described, and the band copy shifted from "leakage" to "potential" across the four pillars per our walkthrough.</p>
+        <p>Let me know if you want to walk through it together before printing.</p>
+        <p>Best,<br>Justin</p>
+      </div>
+
+      <!-- LIVE ANIMATED SIGNATURE (inline) -->
+      <table cellpadding="0" cellspacing="0" border="0" style="font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; color: #2A241B; line-height: 1.45; max-width: 480px; margin-top: 8px;">
+        <tr>
+          <td style="padding-right: 18px; vertical-align: top; padding-top: 2px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 360 360" role="img" aria-label="Praxis · the operating atom">
+              <defs>
+                <clipPath id="liveJM"><circle cx="180" cy="180" r="156"/></clipPath>
+                <radialGradient id="liveJMNuc" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#E84450"/>
+                  <stop offset="60%" stop-color="#C42130"/>
+                  <stop offset="100%" stop-color="#7a1422"/>
+                </radialGradient>
+              </defs>
+              <circle cx="180" cy="180" r="172" fill="#C9A24B"/>
+              <g fill="#C9A24B">
+                <g id="ljm"><rect x="174" y="0" width="12" height="14"/></g>
+                <use href="#ljm" transform="rotate(30 180 180)"/>
+                <use href="#ljm" transform="rotate(60 180 180)"/>
+                <use href="#ljm" transform="rotate(90 180 180)"/>
+                <use href="#ljm" transform="rotate(120 180 180)"/>
+                <use href="#ljm" transform="rotate(150 180 180)"/>
+                <use href="#ljm" transform="rotate(180 180 180)"/>
+                <use href="#ljm" transform="rotate(210 180 180)"/>
+                <use href="#ljm" transform="rotate(240 180 180)"/>
+                <use href="#ljm" transform="rotate(270 180 180)"/>
+                <use href="#ljm" transform="rotate(300 180 180)"/>
+                <use href="#ljm" transform="rotate(330 180 180)"/>
+              </g>
+              <circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#F1E8D2" stroke-width="3"/>
+              <g clip-path="url(#liveJM)">
+                <g><animateTransform attributeName="transform" type="rotate" from="0 180 180" to="360 180 180" dur="32s" repeatCount="indefinite"/><ellipse cx="180" cy="180" rx="128" ry="46" fill="none" stroke="#C9A24B" stroke-width="0.8" stroke-dasharray="2,3" opacity="0.42"/><circle cx="308" cy="180" r="5" fill="#C9A24B" opacity="0.85"/><circle cx="52" cy="180" r="4" fill="#C9A24B" opacity="0.6"/><circle cx="180" cy="226" r="3.5" fill="#C9A24B" opacity="0.7"/></g>
+                <g><animateTransform attributeName="transform" type="rotate" from="0 180 180" to="-360 180 180" dur="20s" repeatCount="indefinite"/><ellipse cx="180" cy="180" rx="92" ry="92" fill="none" stroke="#C9A24B" stroke-width="0.9" stroke-dasharray="3,3" opacity="0.55"/><circle cx="272" cy="180" r="7" fill="#F1E8D2"/><circle cx="88" cy="180" r="5" fill="#C9A24B"/></g>
+                <g><animateTransform attributeName="transform" type="rotate" from="0 180 180" to="360 180 180" dur="13s" repeatCount="indefinite"/><ellipse cx="180" cy="180" rx="62" ry="22" fill="none" stroke="#C9A24B" stroke-width="0.7" stroke-dasharray="1.5,2" opacity="0.55"/><circle cx="242" cy="180" r="5" fill="#F1E8D2"/></g>
+                <circle cx="180" cy="180" r="56" fill="#C42130" opacity="0.18"><animate attributeName="r" values="56;66;56" dur="3.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.18;0.04;0.18" dur="3.2s" repeatCount="indefinite"/></circle>
+                <circle cx="180" cy="180" r="44" fill="url(#liveJMNuc)"><animate attributeName="r" values="44;48;44" dur="3.2s" repeatCount="indefinite"/></circle>
+                <circle cx="170" cy="170" r="10" fill="#F1E8D2" opacity="0.35"><animate attributeName="opacity" values="0.35;0.55;0.35" dur="3.2s" repeatCount="indefinite"/></circle>
+              </g>
+            </svg>
+          </td>
+          <td style="vertical-align: top; border-left: 0.5px solid #14365E; padding-left: 18px;">
+            <div style="font-family: 'Arial Black', 'Helvetica Black', Impact, sans-serif; font-size: 18px; font-weight: 900; letter-spacing: 0.5px; color: #14365E; text-transform: uppercase; line-height: 1;">Justin Morrow<span style="color: #C42130;">.</span></div>
+            <div style="font-family: 'Courier New', Consolas, monospace; font-size: 10.5px; letter-spacing: 1.6px; color: #6e6555; text-transform: uppercase; margin-top: 4px;">Co-Founder · Managing Partner</div>
+            <div style="font-family: 'Courier New', Consolas, monospace; font-size: 11px; color: #2A241B; margin-top: 10px; padding-top: 8px; border-top: 0.5px dashed #C9A24B; line-height: 1.6;"><a href="mailto:justin@gopraxis.ai" style="color: #14365E; text-decoration: none;">justin@gopraxis.ai</a> &nbsp;<span style="color: #C42130;">·</span>&nbsp; <a href="https://gopraxis.ai" style="color: #2A241B; text-decoration: none;">gopraxis.ai</a></div>
+            <div style="font-family: 'Courier New', Consolas, monospace; font-size: 9.5px; letter-spacing: 1.4px; color: #6e6555; text-transform: uppercase; margin-top: 8px;"><a href="https://gopraxis.ai" style="color: #14365E; text-decoration: none; border-bottom: 0.5px solid #14365E;">gopraxis.ai</a> &nbsp;<span style="color: #C9A24B;">·</span>&nbsp; Phoenix · Berlin &nbsp;<span style="color: #C9A24B;">·</span>&nbsp; Operational Intelligence</div>
+            <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 11px; color: #6e6555; margin-top: 10px; padding-top: 6px; border-top: 0.5px dashed #C9A24B; line-height: 1.45;">Operators who build software for other operators. Six engagements per year. Both partners on every one.</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Compatibility -->
+<section class="compat">
+  <div class="section-tag"><span class="red">§ 03 · Email client compatibility</span><span>SMIL animation support · 2026</span></div>
+  <div class="compat-grid">
+    <div class="compat-card">
+      <div class="name">Apple Mail</div>
+      <div class="status yes">● ANIMATES</div>
+      <div class="desc">macOS, iOS, iPadOS. Full SMIL support. The orbital rings rotate, the nucleus pulses. This is your hero target — most Praxis recipients on Mac/iOS will see the animation.</div>
+    </div>
+    <div class="compat-card">
+      <div class="name">Gmail · Web</div>
+      <div class="status yes">● ANIMATES</div>
+      <div class="desc">Browser-rendered Gmail. Full SMIL support. Animation works in Chrome, Safari, Firefox, Edge. Most Praxis recipients on Gmail in a browser will see the full effect.</div>
+    </div>
+    <div class="compat-card">
+      <div class="name">Gmail · iOS / Android</div>
+      <div class="status partial">◐ MOST</div>
+      <div class="desc">Mobile Gmail apps render WebKit-based content. SMIL works on iOS (WebKit). Android may render the static first frame depending on the system WebView version.</div>
+    </div>
+    <div class="compat-card">
+      <div class="name">Outlook · Desktop</div>
+      <div class="status fallback">○ STATIC</div>
+      <div class="desc">Outlook 2016+ uses Word's rendering engine, which strips SMIL. Recipients see the static first frame as the regular Praxis badge. Graceful fallback, nothing breaks.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Optional GIF callout -->
+<div class="gif-callout">
+  <div class="lab">If you want full Outlook coverage</div>
+  <h4>Convert to animated GIF</h4>
+  <p>For a guaranteed-everywhere animation including Outlook desktop, we'd need to convert the SVG to a GIF. The cleanest path: open the animated SVG in a browser, screen-record at <code>56×56</code> for one full loop (32 seconds), convert via <strong>ezgif.com/svg-to-gif</strong> or <code>ffmpeg</code>. Host the resulting <code>atom.gif</code> at <code>gopraxis.ai/atom.gif</code> and reference it via <code>&lt;img src="https://gopraxis.ai/atom.gif"&gt;</code> in the signature instead of the inline SVG. The GIF approach also works in Outlook desktop. Tell me if you want me to walk through the conversion or generate a frame-by-frame export.</p>
+</div>
+
+<!-- Downloads -->
+<div class="download-row">
+  <span class="lab">Recommended · GIF (animates everywhere)</span>
+  <a class="download" href="assets/justin-signature-gif.html" download>justin-signature.html <span class="arr">↓</span></a>
+  <a class="download" href="assets/greg-signature-gif.html" download>greg-signature.html <span class="arr">↓</span></a>
+  <a class="download" href="assets/atom.gif" download>atom.gif <span class="arr">↓</span></a>
+</div>
+<div class="download-row" style="margin-top: 0; padding-top: 18px; border-top: 0;">
+  <span class="lab">Inline SVG · animates in Apple Mail, Gmail web</span>
+  <a class="download" href="assets/justin-signature.html" download>justin-signature-svg.html <span class="arr">↓</span></a>
+  <a class="download" href="assets/greg-signature.html" download>greg-signature-svg.html <span class="arr">↓</span></a>
+  <a class="download" href="assets/signature-atom-animated.svg" download>signature-atom-animated.svg <span class="arr">↓</span></a>
+</div>
+
+<!-- Install instructions -->
+<section class="mock-section" style="padding-top: 24px;">
+  <div class="section-tag"><span class="red">§ 04 · How to install</span><span>One-time setup</span></div>
+  <div style="background: rgba(241,232,210,0.04); border: 1px solid var(--rule); padding: 28px 32px;">
+    <div style="font-family: 'Big Shoulders Display'; font-weight: 800; font-size: 20px; letter-spacing: 0.005em; text-transform: uppercase; color: var(--paper); margin-bottom: 14px;">Gmail</div>
+    <ol style="font-family: 'IBM Plex Sans'; font-size: 14px; line-height: 1.7; color: var(--paper-dim); margin-left: 22px;">
+      <li>Open the downloaded HTML file in a browser. The signature renders visually.</li>
+      <li>Select the entire signature (cmd+A or click-and-drag), copy (cmd+C).</li>
+      <li>Open Gmail → Settings (gear icon) → See all settings → Signature.</li>
+      <li>Create or edit a signature, paste (cmd+V) into the editor, save changes.</li>
+    </ol>
+    <div style="font-family: 'Big Shoulders Display'; font-weight: 800; font-size: 20px; letter-spacing: 0.005em; text-transform: uppercase; color: var(--paper); margin: 28px 0 14px;">Outlook desktop</div>
+    <ol style="font-family: 'IBM Plex Sans'; font-size: 14px; line-height: 1.7; color: var(--paper-dim); margin-left: 22px;">
+      <li>Open the downloaded HTML file in a browser. Select all and copy.</li>
+      <li>In Outlook: File → Options → Mail → Signatures.</li>
+      <li>Create or edit a signature, paste, save.</li>
+    </ol>
+    <div style="font-family: 'Big Shoulders Display'; font-weight: 800; font-size: 20px; letter-spacing: 0.005em; text-transform: uppercase; color: var(--paper); margin: 28px 0 14px;">Apple Mail</div>
+    <ol style="font-family: 'IBM Plex Sans'; font-size: 14px; line-height: 1.7; color: var(--paper-dim); margin-left: 22px;">
+      <li>Mail → Settings → Signatures.</li>
+      <li>Create a new signature for the account, type any placeholder text.</li>
+      <li>Open the downloaded HTML file in a browser, select all, copy.</li>
+      <li>Quit Mail. Open <code style="font-family: 'IBM Plex Mono'; font-size: 12px; color: var(--gold-paper); background: rgba(0,0,0,0.4); padding: 1px 5px;">~/Library/Mail/V[10]/MailData/Signatures/</code> and find the .mailsignature file you just created (most recent timestamp).</li>
+      <li>Open it in a text editor, replace the body content with the signature HTML, save.</li>
+      <li>Restart Mail. Signature is in place.</li>
+    </ol>
+    <p style="font-family: 'IBM Plex Sans'; font-size: 13px; line-height: 1.6; color: var(--paper-mute); margin-top: 24px; padding-top: 18px; border-top: 0.5px dashed var(--rule-soft);">The GIF is hosted at <code style="font-family: 'IBM Plex Mono'; font-size: 12px; color: var(--gold-paper); background: rgba(0,0,0,0.4); padding: 1px 5px;">https://project-v6d8q.vercel.app/assets/atom.gif</code> until gopraxis.ai is cut over to V4. After cutover, the URL becomes <code style="font-family: 'IBM Plex Mono'; font-size: 12px; color: var(--gold-paper); background: rgba(0,0,0,0.4); padding: 1px 5px;">https://gopraxis.ai/assets/atom.gif</code> and the signature files should be re-downloaded.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <span>Praxis Operational Intelligence · Operations Bureau No. 26 · Phoenix · Berlin · MMXXVI</span>
+    <span>
+      <span style="color: var(--red)">●</span> Animated signature v1
+      <a href="artifacts.html">Artifacts</a>
+      <a href="world-model-3d.html">Full World Model</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

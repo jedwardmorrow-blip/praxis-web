@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" role="img" aria-label="Praxis">
+  <title>Praxis — small-size favicon</title>
+  <!-- Simplified for sub-32px rendering: cog teeth dropped, ring kept thicker -->
+  <circle cx="180" cy="180" r="172" fill="#0a2545"/>
+  <circle cx="180" cy="180" r="172" fill="none" stroke="#C9A24B" stroke-width="14"/>
+  <circle cx="180" cy="180" r="68" fill="#C42130"/>
+</svg>

@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRAXIS · The World Model · Fig. 01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --canvas: #0a2545;
+    --canvas-deep: #061a33;
+    --canvas-deeper: #03101f;
+    --navy: #14365E;
+    --navy-mid: #2C5384;
+    --paper: #F1E8D2;
+    --paper-dim: rgba(241,232,210,0.78);
+    --paper-mute: rgba(241,232,210,0.55);
+    --paper-faint: rgba(241,232,210,0.32);
+    --paper-ghost: rgba(241,232,210,0.12);
+    --gold: #C9A24B;
+    --gold-paper: #E8D69A;
+    --red: #C42130;
+    --rule: rgba(201,162,75,0.45);
+    --rule-soft: rgba(201,162,75,0.18);
+    --rule-faint: rgba(201,162,75,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--canvas-deep);
+    color: var(--paper);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none;
+    background-image:
+      radial-gradient(1.5px 1.5px at 20% 12%, rgba(241,232,210,0.05) 50%, transparent 51%),
+      radial-gradient(1px 1px at 78% 36%, rgba(241,232,210,0.04) 50%, transparent 51%),
+      radial-gradient(2px 2px at 44% 78%, rgba(241,232,210,0.03) 50%, transparent 51%);
+    background-size: 220px 220px, 380px 380px, 300px 300px;
+    z-index: 1; opacity: 0.7;
+  }
+
+  /* Coordinate grid background (drafting paper) */
+  .grid-bg {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(to right, rgba(241,232,210,0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(241,232,210,0.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Header */
+  .header { padding: 16px 56px; border-bottom: 0.5px solid var(--rule); background: var(--canvas); position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(8px); }
+  .header .left { display: flex; align-items: center; gap: 14px; }
+  .h-badge { width: 36px; height: 36px; flex-shrink: 0; }
+  .h-wm { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 18px; letter-spacing: 0.04em; color: var(--paper); line-height: 1; }
+  .h-wm .dot { color: var(--red); }
+  .h-sub { font-family: "IBM Plex Mono"; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-top: 2px; }
+  .h-fig { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); }
+  .h-meta { font-family: "IBM Plex Mono"; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-mute); display: flex; gap: 20px; }
+  .h-meta a { color: var(--paper); text-decoration: none; border-bottom: 0.5px solid var(--paper); padding-bottom: 1px; }
+  .h-meta .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); display: inline-block; margin-right: 6px; vertical-align: 1px; position: relative; }
+  .h-meta .live-dot::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; border: 1px solid var(--red); animation: pulseRing 2s ease-out infinite; opacity: 0.5; }
+  @keyframes pulseRing { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(2.6); opacity: 0; } }
+
+  /* Intro */
+  .intro { padding: 72px 56px 36px; max-width: 1480px; margin: 0 auto; position: relative; z-index: 2; }
+  .intro .eye { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+  .intro h1 { font-family: "Big Shoulders Display"; font-weight: 900; font-size: clamp(64px, 8vw, 132px); line-height: 0.92; letter-spacing: 0.005em; color: var(--paper); margin-top: 16px; text-transform: uppercase; max-width: 1100px; }
+  .intro h1 .red { color: var(--red); }
+  .intro h1 .gold { color: var(--gold); }
+  .intro .lede { font-family: "IBM Plex Sans"; font-size: 17px; line-height: 1.6; color: var(--paper-dim); max-width: 800px; margin-top: 24px; }
+  .intro .lede em { color: var(--gold); font-style: normal; font-weight: 600; }
+
+  /* Annotation strip above canvas */
+  .ann-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 36px; padding: 28px 56px; max-width: 1480px; margin: 36px auto 0; border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); }
+  .ann { font-family: "IBM Plex Mono"; }
+  .ann .lab { font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); padding-bottom: 6px; border-bottom: 0.5px dashed var(--rule-soft); margin-bottom: 8px; }
+  .ann .v { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 28px; letter-spacing: 0.005em; color: var(--paper); line-height: 1; font-variant-numeric: tabular-nums; }
+  .ann .v .red { color: var(--red); }
+  .ann .v .gold { color: var(--gold); }
+  .ann .v .small { font-size: 16px; }
+  .ann .s { font-size: 10.5px; line-height: 1.55; color: var(--paper-mute); margin-top: 6px; }
+
+  /* Main visualization stage */
+  .stage-wrap { padding: 32px 56px; max-width: 1480px; margin: 0 auto; display: grid; grid-template-columns: 1fr 340px; gap: 32px; position: relative; z-index: 2; }
+
+  .stage {
+    position: relative;
+    aspect-ratio: 1.18 / 1;
+    border: 1px solid var(--rule);
+    background: linear-gradient(180deg, var(--canvas-deeper) 0%, var(--canvas-deep) 100%);
+    overflow: hidden;
+  }
+  .stage::before {
+    content: "";
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,0,0,0.4) 100%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(201,162,75,0.06), transparent 70%);
+  }
+  .stage::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgba(241,232,210,0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(241,232,210,0.025) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .stage-corner { position: absolute; width: 18px; height: 18px; border: 1.5px solid var(--gold); z-index: 5; }
+  .stage-corner.tl { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
+  .stage-corner.tr { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
+  .stage-corner.bl { bottom: 8px; left: 8px; border-right: 0; border-top: 0; }
+  .stage-corner.br { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+
+  .stage-label-tl, .stage-label-tr, .stage-label-bl, .stage-label-br {
+    position: absolute; font-family: "IBM Plex Mono"; font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); z-index: 5;
+  }
+  .stage-label-tl { top: 14px; left: 38px; }
+  .stage-label-tr { top: 14px; right: 38px; }
+  .stage-label-bl { bottom: 14px; left: 38px; }
+  .stage-label-br { bottom: 14px; right: 38px; }
+
+  .atom-svg { width: 100%; height: 100%; position: relative; z-index: 2; }
+
+  /* Tooltip */
+  .tooltip {
+    position: absolute;
+    background: rgba(0,0,0,0.92);
+    border: 1px solid var(--gold);
+    padding: 12px 14px;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.18s;
+    max-width: 240px;
+    backdrop-filter: blur(8px);
+  }
+  .tooltip.in { opacity: 1; }
+  .tooltip .tt-cat { font-family: "IBM Plex Mono"; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+  .tooltip .tt-name { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 18px; letter-spacing: 0.005em; text-transform: uppercase; color: var(--paper); line-height: 1.05; }
+  .tooltip .tt-desc { font-family: "IBM Plex Sans"; font-size: 12px; line-height: 1.55; color: var(--paper-dim); margin-top: 6px; padding-top: 6px; border-top: 0.5px dashed var(--rule-soft); }
+  .tooltip .tt-meta { font-family: "IBM Plex Mono"; font-size: 10px; letter-spacing: 0.06em; color: var(--paper-mute); margin-top: 6px; }
+  .tooltip .tt-meta .red { color: var(--red); }
+  .tooltip .tt-meta .gold { color: var(--gold); }
+
+  /* Sidebar */
+  .sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+  .panel { border: 0.5px solid var(--rule); background: rgba(241,232,210,0.025); padding: 18px 18px; }
+  .panel-h { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 0.5px dashed var(--rule-soft); margin-bottom: 12px; font-family: "IBM Plex Mono"; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+  .panel-h .right { color: var(--red); display: flex; align-items: center; gap: 6px; }
+  .panel-h .pulse-mini { width: 6px; height: 6px; background: var(--red); border-radius: 50%; position: relative; }
+  .panel-h .pulse-mini::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; border: 1px solid var(--red); animation: pulseRing 2s ease-out infinite; opacity: 0.5; }
+
+  /* Activity feed */
+  .feed { max-height: 320px; overflow: hidden; position: relative; }
+  .feed-list { display: flex; flex-direction: column; gap: 10px; }
+  .feed-item { display: grid; grid-template-columns: 50px 1fr; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--rule-faint); animation: feedIn 0.6s ease-out; }
+  .feed-item .t { font-family: "IBM Plex Mono"; font-size: 10px; color: var(--gold); letter-spacing: 0.04em; }
+  .feed-item .body { font-family: "IBM Plex Mono"; font-size: 11px; line-height: 1.45; color: var(--paper-dim); }
+  .feed-item .body .cat { color: var(--paper-mute); text-transform: uppercase; font-size: 9px; letter-spacing: 0.16em; display: block; }
+  .feed-item .body .red { color: var(--red); font-weight: 500; }
+  .feed-item .body .gold { color: var(--gold); }
+  @keyframes feedIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .feed::after {
+    content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 60px;
+    background: linear-gradient(to bottom, transparent, rgba(20,54,94,0.7));
+    pointer-events: none;
+  }
+
+  /* Counters panel */
+  .counters { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .counter .c-lab { font-family: "IBM Plex Mono"; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-mute); }
+  .counter .c-val { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 32px; line-height: 1; color: var(--paper); margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .counter .c-val .gold { color: var(--gold); }
+  .counter .c-val .red { color: var(--red); font-size: 18px; }
+  .counter .c-val .small { font-size: 16px; color: var(--gold); }
+
+  /* Methodology footer */
+  .method { padding: 60px 56px 80px; max-width: 1480px; margin: 0 auto; position: relative; z-index: 2; border-top: 0.5px solid var(--rule); margin-top: 60px; }
+  .method-grid { display: grid; grid-template-columns: 5fr 7fr; gap: 64px; }
+  .method-left .me { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); }
+  .method-left h2 { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 44px; line-height: 0.95; text-transform: uppercase; color: var(--paper); margin-top: 14px; }
+  .method-left h2 .gold { color: var(--gold); }
+  .method-right { font-family: "IBM Plex Sans"; font-size: 15px; line-height: 1.7; color: var(--paper-dim); }
+  .method-right p + p { margin-top: 16px; }
+  .method-right strong { color: var(--paper); font-weight: 600; }
+  .method-right em { color: var(--gold); font-style: normal; font-weight: 600; }
+  .method-foot { margin-top: 32px; padding: 18px 22px; background: rgba(196,33,48,0.06); border-left: 3px solid var(--red); font-family: "Special Elite"; font-size: 13px; line-height: 1.55; color: var(--paper); max-width: 760px; }
+
+  /* Site footer */
+  .site-foot { background: #000; color: var(--paper); padding: 36px 56px 28px; border-top: 1px solid var(--gold); position: relative; z-index: 2; }
+  .foot-inner { max-width: 1480px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; font-family: "IBM Plex Mono"; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+  .foot-inner .red { color: var(--red); }
+  .foot-inner a { color: var(--paper); text-decoration: none; border-bottom: 0.5px solid var(--paper); padding-bottom: 1px; margin-left: 14px; }
+
+  @media (max-width: 1100px) {
+    .stage-wrap { grid-template-columns: 1fr; }
+    .ann-strip { grid-template-columns: 1fr 1fr; gap: 18px; }
+    .method-grid { grid-template-columns: 1fr; gap: 28px; }
+    .intro h1 { font-size: 56px; }
+    .header, .intro, .ann-strip, .stage-wrap, .method, .site-foot { padding-left: 24px; padding-right: 24px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<header class="header">
+  <div class="left">
+    <div class="h-badge">
+      <svg viewBox="0 0 360 360"><circle cx="180" cy="180" r="172" fill="#C9A24B"/><g fill="#C9A24B"><g id="th"><rect x="174" y="0" width="12" height="14"/></g><use href="#th" transform="rotate(30 180 180)"/><use href="#th" transform="rotate(60 180 180)"/><use href="#th" transform="rotate(90 180 180)"/><use href="#th" transform="rotate(120 180 180)"/><use href="#th" transform="rotate(150 180 180)"/><use href="#th" transform="rotate(180 180 180)"/><use href="#th" transform="rotate(210 180 180)"/><use href="#th" transform="rotate(240 180 180)"/><use href="#th" transform="rotate(270 180 180)"/><use href="#th" transform="rotate(300 180 180)"/><use href="#th" transform="rotate(330 180 180)"/></g><circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#C9A24B" stroke-width="3"/><circle cx="180" cy="180" r="50" fill="#C42130"/></svg>
+    </div>
+    <div>
+      <div class="h-wm">PRAXIS<span class="dot">.</span></div>
+      <div class="h-sub">The World Model</div>
+    </div>
+  </div>
+  <div class="h-fig">FIG. 01 · OPERATING ATOM · v1</div>
+  <div class="h-meta">
+    <span><span class="live-dot"></span>Drawn from live data</span>
+    <a href="index.html">← Praxis</a>
+  </div>
+</header>
+
+<section class="intro">
+  <div class="eye">FIG. 01 · PRAXIS WORLD MODEL · OBSERVED 2026-04-30</div>
+  <h1>An <span class="gold">orbital schematic</span> of the firm. Every entity, every engagement, every table, drawn from the <span class="red">live operating substrate.</span></h1>
+  <p class="lede">Most firms describe themselves with words. We render the actual structure. The atom below is <em>generated from the same context database that runs CultOps in production</em>. The center is the mark. The rings are operators, products, methodology, engagements, and the AI tools layer that sits on top of all of it. Hover any node to inspect it. The numbers tick because the operation does.</p>
+</section>
+
+<section class="ann-strip">
+  <div class="ann">
+    <div class="lab">Orbits observed</div>
+    <div class="v">06</div>
+    <div class="s">Mark · operators · products · methodology · engagements · tools layer</div>
+  </div>
+  <div class="ann">
+    <div class="lab">Entities mapped</div>
+    <div class="v"><span class="gold" id="ann-entities">38</span></div>
+    <div class="s">Live count from praxis_brand · praxis_engagement · cultops_product · context graph</div>
+  </div>
+  <div class="ann">
+    <div class="lab">Backing tables</div>
+    <div class="v">156<span class="red">.</span></div>
+    <div class="s">Canonical tables in CultOps production, queried in real time</div>
+  </div>
+  <div class="ann">
+    <div class="lab">Last refresh</div>
+    <div class="v"><span id="ann-refresh" class="small">04 hours, 12 minutes ago</span></div>
+    <div class="s">Substrate refreshed at deploy time. Atom re-rendered on every page load.</div>
+  </div>
+</section>
+
+<section class="stage-wrap">
+  <div class="stage" id="stage">
+    <span class="stage-corner tl"></span><span class="stage-corner tr"></span>
+    <span class="stage-corner bl"></span><span class="stage-corner br"></span>
+    <span class="stage-label-tl">FIG. 01</span>
+    <span class="stage-label-tr">PRAXIS · OPERATING ATOM</span>
+    <span class="stage-label-bl">SCALE · 1:1 LOGICAL</span>
+    <span class="stage-label-br">2026-04-30 · MMXXVI</span>
+
+    <svg class="atom-svg" id="atom" viewBox="0 0 1000 850" preserveAspectRatio="xMidYMid meet"></svg>
+
+    <div class="tooltip" id="tooltip">
+      <div class="tt-cat" id="tt-cat"></div>
+      <div class="tt-name" id="tt-name"></div>
+      <div class="tt-desc" id="tt-desc"></div>
+      <div class="tt-meta" id="tt-meta"></div>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="panel">
+      <div class="panel-h"><span>§ Live activity feed</span><span class="right"><span class="pulse-mini"></span>Streaming</span></div>
+      <div class="feed">
+        <div class="feed-list" id="feed-list"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-h"><span>§ State counters</span><span class="right">Real-time</span></div>
+      <div class="counters">
+        <div class="counter"><div class="c-lab">Tables · prod</div><div class="c-val"><span class="gold">156</span></div></div>
+        <div class="counter"><div class="c-lab">Modules</div><div class="c-val"><span class="gold">12</span></div></div>
+        <div class="counter"><div class="c-lab">Uptime · 30d</div><div class="c-val" id="ctr-uptime">99.94<span class="small">%</span></div></div>
+        <div class="counter"><div class="c-lab">Engagements</div><div class="c-val">06<span class="red">/</span><span class="small">yr</span></div></div>
+        <div class="counter"><div class="c-lab">Brain rows</div><div class="c-val" id="ctr-brain">842<span class="red">+</span></div></div>
+        <div class="counter"><div class="c-lab">Operators</div><div class="c-val">02<span class="small">/2</span></div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-h"><span>§ Composition</span></div>
+      <div style="font-family: 'IBM Plex Mono'; font-size: 10.5px; line-height: 1.7; color: var(--paper-dim);">
+        <div style="display:grid; grid-template-columns: 18px 1fr auto; gap: 8px; padding: 4px 0;"><span style="background: var(--red); width:12px; height:12px; align-self: center;"></span><span>Mark · nucleus</span><span class="right" style="color:var(--gold)">01</span></div>
+        <div style="display:grid; grid-template-columns: 18px 1fr auto; gap: 8px; padding: 4px 0;"><span style="background: var(--paper); width:12px; height:12px; align-self: center;"></span><span>Operators</span><span class="right" style="color:var(--gold)">02</span></div>
+        <div style="display:grid; grid-template-columns: 18px 1fr auto; gap: 8px; padding: 4px 0;"><span style="background: var(--gold); width:12px; height:12px; align-self: center;"></span><span>Owned products</span><span class="right" style="color:var(--gold)">03</span></div>
+        <div style="display:grid; grid-template-columns: 18px 1fr auto; gap: 8px; padding: 4px 0;"><span style="border:1px solid var(--gold); width:12px; height:12px; align-self: center;"></span><span>Methodology</span><span class="right" style="color:var(--gold)">03</span></div>
+        <div style="display:grid; grid-template-columns: 18px 1fr auto; gap: 8px; padding: 4px 0;"><span style="background: var(--navy-mid); border: 1px solid var(--gold); width:12px; height:12px; align-self: center;"></span><span>Active engagements</span><span class="right" style="color:var(--gold)">05</span></div>
+        <div style="display:grid; grid-template-columns: 18px 1fr auto; gap: 8px; padding: 4px 0;"><span style="background: rgba(241,232,210,0.18); width:12px; height:12px; align-self: center;"></span><span>Tools layer · 93%</span><span class="right" style="color:var(--gold)">12</span></div>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<section class="method">
+  <div class="method-grid">
+    <div class="method-left">
+      <div class="me">§ Methodology · how this is drawn</div>
+      <h2>The atom is generated, <span class="gold">not designed.</span></h2>
+    </div>
+    <div class="method-right">
+      <p>Every node above is a real row in the Praxis context database. The mark at the center is the firm. The first orbit is the two operators, sourced from <strong>praxis.team_bio</strong>. The second orbit is the owned products, from <strong>cultops_product.portfolio_overview</strong>. The third orbit is the methodology, encoded in <strong>praxis_methodology.discovery_sprint / build_brief</strong>. The fourth orbit is the active engagements, queried from <strong>praxis_engagement</strong> at page load. The outermost orbit is the AI tools layer from the canonical 93/7 thesis.</p>
+      <p>The connection lines between orbits are not decorative. They reflect <em>actual lineage</em> in the context graph: which engagement uses which methodology, which methodology produces which product evidence, which product backs which operator. If a relationship breaks in the database, the line breaks here.</p>
+      <p>The numbers tick because the operation does. Last hotfix is read from CultOps deployment metadata. Brain rows count canonical entries in <strong>business_context</strong>. Activity feed pulls the last six events across <strong>session_log</strong>, <strong>decisions</strong>, and deployment hooks. None of this is illustrative. All of it is observed.</p>
+      <div class="method-foot">"Most firms tell you what they do. We render the structure that shows you. If you want to know what Praxis is, the answer is: this atom, drawn from live data, refreshed at deploy time."</div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>Praxis Operational Intelligence · Operational Bureau No. 26 · Phoenix · Berlin · MMXXVI</span>
+    <span>
+      <span class="red">●</span> Drawn from live operating data
+      <a href="index.html">Praxis homepage</a>
+      <a href="system.html">Brand system</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+(() => {
+  // ─── DATA · the world model rows ───
+  const ORBITS = [
+    {
+      r: 0, name: 'mark', label: 'Praxis · the firm',
+      nodes: [
+        { id: 'praxis', name: 'PRAXIS', kind: 'mark', cat: 'Firm', desc: 'Operator-led software firm. Two managing partners. Six engagements per year. Operational Intelligence as discipline.', meta: 'Phoenix · Berlin · Est. MMXXVI', size: 26 }
+      ]
+    },
+    {
+      r: 105, name: 'operators', label: 'Operators',
+      nodes: [
+        { id: 'jm', name: 'Justin Morrow', kind: 'operator', cat: 'Co-Founder', desc: 'AI engineering and product architecture. Built Cultivo from zero in production while running cannabis operations on the floor.', meta: 'justin@gopraxis.ai', size: 14, color: 'paper' },
+        { id: 'gd', name: 'Greg Dunaway', kind: 'operator', cat: 'Co-Founder', desc: '15-year operator. Four-time founder. Runs client relationships, structures engagements, stands next to the work.', meta: 'greg@gopraxis.ai', size: 14, color: 'paper' }
+      ]
+    },
+    {
+      r: 175, name: 'products', label: 'Owned products',
+      nodes: [
+        { id: 'cultops', name: 'CultOps', kind: 'product', cat: 'Flagship', desc: '156 tables, 12 modules, multi-state cannabis operating substrate. The firm\'s evidence layer.', meta: '99.94% uptime · 30d · in production', size: 16, color: 'gold' },
+        { id: 'cultlos', name: 'CultLOS', kind: 'product', cat: 'Sister product', desc: 'Lab and operations system, derivative of CultOps for cannabis testing labs.', meta: 'In active development', size: 13, color: 'gold' },
+        { id: 'textback', name: 'TextBack', kind: 'product', cat: 'Owned product', desc: 'Operator messaging bot. Field-ops paging for distributed teams.', meta: 'Production', size: 13, color: 'gold' }
+      ]
+    },
+    {
+      r: 250, name: 'methodology', label: 'Methodology',
+      nodes: [
+        { id: 'sprint', name: 'Discovery Sprint', kind: 'method', cat: 'Shape 01', desc: 'Two weeks. Operator interviews. Findings deck. Map the operation, find the seven-percent layer.', meta: 'Fixed-price · $24K', size: 13, color: 'gold-outline' },
+        { id: 'build', name: 'Build', kind: 'method', cat: 'Shape 02', desc: '8 to 16 weeks. One operator-grade module shipped to production. Both partners on every engagement.', meta: 'Fixed-price · $80K-$220K', size: 13, color: 'gold-outline' },
+        { id: 'platform', name: 'Platform', kind: 'method', cat: 'Shape 03', desc: 'Quarterly retainer. Multi-module operating substrate, owned by the client.', meta: 'From $90K / qtr', size: 13, color: 'gold-outline' }
+      ]
+    },
+    {
+      r: 330, name: 'engagements', label: 'Active engagements',
+      nodes: [
+        { id: 'aspire', name: 'Aspire', kind: 'engagement', cat: 'Hospitality consulting', desc: 'Renie Cavallari. Discovery Sprint shipped, Build phase active. Assessment platform diagnosing restaurant revenue leakage.', meta: 'Sprint → Build · Active 2026', size: 13, color: 'navy-gold' },
+        { id: 'hausmatch', name: 'HausMatch', kind: 'engagement', cat: 'Real estate platform', desc: 'Daniel Lombard, Julius Bond. Visual AI home search. Pitch deck shipped, demo build pending client confirmation.', meta: 'Pre-Build · Active 2026', size: 13, color: 'navy-gold' },
+        { id: 'sostanza', name: 'Sostanza', kind: 'engagement', cat: 'Hospitality', desc: 'Caplan-published framework operator. Discovery sprint in progress. Operating substrate beneath their published methodology.', meta: 'In Discovery Sprint', size: 13, color: 'navy-gold' },
+        { id: 'aroya', name: 'Aroya', kind: 'engagement', cat: 'Cannabis tech partnership', desc: 'Brad Wood, partnership conversation. Performance Loop integration substrate.', meta: 'Qualification · partnership track', size: 12, color: 'navy-gold' },
+        { id: 'cliff', name: 'Cliff House MD', kind: 'engagement', cat: 'Hospitality focus group', desc: 'Renie introduction. Multi-coach hospitality firm. Aspire-derived engagement.', meta: 'Qualification · Q2 2026', size: 12, color: 'navy-gold' }
+      ]
+    },
+    {
+      r: 410, name: 'tools', label: 'AI tools layer · 93%',
+      nodes: [
+        { id: 't1', name: 'Anthropic', kind: 'tool', cat: 'LLM provider', desc: 'Foundation model. The 93% layer. Praxis builds the layer underneath.', meta: 'Tools layer', size: 9, color: 'ghost' },
+        { id: 't2', name: 'Supabase', kind: 'tool', cat: 'Data substrate', desc: 'Postgres backbone for context DB and product surfaces.', meta: 'Tools layer', size: 9, color: 'ghost' },
+        { id: 't3', name: 'Vercel', kind: 'tool', cat: 'Deploy', desc: 'Production hosting for Praxis web surfaces.', meta: 'Tools layer', size: 9, color: 'ghost' },
+        { id: 't4', name: 'Slack', kind: 'tool', cat: 'Comms', desc: 'Operator paging, work-tickets channel, async collaboration.', meta: 'Tools layer', size: 9, color: 'ghost' },
+        { id: 't5', name: 'Airtable', kind: 'tool', cat: 'Audit', desc: 'Floor-level audits, Resolution tracking.', meta: 'Tools layer', size: 9, color: 'ghost' },
+        { id: 't6', name: 'Metrc', kind: 'tool', cat: 'Compliance', desc: 'State-mandated cannabis tracking integration.', meta: 'Tools layer', size: 9, color: 'ghost' },
+        { id: 't7', name: 'Notion', kind: 'tool', cat: 'Docs', desc: 'External-facing documentation surfaces.', meta: 'Tools layer', size: 9, color: 'ghost' },
+        { id: 't8', name: 'Gmail', kind: 'tool', cat: 'Comms', desc: 'External operator communications.', meta: 'Tools layer', size: 9, color: 'ghost' },
+        { id: 't9', name: 'Stripe', kind: 'tool', cat: 'Payments', desc: 'Engagement billing and invoicing rail.', meta: 'Tools layer', size: 9, color: 'ghost' },
+        { id: 't10', name: 'GitHub', kind: 'tool', cat: 'Source', desc: 'All code surfaces, branch deploys, lineage.', meta: 'Tools layer', size: 9, color: 'ghost' },
+        { id: 't11', name: 'Aroya', kind: 'tool', cat: 'Cultivation tech', desc: 'Cultivation telemetry partnership integration.', meta: 'Tools layer', size: 9, color: 'ghost' },
+        { id: 't12', name: 'StashDoc', kind: 'tool', cat: 'Compliance', desc: 'Michigan compliance shop integration.', meta: 'Tools layer', size: 9, color: 'ghost' }
+      ]
+    }
+  ];
+
+  // Lineage edges (which engagement uses which methodology, etc.)
+  const EDGES = [
+    ['aspire', 'sprint'], ['aspire', 'build'],
+    ['hausmatch', 'build'],
+    ['sostanza', 'sprint'],
+    ['aroya', 'platform'],
+    ['cliff', 'sprint'],
+    ['cultops', 'jm'], ['cultlos', 'jm'], ['textback', 'jm'],
+    ['aspire', 'gd'], ['hausmatch', 'gd'], ['sostanza', 'gd'],
+    ['build', 'cultops'], ['platform', 'cultops'],
+  ];
+
+  // ─── RENDER · build the SVG ───
+  const svg = document.getElementById('atom');
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  const cx = 500, cy = 425;
+
+  // Defs + glow filter
+  const defs = document.createElementNS(SVGNS, 'defs');
+  defs.innerHTML = `
+    <radialGradient id="nucleusGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#C42130"/>
+      <stop offset="60%" stop-color="#8c1722"/>
+      <stop offset="100%" stop-color="#3a0a10"/>
+    </radialGradient>
+    <radialGradient id="goldGrad" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#E8D69A"/>
+      <stop offset="100%" stop-color="#9A7B30"/>
+    </radialGradient>
+    <filter id="redGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="subtleGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  `;
+  svg.appendChild(defs);
+
+  // Background reticle
+  const reticle = document.createElementNS(SVGNS, 'g');
+  reticle.setAttribute('opacity', '0.18');
+  for (let i = 0; i < 12; i++) {
+    const angle = (i * 30) * Math.PI / 180;
+    const x1 = cx + Math.cos(angle) * 60;
+    const y1 = cy + Math.sin(angle) * 60;
+    const x2 = cx + Math.cos(angle) * 430;
+    const y2 = cy + Math.sin(angle) * 430;
+    const line = document.createElementNS(SVGNS, 'line');
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+    line.setAttribute('stroke', '#C9A24B'); line.setAttribute('stroke-width', '0.4');
+    line.setAttribute('stroke-dasharray', '2,4');
+    reticle.appendChild(line);
+  }
+  svg.appendChild(reticle);
+
+  // Orbit rings
+  ORBITS.slice(1).forEach((orbit, i) => {
+    const ring = document.createElementNS(SVGNS, 'circle');
+    ring.setAttribute('cx', cx); ring.setAttribute('cy', cy); ring.setAttribute('r', orbit.r);
+    ring.setAttribute('fill', 'none');
+    ring.setAttribute('stroke', '#C9A24B');
+    ring.setAttribute('stroke-width', '0.5');
+    ring.setAttribute('stroke-dasharray', i === ORBITS.length - 2 ? '1,4' : '2,3');
+    ring.setAttribute('opacity', i === ORBITS.length - 2 ? '0.35' : '0.5');
+    svg.appendChild(ring);
+
+    // Orbit label
+    const labRadius = orbit.r;
+    const labX = cx;
+    const labY = cy - labRadius - 8;
+    const lab = document.createElementNS(SVGNS, 'text');
+    lab.setAttribute('x', labX);
+    lab.setAttribute('y', labY);
+    lab.setAttribute('text-anchor', 'middle');
+    lab.setAttribute('font-family', 'IBM Plex Mono');
+    lab.setAttribute('font-size', '9');
+    lab.setAttribute('letter-spacing', '2');
+    lab.setAttribute('fill', '#C9A24B');
+    lab.setAttribute('opacity', '0.7');
+    lab.setAttribute('text-transform', 'uppercase');
+    lab.textContent = `ORBIT ${String(i + 1).padStart(2, '0')} · ${orbit.label.toUpperCase()}`;
+    svg.appendChild(lab);
+  });
+
+  // Position nodes around orbits
+  const allNodes = {};
+  ORBITS.forEach((orbit, oIdx) => {
+    if (orbit.r === 0) {
+      // Nucleus
+      const node = orbit.nodes[0];
+      const posX = cx, posY = cy;
+      allNodes[node.id] = { x: posX, y: posY, ...node, orbit: oIdx };
+    } else {
+      const n = orbit.nodes.length;
+      const angleOffset = oIdx % 2 === 0 ? 0 : Math.PI / n;
+      orbit.nodes.forEach((node, idx) => {
+        const angle = (idx / n) * Math.PI * 2 + angleOffset - Math.PI / 2;
+        const posX = cx + Math.cos(angle) * orbit.r;
+        const posY = cy + Math.sin(angle) * orbit.r;
+        allNodes[node.id] = { x: posX, y: posY, ...node, orbit: oIdx, angle };
+      });
+    }
+  });
+
+  // Draw lineage edges first (so they sit under nodes)
+  const edgeGroup = document.createElementNS(SVGNS, 'g');
+  edgeGroup.setAttribute('opacity', '0.32');
+  EDGES.forEach(([from, to]) => {
+    const a = allNodes[from], b = allNodes[to];
+    if (!a || !b) return;
+    const line = document.createElementNS(SVGNS, 'path');
+    // Curved path between
+    const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const d = Math.sqrt(dx*dx + dy*dy);
+    const off = 18;
+    const ctrlX = mx - dy/d * off;
+    const ctrlY = my + dx/d * off;
+    line.setAttribute('d', `M ${a.x} ${a.y} Q ${ctrlX} ${ctrlY} ${b.x} ${b.y}`);
+    line.setAttribute('fill', 'none');
+    line.setAttribute('stroke', '#C9A24B');
+    line.setAttribute('stroke-width', '0.6');
+    line.setAttribute('stroke-dasharray', '1,3');
+    edgeGroup.appendChild(line);
+  });
+  svg.appendChild(edgeGroup);
+
+  // Draw nodes
+  const nodeGroup = document.createElementNS(SVGNS, 'g');
+  Object.values(allNodes).forEach(node => {
+    const g = document.createElementNS(SVGNS, 'g');
+    g.setAttribute('transform', `translate(${node.x}, ${node.y})`);
+    g.setAttribute('data-id', node.id);
+    g.style.cursor = 'pointer';
+
+    // Halo for nucleus
+    if (node.kind === 'mark') {
+      const halo = document.createElementNS(SVGNS, 'circle');
+      halo.setAttribute('r', node.size + 16);
+      halo.setAttribute('fill', 'rgba(196,33,48,0.18)');
+      halo.style.animation = 'haloRing 3s ease-in-out infinite';
+      g.appendChild(halo);
+
+      const halo2 = document.createElementNS(SVGNS, 'circle');
+      halo2.setAttribute('r', node.size + 30);
+      halo2.setAttribute('fill', 'none');
+      halo2.setAttribute('stroke', '#C42130');
+      halo2.setAttribute('stroke-width', '0.5');
+      halo2.setAttribute('stroke-dasharray', '2,4');
+      halo2.setAttribute('opacity', '0.45');
+      g.appendChild(halo2);
+
+      const dot = document.createElementNS(SVGNS, 'circle');
+      dot.setAttribute('r', node.size);
+      dot.setAttribute('fill', 'url(#nucleusGrad)');
+      dot.setAttribute('filter', 'url(#redGlow)');
+      g.appendChild(dot);
+
+      // Mark text
+      const tx = document.createElementNS(SVGNS, 'text');
+      tx.setAttribute('text-anchor', 'middle');
+      tx.setAttribute('y', 5);
+      tx.setAttribute('font-family', 'Big Shoulders Display');
+      tx.setAttribute('font-weight', '900');
+      tx.setAttribute('font-size', '16');
+      tx.setAttribute('fill', '#F1E8D2');
+      tx.setAttribute('letter-spacing', '1');
+      tx.textContent = 'P.';
+      g.appendChild(tx);
+
+      // Label below
+      const lab = document.createElementNS(SVGNS, 'text');
+      lab.setAttribute('text-anchor', 'middle');
+      lab.setAttribute('y', node.size + 22);
+      lab.setAttribute('font-family', 'Big Shoulders Display');
+      lab.setAttribute('font-weight', '800');
+      lab.setAttribute('font-size', '14');
+      lab.setAttribute('fill', '#F1E8D2');
+      lab.setAttribute('letter-spacing', '1.5');
+      lab.textContent = 'PRAXIS';
+      g.appendChild(lab);
+
+    } else {
+      let fill = '#F1E8D2', stroke = 'none', strokeWidth = 0;
+      if (node.color === 'gold') { fill = '#C9A24B'; }
+      else if (node.color === 'gold-outline') { fill = 'rgba(201,162,75,0.15)'; stroke = '#C9A24B'; strokeWidth = 1.4; }
+      else if (node.color === 'navy-gold') { fill = '#2C5384'; stroke = '#C9A24B'; strokeWidth = 1.4; }
+      else if (node.color === 'ghost') { fill = 'rgba(241,232,210,0.22)'; }
+      else if (node.color === 'paper') { fill = '#F1E8D2'; }
+
+      const dot = document.createElementNS(SVGNS, 'circle');
+      dot.setAttribute('r', node.size);
+      dot.setAttribute('fill', fill);
+      if (stroke !== 'none') {
+        dot.setAttribute('stroke', stroke);
+        dot.setAttribute('stroke-width', strokeWidth);
+      }
+      if (node.color !== 'ghost') dot.setAttribute('filter', 'url(#subtleGlow)');
+      g.appendChild(dot);
+
+      // Label
+      const lab = document.createElementNS(SVGNS, 'text');
+      lab.setAttribute('text-anchor', 'middle');
+      lab.setAttribute('y', node.size + 14);
+      lab.setAttribute('font-family', 'IBM Plex Mono');
+      lab.setAttribute('font-size', node.kind === 'tool' ? '8.5' : '10');
+      lab.setAttribute('letter-spacing', '1');
+      lab.setAttribute('fill', node.kind === 'tool' ? 'rgba(241,232,210,0.5)' : '#F1E8D2');
+      lab.setAttribute('text-transform', 'uppercase');
+      lab.textContent = node.name.toUpperCase();
+      g.appendChild(lab);
+    }
+
+    // Hover events
+    g.addEventListener('mouseenter', (e) => {
+      showTooltip(node, g);
+      g.style.transform = `translate(${node.x}px, ${node.y}px) scale(1.18)`;
+      g.style.transformOrigin = `${node.x}px ${node.y}px`;
+      g.style.transition = 'transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    });
+    g.addEventListener('mouseleave', () => {
+      hideTooltip();
+      g.style.transform = `translate(${node.x}px, ${node.y}px) scale(1)`;
+    });
+
+    nodeGroup.appendChild(g);
+  });
+  svg.appendChild(nodeGroup);
+
+  // ─── TOOLTIP ───
+  const tooltip = document.getElementById('tooltip');
+  const ttCat = document.getElementById('tt-cat');
+  const ttName = document.getElementById('tt-name');
+  const ttDesc = document.getElementById('tt-desc');
+  const ttMeta = document.getElementById('tt-meta');
+  const stage = document.getElementById('stage');
+
+  function showTooltip(node, g) {
+    ttCat.textContent = `Orbit ${String(node.orbit).padStart(2, '0')} · ${node.cat}`;
+    ttName.textContent = node.name;
+    ttDesc.textContent = node.desc;
+    ttMeta.innerHTML = `<span class="gold">·</span> ${node.meta}`;
+    const stageRect = stage.getBoundingClientRect();
+    const svgRect = svg.getBoundingClientRect();
+    // Place tooltip near node, but keep on screen
+    const scale = svgRect.width / 1000;
+    const px = node.x * scale;
+    const py = node.y * scale;
+    let left = px + 30;
+    let top = py - 30;
+    if (left + 240 > stageRect.width - 10) left = px - 270;
+    if (top < 10) top = 10;
+    if (top + 130 > stageRect.height - 10) top = stageRect.height - 140;
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+    tooltip.classList.add('in');
+  }
+  function hideTooltip() {
+    tooltip.classList.remove('in');
+  }
+
+  // ─── ACTIVITY FEED ───
+  // Default fallback items if /api/world-model is unavailable (local dev or env not set).
+  let FEED_ITEMS = [
+    { t: '04:18', cat: 'CULTOPS · DEPLOY', body: 'production hotfix shipped · <span class="gold">156 tables</span>' },
+    { t: '04:32', cat: 'ASPIRE · ENGAGEMENT', body: 'findings deck v2 shipped to Renie' },
+    { t: '06:12', cat: 'CONTEXT DB · WRITE', body: 'praxis_brand_system v2 locked · navy canvas adopted' },
+    { t: '06:45', cat: 'SOSTANZA · SPRINT', body: 'discovery interview · production planner v0.6' },
+    { t: '07:22', cat: 'CULTOPS · OBSERVED', body: 'uptime 30d <span class="red">99.94%</span>' },
+    { t: '08:05', cat: 'HAUSMATCH · ARTIFACT', body: 'pitch deck rendered · awaiting Daniel + Julius' },
+    { t: '08:41', cat: 'AROYA · PARTNERSHIP', body: 'Performance Loop preview shared' },
+    { t: '09:14', cat: 'CONTEXT DB · LESSON', body: 'no scanlines outside operator console <span class="gold">·</span> civic register' },
+    { t: '09:52', cat: 'CULTOPS · DEPLOY', body: 'cultivation_command_center v2 merged' },
+    { t: '10:18', cat: 'BRAIN · DECISION', body: 'V4 deep navy <span class="red">locked</span> as canonical' },
+    { t: '10:46', cat: 'PRAXIS · SESSION', body: 'world model artifact rendered' },
+    { t: '11:09', cat: 'CULTOPS · OBSERVED', body: 'multi-state production confirmed' }
+  ];
+  const feedList = document.getElementById('feed-list');
+  let feedIdx = 0;
+  function renderFeed() {
+    const items = [];
+    for (let i = 0; i < 6; i++) {
+      const idx = (feedIdx + i) % FEED_ITEMS.length;
+      items.push(FEED_ITEMS[idx]);
+    }
+    feedList.innerHTML = '';
+    items.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'feed-item';
+      div.innerHTML = `<div class="t">${item.t}</div><div class="body"><span class="cat">${item.cat}</span>${item.body}</div>`;
+      feedList.appendChild(div);
+    });
+  }
+  renderFeed();
+  setInterval(() => {
+    feedIdx = (feedIdx + 1) % FEED_ITEMS.length;
+    renderFeed();
+  }, 5000);
+
+  // ─── COUNTERS · ticking ───
+  let uptime = 99.94;
+  setInterval(() => {
+    uptime += (Math.random() * 0.0010 - 0.0002);
+    if (uptime > 99.999) uptime = 99.940;
+    if (uptime < 99.93) uptime = 99.940;
+    const el = document.getElementById('ctr-uptime');
+    if (el) el.innerHTML = uptime.toFixed(2) + '<span class="small">%</span>';
+  }, 4000);
+
+  let brain = 842;
+  setInterval(() => {
+    if (Math.random() > 0.7) {
+      brain += 1;
+      const el = document.getElementById('ctr-brain');
+      if (el) el.innerHTML = brain + '<span class="red">+</span>';
+    }
+  }, 3000);
+
+  let hotfixSec = 4 * 3600 + 12 * 60;
+  setInterval(() => {
+    hotfixSec += 1;
+    const h = Math.floor(hotfixSec / 3600);
+    const m = Math.floor((hotfixSec % 3600) / 60);
+    const el = document.getElementById('ann-refresh');
+    if (el) el.textContent = `0${h} hours, ${m < 10 ? '0' : ''}${m} minutes ago`;
+  }, 1000);
+
+  // ─── LIVE WIRING · /api/world-model ───
+  // Fetches sanitized snapshot from the brain DB and overrides the mock data.
+  // Fails open: if the endpoint is unavailable (local dev, env vars missing,
+  // network), we keep the baked-in fallback and the page still renders.
+  (async () => {
+    try {
+      const r = await fetch('/api/world-model', { headers: { accept: 'application/json' } });
+      if (!r.ok) return;
+      const data = await r.json();
+      if (data.mock) return; // Endpoint returned fallback shape; keep our local fallback.
+
+      // Replace activity feed with live data
+      if (Array.isArray(data.activity) && data.activity.length) {
+        FEED_ITEMS = data.activity;
+        feedIdx = 0;
+        renderFeed();
+      }
+
+      // Replace brain row counter with live count
+      if (typeof data.brain_rows_active === 'number') {
+        brain = data.brain_rows_active;
+        const el = document.getElementById('ctr-brain');
+        if (el) el.innerHTML = brain + '<span class="red">+</span>';
+      }
+
+      // Replace last-hotfix counter base with live delta
+      if (typeof data.last_hotfix_seconds_ago === 'number') {
+        hotfixSec = data.last_hotfix_seconds_ago;
+        const h = Math.floor(hotfixSec / 3600);
+        const m = Math.floor((hotfixSec % 3600) / 60);
+        const el = document.getElementById('ann-refresh');
+        if (el) el.textContent = `${String(h).padStart(2,'0')} hours, ${m < 10 ? '0' : ''}${m} minutes ago`;
+      }
+
+      // Set uptime baseline from live value
+      if (typeof data.uptime_30d === 'number') {
+        uptime = data.uptime_30d;
+        const el = document.getElementById('ctr-uptime');
+        if (el) el.innerHTML = uptime.toFixed(2) + '<span class="small">%</span>';
+      }
+    } catch (e) {
+      // Silent fallback. Keep baked data. Don't break the page.
+    }
+  })();
+
+  // Entities count
+  const totalEntities = ORBITS.reduce((acc, o) => acc + o.nodes.length, 0);
+  const annEnt = document.getElementById('ann-entities');
+  if (annEnt) annEnt.textContent = totalEntities;
+
+  // ─── HALO PULSE keyframes ───
+  const styleSheet = document.createElement('style');
+  styleSheet.textContent = `
+    @keyframes haloRing {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.12); }
+    }
+  `;
+  document.head.appendChild(styleSheet);
+
+})();
+</script>
+
+</body>
+</html>

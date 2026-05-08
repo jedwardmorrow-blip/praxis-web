@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRAXIS · Concept 5 · Sincere Atom-Age System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800;900&family=Bungee+Inline&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Limelight&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #EFE4CD;
+    --paper-aged: #E5D7B8;
+    --paper-deep: #DCC9A0;
+    --ink: #0E0E0D;
+    --ink-soft: #2c2620;
+    --ink-mute: #6e6555;
+    --ink-faint: #9a9077;
+    --rule: #14365E;
+    --rule-soft: #b6a984;
+    --navy: #14365E;
+    --navy-deep: #0a2545;
+    --navy-soft: #2c5384;
+    --red: #C42130;
+    --red-deep: #8c1722;
+    --gold-aged: #B8943C;
+    --gold-paper: #E8D69A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+  }
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(1.5px 1.5px at 20% 12%, rgba(14,14,13,0.10) 50%, transparent 51%),
+      radial-gradient(1px 1px at 78% 36%, rgba(14,14,13,0.08) 50%, transparent 51%),
+      radial-gradient(2px 2px at 44% 78%, rgba(14,14,13,0.05) 50%, transparent 51%),
+      radial-gradient(1px 1px at 65% 90%, rgba(14,14,13,0.08) 50%, transparent 51%);
+    background-size: 220px 220px, 380px 380px, 300px 300px, 180px 180px;
+    z-index: 100;
+    opacity: 0.7;
+  }
+  main { max-width: 1320px; margin: 0 auto; padding: 32px 56px 96px; position: relative; }
+
+  /* Top bar */
+  .top { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 14px 0 12px; border-bottom: 0.75px solid var(--navy); font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .top .l { color: var(--ink-mute); }
+  .top .c { color: var(--navy); font-family: "Big Shoulders Display"; font-weight: 800; letter-spacing: 0.04em; font-size: 16px; }
+  .top .c .d { color: var(--red); }
+  .top .r { text-align: right; color: var(--ink-mute); }
+  .top .r a { color: var(--ink); text-decoration: none; border-bottom: 0.5px solid var(--ink); padding-bottom: 1px; margin-left: 14px; }
+
+  /* Intro */
+  .intro { padding: 60px 0 36px; max-width: 940px; }
+  .kicker { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red); }
+  .h1 { font-family: "Big Shoulders Display", sans-serif; font-weight: 900; font-size: 88px; line-height: 0.92; letter-spacing: 0.005em; margin-top: 16px; text-transform: uppercase; color: var(--navy); }
+  .h1 .red { color: var(--red); }
+  .lede { font-family: "IBM Plex Sans"; font-size: 18px; line-height: 1.55; color: var(--ink); margin-top: 24px; max-width: 760px; }
+  .lede em { font-style: normal; font-weight: 600; color: var(--navy); }
+  .principle { font-family: "Special Elite", monospace; font-size: 14px; line-height: 1.6; color: var(--ink-soft); margin-top: 22px; max-width: 720px; padding: 18px 22px; border-left: 3px solid var(--red); background: rgba(196,33,48,0.04); }
+
+  /* Section rule */
+  .section-rule { display: flex; justify-content: space-between; padding: 24px 0 14px; border-top: 0.75px solid var(--navy); margin-top: 60px; font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 32px; }
+  .section-rule .lab { color: var(--red); }
+
+  /* Primary mark display */
+  .mark-stage { background: var(--paper-aged); border: 0.75px solid var(--navy); padding: 80px 40px; display: flex; flex-direction: column; align-items: center; gap: 36px; position: relative; }
+  .mark-stage::before, .mark-stage::after { content: ""; position: absolute; left: 16px; right: 16px; height: 1px; background: var(--navy); opacity: 0.4; }
+  .mark-stage::before { top: 8px; }
+  .mark-stage::after { bottom: 8px; }
+  .mark-corner-tl, .mark-corner-tr, .mark-corner-bl, .mark-corner-br { position: absolute; width: 14px; height: 14px; border: 1.5px solid var(--navy); }
+  .mark-corner-tl { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
+  .mark-corner-tr { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
+  .mark-corner-bl { bottom: 8px; left: 8px; border-right: 0; border-top: 0; }
+  .mark-corner-br { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+
+  .badge-large {
+    width: 360px; height: 360px;
+    position: relative;
+  }
+  .badge-large svg { width: 100%; height: 100%; }
+  .badge-stack { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; pointer-events: none; }
+  .badge-stack .wm { font-family: "Big Shoulders Display", sans-serif; font-weight: 900; font-size: 64px; line-height: 0.95; letter-spacing: 0.005em; color: var(--paper); text-transform: none; }
+  .badge-stack .wm .dot { color: var(--red); }
+  .badge-stack .yr { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: 0.32em; color: var(--paper); margin-top: 6px; opacity: 0.85; }
+
+  .mark-tag { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--navy); display: flex; gap: 18px; align-items: center; }
+  .mark-tag::before, .mark-tag::after { content: ""; width: 60px; height: 0.5px; background: var(--navy); }
+
+  /* Mark size scale */
+  .scale-row { display: grid; grid-template-columns: 240px 120px 60px 24px; gap: 56px; align-items: end; padding: 56px 0 32px; justify-content: center; }
+  .scale-row .badge-mini { position: relative; }
+  .scale-row .badge-mini svg { width: 100%; height: 100%; display: block; }
+  .scale-row .badge-mini .stack { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; pointer-events: none; }
+  .scale-row .badge-mini .stack .wm { font-family: "Big Shoulders Display"; font-weight: 900; line-height: 0.95; color: var(--paper); }
+  .scale-row .badge-mini .stack .wm .dot { color: var(--red); }
+  .scale-row .badge-mini .stack .yr { font-family: "IBM Plex Mono"; letter-spacing: 0.28em; color: var(--paper); opacity: 0.85; }
+  .scale-240 { width: 240px; height: 240px; } .scale-240 .wm { font-size: 44px; } .scale-240 .yr { font-size: 8px; margin-top: 4px; }
+  .scale-120 { width: 120px; height: 120px; } .scale-120 .wm { font-size: 22px; } .scale-120 .yr { font-size: 5px; margin-top: 2px; }
+  .scale-60 { width: 60px; height: 60px; } .scale-60 .wm { font-size: 12px; } .scale-60 .yr { display: none; }
+  .scale-24 { width: 24px; height: 24px; }
+  .scale-row .label { display: block; font-family: "IBM Plex Mono"; font-size: 10px; letter-spacing: 0.16em; color: var(--ink-mute); text-align: center; margin-top: 18px; text-transform: uppercase; }
+
+  /* Color system */
+  .colors { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+  .swatch { padding: 100px 16px 16px; position: relative; border: 0.75px solid var(--navy); }
+  .swatch.cream { background: var(--paper-aged); color: var(--ink); }
+  .swatch.navy { background: var(--navy); color: var(--paper); }
+  .swatch.ink { background: var(--ink); color: var(--paper); }
+  .swatch.red { background: var(--red); color: var(--paper); }
+  .swatch.gold { background: var(--gold-aged); color: var(--ink); }
+  .swatch.paper-deep { background: var(--paper-deep); color: var(--ink); }
+  .swatch .name { font-family: "Big Shoulders Display"; font-weight: 700; font-size: 16px; letter-spacing: 0.02em; text-transform: uppercase; }
+  .swatch .hex { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.06em; margin-top: 4px; opacity: 0.85; }
+  .swatch .role { font-family: "Special Elite"; font-size: 11px; line-height: 1.4; margin-top: 10px; padding-top: 8px; border-top: 0.5px solid currentColor; opacity: 0.7; }
+
+  /* Type system */
+  .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 0.75px solid var(--navy); }
+  .type-row { padding: 24px 28px; border-bottom: 0.5px solid var(--rule-soft); border-right: 0.5px solid var(--rule-soft); }
+  .type-row:nth-child(2n) { border-right: 0; }
+  .type-row:nth-last-child(-n+2) { border-bottom: 0; }
+  .type-row .meta { display: flex; justify-content: space-between; font-family: "IBM Plex Mono"; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 10px; }
+  .type-row .meta .red { color: var(--red); }
+  .type-row .specimen { color: var(--ink); }
+  .type-row .role { font-family: "IBM Plex Mono"; font-size: 11px; line-height: 1.6; color: var(--ink-mute); margin-top: 12px; padding-top: 10px; border-top: 0.5px dashed var(--rule-soft); }
+  .specimen-bs { font-family: "Big Shoulders Display"; font-weight: 900; font-size: 56px; line-height: 0.96; letter-spacing: 0.005em; text-transform: uppercase; color: var(--navy); }
+  .specimen-bs .red { color: var(--red); }
+  .specimen-plex-sans { font-family: "IBM Plex Sans"; font-weight: 400; font-size: 18px; line-height: 1.55; color: var(--ink); }
+  .specimen-plex-sans strong { color: var(--navy); font-weight: 600; }
+  .specimen-plex-mono { font-family: "IBM Plex Mono"; font-size: 14px; line-height: 1.7; color: var(--ink); letter-spacing: 0.02em; }
+  .specimen-plex-mono .lab { color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.16em; font-size: 10.5px; }
+  .specimen-plex-mono .red { color: var(--red); }
+  .specimen-elite { font-family: "Special Elite"; font-size: 16px; line-height: 1.55; color: var(--ink-soft); }
+  .specimen-limelight { font-family: "Limelight"; font-size: 44px; line-height: 1; letter-spacing: 0.02em; color: var(--navy); }
+  .specimen-limelight .red { color: var(--red); }
+  .specimen-bungee { font-family: "Bungee Inline"; font-size: 38px; line-height: 1; letter-spacing: 0.005em; color: var(--navy); }
+  .specimen-bungee .red { color: var(--red); }
+
+  /* Applications */
+  .app-row { margin-bottom: 28px; }
+  .app-head { display: grid; grid-template-columns: 80px 1fr auto; gap: 20px; align-items: baseline; padding: 12px 16px; background: var(--paper-aged); border: 0.75px solid var(--navy); border-bottom: 0; }
+  .app-head .num { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.16em; color: var(--ink-mute); }
+  .app-head .name { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 22px; letter-spacing: 0.005em; text-transform: uppercase; color: var(--navy); }
+  .app-head .tag { font-family: "IBM Plex Mono"; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); }
+  .app-body { border: 0.75px solid var(--navy); padding: 32px; background: var(--paper); }
+
+  /* Site header app */
+  .site-header { background: var(--paper); padding: 16px 24px; border: 1px solid var(--navy); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .site-header .left { display: flex; align-items: center; gap: 16px; }
+  .site-header .badge-mini-32 { width: 44px; height: 44px; position: relative; flex-shrink: 0; }
+  .site-header .badge-mini-32 svg { width: 100%; height: 100%; display: block; }
+  .site-header .wmline { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 22px; letter-spacing: 0.04em; color: var(--navy); }
+  .site-header .wmline .dot { color: var(--red); }
+  .site-header .sub { font-family: "IBM Plex Mono"; font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-mute); margin-top: 1px; }
+  .site-header .nav { display: flex; gap: 24px; font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); }
+  .site-header .nav a { color: inherit; text-decoration: none; padding-bottom: 2px; border-bottom: 1px solid transparent; }
+  .site-header .nav a:hover { border-bottom-color: var(--red); }
+  .site-header .cta { background: var(--red); color: var(--paper); padding: 9px 18px; font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; }
+
+  /* Business card app */
+  .card-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding: 32px 0; }
+  .biz-card { aspect-ratio: 7/4; box-shadow: 0 6px 14px rgba(0,0,0,0.18); position: relative; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
+  .biz-card.front { background: var(--paper); border: 1px solid var(--navy); color: var(--ink); }
+  .biz-card.back { background: var(--navy); color: var(--paper); }
+  .bc-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .bc-top .badge-card { width: 72px; height: 72px; position: relative; flex-shrink: 0; }
+  .bc-top .badge-card svg { width: 100%; height: 100%; }
+  .bc-top .meta-card { font-family: "IBM Plex Mono"; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-mute); text-align: right; line-height: 1.5; }
+  .bc-name { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 28px; letter-spacing: 0.005em; line-height: 1; color: var(--navy); text-transform: uppercase; }
+  .bc-role { font-family: "IBM Plex Mono"; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); margin-top: 4px; }
+  .bc-bottom { font-family: "IBM Plex Mono"; font-size: 11px; line-height: 1.6; color: var(--ink); display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .bc-bottom .red { color: var(--red); }
+  .bc-bottom .lab { font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); display: block; margin-bottom: 2px; }
+
+  /* Back of card: small poster */
+  .biz-card.back { padding: 0; overflow: hidden; }
+  .bcb-content { padding: 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; gap: 12px; position: relative; }
+  .bcb-content::before { content: ""; position: absolute; inset: 8px; border: 1px solid rgba(232,214,154,0.4); pointer-events: none; }
+  .bcb-eye { font-family: "IBM Plex Mono"; font-size: 8.5px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold-paper); }
+  .bcb-h { font-family: "Limelight"; font-size: 30px; line-height: 0.96; color: var(--paper); }
+  .bcb-h .red { color: var(--red); }
+  .bcb-tag { font-family: "Special Elite"; font-size: 11px; line-height: 1.45; color: var(--gold-paper); max-width: 230px; }
+  .bcb-foot { font-family: "IBM Plex Mono"; font-size: 8.5px; letter-spacing: 0.28em; color: var(--gold-paper); padding-top: 8px; border-top: 1px solid rgba(232,214,154,0.4); width: 80%; display: flex; justify-content: space-between; }
+
+  /* Deck cover slide */
+  .deck-slide { aspect-ratio: 16/9; background: var(--paper); border: 1px solid var(--navy); display: grid; grid-template-columns: 5fr 7fr; box-shadow: 0 8px 18px rgba(0,0,0,0.18); }
+  .deck-art {
+    background:
+      radial-gradient(ellipse 100% 70% at 50% 30%, #d4561c 0%, var(--red) 55%, var(--red-deep) 100%);
+    color: var(--paper);
+    padding: 28px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    text-align: center;
+    position: relative;
+    border-right: 1px solid var(--navy);
+    overflow: hidden;
+  }
+  .deck-art::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      conic-gradient(from 75deg at 50% 50%,
+        transparent 0deg, transparent 50deg,
+        rgba(232,214,154,0.12) 56deg, transparent 62deg,
+        transparent 80deg, rgba(232,214,154,0.12) 86deg, transparent 92deg,
+        transparent 110deg, rgba(232,214,154,0.12) 116deg, transparent 122deg);
+    pointer-events: none;
+  }
+  .deck-art > * { position: relative; }
+  .deck-art .eye { font-family: "IBM Plex Mono"; font-size: 9.5px; letter-spacing: 0.32em; text-transform: uppercase; padding-bottom: 8px; border-bottom: 1px solid var(--gold-paper); }
+  .deck-art .h { font-family: "Limelight"; font-size: 56px; line-height: 0.94; letter-spacing: -0.005em; }
+  .deck-art .h .red { color: var(--gold-paper); }
+  .deck-art .sub { font-family: "Big Shoulders Display"; font-weight: 700; font-size: 16px; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 6px; }
+  .deck-art .illus { padding: 8px 0; }
+  .deck-art .illus svg { width: 200px; height: 138px; }
+  .deck-art .foot { background: var(--navy-deep); padding: 12px 14px; margin: 0 -28px -28px; border-top: 2px solid var(--gold-paper); }
+  .deck-art .foot .h2 { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 16px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gold-paper); }
+  .deck-art .foot .s2 { font-family: "Special Elite"; font-size: 10px; line-height: 1.4; color: var(--paper); margin-top: 4px; }
+
+  .deck-text { padding: 36px 40px; display: flex; flex-direction: column; justify-content: space-between; }
+  .deck-text .top-row { display: flex; justify-content: space-between; align-items: flex-start; }
+  .deck-text .badge-deck { width: 60px; height: 60px; position: relative; }
+  .deck-text .badge-deck svg { width: 100%; height: 100%; }
+  .deck-text .meta-deck { text-align: right; font-family: "IBM Plex Mono"; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-mute); line-height: 1.6; }
+  .deck-text .deck-h { font-family: "Big Shoulders Display"; font-weight: 900; font-size: 64px; line-height: 0.92; letter-spacing: 0.005em; text-transform: uppercase; color: var(--navy); margin-top: 12px; }
+  .deck-text .deck-h .red { color: var(--red); }
+  .deck-text .deck-sub { font-family: "Special Elite"; font-size: 16px; line-height: 1.5; color: var(--ink-soft); margin-top: 14px; max-width: 400px; }
+  .deck-text .deck-foot { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); display: flex; justify-content: space-between; padding-top: 14px; border-top: 0.5px solid var(--navy); }
+  .deck-text .deck-foot .red { color: var(--red); }
+
+  /* Console terminal app */
+  .console-window {
+    background: var(--paper);
+    border: 1.25px solid var(--navy);
+    color: var(--ink);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .console-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: var(--navy); color: var(--paper); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; }
+  .console-bar .left { display: flex; align-items: center; gap: 12px; }
+  .console-bar .pulse { width: 8px; height: 8px; background: var(--red); border-radius: 50%; position: relative; }
+  .console-bar .pulse::after { content: ""; position: absolute; inset: -3px; border-radius: 50%; border: 1px solid var(--red); animation: pulse 2s ease-out infinite; opacity: 0.6; }
+  @keyframes pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(2.6); opacity: 0; } }
+  .console-bar .right { font-family: "IBM Plex Mono"; }
+  .console-body { padding: 22px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+  .console-section .lab { font-family: "IBM Plex Mono"; font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-mute); padding-bottom: 6px; border-bottom: 0.5px dashed var(--rule-soft); margin-bottom: 8px; }
+  .console-section .row { display: grid; grid-template-columns: 130px 1fr; padding: 2px 0; }
+  .console-section .row .k { color: var(--ink-mute); }
+  .console-section .row .v { color: var(--ink); }
+  .console-section .row .v.red { color: var(--red); }
+  .console-section .row .v.navy { color: var(--navy); font-weight: 500; }
+  .console-foot { padding: 10px 16px; background: var(--paper-aged); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); display: flex; justify-content: space-between; border-top: 0.5px solid var(--navy); }
+  .console-foot .red { color: var(--red); }
+
+  /* Restraint rules */
+  .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1.5px solid var(--navy); }
+  .rule-col { padding: 28px 32px; }
+  .rule-col.do { background: rgba(20,54,94,0.06); border-right: 0.5px solid var(--navy); }
+  .rule-col.dont { background: rgba(196,33,48,0.05); }
+  .rule-col .rh { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 26px; letter-spacing: 0.02em; text-transform: uppercase; padding-bottom: 10px; border-bottom: 1.5px solid currentColor; margin-bottom: 16px; }
+  .rule-col.do .rh { color: var(--navy); }
+  .rule-col.dont .rh { color: var(--red); }
+  .rule-col ul { list-style: none; padding: 0; }
+  .rule-col li { font-family: "IBM Plex Sans"; font-size: 14px; line-height: 1.55; padding: 10px 0; border-bottom: 0.5px dashed var(--rule-soft); }
+  .rule-col li:last-child { border-bottom: 0; }
+  .rule-col li strong { font-weight: 600; }
+  .rule-col.do li strong { color: var(--navy); }
+  .rule-col.dont li strong { color: var(--red); }
+  .rule-col li .reason { display: block; font-family: "IBM Plex Mono"; font-size: 10.5px; line-height: 1.55; color: var(--ink-mute); margin-top: 4px; }
+
+  footer { margin-top: 64px; padding-top: 18px; border-top: 0.75px solid var(--navy); display: flex; justify-content: space-between; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); }
+
+  @media (max-width: 1100px) {
+    main { padding: 24px 24px 64px; }
+    .h1 { font-size: 56px; }
+    .colors { grid-template-columns: 1fr 1fr; }
+    .type-grid, .rules { grid-template-columns: 1fr; }
+    .scale-row { grid-template-columns: repeat(2, auto); gap: 28px; }
+    .card-pair { grid-template-columns: 1fr; }
+    .deck-slide { grid-template-columns: 1fr; aspect-ratio: auto; }
+    .console-body { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <div class="top">
+    <span class="l">Praxis · brand exploration · concept 5 (locked)</span>
+    <span class="c">PRAXIS<span class="d">.</span></span>
+    <span class="r">
+      <a href="index.html">A/B</a>
+      
+      
+    </span>
+  </div>
+
+  <section class="intro">
+    <span class="kicker">Concept 05 · Sincere Atom-Age System · 2026-04-30</span>
+    <h1 class="h1">Civic <span class="red">atom-age,</span><br>not Fallout cosplay.</h1>
+    <p class="lede">A complete brand system that channels the <em>1940s WPA, 1950s Olivetti, 1960s NASA technical manuals, and Civil Service insignia</em> — the sincere visual ancestors of Fallout's parody brands. Sincere atom-age has the warmth, the optimism, the period typography, and the operator-grounded posture without the irony. Civilians believed technology would transform daily life optimistically. Praxis says: this time, deliver on it.</p>
+    <p class="principle">The single rule that holds this system together: every move has to read the same way to a buyer who has never played Fallout as it does to a buyer who has. If a move only works because someone "gets the reference," it fails the operator-credibility test and we drop it. The reference is allowed to be there for those who see it. It cannot be required for the design to work.</p>
+  </section>
+
+  <!-- Primary mark -->
+  <div class="section-rule">
+    <span class="lab">§ 01 · Primary mark</span>
+    <span>The civic vault badge, stripped</span>
+  </div>
+
+  <section class="mark-stage">
+    <span class="mark-corner-tl"></span><span class="mark-corner-tr"></span>
+    <span class="mark-corner-bl"></span><span class="mark-corner-br"></span>
+
+    <div class="mark-tag">PRIMARY LOCKUP · CIVIC INDUSTRIAL BADGE</div>
+
+    <div class="badge-large">
+      <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="navygrad" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#1c4a7c"/>
+            <stop offset="100%" stop-color="#0a2545"/>
+          </radialGradient>
+        </defs>
+        <!-- Outer cog -->
+        <circle cx="180" cy="180" r="172" fill="#14365E"/>
+        <g fill="#14365E">
+          <g id="t5">
+            <rect x="174" y="0" width="12" height="14"/>
+          </g>
+          <use href="#t5" transform="rotate(30 180 180)"/>
+          <use href="#t5" transform="rotate(60 180 180)"/>
+          <use href="#t5" transform="rotate(90 180 180)"/>
+          <use href="#t5" transform="rotate(120 180 180)"/>
+          <use href="#t5" transform="rotate(150 180 180)"/>
+          <use href="#t5" transform="rotate(180 180 180)"/>
+          <use href="#t5" transform="rotate(210 180 180)"/>
+          <use href="#t5" transform="rotate(240 180 180)"/>
+          <use href="#t5" transform="rotate(270 180 180)"/>
+          <use href="#t5" transform="rotate(300 180 180)"/>
+          <use href="#t5" transform="rotate(330 180 180)"/>
+        </g>
+        <!-- Inner field -->
+        <circle cx="180" cy="180" r="158" fill="url(#navygrad)" stroke="#EFE4CD" stroke-width="2.5"/>
+        <circle cx="180" cy="180" r="148" fill="none" stroke="#EFE4CD" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.55"/>
+        <circle cx="180" cy="180" r="92" fill="none" stroke="#EFE4CD" stroke-width="0.5" opacity="0.4"/>
+        <!-- Curved word ring -->
+        <defs>
+          <path id="topArc5" d="M 56,180 A 124,124 0 0 1 304,180" fill="none"/>
+          <path id="botArc5" d="M 60,180 A 120,120 0 0 0 300,180" fill="none"/>
+        </defs>
+        <text font-family="Big Shoulders Display" font-weight="800" font-size="22" fill="#EFE4CD" letter-spacing="3.2">
+          <textPath href="#topArc5" startOffset="50%" text-anchor="middle">OPERATIONAL · INTELLIGENCE</textPath>
+        </text>
+        <text font-family="IBM Plex Mono" font-size="11" fill="#EFE4CD" letter-spacing="6" opacity="0.85">
+          <textPath href="#botArc5" startOffset="50%" text-anchor="middle">EST. MMXXVI · PHOENIX</textPath>
+        </text>
+        <!-- Side flourish stars -->
+        <g fill="#C42130">
+          <polygon points="32,180 28,176 24,180 28,184" />
+          <polygon points="336,180 332,176 328,180 332,184" />
+        </g>
+        <!-- Subtle atom orbit behind wordmark -->
+        <g stroke="#EFE4CD" stroke-width="0.6" fill="none" opacity="0.18" transform="translate(180,180)">
+          <ellipse cx="0" cy="0" rx="68" ry="22"/>
+          <ellipse cx="0" cy="0" rx="68" ry="22" transform="rotate(60)"/>
+          <ellipse cx="0" cy="0" rx="68" ry="22" transform="rotate(-60)"/>
+        </g>
+      </svg>
+      <div class="badge-stack">
+        <div class="wm">PRAXIS<span class="dot">.</span></div>
+        <div class="yr">VOLUME ONE · 2026</div>
+      </div>
+    </div>
+
+    <div class="mark-tag">DROPPED FROM CONCEPT 01: "PRAXIS-TEC" SUFFIX · YELLOW-ON-COBALT · VAULT NUMBER GAGS</div>
+
+    <!-- Scale -->
+    <div class="scale-row" style="background: var(--paper); padding: 36px 0; border-top: 0.5px solid var(--navy); border-bottom: 0.5px solid var(--navy); width: 100%; margin-top: 16px;">
+
+      <div>
+        <div class="badge-mini scale-240">
+          <svg viewBox="0 0 360 360"><circle cx="180" cy="180" r="172" fill="#14365E"/><g fill="#14365E"><g id="t240"><rect x="174" y="0" width="12" height="14"/></g><use href="#t240" transform="rotate(30 180 180)"/><use href="#t240" transform="rotate(60 180 180)"/><use href="#t240" transform="rotate(90 180 180)"/><use href="#t240" transform="rotate(120 180 180)"/><use href="#t240" transform="rotate(150 180 180)"/><use href="#t240" transform="rotate(180 180 180)"/><use href="#t240" transform="rotate(210 180 180)"/><use href="#t240" transform="rotate(240 180 180)"/><use href="#t240" transform="rotate(270 180 180)"/><use href="#t240" transform="rotate(300 180 180)"/><use href="#t240" transform="rotate(330 180 180)"/></g><circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#EFE4CD" stroke-width="2.5"/></svg>
+          <div class="stack"><div class="wm">PRAXIS<span class="dot">.</span></div><div class="yr">EST. MMXXVI</div></div>
+        </div>
+        <span class="label">240 px · header</span>
+      </div>
+
+      <div>
+        <div class="badge-mini scale-120">
+          <svg viewBox="0 0 360 360"><circle cx="180" cy="180" r="172" fill="#14365E"/><g fill="#14365E"><g id="t120"><rect x="174" y="0" width="12" height="14"/></g><use href="#t120" transform="rotate(30 180 180)"/><use href="#t120" transform="rotate(60 180 180)"/><use href="#t120" transform="rotate(90 180 180)"/><use href="#t120" transform="rotate(120 180 180)"/><use href="#t120" transform="rotate(150 180 180)"/><use href="#t120" transform="rotate(180 180 180)"/><use href="#t120" transform="rotate(210 180 180)"/><use href="#t120" transform="rotate(240 180 180)"/><use href="#t120" transform="rotate(270 180 180)"/><use href="#t120" transform="rotate(300 180 180)"/><use href="#t120" transform="rotate(330 180 180)"/></g><circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#EFE4CD" stroke-width="2.5"/></svg>
+          <div class="stack"><div class="wm">PRAXIS<span class="dot">.</span></div></div>
+        </div>
+        <span class="label">120 px · social</span>
+      </div>
+
+      <div>
+        <div class="badge-mini scale-60">
+          <svg viewBox="0 0 360 360"><circle cx="180" cy="180" r="172" fill="#14365E"/><circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#EFE4CD" stroke-width="3"/></svg>
+          <div class="stack"><div class="wm">P<span class="dot">.</span></div></div>
+        </div>
+        <span class="label">60 px · email</span>
+      </div>
+
+      <div>
+        <div class="badge-mini scale-24">
+          <svg viewBox="0 0 360 360"><circle cx="180" cy="180" r="172" fill="#14365E"/><circle cx="180" cy="180" r="158" fill="#0a2545"/><circle cx="180" cy="180" r="20" fill="#C42130"/></svg>
+        </div>
+        <span class="label">24 px · favicon</span>
+      </div>
+
+    </div>
+
+    <div class="mark-tag">SCALES TO 16 PX · PASSES FAVICON TEST</div>
+  </section>
+
+  <!-- Color system -->
+  <div class="section-rule">
+    <span class="lab">§ 02 · Color system</span>
+    <span>Six colors. Strict semantic roles.</span>
+  </div>
+
+  <section class="colors">
+    <div class="swatch cream">
+      <div class="name">Praxis Cream</div>
+      <div class="hex">#EFE4CD</div>
+      <div class="role">Default canvas. The paper. Everything sits on this. Period correct, period warm.</div>
+    </div>
+    <div class="swatch navy">
+      <div class="name">Operator Navy</div>
+      <div class="hex">#14365E</div>
+      <div class="role">Primary ink. Headlines, badge field, secondary surfaces. The "civic" register.</div>
+    </div>
+    <div class="swatch ink">
+      <div class="name">Print Ink</div>
+      <div class="hex">#0E0E0D</div>
+      <div class="role">Body copy, footnotes, fine print. Use sparingly outside text.</div>
+    </div>
+    <div class="swatch red">
+      <div class="name">Atomic Red</div>
+      <div class="hex">#C42130</div>
+      <div class="role">Single accent. The dot. One CTA per page. One pulse per section. Never wallpaper.</div>
+    </div>
+    <div class="swatch gold">
+      <div class="name">Aged Gold</div>
+      <div class="hex">#B8943C</div>
+      <div class="role">Hero artwork only. Propaganda poster, deck cover, conference backdrop. Banned from primary mark.</div>
+    </div>
+    <div class="swatch paper-deep">
+      <div class="name">Paper Aged</div>
+      <div class="hex">#DCC9A0</div>
+      <div class="role">Section dividers, side panels, business card front aging. Subtle texture, not hierarchy.</div>
+    </div>
+  </section>
+
+  <!-- Type system -->
+  <div class="section-rule">
+    <span class="lab">§ 03 · Type system</span>
+    <span>Five faces. Strict role boundaries.</span>
+  </div>
+
+  <section class="type-grid">
+
+    <div class="type-row">
+      <div class="meta"><span>BIG SHOULDERS DISPLAY 800/900</span><span class="red">DISPLAY · HEADLINES</span></div>
+      <div class="specimen specimen-bs">Operators<br>who build<span class="red">.</span></div>
+      <div class="role">Primary headline face across site, deck, business cards. Atomic-age industrial without Fallout-specific signal. Open-source via Google Fonts.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="meta"><span>IBM PLEX SANS 400/500/600</span><span class="red">BODY · LEDE COPY</span></div>
+      <div class="specimen specimen-plex-sans">We ran a multi-state operation. Then we built the software that runs it. <strong>Now we build for the founders doing the same.</strong></div>
+      <div class="role">All running text, lede paragraphs, manifesto sections. Warm, technical, operator-grounded. Pairs with Big Shoulders without competing.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="meta"><span>IBM PLEX MONO 400/500</span><span class="red">DATA · LABELS · CHROME</span></div>
+      <div class="specimen specimen-plex-mono">
+        <span class="lab">Live state · CultOps production</span><br>
+        tables ······· 156<br>
+        modules ······ 12<br>
+        last hotfix ·· <span class="red">04 hours ago</span><br>
+        capacity ····· 06 / yr · active
+      </div>
+      <div class="role">Section tags, eyebrow text, data readouts, footnotes, navigation, footer chrome, equipment plates. Carries the "operator's instrument" quality.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="meta"><span>SPECIAL ELITE</span><span class="red">PERIOD VOICE · TYPEWRITER</span></div>
+      <div class="specimen specimen-elite">"Why fixed-price, not hours? Output-based pricing rewards velocity. Fixed pricing rewards correctness. We price for the answer, not the keystrokes."</div>
+      <div class="role">Pull quotes, signature blocks, marginalia, period flourishes. Use sparingly, never for body copy. Adds human-typewriter warmth.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="meta"><span>LIMELIGHT</span><span class="red">POSTER ONLY</span></div>
+      <div class="specimen specimen-limelight">Operators Build<span class="red">.</span></div>
+      <div class="role">Reserved for the propaganda poster, deck cover, and conference backdrop. Never on the website body, never in business cards, never as section heads. One artifact per surface.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="meta"><span>BUNGEE INLINE</span><span class="red">ATOMIC EXCLAMATION · BANNED OUTSIDE POSTER</span></div>
+      <div class="specimen specimen-bungee">PRAXIS BUILDS<span class="red">!</span></div>
+      <div class="role">The fun one. Hero stripe on a propaganda poster. Sticker text. A single deck section divider. Never the wordmark. Never a section heading on the site.</div>
+    </div>
+
+  </section>
+
+  <!-- Applications -->
+  <div class="section-rule">
+    <span class="lab">§ 04 · Applications</span>
+    <span>The system, applied to four real surfaces</span>
+  </div>
+
+  <section class="app-row">
+    <div class="app-head"><span class="num">APP 01</span><span class="name">Site header</span><span class="tag">Live on every page</span></div>
+    <div class="app-body" style="padding: 24px;">
+      <div class="site-header">
+        <div class="left">
+          <div class="badge-mini-32">
+            <svg viewBox="0 0 360 360"><circle cx="180" cy="180" r="172" fill="#14365E"/><g fill="#14365E"><g id="th"><rect x="174" y="0" width="12" height="14"/></g><use href="#th" transform="rotate(30 180 180)"/><use href="#th" transform="rotate(60 180 180)"/><use href="#th" transform="rotate(90 180 180)"/><use href="#th" transform="rotate(120 180 180)"/><use href="#th" transform="rotate(150 180 180)"/><use href="#th" transform="rotate(180 180 180)"/><use href="#th" transform="rotate(210 180 180)"/><use href="#th" transform="rotate(240 180 180)"/><use href="#th" transform="rotate(270 180 180)"/><use href="#th" transform="rotate(300 180 180)"/><use href="#th" transform="rotate(330 180 180)"/></g><circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#EFE4CD" stroke-width="3"/><circle cx="180" cy="180" r="50" fill="#C42130"/></svg>
+          </div>
+          <div>
+            <div class="wmline">PRAXIS<span class="dot">.</span></div>
+            <div class="sub">Operational Intelligence</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="#">Work</a><a href="#">How We Work</a><a href="#">People</a><a href="#">Cannabis</a><a href="#">Intake</a>
+        </nav>
+        <a class="cta" href="#">File an intake →</a>
+      </div>
+      <p style="margin-top: 14px; font-family: 'IBM Plex Mono'; font-size: 11px; line-height: 1.6; color: var(--ink-mute);">Badge sits left at 44 px, wordmark in Big Shoulders 800 with the red dot, "Operational Intelligence" in Plex Mono caps below. Nav in Plex Mono. Single red CTA, never two. The badge's red center reads as a 16 px favicon when scaled.</p>
+    </div>
+  </section>
+
+  <section class="app-row">
+    <div class="app-head"><span class="num">APP 02</span><span class="name">Business card · front and back</span><span class="tag">Greg's pitch artifact</span></div>
+    <div class="app-body">
+      <div class="card-pair">
+
+        <div>
+          <div class="biz-card front">
+            <div class="bc-top">
+              <div class="badge-card">
+                <svg viewBox="0 0 360 360"><circle cx="180" cy="180" r="172" fill="#14365E"/><g fill="#14365E"><g id="tbf"><rect x="174" y="0" width="12" height="14"/></g><use href="#tbf" transform="rotate(30 180 180)"/><use href="#tbf" transform="rotate(60 180 180)"/><use href="#tbf" transform="rotate(90 180 180)"/><use href="#tbf" transform="rotate(120 180 180)"/><use href="#tbf" transform="rotate(150 180 180)"/><use href="#tbf" transform="rotate(180 180 180)"/><use href="#tbf" transform="rotate(210 180 180)"/><use href="#tbf" transform="rotate(240 180 180)"/><use href="#tbf" transform="rotate(270 180 180)"/><use href="#tbf" transform="rotate(300 180 180)"/><use href="#tbf" transform="rotate(330 180 180)"/></g><circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#EFE4CD" stroke-width="3"/><defs><path id="topbf" d="M 70,180 A 110,110 0 0 1 290,180" fill="none"/></defs><text font-family="Big Shoulders Display" font-weight="800" font-size="22" fill="#EFE4CD" letter-spacing="3"><textPath href="#topbf" startOffset="50%" text-anchor="middle">OPERATIONAL · INTELLIGENCE</textPath></text><text x="180" y="190" font-family="Big Shoulders Display" font-weight="900" font-size="78" fill="#EFE4CD" text-anchor="middle">P<tspan fill="#C42130">.</tspan></text></svg>
+              </div>
+              <div class="meta-card">PRAXIS · OP. INT.<br>EST. MMXXVI<br>FORM PX-001</div>
+            </div>
+            <div>
+              <div class="bc-name">Greg Dunaway<span style="color:var(--red)">.</span></div>
+              <div class="bc-role">Co-Founder · Managing Partner</div>
+            </div>
+            <div class="bc-bottom">
+              <div><span class="lab">Email</span>greg@gopraxis.ai</div>
+              <div><span class="lab">Web</span>gopraxis.ai</div>
+            </div>
+          </div>
+          <div style="text-align: center; font-family: 'IBM Plex Mono'; font-size: 10.5px; color: var(--ink-mute); margin-top: 10px; letter-spacing: 0.16em; text-transform: uppercase;">Front · cream paper · navy ink · red dot</div>
+        </div>
+
+        <div>
+          <div class="biz-card back">
+            <div class="bcb-content">
+              <div class="bcb-eye">PRAXIS · OPERATIONS BUREAU · NO. 26</div>
+              <div class="bcb-h">Operators<br>Build<span class="red">.</span></div>
+              <div class="bcb-tag">93% goes to the tools.<br>7% goes to the layer that makes them work.<br>We build the 7%.</div>
+              <div class="bcb-foot"><span>Phoenix · Berlin</span><span>gopraxis.ai</span></div>
+            </div>
+          </div>
+          <div style="text-align: center; font-family: 'IBM Plex Mono'; font-size: 10.5px; color: var(--ink-mute); margin-top: 10px; letter-spacing: 0.16em; text-transform: uppercase;">Back · navy field · gold-cream type · red accent</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="app-row">
+    <div class="app-head"><span class="num">APP 03</span><span class="name">Deck cover slide · 16:9</span><span class="tag">Sostanza, Aroya, HausMatch covers</span></div>
+    <div class="app-body" style="padding: 24px;">
+      <div class="deck-slide">
+        <div class="deck-art">
+          <div>
+            <div class="eye">PRAXIS · OPERATIONS BUREAU · NO. 26</div>
+          </div>
+          <div>
+            <div class="h">Operators<br>Build<span class="red">.</span></div>
+            <div class="sub">For the Operation. For the Operator.</div>
+          </div>
+          <div class="illus">
+            <svg viewBox="0 0 200 138" fill="none" stroke="#EFE4CD" stroke-width="1.6">
+              <line x1="20" y1="118" x2="180" y2="118" stroke-width="2.4"/>
+              <rect x="78" y="74" width="60" height="40" rx="2" fill="#14365E" stroke="#E8D69A" stroke-width="2"/>
+              <line x1="84" y1="84" x2="130" y2="84" stroke="#E8D69A" stroke-width="1.4"/>
+              <line x1="84" y1="90" x2="124" y2="90" stroke="#E8D69A" stroke-width="1.4"/>
+              <line x1="84" y1="96" x2="128" y2="96" stroke="#E8D69A" stroke-width="1.4"/>
+              <line x1="84" y1="102" x2="118" y2="102" stroke="#E8D69A" stroke-width="1.4"/>
+              <circle cx="46" cy="42" r="11" fill="#14365E" stroke="#E8D69A" stroke-width="2"/>
+              <path d="M 28 116 Q 28 78 38 64 L 54 64 Q 64 76 64 96 L 64 116 Z" fill="#14365E" stroke="#E8D69A" stroke-width="2"/>
+              <path d="M 56 80 L 80 84" stroke="#E8D69A" stroke-width="2.4"/>
+              <g transform="translate(160, 38)" stroke="#E8D69A" stroke-width="1.5" fill="none">
+                <ellipse cx="0" cy="0" rx="20" ry="8"/>
+                <ellipse cx="0" cy="0" rx="20" ry="8" transform="rotate(60)"/>
+                <ellipse cx="0" cy="0" rx="20" ry="8" transform="rotate(-60)"/>
+                <circle cx="0" cy="0" r="3.5" fill="#0E0E0D" stroke="none"/>
+              </g>
+              <g stroke="#E8D69A" stroke-width="1" opacity="0.7">
+                <line x1="160" y1="20" x2="160" y2="10"/>
+                <line x1="178" y1="32" x2="186" y2="28"/>
+                <line x1="142" y1="32" x2="134" y2="28"/>
+              </g>
+            </svg>
+          </div>
+          <div class="foot">
+            <div class="h2">93/7 · We build the layer<span style="color:var(--paper)">.</span></div>
+            <div class="s2">PRAXIS · operators who build software for other operators · est. 2026</div>
+          </div>
+        </div>
+        <div class="deck-text">
+          <div class="top-row">
+            <div class="badge-deck">
+              <svg viewBox="0 0 360 360"><circle cx="180" cy="180" r="172" fill="#14365E"/><g fill="#14365E"><g id="td"><rect x="174" y="0" width="12" height="14"/></g><use href="#td" transform="rotate(30 180 180)"/><use href="#td" transform="rotate(60 180 180)"/><use href="#td" transform="rotate(90 180 180)"/><use href="#td" transform="rotate(120 180 180)"/><use href="#td" transform="rotate(150 180 180)"/><use href="#td" transform="rotate(180 180 180)"/><use href="#td" transform="rotate(210 180 180)"/><use href="#td" transform="rotate(240 180 180)"/><use href="#td" transform="rotate(270 180 180)"/><use href="#td" transform="rotate(300 180 180)"/><use href="#td" transform="rotate(330 180 180)"/></g><circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#EFE4CD" stroke-width="3"/><circle cx="180" cy="180" r="40" fill="#C42130"/></svg>
+            </div>
+            <div class="meta-deck">SOSTANZA · OPERATIONAL DIAGNOSTIC<br>2026 · DECK COVER · 01 / 18</div>
+          </div>
+          <div>
+            <div class="deck-h">A Diagnostic<br>for Operators<span class="red">.</span></div>
+            <div class="deck-sub">Where the tools work, where the layer underneath them does not, and what to build first to make the next twelve months operate as intended.</div>
+          </div>
+          <div class="deck-foot">
+            <span>Prepared for the Sostanza team</span>
+            <span class="red">CONFIDENTIAL · 2026-04-30</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="app-row">
+    <div class="app-head"><span class="num">APP 04</span><span class="name">Operator console · the one terminal surface</span><span class="tag">CultOps internal — civic, not Pip-Boy</span></div>
+    <div class="app-body" style="padding: 24px;">
+      <div class="console-window">
+        <div class="console-bar">
+          <div class="left">
+            <div class="pulse"></div>
+            <span>PRAXIS Operator Console · Live</span>
+          </div>
+          <div class="right">SESSION · 04:18 · OK</div>
+        </div>
+        <div class="console-body">
+
+          <div class="console-section">
+            <div class="lab">§ Production · CultOps</div>
+            <div class="row"><span class="k">tables</span><span class="v navy">156</span></div>
+            <div class="row"><span class="k">modules</span><span class="v navy">12</span></div>
+            <div class="row"><span class="k">last hotfix</span><span class="v red">04 hours ago</span></div>
+            <div class="row"><span class="k">uptime · 30d</span><span class="v">99.94 %</span></div>
+            <div class="row"><span class="k">in production</span><span class="v">multiple states</span></div>
+          </div>
+
+          <div class="console-section">
+            <div class="lab">§ Capacity · Engagements</div>
+            <div class="row"><span class="k">active</span><span class="v navy">Aspire · HausMatch</span></div>
+            <div class="row"><span class="k">in dx sprint</span><span class="v">Sostanza</span></div>
+            <div class="row"><span class="k">in qualification</span><span class="v">Aroya · Cliff House</span></div>
+            <div class="row"><span class="k">capacity</span><span class="v red">06 / yr · 02 open</span></div>
+            <div class="row"><span class="k">operators</span><span class="v">Morrow · Dunaway</span></div>
+          </div>
+
+        </div>
+        <div class="console-foot">
+          <span>Operator console · build 3.7.2</span>
+          <span class="red">Scope: civic / restrained · no scanlines outside this surface</span>
+        </div>
+      </div>
+      <p style="margin-top: 14px; font-family: 'IBM Plex Mono'; font-size: 11px; line-height: 1.6; color: var(--ink-mute);">The Pip-Boy reference, demilitarized. Plex Mono on cream paper, navy chrome, single red pulse, hairline rules. No phosphor green, no scanlines, no CRT vignette. The "operator's terminal" idea survives by giving up its costume. This is the one surface where the terminal language is allowed to live, and only because it's structurally an operations console.</p>
+    </div>
+  </section>
+
+  <!-- Restraint rules -->
+  <div class="section-rule">
+    <span class="lab">§ 05 · Restraint rules</span>
+    <span>What this system requires, and what it bans</span>
+  </div>
+
+  <section class="rules">
+
+    <div class="rule-col do">
+      <div class="rh">Do</div>
+      <ul>
+        <li><strong>Use the badge as the primary mark</strong> on every surface that needs identity, at every scale from 16 px to 240 px.<span class="reason">The badge is what makes this system civic instead of generic. It carries the operational weight without requiring the visitor to "get a reference."</span></li>
+        <li><strong>Reserve Limelight and Bungee Inline for one artifact per surface.</strong> Poster only. Deck cover only. Conference backdrop only.<span class="reason">If display type goes everywhere, the system tips into pastiche immediately. The display face is a moment, not a habit.</span></li>
+        <li><strong>Treat the propaganda poster as the artwork, not the wallpaper.</strong> One per page. One per deck. One per booth.<span class="reason">A WPA poster works because there's only one of them in the room. A wall of them is a thrift store.</span></li>
+        <li><strong>Run the operator console as the only terminal-language surface.</strong> Anywhere a scanline appears, it has to be earned by being a real operations interface.<span class="reason">The Pip-Boy reference is allowed exactly once, and only because it's structurally a console.</span></li>
+        <li><strong>Lead with operator copy, not period copy.</strong> "Operators who build." comes before "Operations Bureau No. 26." The period flourish supports the substance, never replaces it.<span class="reason">If the period framing reads first, the buyer thinks "costume." If the substance reads first, the period framing reads as conviction.</span></li>
+      </ul>
+    </div>
+
+    <div class="rule-col dont">
+      <div class="rh">Don't</div>
+      <ul>
+        <li><strong>No mascots.</strong> No Operator Boy. No cartoon thumbs-up character. No friendly anthropomorphic operator avatar.<span class="reason">The mascot is the single move that flips this system from "civic" to "Fallout pastiche" in one second. There is no operator buyer who would take a brand with a Vault-Boy-style mascot seriously.</span></li>
+        <li><strong>No "-Tec" suffix.</strong> No "Praxis-Tec." No "Vault" anything. No "Pre-war." No fictional model number gags.<span class="reason">The suffix is a wink. The wink is what reads as joke. The badge format on its own is civic and works without any of those words.</span></li>
+        <li><strong>No yellow-on-cobalt.</strong> Vault-Tec's signature combo is the most recognizable single visual in the entire Fallout universe.<span class="reason">If we use it, every visual person who has ever seen Fallout reads "Vault-Tec parody" in a quarter second. Navy on cream is the substitute. Aged gold appears only on hero artwork.</span></li>
+        <li><strong>No phosphor green outside the operator console.</strong> No CRT scanlines on the marketing site. No VT323 in the wordmark. No glowing terminal aesthetic on a deck slide.<span class="reason">Same logic as the mascot rule. If green-on-black appears on more than one surface, the system collapses into Pip-Boy fanart.</span></li>
+        <li><strong>No irony, ever.</strong> No "knowing wink." No "atomic-age cosplay" copy. No "bunker" or "fallout" puns. No retro-aware humor in the voice.<span class="reason">The whole strategic premise is that operator buyers buy from people who take their own work seriously. The moment the brand winks at itself, the buyer hears "we don't take this seriously either."</span></li>
+        <li><strong>No "Operations Bureau" / "Vault 26" framing on procurement-grade surfaces.</strong> Those phrases are allowed on the propaganda poster and the back of a card. They are banned from the front of the card, the contract, the proposal, and the invoice.<span class="reason">Period copy on a contract reads as fiction. Operators sign contracts, not stories.</span></li>
+      </ul>
+    </div>
+
+  </section>
+
+  <footer>
+    <span>Praxis Operational Intelligence · 2026</span>
+    <span>Concept 5 · Sincere Atom-Age System · v1</span>
+    <span>gopraxis.ai</span>
+  </footer>
+
+</main>
+</body>
+</html>

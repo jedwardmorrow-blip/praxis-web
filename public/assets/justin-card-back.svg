@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1125 675" width="1125" height="675" role="img" aria-label="Justin Morrow business card back">
+  <title>Praxis · business card · back</title>
+  <desc>3.5 in × 2 in trim with 0.125 in bleed.</desc>
+
+  <!-- Bleed background, deep navy with subtle radial -->
+  <defs>
+    <radialGradient id="navyGrad" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#14365E"/>
+      <stop offset="100%" stop-color="#0a2545"/>
+    </radialGradient>
+  </defs>
+  <rect width="1125" height="675" fill="url(#navyGrad)"/>
+
+  <!-- Hairline frame in gold-paper -->
+  <rect x="56" y="56" width="1013" height="563" fill="none" stroke="#E8D69A" stroke-width="0.75" opacity="0.45"/>
+
+  <!-- Eyebrow at top -->
+  <text x="562.5" y="135" text-anchor="middle" font-family="IBM Plex Mono, Courier New, monospace" font-size="14" letter-spacing="6.5" fill="#C9A24B">PRAXIS · OPERATIONS BUREAU · NO. 26</text>
+
+  <!-- Center wordmark, oversized -->
+  <text x="562.5" y="350" text-anchor="middle" font-family="Big Shoulders Display, Arial Black, Impact, sans-serif" font-weight="900" font-size="170" letter-spacing="2" fill="#F1E8D2">PRAXIS<tspan fill="#C42130">.</tspan></text>
+
+  <!-- Subtitle -->
+  <text x="562.5" y="402" text-anchor="middle" font-family="IBM Plex Mono, Courier New, monospace" font-size="16" letter-spacing="9" fill="#C9A24B">OPERATIONAL · INTELLIGENCE</text>
+
+  <!-- Hairline divider -->
+  <line x1="380" y1="455" x2="745" y2="455" stroke="#C9A24B" stroke-width="0.75" opacity="0.55"/>
+
+  <!-- Tagline (typewriter) -->
+  <text x="562.5" y="500" text-anchor="middle" font-family="Special Elite, Georgia, serif" font-style="italic" font-size="17" fill="#E8D69A">93% goes to the tools. 7% goes to the layer.</text>
+  <text x="562.5" y="525" text-anchor="middle" font-family="Special Elite, Georgia, serif" font-style="italic" font-size="17" fill="#F1E8D2">We build the 7%.</text>
+
+  <!-- Bottom row -->
+  <g font-family="IBM Plex Mono, Courier New, monospace" font-size="13" letter-spacing="3" fill="#C9A24B">
+    <text x="95" y="595">PHOENIX · BERLIN</text>
+    <text x="562.5" y="595" text-anchor="middle" fill="#F1E8D2">GOPRAXIS.AI</text>
+    <text x="1030" y="595" text-anchor="end">EST. MMXXVI</text>
+  </g>
+
+  <!-- Corner brackets -->
+  <g stroke="#C9A24B" stroke-width="1.25" fill="none" opacity="0.85">
+    <path d="M 56 76 L 56 56 L 76 56"/>
+    <path d="M 1049 56 L 1069 56 L 1069 76"/>
+    <path d="M 1069 599 L 1069 619 L 1049 619"/>
+    <path d="M 76 619 L 56 619 L 56 599"/>
+  </g>
+</svg>

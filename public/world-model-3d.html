@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRAXIS · The World Model · 3D · Fig. 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --canvas: #0a2545;
+    --canvas-deep: #061a33;
+    --canvas-deeper: #03101f;
+    --navy: #14365E;
+    --paper: #F1E8D2;
+    --paper-dim: rgba(241,232,210,0.78);
+    --paper-mute: rgba(241,232,210,0.55);
+    --paper-faint: rgba(241,232,210,0.32);
+    --gold: #C9A24B;
+    --gold-paper: #E8D69A;
+    --red: #C42130;
+    --rule: rgba(201,162,75,0.45);
+    --rule-soft: rgba(201,162,75,0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--canvas-deeper);
+    color: var(--paper);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+
+  /* Header */
+  .header { padding: 16px 56px; border-bottom: 0.5px solid var(--rule); background: var(--canvas); position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(8px); }
+  .header .left { display: flex; align-items: center; gap: 14px; }
+  .h-badge { width: 36px; height: 36px; flex-shrink: 0; }
+  .h-wm { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 18px; letter-spacing: 0.04em; color: var(--paper); line-height: 1; }
+  .h-wm .dot { color: var(--red); }
+  .h-sub { font-family: "IBM Plex Mono"; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-top: 2px; }
+  .h-fig { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); }
+  .h-meta { font-family: "IBM Plex Mono"; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-mute); display: flex; gap: 20px; }
+  .h-meta a { color: var(--paper); text-decoration: none; border-bottom: 0.5px solid var(--paper); padding-bottom: 1px; }
+  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); display: inline-block; margin-right: 6px; vertical-align: 1px; position: relative; }
+  .live-dot::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; border: 1px solid var(--red); animation: pulseRing 2s ease-out infinite; opacity: 0.5; }
+  @keyframes pulseRing { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(2.6); opacity: 0; } }
+
+  /* Intro */
+  .intro { padding: 56px 56px 28px; max-width: 1480px; margin: 0 auto; position: relative; z-index: 2; }
+  .intro .eye { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+  .intro h1 { font-family: "Big Shoulders Display"; font-weight: 900; font-size: clamp(56px, 7vw, 110px); line-height: 0.92; letter-spacing: 0.005em; color: var(--paper); margin-top: 16px; text-transform: uppercase; max-width: 1100px; }
+  .intro h1 .red { color: var(--red); }
+  .intro h1 .gold { color: var(--gold); }
+  .intro .lede { font-family: "IBM Plex Sans"; font-size: 16px; line-height: 1.6; color: var(--paper-dim); max-width: 760px; margin-top: 22px; }
+  .intro .lede em { color: var(--gold); font-style: normal; font-weight: 600; }
+
+  /* Stage container */
+  .stage-3d-wrap { padding: 24px 56px 36px; max-width: 1480px; margin: 0 auto; position: relative; z-index: 2; }
+  .stage-3d {
+    position: relative;
+    height: 720px;
+    border: 1px solid var(--rule);
+    background: linear-gradient(180deg, var(--canvas-deeper) 0%, var(--canvas-deep) 100%);
+    overflow: hidden;
+  }
+  #scene-canvas { width: 100%; height: 100%; display: block; }
+
+  /* Stage frame brackets and labels */
+  .stage-corner { position: absolute; width: 18px; height: 18px; border: 1.5px solid var(--gold); z-index: 5; pointer-events: none; }
+  .stage-corner.tl { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
+  .stage-corner.tr { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
+  .stage-corner.bl { bottom: 8px; left: 8px; border-right: 0; border-top: 0; }
+  .stage-corner.br { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+  .stage-tl, .stage-tr, .stage-bl, .stage-br { position: absolute; font-family: "IBM Plex Mono"; font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); z-index: 5; pointer-events: none; }
+  .stage-tl { top: 14px; left: 38px; }
+  .stage-tr { top: 14px; right: 38px; }
+  .stage-bl { bottom: 14px; left: 38px; }
+  .stage-br { bottom: 14px; right: 38px; }
+
+  /* HUD overlays */
+  .hud-bottom-left {
+    position: absolute; bottom: 36px; left: 38px; z-index: 6;
+    font-family: "IBM Plex Mono"; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-mute);
+    pointer-events: none; line-height: 1.7;
+  }
+  .hud-bottom-left .row { display: flex; gap: 14px; align-items: center; }
+  .hud-bottom-left .row .k { color: var(--gold); }
+  .hud-bottom-left .row .v { color: var(--paper); font-variant-numeric: tabular-nums; }
+  .hud-bottom-left .row .v.red { color: var(--red); }
+
+  .hud-top-right {
+    position: absolute; top: 36px; right: 38px; z-index: 6;
+    font-family: "IBM Plex Mono"; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-mute);
+    text-align: right; pointer-events: none; line-height: 1.7;
+  }
+  .hud-top-right .v { color: var(--paper); }
+  .hud-top-right .v.gold { color: var(--gold); }
+  .hud-top-right .v.red { color: var(--red); }
+
+  /* Controls hint */
+  .controls-hint {
+    position: absolute; bottom: 36px; right: 38px; z-index: 6;
+    font-family: "IBM Plex Mono"; font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-mute);
+    text-align: right; pointer-events: none;
+    background: rgba(0,0,0,0.4); padding: 8px 10px; border: 0.5px solid var(--rule-soft);
+    line-height: 1.7;
+  }
+  .controls-hint .gold { color: var(--gold); }
+  .controls-hint .key { padding: 1px 6px; border: 0.5px solid var(--gold); color: var(--gold); margin-right: 4px; }
+
+  /* Tooltip */
+  .tooltip-3d {
+    position: absolute;
+    background: rgba(0,0,0,0.92);
+    border: 1px solid var(--gold);
+    padding: 12px 14px;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.15s;
+    max-width: 260px;
+    backdrop-filter: blur(8px);
+    transform: translate(-50%, -120%);
+  }
+  .tooltip-3d.in { opacity: 1; }
+  .tooltip-3d .tt-cat { font-family: "IBM Plex Mono"; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+  .tooltip-3d .tt-name { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 18px; letter-spacing: 0.005em; text-transform: uppercase; color: var(--paper); line-height: 1.05; }
+  .tooltip-3d .tt-desc { font-family: "IBM Plex Sans"; font-size: 12px; line-height: 1.55; color: var(--paper-dim); margin-top: 6px; padding-top: 6px; border-top: 0.5px dashed var(--rule-soft); }
+  .tooltip-3d .tt-meta { font-family: "IBM Plex Mono"; font-size: 10px; letter-spacing: 0.06em; color: var(--paper-mute); margin-top: 6px; }
+  .tooltip-3d .tt-meta .gold { color: var(--gold); }
+
+  /* HTML node labels */
+  .node-labels { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
+  .node-label {
+    position: absolute;
+    transform: translate(-50%, 0);
+    font-family: "IBM Plex Mono";
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--paper-dim);
+    white-space: nowrap;
+    text-shadow: 0 0 8px rgba(0,0,0,0.85), 0 1px 2px rgba(0,0,0,0.9);
+    transition: opacity 0.2s, color 0.2s;
+    margin-top: 6px;
+  }
+  .node-label.large { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 14px; letter-spacing: 0.04em; color: var(--paper); margin-top: 8px; }
+  .node-label.tool { color: var(--paper-faint); font-size: 8.5px; }
+  .node-label.engagement { color: var(--gold-paper); }
+  .node-label.product { color: var(--gold); }
+  .node-label.method { color: var(--gold); }
+  .node-label.hidden { opacity: 0; }
+  .node-label.hovered { color: var(--red); transform: translate(-50%, 0) scale(1.15); }
+
+  /* Methodology */
+  .method { padding: 60px 56px 80px; max-width: 1480px; margin: 0 auto; position: relative; z-index: 2; }
+  .method-grid { display: grid; grid-template-columns: 5fr 7fr; gap: 64px; }
+  .method-left .me { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); }
+  .method-left h2 { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 44px; line-height: 0.95; text-transform: uppercase; color: var(--paper); margin-top: 14px; }
+  .method-left h2 .gold { color: var(--gold); }
+  .method-right { font-family: "IBM Plex Sans"; font-size: 15px; line-height: 1.7; color: var(--paper-dim); }
+  .method-right p + p { margin-top: 16px; }
+  .method-right strong { color: var(--paper); font-weight: 600; }
+  .method-right em { color: var(--gold); font-style: normal; font-weight: 600; }
+  .method-foot { margin-top: 32px; padding: 18px 22px; background: rgba(196,33,48,0.06); border-left: 3px solid var(--red); font-family: "Special Elite"; font-size: 13px; line-height: 1.55; color: var(--paper); max-width: 760px; }
+
+  /* Footer */
+  .site-foot { background: #000; color: var(--paper); padding: 36px 56px 28px; border-top: 1px solid var(--gold); position: relative; z-index: 2; }
+  .foot-inner { max-width: 1480px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; font-family: "IBM Plex Mono"; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+  .foot-inner a { color: var(--paper); text-decoration: none; border-bottom: 0.5px solid var(--paper); padding-bottom: 1px; margin-left: 14px; }
+
+  @media (max-width: 1100px) {
+    .stage-3d { height: 540px; }
+    .header, .intro, .stage-3d-wrap, .method, .site-foot { padding-left: 24px; padding-right: 24px; }
+    .intro h1 { font-size: 48px; }
+    .method-grid { grid-template-columns: 1fr; gap: 28px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="left">
+    <div class="h-badge">
+      <svg viewBox="0 0 360 360"><circle cx="180" cy="180" r="172" fill="#C9A24B"/><g fill="#C9A24B"><g id="th"><rect x="174" y="0" width="12" height="14"/></g><use href="#th" transform="rotate(30 180 180)"/><use href="#th" transform="rotate(60 180 180)"/><use href="#th" transform="rotate(90 180 180)"/><use href="#th" transform="rotate(120 180 180)"/><use href="#th" transform="rotate(150 180 180)"/><use href="#th" transform="rotate(180 180 180)"/><use href="#th" transform="rotate(210 180 180)"/><use href="#th" transform="rotate(240 180 180)"/><use href="#th" transform="rotate(270 180 180)"/><use href="#th" transform="rotate(300 180 180)"/><use href="#th" transform="rotate(330 180 180)"/></g><circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#C9A24B" stroke-width="3"/><circle cx="180" cy="180" r="50" fill="#C42130"/></svg>
+    </div>
+    <div>
+      <div class="h-wm">PRAXIS<span class="dot">.</span></div>
+      <div class="h-sub">The World Model · 3D</div>
+    </div>
+  </div>
+  <div class="h-fig">FIG. 02 · OPERATING ATOM · 3D · v1</div>
+  <div class="h-meta">
+    <span><span class="live-dot"></span>Live</span>
+    <a href="world-model.html">Fig. 01 · 2D</a>
+    <a href="index.html">← Praxis</a>
+  </div>
+</header>
+
+<section class="intro">
+  <div class="eye">FIG. 02 · PRAXIS WORLD MODEL · THREE-DIMENSIONAL</div>
+  <h1>The same atom, <span class="gold">in three dimensions</span>. Drag to rotate. <span class="red">Hover to inspect.</span></h1>
+  <p class="lede">Six orbits at axial tilts, twenty-six entities, real lineage edges, drawn in actual three-dimensional space. Same data as Fig. 01, rendered as a navigable model. The camera slow-orbits on idle. Click and drag to take control. Hover any node to inspect it. The nucleus glows because it should — <em>it is the firm.</em></p>
+</section>
+
+<section class="stage-3d-wrap">
+  <div class="stage-3d" id="stage">
+    <span class="stage-corner tl"></span><span class="stage-corner tr"></span>
+    <span class="stage-corner bl"></span><span class="stage-corner br"></span>
+    <span class="stage-tl">FIG. 02</span>
+    <span class="stage-tr">PRAXIS · OPERATING ATOM · 3D</span>
+    <span class="stage-bl">SCALE · 1:1 LOGICAL</span>
+    <span class="stage-br">2026-04-30 · MMXXVI</span>
+
+    <canvas id="scene-canvas"></canvas>
+
+    <div class="node-labels" id="labels"></div>
+
+    <div class="hud-top-right">
+      <div><span class="v gold">26</span> entities · <span class="v">06</span> orbits</div>
+      <div><span class="v">156</span> tables · <span class="v">12</span> modules</div>
+      <div><span class="v red">99.94%</span> uptime · 30d</div>
+    </div>
+
+    <div class="hud-bottom-left">
+      <div class="row"><span class="k">CAM</span><span class="v" id="cam-azim">0.00°</span> AZ <span class="v" id="cam-elev">0.00°</span> EL <span class="v" id="cam-dist">12.0</span> R</div>
+      <div class="row"><span class="k">LAST REFRESH</span><span class="v red" id="cam-time">04:18</span></div>
+    </div>
+
+    <div class="controls-hint">
+      <div><span class="key">DRAG</span> rotate</div>
+      <div><span class="key">SCROLL</span> zoom</div>
+      <div><span class="key">HOVER</span> inspect</div>
+    </div>
+
+    <div class="tooltip-3d" id="tooltip">
+      <div class="tt-cat" id="tt-cat"></div>
+      <div class="tt-name" id="tt-name"></div>
+      <div class="tt-desc" id="tt-desc"></div>
+      <div class="tt-meta" id="tt-meta"></div>
+    </div>
+  </div>
+</section>
+
+<section class="method">
+  <div class="method-grid">
+    <div class="method-left">
+      <div class="me">§ Methodology · the third dimension</div>
+      <h2>Same ontology<span class="gold">,</span> rendered in space.</h2>
+    </div>
+    <div class="method-right">
+      <p>Every node is a real entity in the Praxis context database. The nucleus is the firm itself, glowing red because it is the load-bearing object the entire structure orbits. The first inner shell is the two operators. The second is the owned products (CultOps, CultLOS, TextBack). The third is methodology (Discovery Sprint, Build, Platform). The fourth is active engagements. The outermost shell is the AI tools layer — twelve translucent ghosts representing the 93% layer that sits on top of everything.</p>
+      <p>Each orbit is rendered at a slightly different axial tilt. This is not decorative. It is the only way to render six concentric shells in three-dimensional space without occlusion. The same trick is used in <strong>Bohr atomic model diagrams</strong>, mid-century corporate organization charts, and NASA orbital mechanics illustrations.</p>
+      <p>The lineage edges are <em>real lineage</em>, drawn as bezier curves through space. Aspire connects to both Sprint and Build because that engagement uses both methodologies. CultOps connects to Justin because he built it. Build connects to CultOps because the methodology produces that product as evidence. If a relationship breaks in the database, the curve breaks here.</p>
+      <div class="method-foot">"Most firms have an org chart. We have an operating atom. The difference is the org chart shows reporting lines. The atom shows the actual structure of the work, drawn from the same database that runs production."</div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>Praxis Operational Intelligence · Operational Bureau No. 26 · Phoenix · Berlin · MMXXVI</span>
+    <span>
+      <span style="color: var(--red)">●</span> Drawn from live operating data
+      <a href="index.html">Praxis homepage</a>
+      <a href="world-model.html">Fig. 01 · 2D</a>
+    </span>
+  </div>
+</footer>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://esm.sh/three@0.160.0",
+    "three/addons/": "https://esm.sh/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+// ─── DATA · ontology ───
+const ORBITS = [
+  { r: 0, tilt: 0, name: 'Mark', nodes: [
+    { id: 'praxis', name: 'PRAXIS', kind: 'mark', cat: 'Firm', desc: 'Operator-led software firm. Two managing partners. Six engagements per year. Operational Intelligence as discipline.', meta: 'Phoenix · Berlin · Est. MMXXVI', size: 0.55 }
+  ]},
+  { r: 1.9, tilt: 0, speed: 0.18, name: 'Operators', nodes: [
+    { id: 'jm', name: 'JUSTIN MORROW', kind: 'operator', cat: 'Co-Founder · Managing Partner', desc: 'AI engineering and product architecture. Built CultOps from zero in production while running cannabis operations.', meta: 'justin@gopraxis.ai', size: 0.30, color: 'paper' },
+    { id: 'gd', name: 'GREG DUNAWAY', kind: 'operator', cat: 'Co-Founder · Managing Partner', desc: '15-year operator. Four-time founder. Runs client relationships, structures engagements.', meta: 'greg@gopraxis.ai', size: 0.30, color: 'paper' }
+  ]},
+  { r: 3.0, tilt: 0.42, speed: 0.13, name: 'Products', nodes: [
+    { id: 'cultops', name: 'CULTOPS', kind: 'product', cat: 'Flagship product', desc: '156 tables, 12 modules, multi-state cannabis operating substrate. The firm\'s evidence layer.', meta: '99.94% uptime · in production', size: 0.34, color: 'gold' },
+    { id: 'cultlos', name: 'CULTLOS', kind: 'product', cat: 'Sister product', desc: 'Lab and operations system, derivative of CultOps for cannabis testing labs.', meta: 'In active development', size: 0.26, color: 'gold' },
+    { id: 'textback', name: 'TEXTBACK', kind: 'product', cat: 'Owned product', desc: 'Operator messaging bot. Field-ops paging for distributed teams.', meta: 'Production', size: 0.26, color: 'gold' }
+  ]},
+  { r: 4.2, tilt: -0.28, speed: 0.10, name: 'Methodology', nodes: [
+    { id: 'sprint', name: 'DISCOVERY SPRINT', kind: 'method', cat: 'Shape 01 · Methodology', desc: 'Two weeks. Operator interviews. Findings deck. Map the operation, find the seven-percent layer.', meta: 'Fixed-price · $24K', size: 0.26, color: 'method' },
+    { id: 'build', name: 'BUILD', kind: 'method', cat: 'Shape 02 · Methodology', desc: '8 to 16 weeks. One operator-grade module shipped to production. Both partners on every engagement.', meta: 'Fixed-price · $80K to $220K', size: 0.26, color: 'method' },
+    { id: 'platform', name: 'PLATFORM', kind: 'method', cat: 'Shape 03 · Methodology', desc: 'Quarterly retainer. Multi-module operating substrate, owned by the client.', meta: 'From $90K / qtr', size: 0.26, color: 'method' }
+  ]},
+  { r: 5.6, tilt: 0.62, speed: 0.07, name: 'Engagements', nodes: [
+    { id: 'aspire', name: 'ASPIRE', kind: 'engagement', cat: 'Hospitality consulting', desc: 'Renie Cavallari. Discovery Sprint shipped, Build phase active. Assessment platform diagnosing restaurant revenue leakage.', meta: 'Sprint → Build · Active 2026', size: 0.28, color: 'engagement' },
+    { id: 'hausmatch', name: 'HAUSMATCH', kind: 'engagement', cat: 'Real estate platform', desc: 'Daniel Lombard, Julius Bond. Visual AI home search. Pitch deck shipped, demo build pending.', meta: 'Pre-Build · Active 2026', size: 0.28, color: 'engagement' },
+    { id: 'sostanza', name: 'SOSTANZA', kind: 'engagement', cat: 'Hospitality framework operator', desc: 'Discovery sprint in progress. Operating substrate beneath their published methodology.', meta: 'In Discovery Sprint', size: 0.26, color: 'engagement' },
+    { id: 'aroya', name: 'AROYA', kind: 'engagement', cat: 'Cannabis tech partnership', desc: 'Brad Wood, partnership conversation. Performance Loop integration substrate.', meta: 'Qualification · partnership track', size: 0.24, color: 'engagement' },
+    { id: 'cliff', name: 'CLIFF HOUSE MD', kind: 'engagement', cat: 'Hospitality focus group', desc: 'Renie introduction. Multi-coach hospitality firm. Aspire-derived engagement.', meta: 'Qualification · Q2 2026', size: 0.24, color: 'engagement' }
+  ]},
+  { r: 7.0, tilt: -0.48, speed: 0.04, name: 'Tools layer · 93%', nodes: [
+    { id: 't1', name: 'ANTHROPIC', kind: 'tool', cat: 'LLM provider', desc: 'Foundation model. The 93% layer. Praxis builds the layer underneath.', meta: 'Tools layer', size: 0.18, color: 'tool' },
+    { id: 't2', name: 'SUPABASE', kind: 'tool', cat: 'Data substrate', desc: 'Postgres backbone for context DB and product surfaces.', meta: 'Tools layer', size: 0.18, color: 'tool' },
+    { id: 't3', name: 'VERCEL', kind: 'tool', cat: 'Deploy', desc: 'Production hosting for Praxis web surfaces.', meta: 'Tools layer', size: 0.18, color: 'tool' },
+    { id: 't4', name: 'SLACK', kind: 'tool', cat: 'Comms', desc: 'Operator paging, work-tickets channel.', meta: 'Tools layer', size: 0.16, color: 'tool' },
+    { id: 't5', name: 'AIRTABLE', kind: 'tool', cat: 'Audit', desc: 'Floor-level audits, Resolution tracking.', meta: 'Tools layer', size: 0.16, color: 'tool' },
+    { id: 't6', name: 'METRC', kind: 'tool', cat: 'Compliance', desc: 'State-mandated cannabis tracking integration.', meta: 'Tools layer', size: 0.16, color: 'tool' },
+    { id: 't7', name: 'NOTION', kind: 'tool', cat: 'Docs', desc: 'External-facing documentation surfaces.', meta: 'Tools layer', size: 0.16, color: 'tool' },
+    { id: 't8', name: 'GMAIL', kind: 'tool', cat: 'Comms', desc: 'External operator communications.', meta: 'Tools layer', size: 0.16, color: 'tool' },
+    { id: 't9', name: 'STRIPE', kind: 'tool', cat: 'Payments', desc: 'Engagement billing rail.', meta: 'Tools layer', size: 0.16, color: 'tool' },
+    { id: 't10', name: 'GITHUB', kind: 'tool', cat: 'Source', desc: 'All code surfaces, branch deploys, lineage.', meta: 'Tools layer', size: 0.18, color: 'tool' },
+    { id: 't11', name: 'AROYA TELEMETRY', kind: 'tool', cat: 'Cultivation tech', desc: 'Cultivation telemetry partnership integration.', meta: 'Tools layer', size: 0.16, color: 'tool' },
+    { id: 't12', name: 'STASHDOC', kind: 'tool', cat: 'Compliance', desc: 'Michigan compliance shop integration.', meta: 'Tools layer', size: 0.16, color: 'tool' }
+  ]}
+];
+
+const EDGES = [
+  ['aspire', 'sprint'], ['aspire', 'build'],
+  ['hausmatch', 'build'],
+  ['sostanza', 'sprint'],
+  ['aroya', 'platform'],
+  ['cliff', 'sprint'],
+  ['cultops', 'jm'], ['cultlos', 'jm'], ['textback', 'jm'],
+  ['aspire', 'gd'], ['hausmatch', 'gd'], ['sostanza', 'gd'],
+  ['build', 'cultops'], ['platform', 'cultops']
+];
+
+// ─── COLORS ───
+const COLORS = {
+  paper: 0xF1E8D2,
+  gold: 0xC9A24B,
+  red: 0xC42130,
+  navy: 0x14365E,
+  navyMid: 0x2C5384,
+  navyDeep: 0x0a2545,
+  rule: 0xC9A24B,
+};
+
+// ─── SCENE SETUP ───
+const stage = document.getElementById('stage');
+const canvas = document.getElementById('scene-canvas');
+const labelsContainer = document.getElementById('labels');
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x03101f);
+scene.fog = new THREE.Fog(0x03101f, 18, 32);
+
+const W = stage.clientWidth, H = stage.clientHeight;
+const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 100);
+camera.position.set(11, 5.5, 13);
+camera.lookAt(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(W, H);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+
+// Bloom for glow — tuned down to prevent nucleus from bleeding over neighboring nodes
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(W, H), 0.45, 0.4, 0.72);
+composer.addPass(bloomPass);
+
+// Controls
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.minDistance = 5;
+controls.maxDistance = 22;
+controls.maxPolarAngle = Math.PI * 0.85;
+controls.minPolarAngle = Math.PI * 0.15;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.45;
+
+// ─── LIGHTING ───
+scene.add(new THREE.AmbientLight(0x5a708e, 0.75));
+
+const keyLight = new THREE.DirectionalLight(0xF1E8D2, 1.05);
+keyLight.position.set(8, 12, 8);
+scene.add(keyLight);
+
+const fillLight = new THREE.DirectionalLight(0x8aa0c2, 0.65);
+fillLight.position.set(-8, -2, -6);
+scene.add(fillLight);
+
+// Gold accent from above
+const goldAccent = new THREE.DirectionalLight(0xC9A24B, 0.35);
+goldAccent.position.set(0, 8, -10);
+scene.add(goldAccent);
+
+// Red rim light from center
+const rimLight = new THREE.PointLight(0xC42130, 1.1, 18);
+rimLight.position.set(0, 0, 0);
+scene.add(rimLight);
+
+// ─── BUILD SCENE ───
+const root = new THREE.Group();
+scene.add(root);
+
+// Coordinate reticle (subtle)
+const reticleGroup = new THREE.Group();
+for (let i = 0; i < 12; i++) {
+  const angle = (i / 12) * Math.PI * 2;
+  const points = [
+    new THREE.Vector3(Math.cos(angle) * 0.8, 0, Math.sin(angle) * 0.8),
+    new THREE.Vector3(Math.cos(angle) * 8, 0, Math.sin(angle) * 8)
+  ];
+  const geo = new THREE.BufferGeometry().setFromPoints(points);
+  const mat = new THREE.LineDashedMaterial({ color: COLORS.gold, dashSize: 0.08, gapSize: 0.15, opacity: 0.10, transparent: true });
+  const line = new THREE.Line(geo, mat);
+  line.computeLineDistances();
+  reticleGroup.add(line);
+}
+reticleGroup.rotation.x = -0.05;
+root.add(reticleGroup);
+
+// Star/grid background — increased density and varied sizes for more depth without occluding nodes
+const starGeo = new THREE.BufferGeometry();
+const starCount = 700;
+const starPositions = new Float32Array(starCount * 3);
+const starSizes = new Float32Array(starCount);
+for (let i = 0; i < starCount; i++) {
+  const r = 13 + Math.random() * 9;
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.acos(2 * Math.random() - 1);
+  starPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+  starPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+  starPositions[i * 3 + 2] = r * Math.cos(phi);
+  starSizes[i] = 0.025 + Math.random() * 0.045;
+}
+starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+const starMat = new THREE.PointsMaterial({ color: COLORS.paper, size: 0.045, transparent: true, opacity: 0.55, sizeAttenuation: true });
+scene.add(new THREE.Points(starGeo, starMat));
+
+// Closer dust particles for foreground depth
+const dustGeo = new THREE.BufferGeometry();
+const dustCount = 180;
+const dustPositions = new Float32Array(dustCount * 3);
+for (let i = 0; i < dustCount; i++) {
+  const r = 8 + Math.random() * 4;
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.acos(2 * Math.random() - 1);
+  dustPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+  dustPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+  dustPositions[i * 3 + 2] = r * Math.cos(phi);
+}
+dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
+const dustMat = new THREE.PointsMaterial({ color: COLORS.gold, size: 0.025, transparent: true, opacity: 0.28, sizeAttenuation: true });
+scene.add(new THREE.Points(dustGeo, dustMat));
+
+// ─── ORBIT RINGS + NODES ───
+const orbitGroups = [];
+const allNodes = {};
+const allNodeMeshes = [];
+
+ORBITS.forEach((orbit, oIdx) => {
+  if (orbit.r === 0) {
+    // NUCLEUS
+    const node = orbit.nodes[0];
+    const geo = new THREE.SphereGeometry(node.size, 48, 48);
+    const mat = new THREE.MeshStandardMaterial({
+      color: 0x8c1722,
+      emissive: COLORS.red,
+      emissiveIntensity: 1.4,
+      roughness: 0.4, metalness: 0.2
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.userData = { node, isNucleus: true };
+    root.add(mesh);
+    allNodeMeshes.push(mesh);
+    allNodes[node.id] = { mesh, node, orbit: oIdx };
+
+    // Halo
+    const haloGeo = new THREE.SphereGeometry(node.size * 1.6, 32, 32);
+    const haloMat = new THREE.MeshBasicMaterial({
+      color: COLORS.red, transparent: true, opacity: 0.18, side: THREE.BackSide
+    });
+    const halo = new THREE.Mesh(haloGeo, haloMat);
+    halo.userData = { isHalo: true };
+    mesh.add(halo);
+
+    // Outer ring
+    const ringGeo = new THREE.TorusGeometry(node.size * 2.4, 0.012, 8, 64);
+    const ringMat = new THREE.MeshBasicMaterial({ color: COLORS.gold, transparent: true, opacity: 0.6 });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = Math.PI / 2;
+    mesh.add(ring);
+    return;
+  }
+
+  // ORBIT RING
+  const orbitGroup = new THREE.Group();
+  orbitGroup.rotation.x = orbit.tilt;
+  orbitGroup.rotation.z = orbit.tilt * 0.5;
+  orbitGroup.userData = { speed: orbit.speed || 0.05 };
+  root.add(orbitGroup);
+  orbitGroups.push(orbitGroup);
+
+  // Ring geometry (thin torus) — bumped opacity for clearer orbital structure
+  const isOuter = oIdx === ORBITS.length - 1;
+  const torusGeo = new THREE.TorusGeometry(orbit.r, isOuter ? 0.008 : 0.012, 8, 160);
+  const torusMat = new THREE.MeshBasicMaterial({
+    color: COLORS.gold,
+    transparent: true,
+    opacity: isOuter ? 0.42 : 0.62
+  });
+  const torus = new THREE.Mesh(torusGeo, torusMat);
+  torus.rotation.x = Math.PI / 2;
+  orbitGroup.add(torus);
+
+  // Dashed orbit guide
+  const dashPoints = [];
+  const segs = 128;
+  for (let i = 0; i <= segs; i++) {
+    const a = (i / segs) * Math.PI * 2;
+    dashPoints.push(new THREE.Vector3(Math.cos(a) * orbit.r, 0, Math.sin(a) * orbit.r));
+  }
+  const dashGeo = new THREE.BufferGeometry().setFromPoints(dashPoints);
+  const dashMat = new THREE.LineDashedMaterial({ color: COLORS.gold, dashSize: 0.10, gapSize: 0.10, transparent: true, opacity: 0.32 });
+  const dashLine = new THREE.Line(dashGeo, dashMat);
+  dashLine.computeLineDistances();
+  orbitGroup.add(dashLine);
+
+  // NODES on this orbit
+  const n = orbit.nodes.length;
+  const angleOffset = oIdx % 2 === 0 ? 0 : Math.PI / n;
+  orbit.nodes.forEach((node, idx) => {
+    const a = (idx / n) * Math.PI * 2 + angleOffset;
+    const x = Math.cos(a) * orbit.r;
+    const z = Math.sin(a) * orbit.r;
+    const y = 0;
+
+    let mat;
+    if (node.color === 'paper') {
+      mat = new THREE.MeshStandardMaterial({ color: COLORS.paper, emissive: COLORS.paper, emissiveIntensity: 0.65, roughness: 0.45, metalness: 0.15 });
+    } else if (node.color === 'gold') {
+      mat = new THREE.MeshStandardMaterial({ color: COLORS.gold, emissive: COLORS.gold, emissiveIntensity: 0.95, roughness: 0.3, metalness: 0.5 });
+    } else if (node.color === 'method') {
+      mat = new THREE.MeshStandardMaterial({ color: COLORS.gold, emissive: COLORS.gold, emissiveIntensity: 0.4, roughness: 0.55, metalness: 0.25, transparent: true, opacity: 0.7 });
+    } else if (node.color === 'engagement') {
+      mat = new THREE.MeshStandardMaterial({ color: COLORS.navyMid, emissive: COLORS.gold, emissiveIntensity: 0.4, roughness: 0.35, metalness: 0.6 });
+    } else if (node.color === 'tool') {
+      mat = new THREE.MeshStandardMaterial({ color: COLORS.paper, emissive: COLORS.paper, emissiveIntensity: 0.32, roughness: 0.6, metalness: 0.15, transparent: true, opacity: 0.55 });
+    } else {
+      mat = new THREE.MeshStandardMaterial({ color: COLORS.paper, emissive: COLORS.paper, emissiveIntensity: 0.4, roughness: 0.5 });
+    }
+
+    const geo = new THREE.SphereGeometry(node.size, 48, 48);
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(x, y, z);
+    mesh.userData = { node, originalEmissive: mat.emissiveIntensity, originalScale: 1 };
+
+    // Subtle halo around each node for better depth read
+    if (node.color !== 'tool' && node.color !== 'method') {
+      const haloGeo = new THREE.SphereGeometry(node.size * 1.4, 24, 24);
+      const haloColor = node.color === 'paper' ? COLORS.paper : COLORS.gold;
+      const haloMat = new THREE.MeshBasicMaterial({ color: haloColor, transparent: true, opacity: 0.10, side: THREE.BackSide });
+      const halo = new THREE.Mesh(haloGeo, haloMat);
+      mesh.add(halo);
+    }
+
+    // Wireframe ring for methodology
+    if (node.color === 'method') {
+      const wireGeo = new THREE.TorusGeometry(node.size * 1.2, 0.008, 8, 32);
+      const wireMat = new THREE.MeshBasicMaterial({ color: COLORS.gold, transparent: true, opacity: 0.55 });
+      const wireRing = new THREE.Mesh(wireGeo, wireMat);
+      mesh.add(wireRing);
+    }
+
+    // Gold rim for engagements
+    if (node.color === 'engagement') {
+      const rimGeo = new THREE.TorusGeometry(node.size * 1.05, 0.008, 8, 32);
+      const rimMat = new THREE.MeshBasicMaterial({ color: COLORS.gold, transparent: true, opacity: 0.85 });
+      const rimRing = new THREE.Mesh(rimGeo, rimMat);
+      rimRing.rotation.x = Math.PI / 2;
+      mesh.add(rimRing);
+    }
+
+    orbitGroup.add(mesh);
+    allNodeMeshes.push(mesh);
+    allNodes[node.id] = { mesh, node, orbit: oIdx, orbitGroup };
+  });
+});
+
+// ─── LINEAGE EDGES (3D bezier curves) ───
+const edgeGroup = new THREE.Group();
+const edgeLines = [];
+EDGES.forEach(([fromId, toId]) => {
+  const a = allNodes[fromId], b = allNodes[toId];
+  if (!a || !b) return;
+
+  const edgeData = { from: a.mesh, to: b.mesh, mat: null, line: null };
+
+  const mat = new THREE.LineDashedMaterial({
+    color: COLORS.gold,
+    dashSize: 0.06,
+    gapSize: 0.06,
+    transparent: true,
+    opacity: 0.62
+  });
+
+  // Create initial geometry, will update positions each frame
+  const segs = 32;
+  const positions = new Float32Array((segs + 1) * 3);
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+  const line = new THREE.Line(geo, mat);
+  edgeData.mat = mat;
+  edgeData.line = line;
+  edgeData.segs = segs;
+  edgeGroup.add(line);
+  edgeLines.push(edgeData);
+});
+scene.add(edgeGroup);
+
+// Helper to update edge curves each frame
+const _v1 = new THREE.Vector3(), _v2 = new THREE.Vector3(), _ctrl = new THREE.Vector3();
+function updateEdges() {
+  edgeLines.forEach(e => {
+    e.from.getWorldPosition(_v1);
+    e.to.getWorldPosition(_v2);
+    // Control point: midpoint pulled outward (away from origin)
+    _ctrl.addVectors(_v1, _v2).multiplyScalar(0.5);
+    const len = _ctrl.length();
+    _ctrl.normalize().multiplyScalar(len * 0.7);
+    const curve = new THREE.QuadraticBezierCurve3(_v1.clone(), _ctrl.clone(), _v2.clone());
+    const pts = curve.getPoints(e.segs);
+    const positions = e.line.geometry.attributes.position.array;
+    for (let i = 0; i < pts.length; i++) {
+      positions[i * 3] = pts[i].x;
+      positions[i * 3 + 1] = pts[i].y;
+      positions[i * 3 + 2] = pts[i].z;
+    }
+    e.line.geometry.attributes.position.needsUpdate = true;
+    e.line.computeLineDistances();
+  });
+}
+
+// ─── HTML LABELS ───
+const labelEls = {};
+Object.values(allNodes).forEach(({ node, mesh }) => {
+  if (node.id === 'praxis') return; // No HTML label for nucleus
+  const div = document.createElement('div');
+  div.className = `node-label ${node.kind === 'tool' ? 'tool' : node.kind === 'engagement' ? 'engagement' : node.kind === 'product' ? 'product' : node.kind === 'method' ? 'method' : ''}`;
+  if (node.kind === 'operator') div.className += ' large';
+  div.textContent = node.name;
+  div.dataset.id = node.id;
+  labelsContainer.appendChild(div);
+  labelEls[node.id] = div;
+});
+
+// ─── RAYCASTER · hover ───
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let hoveredId = null;
+
+const tooltip = document.getElementById('tooltip');
+const ttCat = document.getElementById('tt-cat');
+const ttName = document.getElementById('tt-name');
+const ttDesc = document.getElementById('tt-desc');
+const ttMeta = document.getElementById('tt-meta');
+
+function onMouseMove(e) {
+  const rect = canvas.getBoundingClientRect();
+  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const hits = raycaster.intersectObjects(allNodeMeshes, false);
+  if (hits.length > 0) {
+    const node = hits[0].object.userData.node;
+    if (node && node.id !== hoveredId) {
+      hoveredId = node.id;
+      ttCat.textContent = `Orbit ${String(hits[0].object.userData.node ? Object.values(allNodes).find(n => n.node.id === node.id)?.orbit : 0).padStart(2, '0')} · ${node.cat}`;
+      ttName.textContent = node.name;
+      ttDesc.textContent = node.desc;
+      ttMeta.innerHTML = `<span class="gold">·</span> ${node.meta}`;
+      tooltip.classList.add('in');
+      controls.autoRotate = false;
+      // Update label
+      Object.values(labelEls).forEach(el => el.classList.remove('hovered'));
+      if (labelEls[node.id]) labelEls[node.id].classList.add('hovered');
+    }
+    // Position tooltip near cursor
+    tooltip.style.left = (e.clientX - rect.left) + 'px';
+    tooltip.style.top = (e.clientY - rect.top) + 'px';
+  } else {
+    if (hoveredId) {
+      hoveredId = null;
+      tooltip.classList.remove('in');
+      controls.autoRotate = true;
+      Object.values(labelEls).forEach(el => el.classList.remove('hovered'));
+    }
+  }
+}
+canvas.addEventListener('mousemove', onMouseMove);
+canvas.addEventListener('mouseleave', () => {
+  hoveredId = null;
+  tooltip.classList.remove('in');
+  controls.autoRotate = true;
+  Object.values(labelEls).forEach(el => el.classList.remove('hovered'));
+});
+
+// ─── HUD updates ───
+const camAzim = document.getElementById('cam-azim');
+const camElev = document.getElementById('cam-elev');
+const camDist = document.getElementById('cam-dist');
+const camTime = document.getElementById('cam-time');
+
+let hotfixSec = 4 * 3600 + 18 * 60;
+setInterval(() => {
+  hotfixSec += 1;
+  const h = Math.floor(hotfixSec / 3600);
+  const m = Math.floor((hotfixSec % 3600) / 60);
+  if (camTime) camTime.textContent = `${String(h).padStart(2,'0')}:${m < 10 ? '0' : ''}${m}`;
+}, 1000);
+
+// ─── LIVE WIRING · /api/world-model ───
+// Fetches sanitized snapshot from the brain DB. Fails open: keeps mock data
+// if the endpoint is unavailable (local dev, env not set, network failure).
+(async () => {
+  try {
+    const r = await fetch('/api/world-model', { headers: { accept: 'application/json' } });
+    if (!r.ok) return;
+    const data = await r.json();
+    if (data.mock) return; // Endpoint signaled fallback. Keep local mock.
+
+    // Reset hotfix base to live value.
+    if (typeof data.last_hotfix_seconds_ago === 'number') {
+      hotfixSec = data.last_hotfix_seconds_ago;
+      const h = Math.floor(hotfixSec / 3600);
+      const m = Math.floor((hotfixSec % 3600) / 60);
+      if (camTime) camTime.textContent = `${String(h).padStart(2,'0')}:${m < 10 ? '0' : ''}${m}`;
+    }
+
+    // Optional: surface live brain row count if a #live-brain-rows element exists later.
+    const brainEl = document.getElementById('live-brain-rows');
+    if (brainEl && typeof data.brain_rows_active === 'number') {
+      brainEl.textContent = data.brain_rows_active.toLocaleString();
+    }
+  } catch (e) {
+    // Silent fallback. The atom keeps rendering with mock data.
+  }
+})();
+
+// ─── ANIMATE ───
+const clock = new THREE.Clock();
+const _projVec = new THREE.Vector3();
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = clock.getDelta();
+  const t = clock.elapsedTime;
+
+  // Rotate orbits at different speeds
+  orbitGroups.forEach((g, i) => {
+    g.rotation.y += dt * (g.userData.speed || 0.05);
+  });
+
+  // Pulse nucleus
+  const nucleus = allNodes['praxis'];
+  if (nucleus) {
+    const pulse = Math.sin(t * 1.4) * 0.05 + 1;
+    nucleus.mesh.scale.setScalar(pulse);
+  }
+
+  // Update edges
+  updateEdges();
+
+  // Update HTML labels
+  const W = stage.clientWidth, H = stage.clientHeight;
+  Object.entries(labelEls).forEach(([id, el]) => {
+    const n = allNodes[id];
+    if (!n) return;
+    n.mesh.getWorldPosition(_projVec);
+    const dist = camera.position.distanceTo(_projVec);
+    _projVec.project(camera);
+    const x = (_projVec.x * 0.5 + 0.5) * W;
+    const y = (-_projVec.y * 0.5 + 0.5) * H;
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    // Hide if behind camera
+    if (_projVec.z > 1) {
+      el.classList.add('hidden');
+    } else {
+      el.classList.remove('hidden');
+      // Fade by distance
+      const fade = Math.max(0, Math.min(1, 1 - (dist - 4) / 18));
+      el.style.opacity = fade.toString();
+    }
+  });
+
+  // Update HUD
+  const az = controls.getAzimuthalAngle() * 180 / Math.PI;
+  const el = (Math.PI / 2 - controls.getPolarAngle()) * 180 / Math.PI;
+  const d = camera.position.distanceTo(controls.target);
+  if (camAzim) camAzim.textContent = az.toFixed(1) + '°';
+  if (camElev) camElev.textContent = el.toFixed(1) + '°';
+  if (camDist) camDist.textContent = d.toFixed(1);
+
+  controls.update();
+  composer.render();
+}
+
+// ─── RESIZE ───
+function onResize() {
+  const W = stage.clientWidth, H = stage.clientHeight;
+  camera.aspect = W / H;
+  camera.updateProjectionMatrix();
+  renderer.setSize(W, H);
+  composer.setSize(W, H);
+  bloomPass.resolution = new THREE.Vector2(W, H);
+}
+window.addEventListener('resize', onResize);
+
+animate();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRAXIS · System Artifacts · Production-Ready</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --canvas: #0a2545;
+    --canvas-deep: #061a33;
+    --navy: #14365E;
+    --navy-mid: #2C5384;
+    --paper: #F1E8D2;
+    --paper-dim: rgba(241,232,210,0.78);
+    --paper-mute: rgba(241,232,210,0.55);
+    --paper-faint: rgba(241,232,210,0.32);
+    --gold: #C9A24B;
+    --gold-paper: #E8D69A;
+    --red: #C42130;
+    --rule: rgba(201,162,75,0.45);
+    --rule-soft: rgba(201,162,75,0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--canvas);
+    color: var(--paper);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .header { padding: 16px 56px; border-bottom: 0.5px solid var(--rule); background: var(--canvas); position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(8px); }
+  .header .left { display: flex; align-items: center; gap: 14px; }
+  .h-badge { width: 36px; height: 36px; flex-shrink: 0; }
+  .h-wm { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 18px; letter-spacing: 0.04em; color: var(--paper); line-height: 1; }
+  .h-wm .dot { color: var(--red); }
+  .h-sub { font-family: "IBM Plex Mono"; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-top: 2px; }
+  .h-fig { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); }
+  .h-meta { font-family: "IBM Plex Mono"; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-mute); display: flex; gap: 14px; }
+  .h-meta a { color: var(--paper); text-decoration: none; border-bottom: 0.5px solid var(--paper); padding-bottom: 1px; }
+
+  /* Intro */
+  .intro { padding: 60px 56px 32px; max-width: 1320px; margin: 0 auto; }
+  .intro .eye { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+  .intro h1 { font-family: "Big Shoulders Display"; font-weight: 900; font-size: clamp(56px, 7vw, 110px); line-height: 0.92; letter-spacing: 0.005em; color: var(--paper); margin-top: 16px; text-transform: uppercase; max-width: 1100px; }
+  .intro h1 .red { color: var(--red); }
+  .intro h1 .gold { color: var(--gold); }
+  .intro .lede { font-family: "IBM Plex Sans"; font-size: 16px; line-height: 1.6; color: var(--paper-dim); max-width: 760px; margin-top: 22px; }
+
+  /* Section rule */
+  .section-rule { display: flex; justify-content: space-between; padding: 24px 56px 14px; max-width: 1320px; margin: 56px auto 0; border-top: 0.5px solid var(--rule); font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--paper-mute); }
+  .section-rule .lab { color: var(--red); }
+
+  /* Artifact section */
+  .artifact { padding: 28px 56px 60px; max-width: 1320px; margin: 0 auto; }
+  .art-head { display: grid; grid-template-columns: 80px 1fr auto; gap: 20px; align-items: baseline; padding: 14px 22px; background: rgba(241,232,210,0.04); border: 0.75px solid var(--rule); border-bottom: 0; }
+  .art-head .num { font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.16em; color: var(--paper-mute); }
+  .art-head .name { font-family: "Big Shoulders Display"; font-weight: 800; font-size: 24px; letter-spacing: 0.005em; text-transform: uppercase; color: var(--paper); }
+  .art-head .tag { font-family: "IBM Plex Mono"; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+  .art-body { padding: 32px; border: 0.75px solid var(--rule); }
+
+  /* Favicon section */
+  .favicon-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; align-items: end; padding: 20px 0; background: var(--paper); border: 1px solid var(--navy); }
+  .favicon-cell { text-align: center; padding: 12px 8px; }
+  .favicon-cell .icon-frame { background: #ffffff; border: 0.5px solid var(--navy); display: inline-flex; align-items: center; justify-content: center; padding: 4px; }
+  .favicon-cell .lab { font-family: "IBM Plex Mono"; font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--navy); margin-top: 8px; }
+  .favicon-cell .px { font-family: "Big Shoulders Display"; font-weight: 700; font-size: 16px; color: var(--red); margin-top: 2px; }
+
+  .browser-tab-mock { background: var(--paper); border: 1px solid var(--navy); padding: 12px 16px; margin-top: 18px; }
+  .browser-tab-mock .tab { display: inline-flex; align-items: center; gap: 8px; background: #ffffff; padding: 8px 14px 8px 10px; border: 1px solid #d4cab2; border-bottom: 0; font-family: "IBM Plex Sans"; font-size: 13px; color: #2A241B; }
+  .browser-tab-mock .tab .x { font-family: monospace; opacity: 0.4; margin-left: 6px; }
+
+  /* Email signature */
+  .sig-preview { background: #ffffff; padding: 28px; border: 1px solid var(--navy); }
+  .sig-mock { background: #f8f7f4; padding: 22px 24px; border-bottom: 1px solid #e0d8c2; }
+  .sig-mock .from { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; font-size: 14px; color: #2A241B; }
+  .sig-mock .from .name { font-weight: 600; color: #14365E; }
+  .sig-mock .subj { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; font-size: 16px; color: #14365E; font-weight: 600; margin-top: 4px; }
+  .sig-mock .body { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; font-size: 14px; color: #2A241B; padding: 22px 0 4px; line-height: 1.55; }
+
+  /* Card preview */
+  .card-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding: 32px 0; }
+  .card-display { display: flex; flex-direction: column; gap: 10px; }
+  .card-display .card-img { width: 100%; box-shadow: 0 8px 22px rgba(0,0,0,0.45); border: 1px solid var(--rule); }
+  .card-display .card-cap { font-family: "IBM Plex Mono"; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-mute); }
+  .card-display .card-cap .red { color: var(--red); }
+  .card-display .card-cap .gold { color: var(--gold); }
+
+  /* Notes block */
+  .install { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; padding: 24px 0 0; }
+  .install-block { padding: 18px 20px; background: rgba(196,33,48,0.05); border-left: 3px solid var(--red); }
+  .install-block .lab { font-family: "IBM Plex Mono"; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .install-block h4 { font-family: "Big Shoulders Display"; font-weight: 700; font-size: 18px; line-height: 1.1; text-transform: uppercase; color: var(--paper); }
+  .install-block p { font-family: "IBM Plex Sans"; font-size: 13px; line-height: 1.55; color: var(--paper-dim); margin-top: 8px; }
+  .install-block code { font-family: "IBM Plex Mono"; font-size: 11.5px; color: var(--gold-paper); background: rgba(0,0,0,0.4); padding: 1px 5px; border-radius: 2px; }
+  .install-block ol { font-family: "IBM Plex Sans"; font-size: 13px; line-height: 1.6; color: var(--paper-dim); margin: 8px 0 0 16px; }
+  .install-block ol li { margin-bottom: 4px; }
+
+  /* Download row */
+  .downloads { display: flex; flex-wrap: wrap; gap: 10px; padding: 22px 0 0; border-top: 0.5px dashed var(--rule-soft); margin-top: 22px; }
+  .download {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px;
+    background: var(--navy);
+    color: var(--paper);
+    text-decoration: none;
+    font-family: "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    border: 0.5px solid var(--gold);
+    transition: all 0.2s;
+  }
+  .download:hover { background: var(--red); border-color: var(--red); }
+  .download .arr { color: var(--gold); }
+  .download:hover .arr { color: var(--paper); }
+
+  /* Footer */
+  .site-foot { background: #000; color: var(--paper); padding: 36px 56px 28px; border-top: 1px solid var(--gold); }
+  .foot-inner { max-width: 1320px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; font-family: "IBM Plex Mono"; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+  .foot-inner a { color: var(--paper); text-decoration: none; border-bottom: 0.5px solid var(--paper); padding-bottom: 1px; margin-left: 14px; }
+
+  @media (max-width: 1100px) {
+    .header, .intro, .artifact, .section-rule, .site-foot { padding-left: 24px; padding-right: 24px; }
+    .card-pair { grid-template-columns: 1fr; }
+    .install { grid-template-columns: 1fr; }
+    .favicon-row { grid-template-columns: repeat(3, 1fr); }
+    .intro h1 { font-size: 56px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="left">
+    <div class="h-badge">
+      <svg viewBox="0 0 360 360"><circle cx="180" cy="180" r="172" fill="#C9A24B"/><g fill="#C9A24B"><g id="th"><rect x="174" y="0" width="12" height="14"/></g><use href="#th" transform="rotate(30 180 180)"/><use href="#th" transform="rotate(60 180 180)"/><use href="#th" transform="rotate(90 180 180)"/><use href="#th" transform="rotate(120 180 180)"/><use href="#th" transform="rotate(150 180 180)"/><use href="#th" transform="rotate(180 180 180)"/><use href="#th" transform="rotate(210 180 180)"/><use href="#th" transform="rotate(240 180 180)"/><use href="#th" transform="rotate(270 180 180)"/><use href="#th" transform="rotate(300 180 180)"/><use href="#th" transform="rotate(330 180 180)"/></g><circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#C9A24B" stroke-width="3"/><circle cx="180" cy="180" r="50" fill="#C42130"/></svg>
+    </div>
+    <div>
+      <div class="h-wm">PRAXIS<span class="dot">.</span></div>
+      <div class="h-sub">System Artifacts</div>
+    </div>
+  </div>
+  <div class="h-fig">FIG. 03 · PRODUCTION ARTIFACTS · v1</div>
+  <div class="h-meta">
+    <a href="index.html">← Praxis</a>
+    <a href="world-model-3d.html">World Model</a>
+    <a href="system.html">Brand System</a>
+  </div>
+</header>
+
+<section class="intro">
+  <div class="eye">FIG. 03 · PRODUCTION-READY ARTIFACTS · 2026-04-30</div>
+  <h1>Three artifacts<span class="red">,</span> ready to <span class="gold">ship.</span></h1>
+  <p class="lede">Every Praxis touchpoint outside the homepage runs through one of three artifacts: the favicon a browser tab loads, the email signature you and Greg send a hundred times a week, the business card you hand to an operator at a conference. All three are now finalized in the V4 register and ready to deploy. None of them require praxis-web changes; all of them put V4 in front of a buyer the moment they exist.</p>
+</section>
+
+<!-- ─── ARTIFACT 01 · FAVICON SET ─── -->
+<div class="section-rule">
+  <span class="lab">§ 01 · Favicon set</span>
+  <span>Browser tab · sub-32px to 180px · SVG-native</span>
+</div>
+
+<section class="artifact">
+  <div class="art-head">
+    <span class="num">ARTIFACT 01</span>
+    <span class="name">Favicon set · the badge at every browser size</span>
+    <span class="tag">SVG · Apple Touch · simplified</span>
+  </div>
+  <div class="art-body">
+
+    <!-- Live render at multiple sizes on a paper backdrop -->
+    <div class="favicon-row">
+      <div class="favicon-cell">
+        <div class="icon-frame" style="width: 16px; height: 16px;">
+          <img src="assets/favicon-simplified.svg" width="16" height="16" alt="Favicon at 16px">
+        </div>
+        <div class="lab">Tab · simplified</div>
+        <div class="px">16<span style="color:var(--navy)">px</span></div>
+      </div>
+      <div class="favicon-cell">
+        <div class="icon-frame" style="width: 32px; height: 32px;">
+          <img src="assets/favicon.svg" width="32" height="32" alt="Favicon at 32px">
+        </div>
+        <div class="lab">Tab · standard</div>
+        <div class="px">32<span style="color:var(--navy)">px</span></div>
+      </div>
+      <div class="favicon-cell">
+        <div class="icon-frame" style="width: 64px; height: 64px;">
+          <img src="assets/favicon.svg" width="64" height="64" alt="Favicon at 64px">
+        </div>
+        <div class="lab">Bookmark</div>
+        <div class="px">64<span style="color:var(--navy)">px</span></div>
+      </div>
+      <div class="favicon-cell">
+        <div class="icon-frame" style="width: 128px; height: 128px;">
+          <img src="assets/favicon.svg" width="128" height="128" alt="Favicon at 128px">
+        </div>
+        <div class="lab">Web clip</div>
+        <div class="px">128<span style="color:var(--navy)">px</span></div>
+      </div>
+      <div class="favicon-cell">
+        <div class="icon-frame" style="width: 180px; height: 180px;">
+          <img src="assets/apple-touch-icon.svg" width="180" height="180" alt="Apple Touch icon at 180px">
+        </div>
+        <div class="lab">Apple Touch</div>
+        <div class="px">180<span style="color:var(--navy)">px</span></div>
+      </div>
+    </div>
+
+    <!-- Browser tab mock -->
+    <div class="browser-tab-mock">
+      <div style="font-family: 'IBM Plex Mono'; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--navy); margin-bottom: 10px;">PREVIEW · Browser tab</div>
+      <div class="tab">
+        <img src="assets/favicon-simplified.svg" width="16" height="16" alt="Praxis favicon" style="display: block;">
+        <span>Praxis · Operational Intelligence</span>
+        <span class="x">×</span>
+      </div>
+    </div>
+
+    <div class="install">
+      <div class="install-block">
+        <div class="lab">Install · HTML head</div>
+        <h4>Drop into praxis-web</h4>
+        <p>Replace the existing favicon link tags in <code>app/layout.tsx</code> (or your head component) with these:</p>
+        <p style="margin-top: 12px;">
+          <code>&lt;link rel="icon" href="/favicon.svg" type="image/svg+xml" /&gt;</code><br>
+          <code>&lt;link rel="apple-touch-icon" href="/apple-touch-icon.svg" /&gt;</code>
+        </p>
+      </div>
+      <div class="install-block">
+        <div class="lab">Why two SVGs</div>
+        <h4>Cog teeth disappear at 16px</h4>
+        <p>The full badge has 12 cog teeth that turn to mush below 32px. The simplified variant drops the teeth and thickens the gold ring so the mark stays legible in a browser tab. Modern browsers will pick the right one automatically when both are linked.</p>
+      </div>
+      <div class="install-block">
+        <div class="lab">Legacy ICO</div>
+        <h4>If you need .ico</h4>
+        <p>Some legacy environments still want a <code>favicon.ico</code> file. Convert <code>favicon-simplified.svg</code> to a 16×16 / 32×32 multi-resolution ICO via realfavicongenerator.net or similar. SVG is the canonical source, ICO is generated.</p>
+      </div>
+    </div>
+
+    <div class="downloads">
+      <a class="download" href="assets/favicon.svg" download>favicon.svg <span class="arr">↓</span></a>
+      <a class="download" href="assets/favicon-simplified.svg" download>favicon-simplified.svg <span class="arr">↓</span></a>
+      <a class="download" href="assets/apple-touch-icon.svg" download>apple-touch-icon.svg <span class="arr">↓</span></a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── ARTIFACT 02 · EMAIL SIGNATURES ─── -->
+<div class="section-rule">
+  <span class="lab">§ 02 · Email signatures</span>
+  <span>Justin · Greg · inline SVG · table-based for Outlook compat</span>
+</div>
+
+<section class="artifact">
+  <div class="art-head">
+    <span class="num">ARTIFACT 02</span>
+    <span class="name">Email signatures · Justin & Greg</span>
+    <span class="tag">HTML · system fonts · zero external deps</span>
+  </div>
+  <div class="art-body">
+
+    <!-- Justin signature in mock email -->
+    <div class="sig-preview">
+      <div class="sig-mock">
+        <div class="from"><span class="name">Justin Morrow</span> &lt;justin@gopraxis.ai&gt;</div>
+        <div class="subj">Praxis Discovery Sprint · proposal</div>
+        <div class="body">Renie, attached is the Sprint findings deck. Let me know if you want to walk through it together before the Cliff House MD focus group.<br><br>Best,<br>Justin</div>
+        <table cellpadding="0" cellspacing="0" border="0" style="font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; color: #2A241B; line-height: 1.45; max-width: 480px; margin-top: 8px;">
+          <tr>
+            <td style="padding-right: 18px; vertical-align: top; padding-top: 2px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 360 360"><circle cx="180" cy="180" r="172" fill="#C9A24B"/><g fill="#C9A24B"><g id="ts1"><rect x="174" y="0" width="12" height="14"/></g><use href="#ts1" transform="rotate(30 180 180)"/><use href="#ts1" transform="rotate(60 180 180)"/><use href="#ts1" transform="rotate(90 180 180)"/><use href="#ts1" transform="rotate(120 180 180)"/><use href="#ts1" transform="rotate(150 180 180)"/><use href="#ts1" transform="rotate(180 180 180)"/><use href="#ts1" transform="rotate(210 180 180)"/><use href="#ts1" transform="rotate(240 180 180)"/><use href="#ts1" transform="rotate(270 180 180)"/><use href="#ts1" transform="rotate(300 180 180)"/><use href="#ts1" transform="rotate(330 180 180)"/></g><circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#F1E8D2" stroke-width="3"/><circle cx="180" cy="180" r="50" fill="#C42130"/></svg>
+            </td>
+            <td style="vertical-align: top; border-left: 0.5px solid #14365E; padding-left: 18px;">
+              <div style="font-family: 'Arial Black', 'Helvetica Black', Impact, sans-serif; font-size: 18px; font-weight: 900; letter-spacing: 0.5px; color: #14365E; text-transform: uppercase; line-height: 1;">Justin Morrow<span style="color: #C42130;">.</span></div>
+              <div style="font-family: 'Courier New', Consolas, monospace; font-size: 10.5px; letter-spacing: 1.6px; color: #6e6555; text-transform: uppercase; margin-top: 4px;">Co-Founder · Managing Partner</div>
+              <div style="font-family: 'Courier New', Consolas, monospace; font-size: 11px; color: #2A241B; margin-top: 10px; padding-top: 8px; border-top: 0.5px dashed #C9A24B; line-height: 1.6;"><a href="mailto:justin@gopraxis.ai" style="color: #14365E; text-decoration: none;">justin@gopraxis.ai</a> &nbsp;<span style="color: #C42130;">·</span>&nbsp; <a href="https://gopraxis.ai" style="color: #2A241B; text-decoration: none;">gopraxis.ai</a></div>
+              <div style="font-family: 'Courier New', Consolas, monospace; font-size: 9.5px; letter-spacing: 1.4px; color: #6e6555; text-transform: uppercase; margin-top: 8px;"><a href="https://gopraxis.ai" style="color: #14365E; text-decoration: none; border-bottom: 0.5px solid #14365E;">gopraxis.ai</a> &nbsp;<span style="color: #C9A24B;">·</span>&nbsp; Phoenix · Berlin &nbsp;<span style="color: #C9A24B;">·</span>&nbsp; Operational Intelligence</div>
+              <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 11px; color: #6e6555; margin-top: 10px; padding-top: 6px; border-top: 0.5px dashed #C9A24B; line-height: 1.45;">Operators who build software for other operators. Six engagements per year. Both partners on every one.</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Greg signature in mock email -->
+    <div class="sig-preview" style="margin-top: 20px;">
+      <div class="sig-mock">
+        <div class="from"><span class="name">Greg Dunaway</span> &lt;greg@gopraxis.ai&gt;</div>
+        <div class="subj">Aroya partnership · next steps</div>
+        <div class="body">Brad, great talking last week. Quick note on what we'd want to lock for the Performance Loop integration. Both Justin and I will be on the next call.<br><br>Best,<br>Greg</div>
+        <table cellpadding="0" cellspacing="0" border="0" style="font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; color: #2A241B; line-height: 1.45; max-width: 480px; margin-top: 8px;">
+          <tr>
+            <td style="padding-right: 18px; vertical-align: top; padding-top: 2px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 360 360"><circle cx="180" cy="180" r="172" fill="#C9A24B"/><g fill="#C9A24B"><g id="ts2"><rect x="174" y="0" width="12" height="14"/></g><use href="#ts2" transform="rotate(30 180 180)"/><use href="#ts2" transform="rotate(60 180 180)"/><use href="#ts2" transform="rotate(90 180 180)"/><use href="#ts2" transform="rotate(120 180 180)"/><use href="#ts2" transform="rotate(150 180 180)"/><use href="#ts2" transform="rotate(180 180 180)"/><use href="#ts2" transform="rotate(210 180 180)"/><use href="#ts2" transform="rotate(240 180 180)"/><use href="#ts2" transform="rotate(270 180 180)"/><use href="#ts2" transform="rotate(300 180 180)"/><use href="#ts2" transform="rotate(330 180 180)"/></g><circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#F1E8D2" stroke-width="3"/><circle cx="180" cy="180" r="50" fill="#C42130"/></svg>
+            </td>
+            <td style="vertical-align: top; border-left: 0.5px solid #14365E; padding-left: 18px;">
+              <div style="font-family: 'Arial Black', 'Helvetica Black', Impact, sans-serif; font-size: 18px; font-weight: 900; letter-spacing: 0.5px; color: #14365E; text-transform: uppercase; line-height: 1;">Greg Dunaway<span style="color: #C42130;">.</span></div>
+              <div style="font-family: 'Courier New', Consolas, monospace; font-size: 10.5px; letter-spacing: 1.6px; color: #6e6555; text-transform: uppercase; margin-top: 4px;">Co-Founder · Managing Partner</div>
+              <div style="font-family: 'Courier New', Consolas, monospace; font-size: 11px; color: #2A241B; margin-top: 10px; padding-top: 8px; border-top: 0.5px dashed #C9A24B; line-height: 1.6;"><a href="mailto:greg@gopraxis.ai" style="color: #14365E; text-decoration: none;">greg@gopraxis.ai</a> &nbsp;<span style="color: #C42130;">·</span>&nbsp; <a href="https://gopraxis.ai" style="color: #2A241B; text-decoration: none;">gopraxis.ai</a></div>
+              <div style="font-family: 'Courier New', Consolas, monospace; font-size: 9.5px; letter-spacing: 1.4px; color: #6e6555; text-transform: uppercase; margin-top: 8px;"><a href="https://gopraxis.ai" style="color: #14365E; text-decoration: none; border-bottom: 0.5px solid #14365E;">gopraxis.ai</a> &nbsp;<span style="color: #C9A24B;">·</span>&nbsp; Scottsdale · Berlin &nbsp;<span style="color: #C9A24B;">·</span>&nbsp; Operational Intelligence</div>
+              <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 11px; color: #6e6555; margin-top: 10px; padding-top: 6px; border-top: 0.5px dashed #C9A24B; line-height: 1.45;">Operators who build software for other operators. Six engagements per year. Both partners on every one.</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="install">
+      <div class="install-block">
+        <div class="lab">Install · Gmail</div>
+        <h4>Three steps</h4>
+        <ol>
+          <li>Open your <code>.html</code> signature file in a browser</li>
+          <li>Select all (Cmd-A) and copy (Cmd-C)</li>
+          <li>Gmail → Settings → General → Signature → paste, save</li>
+        </ol>
+      </div>
+      <div class="install-block">
+        <div class="lab">Install · Apple Mail / Outlook</div>
+        <h4>Same approach</h4>
+        <p>Open the HTML in a browser, select all, copy, paste into the signature field. Apple Mail and Outlook both preserve the inline styles. The badge is inline SVG so no image hosting required and it survives forwarding.</p>
+      </div>
+      <div class="install-block">
+        <div class="lab">Why system fonts</div>
+        <h4>Big Shoulders not in email</h4>
+        <p>Email clients strip @import. <code>Arial Black</code> approximates Big Shoulders for the name. <code>Courier New</code> approximates Plex Mono for chrome. <code>Georgia</code> italic carries the Special Elite warmth. Close enough; preserves the system in a hostile environment.</p>
+      </div>
+    </div>
+
+    <div class="downloads">
+      <a class="download" href="assets/justin-signature.html" download>justin-signature.html <span class="arr">↓</span></a>
+      <a class="download" href="assets/greg-signature.html" download>greg-signature.html <span class="arr">↓</span></a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── ARTIFACT 03 · BUSINESS CARDS ─── -->
+<div class="section-rule">
+  <span class="lab">§ 03 · Business cards</span>
+  <span>3.5 in × 2 in · 0.125 in bleed · production-ready SVG</span>
+</div>
+
+<section class="artifact">
+  <div class="art-head">
+    <span class="num">ARTIFACT 03</span>
+    <span class="name">Business cards · front & back · both partners</span>
+    <span class="tag">SVG · 1125×675 with bleed · CMYK-safe palette</span>
+  </div>
+  <div class="art-body">
+
+    <!-- Justin -->
+    <div style="font-family: 'IBM Plex Mono'; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); padding-bottom: 8px; border-bottom: 0.5px dashed var(--rule-soft);">JUSTIN MORROW · CARD 01 / 02</div>
+    <div class="card-pair">
+      <div class="card-display">
+        <img class="card-img" src="assets/justin-card-front.svg" alt="Justin Morrow business card front">
+        <div class="card-cap"><span class="red">·</span> FRONT · cream paper · navy ink · red dot · gold cog frame</div>
+      </div>
+      <div class="card-display">
+        <img class="card-img" src="assets/justin-card-back.svg" alt="Justin Morrow business card back">
+        <div class="card-cap"><span class="gold">·</span> BACK · navy field · gold-paper type · 93/7 thesis tagline</div>
+      </div>
+    </div>
+
+    <!-- Greg -->
+    <div style="font-family: 'IBM Plex Mono'; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); padding: 22px 0 8px; border-bottom: 0.5px dashed var(--rule-soft);">GREG DUNAWAY · CARD 02 / 02</div>
+    <div class="card-pair">
+      <div class="card-display">
+        <img class="card-img" src="assets/greg-card-front.svg" alt="Greg Dunaway business card front">
+        <div class="card-cap"><span class="red">·</span> FRONT · cream paper · navy ink · red dot · gold cog frame</div>
+      </div>
+      <div class="card-display">
+        <img class="card-img" src="assets/greg-card-back.svg" alt="Greg Dunaway business card back">
+        <div class="card-cap"><span class="gold">·</span> BACK · navy field · gold-paper type · 93/7 thesis tagline</div>
+      </div>
+    </div>
+
+    <div class="install">
+      <div class="install-block">
+        <div class="lab">Print specs</div>
+        <h4>Standard US 3.5 × 2 in</h4>
+        <ol>
+          <li>Trim size: <code>3.5 in × 2 in</code> (1050×600 px @ 300dpi)</li>
+          <li>Bleed: <code>0.125 in</code> on all sides (full SVG = 1125×675)</li>
+          <li>Safe zone: <code>0.125 in</code> inside the trim line</li>
+          <li>Color mode: convert SVG → PDF in CMYK before submitting</li>
+        </ol>
+      </div>
+      <div class="install-block">
+        <div class="lab">Recommended vendors</div>
+        <h4>Print partners</h4>
+        <p><strong>MOO</strong> for premium feel (Luxe stock 32pt with painted edge in navy or red). <strong>Vistaprint</strong> for fast turnaround. <strong>Jukebox</strong> for letterpress on cotton paper if you want the operator's-manual feel to be physical, not just visual. Recommend MOO Luxe for a first reorder.</p>
+      </div>
+      <div class="install-block">
+        <div class="lab">Convert to print PDF</div>
+        <h4>SVG → PDF · CMYK</h4>
+        <p>Open the SVG in Affinity Designer or Illustrator, set color profile to CMYK, export as PDF/X-1a with bleed. Most online vendors accept PDF/X-1a directly. Spot color for the red (Pantone 199 C is closest) only if doing letterpress.</p>
+      </div>
+    </div>
+
+    <div class="downloads">
+      <a class="download" href="assets/justin-card-front.svg" download>justin-card-front.svg <span class="arr">↓</span></a>
+      <a class="download" href="assets/justin-card-back.svg" download>justin-card-back.svg <span class="arr">↓</span></a>
+      <a class="download" href="assets/greg-card-front.svg" download>greg-card-front.svg <span class="arr">↓</span></a>
+      <a class="download" href="assets/greg-card-back.svg" download>greg-card-back.svg <span class="arr">↓</span></a>
+    </div>
+
+  </div>
+</section>
+
+<!-- Synthesis -->
+<div class="section-rule">
+  <span class="lab">§ 04 · Next move</span>
+  <span>Ship sequence · what happens after this</span>
+</div>
+
+<section class="artifact">
+  <div class="art-body" style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+    <div>
+      <div style="font-family: 'IBM Plex Mono'; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red);">§ Tonight · zero-risk shipping</div>
+      <h3 style="font-family: 'Big Shoulders Display'; font-weight: 800; font-size: 32px; line-height: 1.05; text-transform: uppercase; color: var(--paper); margin-top: 14px;">Three artifacts<span style="color: var(--gold)">,</span> three ship paths.</h3>
+      <p style="font-family: 'IBM Plex Sans'; font-size: 14.5px; line-height: 1.65; color: var(--paper-dim); margin-top: 16px;">Favicon swaps in the praxis-web public folder, single PR. Email signatures install in five minutes per Gmail account. Business cards send to MOO for a first reorder; new cards ship in 4 to 7 business days. By the end of the week every Praxis touchpoint outside the homepage speaks the V4 register, with zero touch on praxis-web layout code.</p>
+    </div>
+    <div>
+      <div style="font-family: 'IBM Plex Mono'; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red);">§ Tomorrow · the brain canon</div>
+      <h3 style="font-family: 'Big Shoulders Display'; font-weight: 800; font-size: 32px; line-height: 1.05; text-transform: uppercase; color: var(--paper); margin-top: 14px;">Update the <span style="color: var(--gold)">brand_system</span> row.</h3>
+      <p style="font-family: 'IBM Plex Sans'; font-size: 14.5px; line-height: 1.65; color: var(--paper-dim); margin-top: 16px;">Once Greg has eyes on V4 and these artifacts, the next step is updating <code style="font-family: 'IBM Plex Mono'; font-size: 12px; color: var(--gold-paper); background: rgba(0,0,0,0.4); padding: 1px 5px;">praxis_brand_system</code> in the Supabase brain so V4 is canonical and the old Bebas + obsidian system is superseded. That single brain write locks the direction across every future session.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>Praxis Operational Intelligence · Operations Bureau No. 26 · Phoenix · Berlin · MMXXVI</span>
+    <span>
+      <span style="color: var(--red)">●</span> System artifacts v1
+      <a href="index.html">Praxis homepage</a>
+      <a href="world-model-3d.html">World Model 3D</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1125 675" width="1125" height="675" role="img" aria-label="Justin Morrow business card front">
+  <title>Praxis · Justin Morrow · business card · front</title>
+  <desc>3.5 in × 2 in trim with 0.125 in bleed. Trim at 37.5 px inset. Safe zone at 75 px inset.</desc>
+
+  <!-- Bleed background (extends fully to 1125x675 edges) -->
+  <rect width="1125" height="675" fill="#F1E8D2"/>
+
+  <!-- Subtle paper texture (light noise via pattern) -->
+  <defs>
+    <pattern id="paperTexture" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="18" r="0.7" fill="#0E0E0D" opacity="0.06"/>
+      <circle cx="78" cy="42" r="0.5" fill="#0E0E0D" opacity="0.05"/>
+      <circle cx="50" cy="92" r="0.9" fill="#0E0E0D" opacity="0.05"/>
+      <circle cx="100" cy="78" r="0.5" fill="#0E0E0D" opacity="0.04"/>
+    </pattern>
+  </defs>
+  <rect width="1125" height="675" fill="url(#paperTexture)"/>
+
+  <!-- Trim guide (REMOVE FOR PRINT — keep visible at 0.4 opacity for vendor review only) -->
+  <g opacity="0" stroke="#C42130" stroke-width="1" fill="none" stroke-dasharray="6,4">
+    <rect x="37.5" y="37.5" width="1050" height="600"/>
+  </g>
+
+  <!-- Hairline frame just inside safe zone -->
+  <rect x="56" y="56" width="1013" height="563" fill="none" stroke="#14365E" stroke-width="1" opacity="0.42"/>
+
+  <!-- Top row: badge top-left, metadata top-right -->
+  <g transform="translate(95, 95)">
+    <!-- Badge at 96px -->
+    <g transform="scale(0.267)">
+      <circle cx="180" cy="180" r="172" fill="#C9A24B"/>
+      <g fill="#C9A24B">
+        <g id="tjf"><rect x="174" y="0" width="12" height="14"/></g>
+        <use href="#tjf" transform="rotate(30 180 180)"/>
+        <use href="#tjf" transform="rotate(60 180 180)"/>
+        <use href="#tjf" transform="rotate(90 180 180)"/>
+        <use href="#tjf" transform="rotate(120 180 180)"/>
+        <use href="#tjf" transform="rotate(150 180 180)"/>
+        <use href="#tjf" transform="rotate(180 180 180)"/>
+        <use href="#tjf" transform="rotate(210 180 180)"/>
+        <use href="#tjf" transform="rotate(240 180 180)"/>
+        <use href="#tjf" transform="rotate(270 180 180)"/>
+        <use href="#tjf" transform="rotate(300 180 180)"/>
+        <use href="#tjf" transform="rotate(330 180 180)"/>
+      </g>
+      <circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#F1E8D2" stroke-width="3"/>
+      <circle cx="180" cy="180" r="50" fill="#C42130"/>
+    </g>
+  </g>
+
+  <!-- Top-right metadata -->
+  <g font-family="IBM Plex Mono, Courier New, monospace" font-size="14" letter-spacing="3.5" fill="#6e6555">
+    <text x="1030" y="105" text-anchor="end">PRAXIS · OPERATIONAL INTELLIGENCE</text>
+    <text x="1030" y="128" text-anchor="end">FORM PX-001 · EST. MMXXVI</text>
+  </g>
+
+  <!-- Hairline divider under badge area -->
+  <line x1="95" y1="218" x2="1030" y2="218" stroke="#14365E" stroke-width="0.75" opacity="0.5"/>
+
+  <!-- Name -->
+  <text x="95" y="320" font-family="Big Shoulders Display, Arial Black, Impact, sans-serif" font-weight="900" font-size="64" letter-spacing="0.5" fill="#14365E" text-transform="uppercase">JUSTIN MORROW<tspan fill="#C42130">.</tspan></text>
+
+  <!-- Role -->
+  <text x="95" y="358" font-family="IBM Plex Mono, Courier New, monospace" font-size="14.5" letter-spacing="3.5" fill="#6e6555">CO-FOUNDER · MANAGING PARTNER</text>
+
+  <!-- Bio brief in serif italic -->
+  <text x="95" y="402" font-family="Special Elite, Georgia, serif" font-style="italic" font-size="16" fill="#2A241B">AI engineering &amp; product architecture.</text>
+
+  <!-- Hairline divider -->
+  <line x1="95" y1="448" x2="540" y2="448" stroke="#14365E" stroke-width="0.5" opacity="0.5"/>
+
+  <!-- Contact block -->
+  <g font-family="IBM Plex Mono, Courier New, monospace">
+    <text x="95" y="486" font-size="12" letter-spacing="2.4" fill="#6e6555">EMAIL</text>
+    <text x="95" y="512" font-size="18" fill="#14365E" letter-spacing="0.5">justin@gopraxis.ai</text>
+
+    <text x="320" y="486" font-size="12" letter-spacing="2.4" fill="#6e6555">WEB</text>
+    <text x="320" y="512" font-size="18" fill="#14365E" letter-spacing="0.5">gopraxis.ai</text>
+
+    <text x="95" y="568" font-size="12" letter-spacing="2.4" fill="#6e6555">BASED</text>
+    <text x="95" y="592" font-size="14" fill="#2A241B" letter-spacing="0.5">Phoenix, AZ <tspan fill="#C9A24B">·</tspan> United States</text>
+  </g>
+
+  <!-- Bottom-right: serial number -->
+  <g font-family="IBM Plex Mono, Courier New, monospace" font-size="11" letter-spacing="3" fill="#6e6555">
+    <text x="1030" y="568" text-anchor="end">SERIAL · PX-26-001</text>
+    <text x="1030" y="592" text-anchor="end" fill="#C42130">· ACTIVE</text>
+  </g>
+
+  <!-- Corner brackets in gold -->
+  <g stroke="#C9A24B" stroke-width="1.25" fill="none">
+    <path d="M 56 76 L 56 56 L 76 56"/>
+    <path d="M 1049 56 L 1069 56 L 1069 76"/>
+    <path d="M 1069 599 L 1069 619 L 1049 619"/>
+    <path d="M 76 619 L 56 619 L 56 599"/>
+  </g>
+</svg>
