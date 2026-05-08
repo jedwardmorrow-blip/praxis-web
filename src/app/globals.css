@@ -7,7 +7,10 @@
 @theme inline {
   /* Fonts — literal names required by Tailwind v4 @theme inline */
   --font-sans:    "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-bebas-neue), "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
+  /* font-heading aligned to V4 canonical (Big Shoulders Display) so cannabis page
+     and any other .font-heading user matches the public site. Bebas Neue stays as
+     the deepest fallback only. */
+  --font-heading: var(--font-big-shoulders), "Big Shoulders Display", var(--font-bebas-neue), "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
   --font-mono:    ui-monospace, "Geist Mono", monospace;
 
   /* shadcn token bridge */

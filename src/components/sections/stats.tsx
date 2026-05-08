@@ -1,36 +1,38 @@
-import { Stagger, StaggerItem } from "@/components/motion"
-
-const stats = [
-  { number: "842", suffix: "+", label: "Business context records encoded in production" },
-  { number: "196", suffix: "",  label: "Knowledge graph entities mapped across one operation" },
-  { number: "12",  suffix: "+", label: "Operational modules shipped in CultOps" },
-  { number: "5",   suffix: "yrs", label: "In the field before we sold a single engagement" },
-]
+import { CountUp } from "../v4/count-up"
 
 export function Stats() {
   return (
-    <div
-      id="stats"
-      className="w-full bg-surface border-b border-border"
-      aria-label="By the numbers"
-    >
-      <Stagger className="grid grid-cols-2 md:grid-cols-4 border-l border-border">
-        {stats.map(({ number, suffix, label }) => (
-          <StaggerItem key={label}>
-            <div className="group relative p-10 border-r border-t border-border overflow-hidden max-sm:p-7">
-              {/* accent left rule on hover */}
-              <span className="absolute top-0 left-0 w-0.5 h-0 bg-border transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:h-full" aria-hidden="true" />
-              <div className="font-heading font-bold leading-none tracking-[0.02em] text-foreground" style={{ fontSize: "clamp(2.2rem, 3.5vw, 3rem)" }}>
-                {number}
-                <span className="text-muted-foreground" style={{ fontSize: "0.65em" }}>{suffix}</span>
-              </div>
-              <p className="mt-2.5 text-[0.72rem] text-muted-foreground leading-[1.5] tracking-[0.06em]">
-                {label}
-              </p>
-            </div>
-          </StaggerItem>
-        ))}
-      </Stagger>
-    </div>
+    <section className="stats">
+      <div className="stats-row">
+        <div className="stat">
+          <div className="num">
+            <CountUp to={79} />
+            <span className="red">%</span>
+          </div>
+          <div className="lab">of companies fail to see ROI from AI investment</div>
+        </div>
+        <div className="stat">
+          <div className="num">
+            <CountUp to={93} />
+            <span className="red">%</span>
+          </div>
+          <div className="lab">of AI budget goes to tools, not the operations underneath</div>
+        </div>
+        <div className="stat">
+          <div className="num">
+            <CountUp to={12} />
+            <span className="gold">+</span>
+          </div>
+          <div className="lab">operational modules shipped in Cultivo, in production today</div>
+        </div>
+        <div className="stat">
+          <div className="num">
+            <CountUp to={5} />{" "}
+            <span style={{ fontSize: 32, color: "var(--gold)" }}>YRS</span>
+          </div>
+          <div className="lab">operating in production before we sold our first engagement</div>
+        </div>
+      </div>
+    </section>
   )
 }

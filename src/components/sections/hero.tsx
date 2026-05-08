@@ -1,95 +1,108 @@
-import Link from "next/link"
-import { FadeUp } from "@/components/motion"
+import { Badge } from "../v4/badge"
+import { HeroCursor } from "../v4/hero-cursor"
 
 export function Hero() {
   return (
-    <section
-      id="hero"
-      className="relative min-h-screen flex flex-col justify-center px-20 pt-28 pb-20 overflow-hidden max-sm:px-6"
-      aria-label="Hero"
-    >
-      {/* dot-grid texture */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          backgroundImage: "radial-gradient(oklch(0.95 0 0 / 0.032) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
-        aria-hidden="true"
-      />
-
-      <div className="relative z-10 flex flex-col">
-        {/* Wordmark */}
-        <FadeUp className="mb-12">
-          <div className="flex items-end leading-none">
-            <span
-              className="font-heading font-bold tracking-[0.05em] leading-[0.88] text-foreground"
-              style={{ fontSize: "clamp(72px, 13vw, 148px)" }}
-            >
-              PRAXIS
-            </span>
-            <span
-              className="rounded-full bg-brand flex-shrink-0 ml-2"
-              style={{
-                width: "clamp(10px, 1.6vw, 20px)",
-                height: "clamp(10px, 1.6vw, 20px)",
-                marginBottom: "clamp(4px, 0.6vw, 9px)",
-              }}
-              aria-hidden="true"
-            />
+    <section className="hero" id="hero">
+      <HeroCursor />
+      <div className="hero-left">
+        <div className="hero-badge-wrap">
+          <div className="hero-badge-large">
+            <Badge variant="stamp" />
           </div>
-          <p
-            className="font-heading font-bold uppercase tracking-[0.48em] text-muted-foreground mt-4"
-            style={{ fontSize: "clamp(10px, 1.1vw, 14px)" }}
+          <div className="hero-wm-stack">
+            <div className="hwm">
+              PRAXIS<span className="dot">.</span>
+            </div>
+            <div className="hsub">Operational Intelligence · Est. MMXXVI</div>
+          </div>
+        </div>
+        <div className="eye">
+          An operator-led software firm <span className="sep">·</span> Phoenix · Berlin{" "}
+          <span className="sep">·</span> Est. 2026
+        </div>
+        <p className="wedge-leader">
+          Every off-the-shelf tool failed our operation. So we built our own
+          <span className="red">.</span>
+        </p>
+        <h1>
+          <span className="word w1">Operators</span>
+          <br />
+          <span className="word w2">who</span>{" "}
+          <span className="word w3">
+            build<span className="red">.</span>
+          </span>
+        </h1>
+        <p className="hero-clarifier">
+          Operational Intelligence is the system underneath your tools, the one your team
+          currently carries in their heads. We build it, document it, and hand it to you.
+        </p>
+        <p className="hero-meta-line">
+          Two co-founders. Six engagements per year. Fixed-price. We price for the answer, not the
+          keystrokes.
+        </p>
+        <div className="hero-proof">
+          <span className="label">Live proof · drawn from production right now</span>
+          <span className="pn">Cultivo</span>
+          <span className="sep">·</span>
+          <span className="pn">156</span> tables<span className="sep">·</span>
+          <span className="pn">12</span> modules<span className="sep">·</span>
+          <span className="live-now">
+            <span className="pulse-inline" />
+            multi-state production today
+          </span>
+        </div>
+        <div className="hero-cta-row">
+          <a href="#intake" className="hero-cta">
+            File an intake <span className="arr">→</span>
+          </a>
+          <a
+            href="mailto:greg@gopraxis.ai?subject=Praxis%20%C2%B7%20book%20a%2015-minute%20call&body=Hi%20Greg%2C%0A%0AOperation%3A%20%0AIndustry%3A%20%0AReason%20for%20call%3A%20%0A%0A%E2%80%94"
+            className="hero-cta-secondary"
           >
-            Operational Intelligence
-          </p>
-        </FadeUp>
-
-        {/* Headline */}
-        <FadeUp delay={0.1}>
-          <h1
-            className="font-heading font-bold tracking-[-0.01em] leading-[1.03] text-foreground mb-6"
-            style={{ fontSize: "clamp(2.4rem, 4.8vw, 4.6rem)" }}
-          >
-            Operators who build.
-          </h1>
-        </FadeUp>
-
-        {/* Copy */}
-        <FadeUp delay={0.18}>
-          <p className="text-[1.05rem] text-muted-foreground max-w-[500px] leading-[1.78] mb-11">
-            We ran complex operations ourselves, built the software we needed,
-            and now we build for the founders doing the same. Not a dev shop.
-            Not a consultancy. An operator-led firm with a limited number of
-            client engagements per year.
-          </p>
-        </FadeUp>
-
-        {/* CTAs */}
-        <FadeUp delay={0.24} className="flex items-center gap-3 flex-wrap">
-          <Link
-            href="#intake"
-            className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white text-[0.78rem] font-semibold tracking-[0.12em] uppercase px-8 py-4 transition-all duration-200 hover:-translate-y-px no-underline"
-          >
-            Tell us about your operation
-          </Link>
-          <Link
-            href="#how"
-            className="inline-flex items-center gap-2 bg-transparent border border-border hover:border-foreground/25 text-muted-foreground hover:text-foreground text-[0.78rem] font-medium tracking-[0.1em] uppercase px-8 py-4 transition-all duration-200 no-underline"
-          >
-            How it works
-          </Link>
-        </FadeUp>
+            Book a 15-min call <span className="arr">→</span>
+          </a>
+          <span className="hero-cta-meta">
+            Both partners on every engagement. <span className="red">No account team.</span>
+          </span>
+        </div>
       </div>
-
-      {/* Scroll hint */}
-      <div
-        className="absolute bottom-11 left-20 flex items-center gap-3 text-[0.68rem] tracking-[0.18em] uppercase text-muted-foreground max-sm:left-6"
-        aria-hidden="true"
-      >
-        <span className="block w-7 h-px bg-muted-foreground/50" />
-        Scroll
+      <div className="hero-right">
+        <div className="live">
+          <div className="live-bar">
+            <span>Cultivo · cannabis flagship · live state</span>
+            <span className="right">
+              <span className="pulse" />
+              <span>Operational</span>
+            </span>
+          </div>
+          <div className="live-rows">
+            <div className="row">
+              <span className="k">active cycles</span>
+              <span className="v gold">7</span>
+            </div>
+            <div className="row">
+              <span className="k">canopy assignments</span>
+              <span className="v gold">196</span>
+            </div>
+            <div className="row">
+              <span className="k">in flowering</span>
+              <span className="v">3 cycles</span>
+            </div>
+            <div className="row">
+              <span className="k">in drying</span>
+              <span className="v">2 cycles</span>
+            </div>
+            <div className="row">
+              <span className="k">brain rows</span>
+              <span className="v">985</span>
+            </div>
+          </div>
+          <div className="live-foot">
+            One Praxis-owned product, running production today. The same patterns ship in every
+            client engagement.
+          </div>
+        </div>
       </div>
     </section>
   )

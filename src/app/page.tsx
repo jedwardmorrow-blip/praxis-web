@@ -1,39 +1,47 @@
-import { Nav } from "@/components/nav"
+import "./v4.css"
+
+import { Nav } from "@/components/v4/nav"
+import { FooterV4 } from "@/components/v4/footer"
 import { Hero } from "@/components/sections/hero"
+import { Atom } from "@/components/sections/atom"
+import { Velocity } from "@/components/sections/velocity"
 import { Stats } from "@/components/sections/stats"
 import { Industries } from "@/components/sections/industries"
 import { Problem } from "@/components/sections/problem"
+import { Narrative } from "@/components/sections/narrative"
+import { Capacity } from "@/components/sections/capacity"
+import { MidCta } from "@/components/sections/mid-cta"
 import { HowWeWork } from "@/components/sections/how-we-work"
 import { PullQuote } from "@/components/sections/pull-quote"
-import { Intelligence } from "@/components/sections/intelligence"
-import { Work } from "@/components/sections/work"
+import { Proof } from "@/components/sections/proof"
+import { Console } from "@/components/sections/console"
 import { People } from "@/components/sections/people"
 import { Intake } from "@/components/sections/intake"
-import { Footer } from "@/components/footer"
+import { Closing } from "@/components/sections/closing"
 
 export default function Home() {
   return (
-    <>
+    <div className="v4-page">
       <Nav />
-      <main>
+      <main id="main">
         <Hero />
+        <Atom />
+        <Velocity />
         <Stats />
         <Industries />
-        <div className="h-px w-full bg-border" />
         <Problem />
-        <div className="h-px w-full bg-border" />
+        <Narrative />
+        <Capacity />
+        <MidCta />
         <HowWeWork />
         <PullQuote />
-        <div className="h-px w-full bg-border" />
-        <Intelligence />
-        <div className="h-px w-full bg-border" />
-        <Work />
-        <div className="h-px w-full bg-border" />
+        <Proof />
+        <Console />
         <People />
-        <div className="h-px w-full bg-border" />
         <Intake />
+        <Closing />
       </main>
-      <Footer />
-    </>
+      <FooterV4 />
+    </div>
   )
 }

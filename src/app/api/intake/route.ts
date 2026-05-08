@@ -1,16 +1,19 @@
 import { createClient } from "@supabase/supabase-js"
 import { Resend } from "resend"
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Force dynamic rendering: env vars are bound at request time, not build time.
+// Module-level supabase/resend init would otherwise crash page-data collection.
+export const dynamic = "force-dynamic"
 
 const NOTIFY_EMAILS = ["Justin@gopraxis.ai", "Greg@gopraxis.ai"]
 
 export async function POST(req: Request) {
+  const supabase = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+  const resend = new Resend(process.env.RESEND_API_KEY)
+
   let body: Record<string, string>
   try {
     body = await req.json()
@@ -37,7 +40,11 @@ export async function POST(req: Request) {
 
   // Build the world_model_notes from extra fields
   const notes: string[] = []
+  if (body.title) notes.push(`Role: ${body.title}`)
+  if (body.phone) notes.push(`Phone: ${body.phone}`)
+  if (body.industry) notes.push(`Industry: ${body.industry}`)
   if (body.team_size) notes.push(`Team size: ${body.team_size}`)
+  if (body.revenue_range) notes.push(`Revenue range: ${body.revenue_range}`)
   if (body.current_tools) notes.push(`Current tools: ${body.current_tools}`)
   if (body.states) notes.push(`States: ${body.states}`)
   if (body.prior_attempts) notes.push(`Prior attempts: ${body.prior_attempts}`)

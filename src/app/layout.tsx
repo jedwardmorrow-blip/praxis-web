@@ -1,5 +1,12 @@
-import type { Metadata } from "next"
-import { Inter, Bebas_Neue } from "next/font/google"
+import type { Metadata, Viewport } from "next"
+import {
+  Inter,
+  Bebas_Neue,
+  Big_Shoulders,
+  IBM_Plex_Sans,
+  IBM_Plex_Mono,
+  Special_Elite,
+} from "next/font/google"
 import "./globals.css"
 
 const inter = Inter({
@@ -15,10 +22,40 @@ const bebasNeue = Bebas_Neue({
   display: "swap",
 })
 
+const bigShoulders = Big_Shoulders({
+  subsets: ["latin"],
+  weight: ["500", "600", "700", "800", "900"],
+  variable: "--font-big-shoulders",
+  display: "swap",
+  fallback: ["Big Shoulders Display", "system-ui", "sans-serif"],
+})
+
+const ibmPlexSans = IBM_Plex_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-plex-sans",
+  display: "swap",
+})
+
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-plex-mono",
+  display: "swap",
+})
+
+const specialElite = Special_Elite({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-special-elite",
+  display: "swap",
+})
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://gopraxis.ai"),
   title: "PRAXIS. Operational Intelligence.",
   description:
-    "We work with operators running medium-complex businesses. We listen, build context, and ship software built for how your operation actually runs.",
+    "Operators who build software for other operators. Every off-the-shelf tool failed our operation, so we built our own. Six engagements per year. Both partners on every one. Fixed-price.",
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -30,19 +67,33 @@ export const metadata: Metadata = {
   openGraph: {
     title: "PRAXIS. Operational Intelligence.",
     description:
-      "Purpose-built software and AI systems for operators with medium-complex operations.",
+      "Operators who build software for other operators. Six engagements per year. Both partners on every one.",
     url: "https://gopraxis.ai",
     siteName: "PRAXIS",
     locale: "en_US",
     type: "website",
   },
+  twitter: { card: "summary" },
 }
+
+export const viewport: Viewport = {
+  themeColor: "#0a2545",
+}
+
+const fontVariables = [
+  inter.variable,
+  bebasNeue.variable,
+  bigShoulders.variable,
+  ibmPlexSans.variable,
+  ibmPlexMono.variable,
+  specialElite.variable,
+].join(" ")
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`dark ${inter.variable} ${bebasNeue.variable}`}>
+    <html lang="en" className={`dark ${fontVariables}`}>
       <body className="antialiased bg-background text-foreground">
         {children}
       </body>
