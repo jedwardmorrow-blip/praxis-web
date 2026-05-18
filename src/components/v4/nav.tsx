@@ -21,11 +21,11 @@ export function Nav() {
         <a href="#activity">Live</a>
         <a href="#people">People</a>
         <Link href="/world-model/3d">World Model</Link>
-        <Link href="/portal">Portal</Link>
+        <Link href="/login">Praxis Login</Link>
       </nav>
       <div className="h-actions">
-        <Link className="h-portal" href="/portal">
-          Portal
+        <Link className="h-portal" href="/login">
+          Praxis Login
         </Link>
         <a className="h-cta" href="#intake">
           File an intake →
