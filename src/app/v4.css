@@ -56,10 +56,33 @@
 .h-nav { display: flex; gap: 28px; font-family: var(--font-plex-mono), "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-dim); }
 .h-nav a { color: inherit; text-decoration: none; padding-bottom: 3px; border-bottom: 1px solid transparent; transition: all 0.2s; }
 .h-nav a.active, .h-nav a:hover { border-bottom-color: var(--red); color: var(--paper); }
+.h-actions { display: flex; align-items: center; gap: 16px; }
+.h-portal { display: none; font-family: var(--font-plex-mono), "IBM Plex Mono"; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-dim); text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s; }
+.h-portal:hover { color: var(--paper); border-bottom-color: var(--red); }
 .h-cta { background: var(--red); color: var(--paper); padding: 10px 18px; font-family: var(--font-plex-mono), "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; transition: background 0.2s; position: relative; overflow: hidden; }
 .h-cta::after { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); transition: left 0.7s ease; }
 .h-cta:hover::after { left: 100%; }
 .h-cta:hover { background: var(--red-deep); }
+
+/* PORTAL */
+.portal-page { min-height: 100vh; }
+.portal-shell { display: flex; justify-content: space-between; align-items: center; padding: 28px 56px; border-bottom: 0.5px solid var(--rule); }
+.portal-brand { font-family: var(--font-big-shoulders), "Big Shoulders Display"; font-weight: 900; font-size: 34px; letter-spacing: 0.04em; color: var(--paper); text-decoration: none; }
+.portal-brand .dot { color: var(--red); }
+.portal-back { font-family: var(--font-plex-mono), "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-dim); text-decoration: none; border-bottom: 1px solid transparent; }
+.portal-back:hover { color: var(--paper); border-bottom-color: var(--red); }
+.portal-main { min-height: calc(100vh - 94px); display: grid; place-items: center; padding: 56px 24px; }
+.portal-card { width: min(100%, 720px); border-top: 1px solid var(--gold); border-bottom: 1px solid var(--rule); padding: 42px 0 36px; }
+.portal-kicker { font-family: var(--font-plex-mono), "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+.portal-card h1 { font-family: var(--font-big-shoulders), "Big Shoulders Display"; font-weight: 900; font-size: clamp(58px, 8vw, 108px); line-height: 0.92; letter-spacing: 0.005em; text-transform: uppercase; color: var(--paper); margin: 0; max-width: 680px; }
+.portal-card p { color: var(--paper-dim); font-family: var(--font-plex-sans), "IBM Plex Sans", sans-serif; font-size: clamp(17px, 2vw, 21px); line-height: 1.5; max-width: 560px; margin: 22px 0 0; }
+.portal-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+.portal-primary, .portal-secondary { font-family: var(--font-plex-mono), "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; padding: 13px 18px; }
+.portal-primary { background: var(--red); color: var(--paper); }
+.portal-primary:hover { background: var(--red-deep); }
+.portal-secondary { color: var(--paper); border: 1px solid var(--rule); }
+.portal-secondary:hover { border-color: var(--gold); }
+.portal-note { margin-top: 24px; padding-top: 16px; border-top: 0.5px dashed var(--rule-soft); color: var(--paper-mute); font-family: var(--font-plex-mono), "IBM Plex Mono"; font-size: 11px; letter-spacing: 0.06em; line-height: 1.7; }
 
 /* HERO */
 .hero { padding: 110px 56px 100px; max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 7fr 5fr; gap: 64px; align-items: center; position: relative; }
@@ -700,10 +723,15 @@ footer.site-foot { background: #000; color: var(--paper); padding: 56px 56px 40p
   /* Header collapse */
   .header { padding: 12px 16px; gap: 12px; }
   .h-nav { display: none; }
+  .h-actions { gap: 10px; }
+  .h-portal { display: inline-block; }
   .h-cta { padding: 9px 12px; font-size: 10px; letter-spacing: 0.14em; }
   .h-wm { font-size: 18px; }
   .h-sub { font-size: 8.5px; }
   .h-badge { width: 36px; height: 36px; }
+  .portal-shell { padding: 18px 20px; }
+  .portal-main { min-height: calc(100vh - 73px); padding: 36px 20px; }
+  .portal-card { padding-top: 32px; }
 
   /* Meta bar smaller */
 
