@@ -17,10 +17,9 @@ export function Nav() {
       </div>
       <nav className="h-nav" aria-label="Primary">
         <Link href="/discovery-sprint">Discovery Sprint</Link>
+        <Link href="/text-back-call-back">Text Back</Link>
         <Link href="/#how">How</Link>
         <Link href="/#proof">Proof</Link>
-        <Link href="/#activity">Live</Link>
-        <Link href="/#people">People</Link>
         <Link href="/world-model/3d">World Model</Link>
         <Link href="/login">Praxis Login</Link>
       </nav>
