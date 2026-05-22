@@ -62,7 +62,7 @@ export function Hero() {
             See the sprint path <span className="arr">→</span>
           </a>
           <span className="hero-cta-meta">
-            One workflow. One prototype. <span className="red">No account team.</span>
+            One workflow. One working proof. <span className="red">No account team.</span>
           </span>
         </div>
       </div>

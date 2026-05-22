@@ -46,7 +46,7 @@ export function Velocity() {
             <div className="velocity-stage">
               <div className="stage-name">Discovery Sprint</div>
               <div className="stage-dur">Five business days</div>
-              <div className="stage-price">One workflow · working prototype</div>
+              <div className="stage-price">One workflow · working proof</div>
               <span className="velocity-arrow">→</span>
             </div>
             <div className="velocity-stage">

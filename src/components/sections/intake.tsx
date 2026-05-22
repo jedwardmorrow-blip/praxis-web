@@ -226,7 +226,7 @@ export function Intake() {
         <div className="form-foot">
           <span className="meta">
             Discovery Sprint first.{" "}
-            <span className="red">One workflow, one prototype.</span>
+            <span className="red">One workflow, one working proof.</span>
           </span>
           <button
             className="form-cta"

@@ -130,7 +130,7 @@ export const ORBITS: AtomOrbit[] = [
         name: "DISCOVERY SPRINT",
         kind: "method",
         cat: "Shape 01",
-        desc: "Five business days. One workflow inspected and prototyped.",
+        desc: "Five business days. One workflow inspected and proven.",
         meta: "First paid step · priced after fit",
         size: 0.26,
         color: "method",

@@ -30,25 +30,25 @@ const sprintDays = [
   },
   {
     day: "03",
-    title: "Prototype Build",
+    title: "Proof Build",
     body: "We build a working proof against real operating context: intake, review, routing, reporting, decision support, or another contained workflow surface.",
   },
   {
     day: "04",
     title: "Operator Review",
-    body: "You react to the prototype while the workflow is still malleable. We tighten the logic, expose gaps, and decide whether production build is justified.",
+    body: "You react to the proof while the workflow is still malleable. We tighten the logic, expose gaps, and decide whether production build is justified.",
   },
   {
     day: "05",
     title: "Roadmap And Scope",
-    body: "You leave with the workflow map, prototype, implementation path, risks, and a fixed-scope build recommendation if the opportunity is worth pursuing.",
+    body: "You leave with the workflow map, working proof, implementation path, risks, and a fixed-scope build recommendation if the opportunity is worth pursuing.",
   },
 ]
 
 const deliverables = [
   "Workflow map of the target process",
   "Ranked automation and AI opportunities",
-  "Working prototype tied to the real workflow",
+  "Working proof or demo tied to the real workflow",
   "30/60/90 day implementation roadmap",
   "Fixed-scope build recommendation",
 ]
@@ -56,11 +56,11 @@ const deliverables = [
 export const metadata: Metadata = {
   title: "Praxis Discovery Sprint",
   description:
-    "A five-business-day Praxis engagement for owner-led companies: inspect one painful workflow, prototype the fix, and leave with a clear implementation path.",
+    "A five-business-day Praxis engagement for owner-led companies: inspect one painful workflow, prove the fix, and leave with a clear implementation path.",
   openGraph: {
     title: "Praxis Discovery Sprint",
     description:
-      "One painful workflow. Five business days. Working prototype. Clear implementation path.",
+      "One painful workflow. Five business days. Working proof. Clear implementation path.",
     url: "https://gopraxis.ai/discovery-sprint",
   },
 }
@@ -80,7 +80,7 @@ export default function DiscoverySprintPage() {
             </h1>
             <p className="ds-lede">
               Praxis helps owner-led companies find the workflow where time, revenue, trust, or
-              owner attention is leaking, then proves the fix with a working prototype.
+              owner attention is leaking, then proves the fix with a working proof.
             </p>
             <div className="ds-cta-row">
               <a className="hero-cta" href={fitCallHref}>
@@ -115,7 +115,7 @@ export default function DiscoverySprintPage() {
               </div>
               <div className="ds-panel-stat">
                 <span className="n">01</span>
-                <span className="l">prototype</span>
+                <span className="l">proof</span>
               </div>
             </div>
             <div className="ds-signal-list">
@@ -195,7 +195,7 @@ export default function DiscoverySprintPage() {
           </div>
           <div className="ds-fit-card muted">
             <span className="sec-tag">§ Not yet</span>
-            <h3>The problem is still too vague to prototype.</h3>
+            <h3>The problem is still too vague to prove.</h3>
             <p>
               If the ask is &quot;we need AI&quot; or &quot;we need a better system&quot; without
               one workflow, examples, and a decision owner, Praxis will help narrow the target
@@ -212,7 +212,7 @@ export default function DiscoverySprintPage() {
             </h2>
             <p>
               The fit call is short. We identify the workflow, confirm there is enough context to
-              prototype, and decide whether a Discovery Sprint is the right first paid step.
+              prove the fix, and decide whether a Discovery Sprint is the right first paid step.
             </p>
             <div className="ds-cta-row">
               <a className="hero-cta" href={fitCallHref}>

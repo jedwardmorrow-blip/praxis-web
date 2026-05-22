@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://gopraxis.ai"),
   title: "PRAXIS. Operational Intelligence.",
   description:
-    "Operators who build software for other operators. Discovery Sprint first: one painful workflow, one working prototype, one clear implementation path.",
+    "Operators who build software for other operators. Discovery Sprint first: one painful workflow, one working proof, one clear implementation path.",
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "PRAXIS. Operational Intelligence.",
     description:
-      "Operators who build software for other operators. Discovery Sprint first: one painful workflow, one working prototype, one clear implementation path.",
+      "Operators who build software for other operators. Discovery Sprint first: one painful workflow, one working proof, one clear implementation path.",
     url: "https://gopraxis.ai",
     siteName: "PRAXIS",
     locale: "en_US",

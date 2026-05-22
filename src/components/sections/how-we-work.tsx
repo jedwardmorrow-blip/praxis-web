@@ -10,9 +10,9 @@ const shapes: Shape[] = [
   {
     num: "SHAPE 01",
     name: "Discovery Sprint",
-    duration: "Five business days · one workflow, inspected and prototyped.",
+    duration: "Five business days · one workflow, inspected and proven.",
     description:
-      "We pick one workflow that is costing time, revenue, or owner attention, map how it actually runs, and prove the fix with a working prototype. You leave with a roadmap and a clear build recommendation.",
+      "We pick one workflow that is costing time, revenue, or owner attention, map how it actually runs, and prove the fix with a working proof or demo. You leave with a roadmap and a clear build recommendation.",
     commitment: "Fixed-scope first step · priced after fit",
   },
   {
@@ -20,7 +20,7 @@ const shapes: Shape[] = [
     name: "Build Sprint",
     duration: "Four to six weeks · one workflow shipped to production.",
     description:
-      "The prototype becomes an operator-grade workflow: connected to real data, reviewed by humans where it matters, documented for the team, and supported through launch.",
+      "The proof becomes an operator-grade workflow: connected to real data, reviewed by humans where it matters, documented for the team, and supported through launch.",
     commitment: "Fixed-scope implementation · no hourly billing",
   },
   {
