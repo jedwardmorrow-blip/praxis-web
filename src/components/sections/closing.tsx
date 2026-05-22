@@ -10,10 +10,8 @@ export function Closing() {
         We are not the firm.
       </p>
       <p className="closing-body">
-        If you have an operation in your head that nobody else can run, tools that do not talk to
-        each other, and reports nobody trusts, file the intake. We will read it within five working
-        days, and either tell you we are a fit and start a conversation, or send you to one or two
-        firms that are. <em>Either way, you hear back.</em>
+        If you have one workflow that keeps leaking time, revenue, or attention, send it in. Justin
+        will read it and tell you whether it is a fit for a Discovery Sprint. <em>Either way, you hear back.</em>
       </p>
       <div className="sig">
         <div className="names">

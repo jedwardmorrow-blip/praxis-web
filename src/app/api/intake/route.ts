@@ -5,7 +5,7 @@ import { Resend } from "resend"
 // Module-level supabase/resend init would otherwise crash page-data collection.
 export const dynamic = "force-dynamic"
 
-const NOTIFY_EMAILS = ["Justin@gopraxis.ai", "Greg@gopraxis.ai"]
+const NOTIFY_EMAILS = ["Justin@gopraxis.ai"]
 
 export async function POST(req: Request) {
   const supabase = createClient(

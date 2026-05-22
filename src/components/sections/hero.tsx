@@ -38,8 +38,7 @@ export function Hero() {
           currently carries in their heads. We build it, document it, and hand it to you.
         </p>
         <p className="hero-meta-line">
-          Two co-founders. Six engagements per year. Fixed-price. We price for the answer, not the
-          keystrokes.
+          Founder-led. Fixed-scope. One painful workflow at a time.
         </p>
         <div className="hero-proof">
           <span className="label">Live proof · drawn from production right now</span>
@@ -53,17 +52,17 @@ export function Hero() {
           </span>
         </div>
         <div className="hero-cta-row">
-          <a href="#intake" className="hero-cta">
-            File an intake <span className="arr">→</span>
-          </a>
           <a
-            href="mailto:greg@gopraxis.ai?subject=Praxis%20%C2%B7%20book%20a%2015-minute%20call&body=Hi%20Greg%2C%0A%0AOperation%3A%20%0AIndustry%3A%20%0AReason%20for%20call%3A%20%0A%0A%E2%80%94"
-            className="hero-cta-secondary"
+            href="mailto:justin@gopraxis.ai?subject=Praxis%20%C2%B7%20Discovery%20Sprint%20fit%20call&body=Hi%20Justin%2C%0A%0ACompany%3A%20%0AWorkflow%20worth%20inspecting%3A%20%0AWhat%20is%20leaking%3A%20%0A%0A%E2%80%94"
+            className="hero-cta"
           >
-            Book a 15-min call <span className="arr">→</span>
+            Book a 20-min fit call <span className="arr">→</span>
+          </a>
+          <a href="#how" className="hero-cta-secondary">
+            See the sprint path <span className="arr">→</span>
           </a>
           <span className="hero-cta-meta">
-            Both partners on every engagement. <span className="red">No account team.</span>
+            One workflow. One prototype. <span className="red">No account team.</span>
           </span>
         </div>
       </div>

@@ -1,6 +1,5 @@
 // Bios reframed per transcript principle 12 (transformation arc, not identity).
-// Initials portraits stay until real photos are provided. Both partners on
-// every engagement.
+// Initials portraits stay until real photos are provided.
 
 export function People() {
   return (
@@ -53,7 +52,7 @@ export function People() {
               Fifteen years operating, four companies founded, one through exit. I have lived every
               version of this conversation from the operator side. At Praxis I run the
               relationships, structure the engagements, and stand next to the work in front of the
-              client. If you talk to Praxis, you talk to me first.
+              client when the engagement calls for it.
             </div>
             <div className="pc">
               <span className="red">·</span> greg@gopraxis.ai

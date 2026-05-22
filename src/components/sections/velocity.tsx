@@ -17,8 +17,8 @@ export function Velocity() {
         }}
       >
         Each particle below is one anonymized engagement, plotted at its current position on the
-        methodology pipeline. As an engagement moves through Discovery Sprint into Build into
-        Platform, its dot drifts right.{" "}
+        methodology pipeline. As an engagement moves through Discovery Sprint into Build Sprint
+        into operating retainer, its dot drifts right.{" "}
         <em
           style={{
             color: "var(--gold)",
@@ -45,26 +45,20 @@ export function Velocity() {
           <div className="velocity-stages">
             <div className="velocity-stage">
               <div className="stage-name">Discovery Sprint</div>
-              <div className="stage-dur">Two weeks</div>
-              <div className="stage-price">
-                Fixed-price · <span className="num">$24K</span>
-              </div>
+              <div className="stage-dur">Five business days</div>
+              <div className="stage-price">One workflow · working prototype</div>
               <span className="velocity-arrow">→</span>
             </div>
             <div className="velocity-stage">
-              <div className="stage-name">Build</div>
-              <div className="stage-dur">8 to 16 weeks</div>
-              <div className="stage-price">
-                Fixed-price · <span className="num">$80K to $220K</span>
-              </div>
+              <div className="stage-name">Build Sprint</div>
+              <div className="stage-dur">4 to 6 weeks</div>
+              <div className="stage-price">Production workflow · fixed scope</div>
               <span className="velocity-arrow">→</span>
             </div>
             <div className="velocity-stage">
-              <div className="stage-name">Platform</div>
-              <div className="stage-dur">Quarterly cadence</div>
-              <div className="stage-price">
-                Retainer · <span className="num">from $90K / qtr</span>
-              </div>
+              <div className="stage-name">Operating Retainer</div>
+              <div className="stage-dur">Monthly cadence</div>
+              <div className="stage-price">Continuous improvement after launch</div>
             </div>
           </div>
 

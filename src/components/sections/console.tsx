@@ -119,14 +119,14 @@ export function Console() {
               <CapStat n="01" label="OPEN" tone="red" />
               <a
                 className="cap-open-slot"
-                href="#intake"
+                href="mailto:justin@gopraxis.ai?subject=Praxis%20%C2%B7%20Discovery%20Sprint%20fit%20call&body=Hi%20Justin%2C%0A%0ACompany%3A%20%0AWorkflow%20worth%20inspecting%3A%20%0AWhat%20is%20leaking%3A%20%0A%0A%E2%80%94"
                 style={{ gridColumn: "1 / -1", marginTop: 14 }}
               >
                 <span className="n">06</span>
-                <span className="stage">Open slot · Q3 2026 start</span>
+                <span className="stage">Open sprint slot · Discovery Sprint</span>
                 <span className="bar" />
                 <span className="open-cta">
-                  File intake <span className="arr">→</span>
+                  Book fit call <span className="arr">→</span>
                 </span>
               </a>
             </div>
@@ -139,7 +139,7 @@ export function Console() {
               <span>§ Operators on duty</span>
               <span className="right">
                 <span className="led" />
-                Both partners · every engagement
+                Founder-led · no account team
               </span>
             </div>
             <div className="op-list">

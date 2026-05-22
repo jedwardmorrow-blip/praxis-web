@@ -47,7 +47,7 @@ export function Intake() {
         <div className="form-success show">
           <div className="eye">§ Received · Form PX-001</div>
           <h3>
-            Filed<span className="red">.</span> Greg reads every one.
+            Filed<span className="red">.</span> Justin reads every one.
           </h3>
           <p>
             If we are a fit and have capacity, you will hear back within five working days. If we
@@ -67,11 +67,11 @@ export function Intake() {
     <section className="intake" id="intake">
       <span className="sec-tag">§ Intake</span>
       <h2 className="sec-h">
-        If the shape fits<span className="red">,</span> file an intake.
+        Send one workflow worth inspecting<span className="red">.</span>
       </h2>
       <p className="lede">
-        Greg reads every one. If we are a fit and have capacity, you will hear back within five
-        working days. If we are not a fit, you will still hear back, with one or two referrals.
+        Justin reads every submission. If the workflow is a fit for a Discovery Sprint, you will
+        hear back with a clear next step. If it is not, you will still hear back.
       </p>
       <p
         style={{
@@ -84,7 +84,7 @@ export function Intake() {
       >
         Already know we should talk?{" "}
         <a
-          href="mailto:greg@gopraxis.ai?subject=Praxis%20%C2%B7%20book%20a%2015-minute%20call&body=Hi%20Greg%2C%0A%0AOperation%3A%20%0AIndustry%3A%20%0AReason%20for%20call%3A%20%0A%0A%E2%80%94"
+          href="mailto:justin@gopraxis.ai?subject=Praxis%20%C2%B7%20Discovery%20Sprint%20fit%20call&body=Hi%20Justin%2C%0A%0ACompany%3A%20%0AWorkflow%20worth%20inspecting%3A%20%0AWhat%20is%20leaking%3A%20%0A%0A%E2%80%94"
           style={{
             color: "var(--gold)",
             textDecoration: "none",
@@ -92,7 +92,7 @@ export function Intake() {
             paddingBottom: 1,
           }}
         >
-          Book a 15-minute call directly with Greg →
+          Book a 20-minute fit call with Justin →
         </a>
       </p>
 
@@ -207,7 +207,7 @@ export function Intake() {
               id="intake-challenge"
               name="challenge"
               required
-              placeholder="What is breaking, what is slow, what reports nobody trusts, what you cannot leave alone for a week."
+              placeholder="What workflow is breaking, slow, leaking revenue, or still dependent on the owner?"
             />
           </div>
         </div>
@@ -225,21 +225,21 @@ export function Intake() {
         </div>
         <div className="form-foot">
           <span className="meta">
-            Six engagements per year.{" "}
-            <span className="red">Both partners on every one.</span>
+            Discovery Sprint first.{" "}
+            <span className="red">One workflow, one prototype.</span>
           </span>
           <button
             className="form-cta"
             type="submit"
             disabled={status.kind === "submitting"}
           >
-            {status.kind === "submitting" ? "Filing..." : "File intake →"}
+            {status.kind === "submitting" ? "Filing..." : "Send workflow →"}
           </button>
         </div>
         {status.kind === "error" && (
           <div className="form-status error" role="alert">
             <strong>Could not file.</strong> {status.message} Please email
-            greg@gopraxis.ai if this persists.
+            justin@gopraxis.ai if this persists.
           </div>
         )}
       </form>

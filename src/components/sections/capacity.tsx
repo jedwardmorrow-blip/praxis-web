@@ -9,8 +9,7 @@ export function Capacity() {
           </div>
           <div className="ct">Engagements per year</div>
           <div className="csub">
-            Both partners on every one. No account team. No handoff. No offshore. When we are full,
-            we refer.
+            Founder-led. No account team. No handoff. No offshore. When we are full, we refer.
           </div>
         </div>
         <div className="wwan-block">
@@ -49,8 +48,8 @@ export function Capacity() {
             </div>
           </div>
           <p className="wwan-coda">
-            We are <em>operators who build software for other operators</em>. Two co-founders, on
-            every engagement, every week.
+            We are <em>operators who build software for other operators</em>. Discovery Sprint
+            first, then fixed-scope implementation when the workflow is worth rebuilding.
           </p>
         </div>
       </div>

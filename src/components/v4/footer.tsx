@@ -18,8 +18,7 @@ export function FooterV4() {
         </div>
         <div className="foot-tag">
           Operators who build software for other operators.{" "}
-          <em>Six engagements per year. Both partners on every one.</em> Fixed-price. We price for
-          the answer, not the keystrokes.
+          <em>Discovery Sprint first.</em> Fixed-scope work, no hourly billing, no account team.
         </div>
         <div className="foot-meta">
           Phoenix · Berlin
