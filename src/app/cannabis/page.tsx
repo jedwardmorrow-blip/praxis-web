@@ -3,9 +3,12 @@ import Link from "next/link"
 import { CannabisIntakeForm } from "./intake-form"
 
 export const metadata: Metadata = {
-  title: "Cannabis Operations — PRAXIS",
+  title: "Cannabis Operations",
   description:
-    "We build custom software, AI agents, and operational intelligence for cannabis operators. Purpose-built for compliance, distribution, and scale.",
+    "Custom software, AI agents, and operational intelligence for cannabis operators. Purpose-built for compliance, distribution, and scale.",
+  alternates: {
+    canonical: "https://gopraxis.ai/cannabis",
+  },
   openGraph: {
     title: "Cannabis Operations — PRAXIS",
     description:
@@ -14,6 +17,9 @@ export const metadata: Metadata = {
     siteName: "PRAXIS",
     locale: "en_US",
     type: "website",
+  },
+  twitter: {
+    card: "summary",
   },
 }
 

@@ -2,6 +2,7 @@ import "./v4.css"
 
 import { Nav } from "@/components/v4/nav"
 import { FooterV4 } from "@/components/v4/footer"
+import { JsonLd } from "@/components/json-ld"
 import { Hero } from "@/components/sections/hero"
 import { Atom } from "@/components/sections/atom"
 import { Velocity } from "@/components/sections/velocity"
@@ -19,9 +20,43 @@ import { People } from "@/components/sections/people"
 import { Intake } from "@/components/sections/intake"
 import { Closing } from "@/components/sections/closing"
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: "Praxis",
+  alternateName: "PRAXIS. Operational Intelligence.",
+  url: "https://gopraxis.ai",
+  logo: "https://gopraxis.ai/favicon.svg",
+  description:
+    "Operator-led software firm. Custom software, AI agents, and operational intelligence for owner-led companies.",
+  email: "justin@gopraxis.ai",
+  areaServed: "US",
+  knowsAbout: [
+    "Custom Software Development",
+    "AI Agents",
+    "Operational Intelligence",
+    "Business Process Automation",
+    "Cannabis Operations Software",
+  ],
+  founder: [
+    {
+      "@type": "Person",
+      name: "Justin Morrow",
+      jobTitle: "Co-Founder & Managing Partner",
+    },
+    {
+      "@type": "Person",
+      name: "Greg Dunaway",
+      jobTitle: "Co-Founder & Managing Partner",
+    },
+  ],
+  sameAs: [],
+}
+
 export default function Home() {
   return (
     <div className="v4-page">
+      <JsonLd data={organizationJsonLd} />
       <Nav />
       <main id="main">
         <Hero />

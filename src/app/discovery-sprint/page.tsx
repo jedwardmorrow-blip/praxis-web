@@ -54,14 +54,23 @@ const deliverables = [
 ]
 
 export const metadata: Metadata = {
-  title: "Praxis Discovery Sprint",
+  title: "Discovery Sprint",
   description:
-    "A five-business-day Praxis engagement for owner-led companies: inspect one painful workflow, prove the fix, and leave with a clear implementation path.",
+    "A five-business-day engagement for owner-led companies: inspect one painful workflow, prove the fix, and leave with a clear implementation path.",
+  alternates: {
+    canonical: "https://gopraxis.ai/discovery-sprint",
+  },
   openGraph: {
     title: "Praxis Discovery Sprint",
     description:
       "One painful workflow. Five business days. Working proof. Clear implementation path.",
     url: "https://gopraxis.ai/discovery-sprint",
+    siteName: "PRAXIS",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
   },
 }
 

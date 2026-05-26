@@ -66,11 +66,20 @@ export const metadata: Metadata = {
   title: "AI Text-Back And Call-Back Setup For Local Businesses",
   description:
     "Praxis sets up AI-assisted missed-call text-back, lead intake, and callback routing for local businesses that cannot afford to let new demand go cold.",
+  alternates: {
+    canonical: "https://gopraxis.ai/text-back-call-back",
+  },
   openGraph: {
     title: "AI Text-Back And Call-Back Setup",
     description:
       "Missed calls, form fills, and after-hours leads answered fast, routed cleanly, and escalated to a human when it matters.",
     url: "https://gopraxis.ai/text-back-call-back",
+    siteName: "PRAXIS",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
   },
 }
 

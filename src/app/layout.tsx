@@ -54,9 +54,12 @@ const specialElite = Special_Elite({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gopraxis.ai"),
-  title: "PRAXIS. Operational Intelligence.",
+  title: {
+    default: "PRAXIS. Operational Intelligence.",
+    template: "%s | PRAXIS",
+  },
   description:
-    "Operators who build software for other operators. Discovery Sprint first: one painful workflow, one working proof, one clear implementation path.",
+    "Operator-led software firm. We build custom software, AI agents, and operational intelligence for owner-led companies. Discovery Sprint first.",
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
@@ -70,13 +73,19 @@ export const metadata: Metadata = {
   openGraph: {
     title: "PRAXIS. Operational Intelligence.",
     description:
-      "Operators who build software for other operators. Discovery Sprint first: one painful workflow, one working proof, one clear implementation path.",
+      "Operator-led software firm. Custom software, AI agents, and operational intelligence for owner-led companies.",
     url: "https://gopraxis.ai",
     siteName: "PRAXIS",
     locale: "en_US",
     type: "website",
   },
-  twitter: { card: "summary" },
+  twitter: {
+    card: "summary",
+    site: "@gopraxis",
+  },
+  alternates: {
+    canonical: "https://gopraxis.ai",
+  },
 }
 
 export const viewport: Viewport = {
@@ -99,6 +108,13 @@ export default function RootLayout({
     <html lang="en" className={`dark ${fontVariables}`}>
       <body className="antialiased bg-background text-foreground">
         {children}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-WBNB2EJBFX"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WBNB2EJBFX');`}
+        </Script>
         <Script
           id="reb2b"
           strategy="afterInteractive"
