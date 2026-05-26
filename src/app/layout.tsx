@@ -1,3 +1,4 @@
+import Script from "next/script"
 import type { Metadata, Viewport } from "next"
 import {
   Inter,
@@ -58,8 +59,10 @@ export const metadata: Metadata = {
     "Operators who build software for other operators. Discovery Sprint first: one painful workflow, one working proof, one clear implementation path.",
   icons: {
     icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
       { url: "/favicon.ico", sizes: "48x48" },
     ],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
@@ -96,6 +99,13 @@ export default function RootLayout({
     <html lang="en" className={`dark ${fontVariables}`}>
       <body className="antialiased bg-background text-foreground">
         {children}
+        <Script
+          id="reb2b"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `!function(key){if(window.reb2b)return;window.reb2b={loaded:true};var s=document.createElement("script");s.async=true;s.src="https://ddwl4m2hdecbv.cloudfront.net/b/"+key+"/"+key+".js.gz";document.getElementsByTagName("script")[0].parentNode.insertBefore(s,document.getElementsByTagName("script")[0]);}("VN080H30XV6J");`,
+          }}
+        />
       </body>
     </html>
   )
