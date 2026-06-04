@@ -1,27 +1,12 @@
 import Script from "next/script"
 import type { Metadata, Viewport } from "next"
 import {
-  Inter,
-  Bebas_Neue,
   Big_Shoulders,
   IBM_Plex_Sans,
   IBM_Plex_Mono,
   Special_Elite,
 } from "next/font/google"
 import "./globals.css"
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-})
-
-const bebasNeue = Bebas_Neue({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-bebas-neue",
-  display: "swap",
-})
 
 const bigShoulders = Big_Shoulders({
   subsets: ["latin"],
@@ -62,13 +47,13 @@ export const metadata: Metadata = {
     "Operator-led software firm. We build custom software, AI agents, and operational intelligence for owner-led companies. Discovery Sprint first.",
   icons: {
     icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
-      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/favicon.svg?v=3", type: "image/svg+xml" },
+      { url: "/favicon-16x16.png?v=3", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png?v=3", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-48x48.png?v=3", sizes: "48x48", type: "image/png" },
+      { url: "/favicon.ico?v=3", sizes: "48x48" },
     ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    apple: [{ url: "/apple-touch-icon.png?v=3", sizes: "180x180", type: "image/png" }],
   },
   openGraph: {
     title: "PRAXIS. Operational Intelligence.",
@@ -93,8 +78,6 @@ export const viewport: Viewport = {
 }
 
 const fontVariables = [
-  inter.variable,
-  bebasNeue.variable,
   bigShoulders.variable,
   ibmPlexSans.variable,
   ibmPlexMono.variable,

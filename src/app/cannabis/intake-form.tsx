@@ -29,8 +29,8 @@ export function CannabisIntakeForm() {
       <div
         className="p-8"
         style={{
-          background: "oklch(0.52 0.165 22 / 0.10)",
-          border: "1px solid oklch(0.52 0.165 22 / 0.30)",
+          background: "rgba(196, 33, 48, 0.12)",
+          border: "1px solid rgba(196, 33, 48, 0.42)",
         }}
         role="status"
       >

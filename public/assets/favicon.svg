@@ -1,24 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" role="img" aria-label="Praxis">
-  <title>Praxis — Operational Intelligence</title>
-  <!-- Outer cog field -->
-  <circle cx="180" cy="180" r="172" fill="#C9A24B"/>
-  <!-- Cog teeth, 12 around -->
-  <g fill="#C9A24B">
-    <g id="t"><rect x="174" y="0" width="12" height="14"/></g>
-    <use href="#t" transform="rotate(30 180 180)"/>
-    <use href="#t" transform="rotate(60 180 180)"/>
-    <use href="#t" transform="rotate(90 180 180)"/>
-    <use href="#t" transform="rotate(120 180 180)"/>
-    <use href="#t" transform="rotate(150 180 180)"/>
-    <use href="#t" transform="rotate(180 180 180)"/>
-    <use href="#t" transform="rotate(210 180 180)"/>
-    <use href="#t" transform="rotate(240 180 180)"/>
-    <use href="#t" transform="rotate(270 180 180)"/>
-    <use href="#t" transform="rotate(300 180 180)"/>
-    <use href="#t" transform="rotate(330 180 180)"/>
-  </g>
-  <!-- Inner navy field -->
-  <circle cx="180" cy="180" r="158" fill="#0a2545" stroke="#F1E8D2" stroke-width="3"/>
-  <!-- Red center, sized to read at 16px -->
-  <circle cx="180" cy="180" r="50" fill="#C42130"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Praxis">
+  <title>Praxis favicon</title>
+  <rect width="32" height="32" fill="#0A2545"/>
+  <path fill="#F1E8D2" d="M7 5h11.2C23 5 26 8 26 12.1c0 4.2-3.1 7.2-7.9 7.2H12v7.7H7V5Zm5 4.2v5.9h5.8c2.3 0 3.6-1.1 3.6-3s-1.3-2.9-3.6-2.9H12Z"/>
+  <circle cx="25" cy="26" r="3.2" fill="#C42130"/>
 </svg>

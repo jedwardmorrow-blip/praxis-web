@@ -6,12 +6,11 @@
 
 @theme inline {
   /* Fonts — literal names required by Tailwind v4 @theme inline */
-  --font-sans:    "Inter", ui-sans-serif, system-ui, sans-serif;
-  /* font-heading aligned to V4 canonical (Big Shoulders Display) so cannabis page
-     and any other .font-heading user matches the public site. Bebas Neue stays as
-     the deepest fallback only. */
-  --font-heading: var(--font-big-shoulders), "Big Shoulders Display", var(--font-bebas-neue), "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
-  --font-mono:    ui-monospace, "Geist Mono", monospace;
+  --font-sans:    var(--font-plex-sans), "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  /* font-heading aligned to V4 canonical (Big Shoulders Display) so all public
+     Praxis surfaces match the current site. */
+  --font-heading: var(--font-big-shoulders), "Big Shoulders Display", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-plex-mono), "IBM Plex Mono", ui-monospace, monospace;
 
   /* shadcn token bridge */
   --color-background:        var(--background);
@@ -51,82 +50,82 @@
   --radius-xl: calc(var(--radius) * 3);
 }
 
-/* ── PRAXIS design tokens — always dark, no light mode ── */
+/* ── PRAXIS V4 design tokens — always dark, no light mode ── */
 :root {
   /* Backgrounds */
-  --background:  oklch(0.09 0 0);           /* #090909 */
-  --surface:     oklch(0.12 0 0);           /* #111111 */
-  --card:        oklch(0.145 0 0);          /* #161616 */
-  --card-hover:  oklch(0.175 0 0);          /* #1d1d1d */
+  --background:  #0a2545;
+  --surface:     #061a33;
+  --card:        #14365e;
+  --card-hover:  #2c5384;
 
   /* Text */
-  --foreground:      oklch(0.95 0.009 85);  /* #F0EDE6 cream */
-  --text-secondary:  oklch(0.64 0.004 80);  /* #9A9792 */
-  --text-muted:      oklch(0.38 0.003 80);  /* #55524F */
+  --foreground:      #f1e8d2;
+  --text-secondary:  rgba(241, 232, 210, 0.78);
+  --text-muted:      rgba(241, 232, 210, 0.55);
 
   /* Card foregrounds */
-  --card-foreground:    oklch(0.95 0.009 85);
-  --popover:            oklch(0.12 0 0);
-  --popover-foreground: oklch(0.95 0.009 85);
+  --card-foreground:    #f1e8d2;
+  --popover:            #061a33;
+  --popover-foreground: #f1e8d2;
 
   /* Brand red */
-  --brand:        oklch(0.52 0.165 22);     /* #C8433A */
-  --brand-hover:  oklch(0.58 0.155 22);
-  --brand-muted:  oklch(0.52 0.165 22 / 0.10);
-  --brand-border: oklch(0.52 0.165 22 / 0.30);
+  --brand:        #c42130;
+  --brand-hover:  #8c1722;
+  --brand-muted:  rgba(196, 33, 48, 0.12);
+  --brand-border: rgba(196, 33, 48, 0.42);
 
   /* shadcn primary = brand red */
-  --primary:             oklch(0.52 0.165 22);
-  --primary-foreground:  oklch(0.99 0 0);
+  --primary:             #c42130;
+  --primary-foreground:  #f1e8d2;
 
   /* shadcn secondary = surface */
-  --secondary:             oklch(0.12 0 0);
-  --secondary-foreground:  oklch(0.95 0.009 85);
+  --secondary:             #061a33;
+  --secondary-foreground:  #f1e8d2;
 
   /* Muted */
-  --muted:             oklch(0.12 0 0);
-  --muted-foreground:  oklch(0.64 0.004 80);
+  --muted:             #061a33;
+  --muted-foreground:  rgba(241, 232, 210, 0.72);
 
   /* Accent (shadcn) = card */
-  --accent:             oklch(0.145 0 0);
-  --accent-foreground:  oklch(0.95 0.009 85);
+  --accent:             #14365e;
+  --accent-foreground:  #f1e8d2;
 
   /* System */
-  --destructive:  oklch(0.52 0.165 22);
-  --border:       oklch(0.95 0 0 / 0.06);
-  --input:        oklch(0.95 0 0 / 0.11);
-  --ring:         oklch(0.52 0.165 22 / 0.5);
+  --destructive:  #c42130;
+  --border:       rgba(201, 162, 75, 0.18);
+  --input:        rgba(201, 162, 75, 0.28);
+  --ring:         rgba(196, 33, 48, 0.5);
   --radius:       0.1875rem;
 }
 
 /* Mirror for .dark class — required for shadcn components */
 .dark {
-  --background:  oklch(0.09 0 0);
-  --surface:     oklch(0.12 0 0);
-  --card:        oklch(0.145 0 0);
-  --card-hover:  oklch(0.175 0 0);
-  --foreground:      oklch(0.95 0.009 85);
-  --text-secondary:  oklch(0.64 0.004 80);
-  --text-muted:      oklch(0.38 0.003 80);
-  --card-foreground:    oklch(0.95 0.009 85);
-  --popover:            oklch(0.12 0 0);
-  --popover-foreground: oklch(0.95 0.009 85);
-  --brand:        oklch(0.52 0.165 22);
-  --brand-hover:  oklch(0.58 0.155 22);
-  --brand-muted:  oklch(0.52 0.165 22 / 0.10);
-  --brand-border: oklch(0.52 0.165 22 / 0.30);
-  --primary:             oklch(0.52 0.165 22);
-  --primary-foreground:  oklch(0.99 0 0);
-  --secondary:             oklch(0.12 0 0);
-  --secondary-foreground:  oklch(0.95 0.009 85);
-  --muted:             oklch(0.12 0 0);
-  --muted-foreground:  oklch(0.64 0.004 80);
-  --accent:             oklch(0.145 0 0);
-  --accent-foreground:  oklch(0.95 0.009 85);
-  --destructive:  oklch(0.52 0.165 22);
-  --border:       oklch(0.95 0 0 / 0.06);
-  --input:        oklch(0.95 0 0 / 0.11);
-  --ring:         oklch(0.52 0.165 22 / 0.5);
+  --background:  #0a2545;
+  --surface:     #061a33;
+  --card:        #14365e;
+  --card-hover:  #2c5384;
+  --foreground:      #f1e8d2;
+  --text-secondary:  rgba(241, 232, 210, 0.78);
+  --text-muted:      rgba(241, 232, 210, 0.55);
+  --card-foreground:    #f1e8d2;
+  --popover:            #061a33;
+  --popover-foreground: #f1e8d2;
+  --brand:        #c42130;
+  --brand-hover:  #8c1722;
+  --brand-muted:  rgba(196, 33, 48, 0.12);
+  --brand-border: rgba(196, 33, 48, 0.42);
+  --primary:             #c42130;
+  --primary-foreground:  #f1e8d2;
+  --secondary:             #061a33;
+  --secondary-foreground:  #f1e8d2;
+  --muted:             #061a33;
+  --muted-foreground:  rgba(241, 232, 210, 0.72);
+  --accent:             #14365e;
+  --accent-foreground:  #f1e8d2;
+  --destructive:  #c42130;
+  --border:       rgba(201, 162, 75, 0.18);
+  --input:        rgba(201, 162, 75, 0.28);
+  --ring:         rgba(196, 33, 48, 0.5);
 }
 
 @layer base {
@@ -194,11 +193,11 @@
 }
 
 .focus\:border-brand\/55:focus {
-  border-color: oklch(0.52 0.165 22 / 0.55);
+  border-color: rgba(196, 33, 48, 0.55);
 }
 
 .border-brand\/30 {
-  border-color: oklch(0.52 0.165 22 / 0.30);
+  border-color: rgba(196, 33, 48, 0.30);
 }
 
 /* ── Transition duration 400 ── */

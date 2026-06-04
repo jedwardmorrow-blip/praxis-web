@@ -1,15 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <!-- Dark background -->
-  <rect width="32" height="32" fill="#0e0e0e"/>
-  <!-- P lettermark — bold geometric sans, built from paths -->
-  <!-- Vertical stem -->
-  <rect x="7" y="6" width="4" height="20" fill="#f2ede4"/>
-  <!-- Top horizontal bar of P -->
-  <rect x="7" y="6" width="10" height="3.5" fill="#f2ede4"/>
-  <!-- Middle horizontal bar of P -->
-  <rect x="7" y="15" width="10" height="3.5" fill="#f2ede4"/>
-  <!-- Right curve of P (top arc) -->
-  <path d="M17 6 Q24 6 24 11.25 Q24 16.5 17 16.5 L17 15 Q22 15 22 11.25 Q22 7.5 17 7.5 Z" fill="#f2ede4"/>
-  <!-- Brand red dot -->
-  <circle cx="25" cy="26" r="3" fill="#C8433A"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Praxis">
+  <title>Praxis favicon</title>
+  <rect width="32" height="32" fill="#0A2545"/>
+  <path fill="#F1E8D2" d="M7 5h11.2C23 5 26 8 26 12.1c0 4.2-3.1 7.2-7.9 7.2H12v7.7H7V5Zm5 4.2v5.9h5.8c2.3 0 3.6-1.1 3.6-3s-1.3-2.9-3.6-2.9H12Z"/>
+  <circle cx="25" cy="26" r="3.2" fill="#C42130"/>
 </svg>
