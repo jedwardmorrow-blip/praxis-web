@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Browning's Irrigation water drop">
+  <defs>
+    <linearGradient id="d" x1="20" y1="8" x2="46" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5BC2F0"/>
+      <stop offset="0.55" stop-color="#0E86C7"/>
+      <stop offset="1" stop-color="#0B6BA0"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0A2E3C"/>
+  <path d="M32 9c8.5 11.2 14 19.4 14 26.4A14 14 0 0 1 18 35.4C18 28.4 23.5 20.2 32 9Z" fill="url(#d)"/>
+  <path d="M26 30c-1.4 2.2-2.1 4.3-2.1 6.4a8 8 0 0 0 3.1 6.3" fill="none" stroke="#EAF7FF" stroke-width="2.4" stroke-linecap="round" opacity="0.85"/>
+</svg>

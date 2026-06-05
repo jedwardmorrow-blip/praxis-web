@@ -1,0 +1,106 @@
+{
+  "photos": [
+    {
+      "file": "photo-1.jpg",
+      "authors": [
+        {
+          "displayName": "Patrick Bell",
+          "uri": "https://maps.google.com/maps/contrib/117975931168250478832",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWH9uqdxVHWdMuHUp2X6ykrCH5ztiZenQW4S7HC1lVIuW259cw=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-2.jpg",
+      "authors": [
+        {
+          "displayName": "Kaden R",
+          "uri": "https://maps.google.com/maps/contrib/115982065831750538986",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocJDNInUKF4qHZW9sAoTN8Y2Ns8khB8m__J3tJs-ZV75TpjJtQ=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-3.jpg",
+      "authors": [
+        {
+          "displayName": "Parker Hatfield",
+          "uri": "https://maps.google.com/maps/contrib/103904730492900339462",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocKYxE0F1svkmJySv-1dNjoJj-zxHVL7FH1WG8Rphb9W0kUSKA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-4.jpg",
+      "authors": [
+        {
+          "displayName": "gregory boyle",
+          "uri": "https://maps.google.com/maps/contrib/114698151667165892397",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocLaRB3a3PtLxu5enzZSlgkaNA_F3QoJxKJ6-_SiAsK1t78X2A=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-5.jpg",
+      "authors": [
+        {
+          "displayName": "D Fowler",
+          "uri": "https://maps.google.com/maps/contrib/109859048301195473609",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocJ9HnxX2q3-ZJKc91-b2UZc3QhSW5BIl18tzleZjgx6KLNc2Q=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-6.jpg",
+      "authors": [
+        {
+          "displayName": "faith robertson",
+          "uri": "https://maps.google.com/maps/contrib/117184885780216425989",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocLTuM1f53oFDAT8SJZi3-K4wFTQ0ebr0T-POTSk2xXluvysUg=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-7.jpg",
+      "authors": [
+        {
+          "displayName": "alicia cabrera",
+          "uri": "https://maps.google.com/maps/contrib/103987280945526593969",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocKF6lOLn-qP9n8zQwFNnSpMd6f4AIvD0y0AzKVh-8ewpFAW=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-8.jpg",
+      "authors": [
+        {
+          "displayName": "Jonathan C",
+          "uri": "https://maps.google.com/maps/contrib/103552074264152032059",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocJ6bGST0ug1HXsLoJhSzBv0f49tJ1q2qmRavohnQWuilMDgPw=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-9.jpg",
+      "authors": [
+        {
+          "displayName": "Gina Briggs",
+          "uri": "https://maps.google.com/maps/contrib/107698913840719781590",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocI_zk7k3-QHwuEHfVe93pUWxuWto1STEB30btZVo5buWVevjg=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-10.jpg",
+      "authors": [
+        {
+          "displayName": "xavier patrick",
+          "uri": "https://maps.google.com/maps/contrib/108220361550136983232",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocKfHVjRvEaLGgdwy8EE6p5RzGXeaApeYPNNg-IOBnw85PGCSw=s100-p-k-no-mo"
+        }
+      ]
+    }
+  ],
+  "reviews_source": "Google",
+  "note": "Google requires visible attribution for photos and reviews used on the live site."
+}

@@ -1,0 +1,106 @@
+{
+  "photos": [
+    {
+      "file": "photo-1.jpg",
+      "authors": [
+        {
+          "displayName": "ALLIED CONCRETE",
+          "uri": "https://maps.google.com/maps/contrib/115591307825958518925",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWE-40EsckEmAEgiPkmjCag2YUOcPqsGiKPHg5IUsHWIYfUowZj=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-2.jpg",
+      "authors": [
+        {
+          "displayName": "Thomas Lopez",
+          "uri": "https://maps.google.com/maps/contrib/104371096503821113656",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocLSOc0f2t8sNwP-jrMpDGtq0zy2PVE9-9tVPq3GPCbnW3X6BA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-3.jpg",
+      "authors": [
+        {
+          "displayName": "Javier Stahlkopf",
+          "uri": "https://maps.google.com/maps/contrib/102450071469272578581",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjXK8skO6XuFk76WgJxGzIyg4-m2hL0CNs1z-CzJL_o2pvatUGAI=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-4.jpg",
+      "authors": [
+        {
+          "displayName": "ALLIED CONCRETE",
+          "uri": "https://maps.google.com/maps/contrib/115591307825958518925",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWE-40EsckEmAEgiPkmjCag2YUOcPqsGiKPHg5IUsHWIYfUowZj=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-5.jpg",
+      "authors": [
+        {
+          "displayName": "Henry Ulloa",
+          "uri": "https://maps.google.com/maps/contrib/111881610157432867554",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocJqm7uvTjOj1ahsfTb8ZgSfQTWv58iKTbXGslie5360-gnE0Q=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-6.jpg",
+      "authors": [
+        {
+          "displayName": "Gerzon",
+          "uri": "https://maps.google.com/maps/contrib/111387565697210533717",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWb-UKiLuN1wvqmnGcn8uBuxWaB2THpZiFtFtSHWoZwpfticetH=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-7.jpg",
+      "authors": [
+        {
+          "displayName": "ALLIED CONCRETE",
+          "uri": "https://maps.google.com/maps/contrib/115591307825958518925",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWE-40EsckEmAEgiPkmjCag2YUOcPqsGiKPHg5IUsHWIYfUowZj=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-8.jpg",
+      "authors": [
+        {
+          "displayName": "ALLIED CONCRETE",
+          "uri": "https://maps.google.com/maps/contrib/115591307825958518925",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWE-40EsckEmAEgiPkmjCag2YUOcPqsGiKPHg5IUsHWIYfUowZj=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-9.jpg",
+      "authors": [
+        {
+          "displayName": "ALLIED CONCRETE",
+          "uri": "https://maps.google.com/maps/contrib/115591307825958518925",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWE-40EsckEmAEgiPkmjCag2YUOcPqsGiKPHg5IUsHWIYfUowZj=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-10.jpg",
+      "authors": [
+        {
+          "displayName": "Brian Bates",
+          "uri": "https://maps.google.com/maps/contrib/100446101293050331755",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjXvxg6iT0tboxMYsjmb8YsdzYZ6ekYk99FuD2kgaBxXqyiSFM6yqw=s100-p-k-no-mo"
+        }
+      ]
+    }
+  ],
+  "reviews_source": "Google",
+  "note": "Google requires visible attribution for photos and reviews used on the live site."
+}
