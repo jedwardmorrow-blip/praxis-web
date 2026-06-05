@@ -29,6 +29,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Mulish:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
 <style>
+  /* motion-intent: restrained; reason: Hathaway is established, hands-on tree work, so motion is a slow easeful settle that mirrors a limb being lowered gently, never a sharp mechanical pop. */
   /* ---- Praxis preview infra (reuse verbatim across previews) ---- */
   *{box-sizing:border-box;margin:0;padding:0}
   img{display:block;max-width:100%}
@@ -97,22 +98,71 @@
   .eyebrow::before{content:"";width:26px;height:2px;background:var(--orange);display:inline-block}
   .eyebrow.on-dark{color:var(--leaf-bright)}
 
-  /* buttons: solid fill, squared, no float-lift. Hover = deepen + 1px nudge. */
-  .btn{display:inline-flex;align-items:center;gap:.55rem;font-family:'Mulish',sans-serif;font-weight:800;font-size:.96rem;letter-spacing:.01em;padding:15px 26px;border-radius:var(--r);border:2px solid transparent;cursor:pointer;transition:background .16s ease,transform .12s ease,border-color .16s ease,color .16s ease}
+  /* buttons: solid fill, squared, no float-lift. Hover = deepen + 1px nudge.
+     Interaction cue: hover AND keyboard focus get the same soft treatment, and
+     a press (:active) settles the button a touch further for a tactile tap. */
+  .btn{display:inline-flex;align-items:center;gap:.55rem;font-family:'Mulish',sans-serif;font-weight:800;font-size:.96rem;letter-spacing:.01em;padding:15px 26px;border-radius:var(--r);border:2px solid transparent;cursor:pointer;transition:background .18s ease,transform .14s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease}
+  .btn:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(196,74,22,.32)}
   .btn-primary{background:var(--orange);color:#fff}
-  .btn-primary:hover{background:var(--orange-deep);transform:translateY(1px)}
+  .btn-primary:hover,.btn-primary:focus-visible{background:var(--orange-deep);transform:translateY(1px)}
+  .btn-primary:active{transform:translateY(2px)}
   .btn-ghost{background:transparent;color:var(--canopy);border-color:var(--rule-strong)}
-  .btn-ghost:hover{border-color:var(--canopy);background:rgba(36,61,42,.05)}
+  .btn-ghost:hover,.btn-ghost:focus-visible{border-color:var(--canopy);background:rgba(36,61,42,.05)}
+  .btn-ghost:focus-visible{box-shadow:0 0 0 3px rgba(36,61,42,.18)}
+  .btn-ghost:active{transform:translateY(1px)}
   .btn-on-canopy{background:var(--orange);color:#fff}
-  .btn-on-canopy:hover{background:var(--orange-deep);transform:translateY(1px)}
-  .btn .arw{font-weight:800;font-size:1.05em;line-height:1}
+  .btn-on-canopy:hover,.btn-on-canopy:focus-visible{background:var(--orange-deep);transform:translateY(1px)}
+  .btn-on-canopy:active{transform:translateY(2px)}
+  /* the arrow eases forward on hover/focus, like heading out to look at the tree */
+  .btn .arw{font-weight:800;font-size:1.05em;line-height:1;transition:transform .2s cubic-bezier(.22,.61,.36,1)}
+  .btn:hover .arw,.btn:focus-visible .arw{transform:translateX(3px)}
 
-  /* scroll-driven reveal, CSS-native (animation-timeline:view), NOT IntersectionObserver. */
+  /* Scroll-driven settle, CSS-native only (animation-timeline:view).
+     The resting opacity:0 lives INSIDE the @supports + reduced-motion guards,
+     so content is visible by default wherever scroll animation is unavailable
+     (Firefox, older Safari), in reduced-motion, and in static screenshots.
+     This is pure CSS, so JS being off has no bearing. No JS reveal anywhere. */
   @media (prefers-reduced-motion: no-preference){
     @supports (animation-timeline: view()){
-      .rise{opacity:0;transform:translateY(16px);animation:rise-in linear both;animation-timeline:view();animation-range:entry 2% cover 22%}
-      @keyframes rise-in{to{opacity:1;transform:none}}
+      .settle{opacity:0;transform:translateY(22px);will-change:opacity,transform;animation:tree-settle linear both;animation-timeline:view();animation-range:entry 5% cover 34%}
+      @keyframes tree-settle{
+        0%{opacity:0;transform:translateY(22px)}
+        70%{opacity:1;transform:translateY(-2px)}
+        100%{opacity:1;transform:translateY(0)}
+      }
     }
+  }
+
+  /* First-viewport cue: hero copy and its CTAs ease up and in on load.
+     Time-based (not scroll-linked) because the hero is already in view, and
+     kept brief so it reads as a calm settle, not a slideshow. Content is fully
+     visible by default; the animation only ADDS the entrance, so reduced-motion
+     and any browser that ignores it still see the whole hero immediately. */
+  @media (prefers-reduced-motion: no-preference){
+    .hero-copy > *{animation:hero-settle .6s cubic-bezier(.22,.61,.36,1) both}
+    .hero-copy .eyebrow{animation-delay:.05s}
+    .hero-copy h1{animation-delay:.12s}
+    .hero-copy .hero-lede{animation-delay:.20s}
+    .hero-copy .hero-cta{animation-delay:.28s}
+    .hero-copy .hero-note{animation-delay:.36s}
+    @keyframes hero-settle{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  }
+
+  /* Reduced-motion: honor the OS setting. The scroll-settle and hero-settle are
+     already gated to no-preference above, so they never run here. This block
+     additionally neutralizes the hover/zoom transitions that live outside that
+     gate, and pins every animated element to its final, fully readable state so
+     nothing is left mid-transition, faded, or shifted. (The Praxis preview bar
+     keeps its own reduced-motion guard up top; this does not touch infra.) */
+  @media (prefers-reduced-motion: reduce){
+    .settle,.hero-copy > *{animation:none !important;opacity:1 !important;transform:none !important}
+    .btn,.btn .arw,.nav a.lnk,.nav .callbtn,.nav .callbtn .num,
+    .tile img,.tile .cap,.row,.field input,.field select,.field textarea{
+      transition:none !important;
+    }
+    .tile img{transform:none !important}
+    .tile .cap{opacity:1;transform:none}
+    .btn:hover,.btn:focus-visible,.btn:active,.btn .arw{transform:none !important}
   }
 
   /* ---------- header ---------- */
@@ -125,10 +175,16 @@
   .mark .w-sub{font-family:'Mulish',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.34em;color:var(--bark);text-transform:uppercase;margin-top:3px}
   .nav{display:flex;align-items:center;gap:28px}
   .nav a.lnk{font-weight:700;font-size:.92rem;color:var(--ink);opacity:.82;transition:opacity .15s,color .15s}
-  .nav a.lnk:hover{opacity:1;color:var(--canopy)}
-  .nav .callbtn{display:inline-flex;flex-direction:column;align-items:flex-end;line-height:1.1}
+  .nav a.lnk:hover,.nav a.lnk:focus-visible{opacity:1;color:var(--canopy)}
+  .nav a.lnk:focus-visible{outline:2px solid var(--leaf);outline-offset:4px;border-radius:2px}
+  /* phone tap: the primary action on a tree-service site, so it gets a clear
+     hover/focus/press affordance without changing its color or layout. */
+  .nav .callbtn{display:inline-flex;flex-direction:column;align-items:flex-end;line-height:1.1;border-radius:var(--r);transition:transform .14s ease}
+  .nav .callbtn:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(196,74,22,.3)}
+  .nav .callbtn:active{transform:translateY(1px)}
   .nav .callbtn .lbl{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--bark-soft);font-weight:700}
-  .nav .callbtn .num{font-family:'Fraunces',serif;font-weight:600;font-size:1.18rem;color:var(--orange)}
+  .nav .callbtn .num{font-family:'Fraunces',serif;font-weight:600;font-size:1.18rem;color:var(--orange);transition:color .15s ease}
+  .nav .callbtn:hover .num,.nav .callbtn:focus-visible .num{color:var(--orange-deep)}
   @media(max-width:820px){ .nav .lnk{display:none} }
 
   /* ---------- hero: editorial split (type left, climb right) ---------- */
@@ -321,7 +377,7 @@
     <span class="pxb-who"><span class="pxb-av"><img src="data:image/jpeg;base64,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" alt="Justin Morrow" width="30" height="30"></span><span class="pxb-id"><b>Justin Morrow</b><span>Tucson web design</span></span></span>
     <span class="pxb-tag">Free preview</span>
     <span class="pxb-msg">I built <b>Hathaway Tree Service</b> a free sample from your Google photos and reviews, no obligation. <span class="dom">hathawaytrees.com</span> is available, in your name.</span>
-    <a class="pxb-cta" href="https://gopraxis.ai/websites" target="_blank" rel="noopener">See pricing →</a>
+    <a class="pxb-cta" href="https://gopraxis.ai/websites#make-live" target="_blank" rel="noopener">Make this live →</a>
     <a class="pxb-tel" href="tel:+15203968737">Call or text (520) 396-8737</a>
     <span class="pxb-by">by Praxis · gopraxis.ai</span>
   </div>
@@ -421,13 +477,13 @@
 <!-- ===== SERVICES: numbered field ledger ===== -->
 <section class="services pad anchor" id="services">
   <div class="wrap">
-    <div class="sec-head rise">
+    <div class="sec-head settle">
       <span class="eyebrow">The work he takes on</span>
       <h2>Everything a desert tree needs, from one crew.</h2>
       <p>Trimming, removals, the health of the tree itself, and the cleanup most outfits skip. Tell Collin what is going on and he will tell you straight what it needs.</p>
     </div>
     <div class="ledger">
-      <div class="row rise">
+      <div class="row settle">
         <span class="no">01</span>
         <div class="body">
           <h3>Tree removal</h3>
@@ -435,7 +491,7 @@
         </div>
         <span class="meta">Climbed &amp; roped</span>
       </div>
-      <div class="row rise">
+      <div class="row settle">
         <span class="no">02</span>
         <div class="body">
           <h3>Trimming &amp; pruning</h3>
@@ -443,7 +499,7 @@
         </div>
         <span class="meta">Shape &amp; thin</span>
       </div>
-      <div class="row rise">
+      <div class="row settle">
         <span class="no">03</span>
         <div class="body">
           <h3>Tree health &amp; tree surgery</h3>
@@ -451,7 +507,7 @@
         </div>
         <span class="meta">Diagnose &amp; treat</span>
       </div>
-      <div class="row rise">
+      <div class="row settle">
         <span class="no">04</span>
         <div class="body">
           <h3>Bush &amp; shrub removal</h3>
@@ -459,7 +515,7 @@
         </div>
         <span class="meta">Pulled &amp; cleared</span>
       </div>
-      <div class="row rise">
+      <div class="row settle">
         <span class="no">05</span>
         <div class="body">
           <h3>Stump grinding</h3>
@@ -467,7 +523,7 @@
         </div>
         <span class="meta">Ground out</span>
       </div>
-      <div class="row rise">
+      <div class="row settle">
         <span class="no">06</span>
         <div class="body">
           <h3>Haul-off &amp; cleanup</h3>
@@ -483,13 +539,13 @@
 <section class="ba pad anchor">
   <div class="wrap">
     <div class="ba-grid">
-      <figure class="ba-figure rise">
+      <figure class="ba-figure settle">
         <div class="ba-pair">
           <div class="ba-shot"><span class="flag before">Before</span><img src="assets/before.jpg" width="720" height="1280" alt="A tall dead eucalyptus standing over a Tucson flagstone patio before removal" loading="lazy" /></div>
           <div class="ba-shot"><span class="flag after">After</span><img src="assets/after.jpg" width="720" height="1280" alt="The same flagstone patio cleared after Hathaway removed the dead eucalyptus" loading="lazy" /></div>
         </div>
       </figure>
-      <div class="ba-copy rise">
+      <div class="ba-copy settle">
         <span class="eyebrow">Same patio, one day</span>
         <h2>A dead eucalyptus over the patio, down and cleared.</h2>
         <p>This one was a tall dead eucalyptus standing right over the back patio. Collin took it down piece by piece from the rope, cut the trunk into rounds, and raked the flagstone clean. Same spot, same day, nothing left to trip over.</p>
@@ -503,7 +559,7 @@
 <!-- ===== WORK GALLERY ===== -->
 <section class="gallery pad anchor">
   <div class="wrap">
-    <div class="gal-head sec-head rise">
+    <div class="gal-head sec-head settle">
       <span class="eyebrow on-dark">Straight off the job</span>
       <h2>Tucson trees, Tucson yards, nothing borrowed.</h2>
       <p>Every photo here is Collin and the crew on an actual Tucson property. No stock, no someone else's trees.</p>
@@ -551,13 +607,13 @@
 <!-- ===== REVIEWS (real Google, attributed) ===== -->
 <section class="reviews pad anchor" id="reviews">
   <div class="wrap">
-    <div class="sec-head rise">
+    <div class="sec-head settle">
       <span class="eyebrow">Straight from the neighbors</span>
       <h2>Why the east side keeps calling Collin back.</h2>
       <p>These are real reviews from Hathaway's Google profile, word for word.</p>
     </div>
     <div class="rev-lead">
-      <blockquote class="rev-hero rise">
+      <blockquote class="rev-hero settle">
         <p class="qt">"I can't say enough good things about Colin and his team. Great communication throughout the entire job. Their attention to detail was far beyond what I expected. Very knowledgeable, professional and reasonably priced."</p>
         <div class="by">
           <span class="av">S</span>
@@ -570,17 +626,17 @@
       </blockquote>
     </div>
     <div class="rev-cols">
-      <article class="rev rise">
+      <article class="rev settle">
         <span class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
         <p>"Collin and his crew removed a huge pine from my backyard and left the ground spotless. The team was efficient and very careful with the surroundings. I'd highly recommend them to anyone looking for quality tree work."</p>
         <div class="by">Peter Cheatham<span>Google review</span></div>
       </article>
-      <article class="rev rise">
+      <article class="rev settle">
         <span class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
         <p>"I've been using Hathaway for our trees front and back for 2 years now. He even repaired previous damage from the hack job the last guy did. His crew has always been polite and the clean up is A+."</p>
         <div class="by">Dunn C.A.<span>Google review</span></div>
       </article>
-      <article class="rev rise">
+      <article class="rev settle">
         <span class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
         <p>"Colin came out real quick, gave good estimates, very fair pricing. When they left, everything was cleaned up and swept. It's the second time I've used him and he hasn't let me down yet."</p>
         <div class="by">emblanar<span>Google review</span></div>
@@ -594,7 +650,7 @@
 <section class="estimate pad anchor" id="estimate">
   <div class="wrap">
     <div class="est-grid">
-      <div class="est-copy rise">
+      <div class="est-copy settle">
         <span class="eyebrow on-dark">Free, no pressure</span>
         <h2>Tell Collin what your tree is doing.</h2>
         <p>Send a few details and he will come look, talk it through, and give you an honest price. Send a photo of the tree if you have one, it helps him plan the climb.</p>
@@ -615,7 +671,7 @@
         </div>
       </div>
 
-      <form class="quote rise" id="quoteform" onsubmit="return submitQuote(event)">
+      <form class="quote settle" id="quoteform" onsubmit="return submitQuote(event)">
         <div class="ft">Ask Collin for an estimate</div>
         <p class="fsub">He reads these himself. Expect a real answer, not a call center.</p>
         <div class="field">

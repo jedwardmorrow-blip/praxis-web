@@ -25,6 +25,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@600;700;800&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
 
 <style>
+  /* motion-intent: restrained; reason: tree and yard work is calm, organic, residential, so sections settle in with a slow soft fade and a gentle image bloom, nothing sharp or mechanical. */
   /* ---- Praxis preview infra (reuse verbatim across previews) ---- */
   *{box-sizing:border-box;margin:0;padding:0}
   img{display:block;max-width:100%}
@@ -293,10 +294,60 @@
   @media(max-width:720px){ footer.site .cols{grid-template-columns:1fr 1fr} footer.site .c-about{grid-column:1 / -1} }
   @media(max-width:460px){ footer.site .cols{grid-template-columns:1fr} }
 
-  /* scroll motion: quiet, CSS/JS-light, reduced-motion respected */
-  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease, transform .6s ease}
-  .reveal.in{opacity:1;transform:none}
-  @media(prefers-reduced-motion:reduce){ .reveal{opacity:1;transform:none;transition:none} html{scroll-behavior:auto} }
+  /* ============================================================
+     MOTION (organic, calm, residential) — CSS-native only.
+     Content is fully visible by default. All hidden/offset
+     resting states live inside @supports so unsupported
+     browsers, JS-off, and static screenshots show everything.
+     ============================================================ */
+
+  /* soft easing curves: unhurried, gentle settle (no overshoot) */
+  :root{ --ease-soft:cubic-bezier(.22,.61,.36,1); --ease-bloom:cubic-bezier(.33,.0,.2,1); }
+
+  /* first-viewport cue: hero copy settles up, hero photo blooms in.
+     Both end on their natural state, so a failed animation = correct page. */
+  @keyframes settle-up{ from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes photo-bloom{ from{opacity:0;transform:scale(1.045)} to{opacity:1;transform:scale(1)} }
+
+  .hero .copy{animation:settle-up .72s var(--ease-soft) both}
+  .hero .shot{animation:settle-up .8s var(--ease-soft) .1s both}
+  .hero .shot .frame img{animation:photo-bloom 1.1s var(--ease-bloom) .1s both}
+  .hero .shot .tag{animation:settle-up .72s var(--ease-soft) .34s both}
+
+  /* scroll cue: sections drift up + fade as they enter the viewport.
+     Guarded so the opacity:0 resting state ONLY exists where view()
+     timelines are supported. Everywhere else the content is visible. */
+  @supports (animation-timeline: view()){
+    @media (prefers-reduced-motion: no-preference){
+      @keyframes grow-in{ from{opacity:0;transform:translateY(26px)} to{opacity:1;transform:translateY(0)} }
+      .grow{
+        animation:grow-in linear both;
+        animation-timeline:view();
+        animation-range:entry 2% cover 26%;
+        will-change:opacity, transform;
+      }
+    }
+  }
+
+  /* interaction cue: a slightly deeper press feedback on the phone/CTA
+     links (organic, soft) plus a clear keyboard focus ring. */
+  .btn:active{transform:translateY(0) scale(.985)}
+  .hdr-call:active,.pxb-tel:active{transform:translateY(0) scale(.985)}
+  a.callbox{transition:transform .22s var(--ease-soft), box-shadow .22s var(--ease-soft), background-color .22s ease}
+  a.callbox:hover{transform:translateY(-2px);box-shadow:var(--card-sh-hi)}
+  a.callbox:active{transform:translateY(0) scale(.99)}
+  .btn:focus-visible,.hdr-call:focus-visible,a.callbox:focus-visible,nav.main a.lnk:focus-visible{
+    outline:3px solid var(--amber);outline-offset:3px;border-radius:12px;
+  }
+
+  /* reduced motion: strip every animation/transition, restore final states */
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .hero .copy,.hero .shot,.hero .shot .frame img,.hero .shot .tag,.grow{
+      animation:none !important;opacity:1 !important;transform:none !important;
+    }
+    .btn,.hdr-call,.pxb-tel,a.callbox{transition:none !important}
+  }
 </style>
 </head>
 <body>
@@ -307,7 +358,7 @@
     <span class="pxb-who"><span class="pxb-av"><img src="data:image/jpeg;base64,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" alt="Justin Morrow" width="30" height="30"></span><span class="pxb-id"><b>Justin Morrow</b><span>Tucson web design</span></span></span>
     <span class="pxb-tag">Free preview</span>
     <span class="pxb-msg">I built <b>Affordable Yard &amp; Tree</b> a free sample from your Google photos and reviews, no obligation. <span class="dom">affordableyardtree.com</span> is available, in your name.</span>
-    <a class="pxb-cta" href="https://gopraxis.ai/websites" target="_blank" rel="noopener">See pricing →</a>
+    <a class="pxb-cta" href="https://gopraxis.ai/websites#make-live" target="_blank" rel="noopener">Make this live →</a>
     <a class="pxb-tel" href="tel:+15203968737">Call or text (520) 396-8737</a>
     <span class="pxb-by">by Praxis · gopraxis.ai</span>
   </div>
@@ -354,7 +405,7 @@
 <!-- hero -->
 <section class="hero" id="top">
   <div class="wrap">
-    <div class="copy reveal">
+    <div class="copy">
       <p class="eyebrow">Tree care &amp; yard cleanup in Tucson</p>
       <h1>Trees trimmed, hauled, and <span class="hl">done right</span> the first time.</h1>
       <p class="sub">Ralph and his crew take down trees, trim and prune, clear cactus and stumps, and haul the whole mess away. You call, he picks up, and the yard gets handled.</p>
@@ -373,7 +424,7 @@
         <div class="meta">Rated by <b style="color:#fff">58 Tucson neighbors</b><br>on Google. Real names, real yards.</div>
       </div>
     </div>
-    <div class="shot reveal">
+    <div class="shot">
       <div class="frame">
         <img src="assets/photo-1.jpg" width="1826" height="1772" alt="Affordable Yard and Tree bucket truck with its boom raised into a tall tree on a bright blue Tucson day, branches loaded in the dump bed." loading="eager" />
       </div>
@@ -385,23 +436,23 @@
 <!-- call-back promise band (the differentiator the reviews prove) -->
 <section class="promise">
   <div class="wrap">
-    <div class="top reveal">
+    <div class="top grow">
       <p class="eyebrow">Why people keep calling Ralph</p>
       <h2>You get a person who <em>actually calls back.</em></h2>
       <p class="lead">Most folks find us because a neighbor handed over the number. The reason it spreads is simple: we answer, we quote fair, and we leave the yard cleaner than we found it.</p>
     </div>
     <div class="grid">
-      <div class="pcard reveal">
+      <div class="pcard grow">
         <div class="ic" aria-hidden="true"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M6.5 3.5 9 4l1 4-2 1.5a12 12 0 0 0 6 6L15.5 13l4 1 .5 2.5a2 2 0 0 1-2 2.5A15 15 0 0 1 4 6a2 2 0 0 1 2.5-2.5Z" fill="#3c5a3f"/></svg></div>
         <h3>Calls back fast</h3>
         <p>Leave a message and you hear back quick, often same day, with a real time to come look.</p>
       </div>
-      <div class="pcard reveal">
+      <div class="pcard grow">
         <div class="ic" aria-hidden="true"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M5 7h9a3 3 0 0 1 0 6H7" stroke="#3c5a3f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <h3>Fair on price</h3>
         <p>Honest quotes that have come in under the other guys more than once. No upsell, no runaround.</p>
       </div>
-      <div class="pcard reveal">
+      <div class="pcard grow">
         <div class="ic" aria-hidden="true"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M3 13l2.5 5h13L21 13M5 13l2-7h10l2 7M5 13h14" stroke="#3c5a3f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <h3>Cleans up after</h3>
         <p>The limbs, the debris, all of it goes in the truck. You come home to a finished yard, not a pile.</p>
@@ -413,30 +464,30 @@
 <!-- services -->
 <section class="svc" id="work">
   <div class="wrap">
-    <div class="sec-head reveal">
+    <div class="sec-head grow">
       <p class="eyebrow">What we do</p>
       <h2>Tree work and yard work, start to finish.</h2>
       <p>From a single overgrown mesquite to a whole lot that needs clearing, here is the kind of work the crew handles every week around town.</p>
     </div>
     <div class="svc-grid">
-      <div class="tile tall reveal">
+      <div class="tile tall grow">
         <img src="assets/photo-4.jpg" width="960" height="961" alt="Worker in a lift bucket trimming the top of a tall pine tree against a clear blue sky." loading="lazy" />
         <div class="cap"><h3>Tree trimming &amp; pruning</h3><p>Shaped, thinned, and cut back for health and clearance.</p></div>
       </div>
-      <div class="tile tall reveal">
+      <div class="tile tall grow">
         <img src="assets/photo-5.jpg" width="3024" height="4032" alt="Two tall fan palms freshly skinned and cleaned up, standing against the Catalina mountains and blue sky." loading="lazy" />
         <div class="cap"><h3>Tree &amp; cactus removal</h3><p>Whole trees, palms, and cactus taken down and cleared out.</p></div>
       </div>
-      <div class="tile reveal">
+      <div class="tile grow">
         <img src="assets/photo-8.jpg" width="1072" height="1920" alt="Crew member in an orange shirt using a long pole saw on a mesquite in a desert cactus garden." loading="lazy" />
         <div class="cap"><h3>Stump grinding</h3><p>Old stumps ground down so the ground is yours again.</p></div>
       </div>
-      <div class="tile reveal">
+      <div class="tile grow">
         <img src="assets/photo-10.jpg" width="1536" height="2048" alt="Affordable Yard and Tree dump truck loaded with cut branches and trunk wood, ready to haul off." loading="lazy" />
         <div class="cap"><h3>Cleanup &amp; hauling</h3><p>Debris, brush, and trimmings loaded up and hauled away.</p></div>
       </div>
     </div>
-    <ul class="svc-list reveal">
+    <ul class="svc-list grow">
       <li><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5 10 17l9-10" stroke="#3c5a3f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Yard cleanup &amp; brush clearing</li>
       <li><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5 10 17l9-10" stroke="#3c5a3f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Firewood</li>
       <li><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5 10 17l9-10" stroke="#3c5a3f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Palm trimming &amp; skinning</li>
@@ -450,17 +501,17 @@
 <!-- before / after -->
 <section class="ba">
   <div class="wrap">
-    <div class="reveal">
+    <div class="grow">
       <p class="eyebrow">See the difference</p>
       <h2>One dead trunk gone, ground cleared.</h2>
       <p class="intro">A big dead tree is more than an eyesore, it is a hazard. Here is one that came down and got cleaned out, stump and all, in a single visit.</p>
     </div>
     <div class="pair">
-      <div class="pic reveal">
+      <div class="pic grow">
         <span class="lbl b">Before</span>
         <img src="assets/photo-7.jpg" width="2448" height="3264" alt="A large dead grey tree trunk standing in a gravel yard at sunset before it was removed." loading="lazy" />
       </div>
-      <div class="pic reveal">
+      <div class="pic grow">
         <span class="lbl a">After</span>
         <img src="assets/photo-3.jpg" width="2028" height="2704" alt="The same spot after removal, cleared down to bare desert ground with no trunk or debris left behind." loading="lazy" />
       </div>
@@ -471,7 +522,7 @@
 <!-- reviews: trust spine -->
 <section class="rev" id="reviews">
   <div class="wrap">
-    <div class="topline reveal">
+    <div class="topline grow">
       <div class="bigstat">
         <div class="n">4.6</div>
         <div class="stars" aria-hidden="true">★★★★★</div>
@@ -485,27 +536,27 @@
       </div>
     </div>
     <div class="quotes">
-      <article class="q reveal">
+      <article class="q grow">
         <div class="stars" aria-hidden="true">★★★★★</div>
         <p>If I could give more stars I would. Best tree removal and trimming service ever. Ralph called back right away and gave me a next day appointment. Best customer service I have experienced in years. The tree removal is honestly affordable and they were fast with removing one old eucalyptus and trimming a tall palm. I will recommend them forever to anyone who will listen to me.</p>
         <div class="by"><span class="av" style="background:var(--sky)" aria-hidden="true">E</span><div><div class="nm">Erika Davis</div><div class="tm">Google review · 5 months ago</div></div></div>
       </article>
-      <article class="q reveal">
+      <article class="q grow">
         <div class="stars" aria-hidden="true">★★★★★</div>
         <p>Ralph was fantastic. Super fast to respond to my initial inquiry, super fast to schedule, and actually super fast to get the job done, which was cutting down a very large, very dead, 70 year old pine tree. And his price was extremely reasonable. To top it off, he himself was friendly, professional, funny, and easy to communicate with.</p>
         <div class="by"><span class="av" style="background:var(--moss)" aria-hidden="true">D</span><div><div class="nm">Diane</div><div class="tm">Google review · 2 years ago</div></div></div>
       </article>
-      <article class="q reveal">
+      <article class="q grow">
         <div class="stars" aria-hidden="true">★★★★★</div>
         <p>Ralph was awesome. Better price than another company I got a quote for and we were able to schedule his service very quickly. Removed 3 trees for us and grinded down two tree stumps. Very friendly and exactly what we wanted.</p>
         <div class="by"><span class="av" style="background:var(--earth)" aria-hidden="true">B</span><div><div class="nm">Ben Chapman</div><div class="tm">Google review · 4 years ago</div></div></div>
       </article>
-      <article class="q reveal">
+      <article class="q grow">
         <div class="stars" aria-hidden="true">★★★★★</div>
         <p>Ralph and his team did a great job, they took care of the tree removal in a reasonable time and the clean up looked great. Very professional, on time, and reasonable on price. Highly recommended.</p>
         <div class="by"><span class="av" style="background:var(--sky)" aria-hidden="true">C</span><div><div class="nm">Carlos Burns</div><div class="tm">Google review · 3 years ago</div></div></div>
       </article>
-      <article class="q reveal">
+      <article class="q grow">
         <div class="stars" aria-hidden="true">★★★★★</div>
         <p>Ralph is a great, friendly guy. He communicated well, and he got the job done professionally and efficiently. I highly recommend.</p>
         <div class="by"><span class="av" style="background:var(--moss)" aria-hidden="true">J</span><div><div class="nm">Joseph Schmidt</div><div class="tm">Google review · 3 months ago</div></div></div>
@@ -517,18 +568,18 @@
 <!-- gallery -->
 <section class="gal" id="gallery">
   <div class="wrap">
-    <div class="sec-head reveal">
+    <div class="sec-head grow">
       <p class="eyebrow">Recent jobs</p>
       <h2>Real Tucson yards the crew has worked.</h2>
       <p>Every photo here is an actual job, not a catalog. Bucket trucks, big mesquites, palms, and the cleanup that comes with them.</p>
     </div>
     <div class="gal-grid">
-      <figure class="g1 reveal"><img src="assets/photo-2.jpg" width="3072" height="4080" alt="Bucket truck working a large mesquite in front of a Tucson home, with fresh-cut branches stacked at the curb." loading="lazy" /><figcaption>Mesquite trim at a Tucson home</figcaption></figure>
-      <figure class="g2 reveal"><img src="assets/photo-9.jpg" width="3024" height="4032" alt="A healthy green mesquite shading a backyard patio with desert mountains in the background." loading="lazy" /><figcaption>Healthy tree, shaded patio</figcaption></figure>
-      <figure class="g3 reveal"><img src="assets/photo-1.jpg" width="1826" height="1772" alt="White bucket truck with its boom extended into a tree against the Tucson sky." loading="lazy" /><figcaption>Boom up, big sky</figcaption></figure>
-      <figure class="g4 reveal"><img src="assets/photo-8.jpg" width="1072" height="1920" alt="Crew member using a pole saw on a tree in a desert garden full of cactus." loading="lazy" /><figcaption>Pole-saw work in a cactus garden</figcaption></figure>
-      <figure class="g5 reveal"><img src="assets/photo-10.jpg" width="1536" height="2048" alt="Dump truck piled high with cut branches ready to haul away." loading="lazy" /><figcaption>Loaded up and hauling off</figcaption></figure>
-      <figure class="g6 reveal"><img src="assets/photo-5.jpg" width="3024" height="4032" alt="Two freshly cleaned fan palms standing tall against the Catalina mountains." loading="lazy" /><figcaption>Fan palms, freshly cleaned</figcaption></figure>
+      <figure class="g1 grow"><img src="assets/photo-2.jpg" width="3072" height="4080" alt="Bucket truck working a large mesquite in front of a Tucson home, with fresh-cut branches stacked at the curb." loading="lazy" /><figcaption>Mesquite trim at a Tucson home</figcaption></figure>
+      <figure class="g2 grow"><img src="assets/photo-9.jpg" width="3024" height="4032" alt="A healthy green mesquite shading a backyard patio with desert mountains in the background." loading="lazy" /><figcaption>Healthy tree, shaded patio</figcaption></figure>
+      <figure class="g3 grow"><img src="assets/photo-1.jpg" width="1826" height="1772" alt="White bucket truck with its boom extended into a tree against the Tucson sky." loading="lazy" /><figcaption>Boom up, big sky</figcaption></figure>
+      <figure class="g4 grow"><img src="assets/photo-8.jpg" width="1072" height="1920" alt="Crew member using a pole saw on a tree in a desert garden full of cactus." loading="lazy" /><figcaption>Pole-saw work in a cactus garden</figcaption></figure>
+      <figure class="g5 grow"><img src="assets/photo-10.jpg" width="1536" height="2048" alt="Dump truck piled high with cut branches ready to haul away." loading="lazy" /><figcaption>Loaded up and hauling off</figcaption></figure>
+      <figure class="g6 grow"><img src="assets/photo-5.jpg" width="3024" height="4032" alt="Two freshly cleaned fan palms standing tall against the Catalina mountains." loading="lazy" /><figcaption>Fan palms, freshly cleaned</figcaption></figure>
     </div>
   </div>
 </section>
@@ -537,7 +588,7 @@
 <section class="est" id="estimate">
   <div class="wrap">
     <div class="grid">
-      <div class="reveal">
+      <div class="grow">
         <p class="eyebrow">Get a price</p>
         <h2>Easiest way is to just call.</h2>
         <p class="intro">Tell Ralph what is going on in the yard and he will set a time to come look and give you a number. No pressure, no charge to ask.</p>
@@ -641,17 +692,6 @@
 <script>
   // preview form handler: wire any quote form to this so it stays a safe preview.
   function submitQuote(e){e.preventDefault();var n=((document.getElementById('name')||{}).value||'there').trim();alert('Thanks, '+n+"! This is a preview, so this note does not send yet. On the live site it goes straight to Ralph. To reach him right now, call (520) 272-8718.");return false;}
-
-  // quiet scroll reveal (brand-appropriate, reduced-motion aware)
-  (function(){
-    var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var els = document.querySelectorAll('.reveal');
-    if(rm || !('IntersectionObserver' in window)){ els.forEach(function(el){el.classList.add('in');}); return; }
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
-    }, {rootMargin:'0px 0px -8% 0px', threshold:0.08});
-    els.forEach(function(el){ io.observe(el); });
-  })();
 </script>
 </body>
 </html>

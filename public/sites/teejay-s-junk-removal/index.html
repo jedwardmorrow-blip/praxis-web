@@ -48,7 +48,7 @@
   .pxb-by{font-size:.72rem;color:#9fb0c4;white-space:nowrap}
   @media(max-width:760px){.pxb-in{padding:9px 14px;gap:8px}.pxb-cta,.pxb-tel{flex:0 1 auto}.pxb-by{order:6}}
 /* px-banner:end */
-  /* motion is NOT infra: add brand-appropriate, CSS-native motion in the build (see the design contract) */
+  /* motion-intent: restrained; reason: junk removal is brisk and get-it-done, so TeeJay's motion is quick confident settles and a short "cleared out" slide, never floaty drift. */
   .mobilebar{position:fixed;bottom:0;left:0;right:0;z-index:60;display:none;gap:10px;padding:11px 14px;background:rgba(15,17,21,.97);backdrop-filter:blur(8px)}
   .mobilebar a{flex:1;text-align:center;padding:14px;border-radius:12px;font-weight:800}
   @media(max-width:900px){ .mobilebar{display:flex} }
@@ -90,24 +90,60 @@
   /* buttons — bold, rounded, punchy, snappy hover */
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:'Onest',sans-serif;font-weight:800;font-size:1.02rem;padding:15px 26px;border-radius:999px;border:0;cursor:pointer;transition:transform .12s var(--ease),box-shadow .12s var(--ease),background .12s ease;will-change:transform}
   .btn svg{width:19px;height:19px;flex:none}
+  .btn:focus-visible{outline:none}
   .btn-lime{background:var(--lime);color:var(--slate);box-shadow:0 10px 0 -2px #93b81f}
-  .btn-lime:hover{transform:translateY(-2px);box-shadow:0 13px 0 -2px #93b81f}
+  .btn-lime:hover,.btn-lime:focus-visible{transform:translateY(-2px);box-shadow:0 13px 0 -2px #93b81f}
+  .btn-lime:focus-visible{box-shadow:0 13px 0 -2px #93b81f,0 0 0 4px rgba(31,122,61,.35)}
   .btn-lime:active{transform:translateY(3px);box-shadow:0 6px 0 -2px #93b81f}
   .btn-green{background:var(--green);color:#fff;box-shadow:0 10px 0 -2px var(--green-deep)}
-  .btn-green:hover{transform:translateY(-2px);box-shadow:0 13px 0 -2px var(--green-deep)}
+  .btn-green:hover,.btn-green:focus-visible{transform:translateY(-2px);box-shadow:0 13px 0 -2px var(--green-deep)}
+  .btn-green:focus-visible{box-shadow:0 13px 0 -2px var(--green-deep),0 0 0 4px rgba(197,240,45,.4)}
   .btn-green:active{transform:translateY(3px);box-shadow:0 6px 0 -2px var(--green-deep)}
   .btn-ghost{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.6)}
-  .btn-ghost:hover{border-color:var(--lime);color:var(--lime)}
+  .btn-ghost:hover,.btn-ghost:focus-visible{border-color:var(--lime);color:var(--lime)}
   .btn-sm{font-size:.92rem;padding:11px 19px}
 
-  /* scroll-driven reveal (CSS-native, no JS observer).
-     Opacity floor stays high (never fully hidden) so content is readable even
-     if a browser holds the pre-entry state; the motion is the punch, not a gate. */
+  /* ---- TeeJay's motion system (CSS-native only, no JS observer) ----
+     Brisk junk-removal feel: things settle in fast and confident, with a short
+     directional "cleared out" lift instead of a slow fade. Content is visible by
+     default everywhere; every animation only ever ENDS at the natural resting
+     state, so JS-off / old-browser / reduced-motion / screenshot all read fully.
+
+     (1) First-viewport cue: the hero copy + photo drop into place on load, quick
+         and staggered, like a truck pulling up and the work starting right away. */
+  @media (prefers-reduced-motion:no-preference){
+    .h-tag,.hero h1,.hero p.lede,.hero .cta-row,.hero .micro,.h-photo{
+      animation:tj-settle .42s var(--ease) both}
+    .hero h1{animation-delay:.05s}
+    .hero p.lede{animation-delay:.12s}
+    .hero .cta-row{animation-delay:.19s}
+    .hero .micro{animation-delay:.25s}
+    .h-photo{animation:tj-rollup .5s var(--ease) both;animation-delay:.1s}
+    @keyframes tj-settle{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @keyframes tj-rollup{from{opacity:0;transform:translateY(20px) scale(.985)}to{opacity:1;transform:none}}
+  }
+
+  /* (2) Scroll-driven "cleared out" reveal — a short, brisk upward lift with a
+        tiny rightward nudge, the sense of a pile being loaded and hauled off the
+        frame. Opacity floor stays high so the content is never blank; the motion
+        is the punch, not a gate. Wrapped in @supports so unsupported browsers
+        (Firefox, older Safari) and static screenshots simply show the final state. */
   @media (prefers-reduced-motion:no-preference){
     @supports (animation-timeline: view()){
-      .reveal{animation:rise linear both;animation-timeline:view();animation-range:entry 2% entry 58%}
-      @keyframes rise{from{opacity:.4;transform:translateY(22px) scale(.99)}to{opacity:1;transform:none}}
+      .cleared{animation:tj-clear linear both;animation-timeline:view();animation-range:entry 4% entry 46%}
+      @keyframes tj-clear{from{opacity:.5;transform:translate3d(-8px,30px,0)}to{opacity:1;transform:none}}
     }
+  }
+
+  /* (3) Reduced-motion: drop every entrance/scroll animation and the snappy button
+        lifts, snap to the final readable state. Hover color/border feedback stays
+        (it is not movement) so the page still feels responsive to the touch. */
+  @media (prefers-reduced-motion:reduce){
+    .h-tag,.hero h1,.hero p.lede,.hero .cta-row,.hero .micro,.h-photo,.cleared{
+      animation:none !important;opacity:1 !important;transform:none !important}
+    .btn,.btn-lime:hover,.btn-green:hover,.btn-lime:active,.btn-green:active{
+      transition:background .12s ease,border-color .12s ease,color .12s ease;transform:none}
+    .haul-card,.haul-card:hover,.gal,.gal:hover,.gal:hover img{transition:none;transform:none}
   }
 
   /* ---------- utility strip ---------- */
@@ -294,7 +330,7 @@
     <span class="pxb-who"><span class="pxb-av"><img src="assets/_pxb-avatar.jpg" alt="Justin Morrow" width="30" height="30"></span><span class="pxb-id"><b>Justin Morrow</b><span>Tucson web design</span></span></span>
     <span class="pxb-tag">Free preview</span>
     <span class="pxb-msg">I built <b>TeeJay's Junk Removal</b> a free sample from your Google photos and reviews, no obligation. <span class="dom">teejaysjunkremoval.net</span> is available, in your name.</span>
-    <a class="pxb-cta" href="https://gopraxis.ai/websites" target="_blank" rel="noopener">See pricing →</a>
+    <a class="pxb-cta" href="https://gopraxis.ai/websites#make-live" target="_blank" rel="noopener">Make this live →</a>
     <a class="pxb-tel" href="tel:+15203968737">Call or text (520) 396-8737</a>
     <span class="pxb-by">by Praxis · gopraxis.ai</span>
   </div>
@@ -388,33 +424,33 @@
 <!-- what we haul -->
 <section class="haul" id="haul">
   <div class="wrap">
-    <div class="sec-head reveal">
+    <div class="sec-head cleared">
       <span class="eyebrow">If it needs to go, it goes</span>
       <h2>The stuff TeeJay loads up and hauls away</h2>
       <p>From a single heavy item to a whole garage piled to the door. If you can point at it, there is a good chance it can ride out on the trailer.</p>
     </div>
     <div class="haul-grid">
-      <div class="haul-card reveal">
+      <div class="haul-card cleared">
         <span class="hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19v-6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6"/><path d="M2 19h20"/><path d="M6 11V7a2 2 0 0 1 2-2h3v6"/></svg></span>
         <div><h3>Furniture and mattresses</h3><p>Couches, beds, dressers, that recliner nobody sits in anymore.</p></div>
       </div>
-      <div class="haul-card reveal">
+      <div class="haul-card cleared">
         <span class="hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 6h6M9 10h6"/></svg></span>
         <div><h3>Appliances</h3><p>Fridges, washers, dryers, water heaters, grills, and the rest.</p></div>
       </div>
-      <div class="haul-card reveal">
+      <div class="haul-card cleared">
         <span class="hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v4H3z"/><path d="M5 11v8h14v-8"/><path d="M10 15h4"/></svg></span>
         <div><h3>Garage and shed cleanouts</h3><p>Boxes, totes, old gear, the corner that has been "later" for years.</p></div>
       </div>
-      <div class="haul-card reveal">
+      <div class="haul-card cleared">
         <span class="hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8h18M7 18v3M17 18v3"/></svg></span>
         <div><h3>Storage unit hauls</h3><p>Clear a unit out fast so you can stop paying for it next month.</p></div>
       </div>
-      <div class="haul-card reveal">
+      <div class="haul-card cleared">
         <span class="hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 4 3.5 7 8 8 4.5-1 8-4 8-8V6l-8-4z"/><path d="m9 12 2 2 4-4"/></svg></span>
         <div><h3>Move-out and property cleanups</h3><p>Leftover piles after a move, a rental, or a yard that needs clearing.</p></div>
       </div>
-      <div class="haul-card reveal">
+      <div class="haul-card cleared">
         <span class="hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-7 7 2 2 7-7a4 4 0 0 0 5.4-5.4l-2 2-2-2 2-2z"/></svg></span>
         <div><h3>A hand with the heavy stuff</h3><p>Need something carried out, swapped, or set up while he is there? Just ask.</p></div>
       </div>
@@ -425,25 +461,25 @@
 <!-- how a pickup works -->
 <section class="how" id="how">
   <div class="wrap how-wrap">
-    <div class="how-photo reveal">
+    <div class="how-photo cleared">
       <img src="assets/photo-4.jpg" alt="A TeeJay's trailer fully loaded with a light property cleanout, dressers and a cabinet strapped down, parked at a Tucson curb" width="1024" height="1536" />
       <span class="tag">Loaded and strapped</span>
     </div>
     <div class="how-copy">
-      <div class="sec-head reveal" style="margin-bottom:8px">
+      <div class="sec-head cleared" style="margin-bottom:8px">
         <span class="eyebrow">Three steps, no runaround</span>
         <h2>Booking a pickup is the easy part</h2>
       </div>
       <div class="steps">
-        <div class="step reveal">
+        <div class="step cleared">
           <span class="num">1</span>
           <div><h3>Call or text a few pics</h3><p>Tell TeeJay what you have and where you are in Tucson. A couple of phone photos is plenty.</p></div>
         </div>
-        <div class="step reveal">
+        <div class="step cleared">
           <span class="num">2</span>
           <div><h3>Get a fair price up front</h3><p>You hear the cost before anything moves. Customers call it reasonable and fair, with no surprises.</p></div>
         </div>
-        <div class="step reveal">
+        <div class="step cleared">
           <span class="num">3</span>
           <div><h3>Watch it disappear</h3><p>TeeJay loads, sweeps the spot, and hauls it off. You keep the clean space and the rest of your day.</p></div>
         </div>
@@ -458,29 +494,29 @@
 <!-- results gallery (before / after) -->
 <section class="gallery" id="results">
   <div class="wrap">
-    <div class="sec-head reveal">
+    <div class="sec-head cleared">
       <span class="eyebrow">Real Tucson pickups</span>
       <h2>Piles in, clean space out</h2>
       <p>Every shot below is an actual TeeJay's job, the kind of before and after you get when the trailer pulls away.</p>
     </div>
     <div class="gal-grid">
-      <div class="gal gal-tall reveal">
+      <div class="gal gal-tall cleared">
         <span class="lab">Before / After</span>
         <img src="assets/photo-2.jpg" alt="Before and after of a Tucson lot cleanout, a large junk pile cleared down to bare ground" width="2160" height="3840" />
       </div>
-      <div class="gal gal-a reveal">
+      <div class="gal gal-a cleared">
         <span class="lab">Garage</span>
         <img src="assets/photo-3.jpg" alt="Before and after of a cluttered garage cleared and organized with the floor swept clean" width="2160" height="3840" />
       </div>
-      <div class="gal gal-b reveal">
+      <div class="gal gal-b cleared">
         <span class="lab">Storage unit</span>
         <img src="assets/photo-5.jpg" alt="Before and after of a packed storage unit emptied out to a clean concrete floor" width="685" height="1024" />
       </div>
-      <div class="gal gal-wide reveal">
+      <div class="gal gal-wide cleared">
         <span class="lab">Patio haul</span>
         <img src="assets/photo-6.jpg" alt="Before and after of a patio area cleared of old furniture and a grill, swept down to clean pavement" width="2160" height="3840" />
       </div>
-      <div class="gal gal-wide reveal">
+      <div class="gal gal-wide cleared">
         <span class="lab">Yard cleanup</span>
         <img src="assets/photo-10.jpg" alt="Before and after of an overgrown backyard corner cleared out and tidied along the block wall" width="2160" height="3840" />
       </div>
@@ -492,12 +528,12 @@
 <section class="reviews" id="reviews">
   <div class="wrap">
     <div class="rv-top">
-      <div class="sec-head reveal" style="margin-bottom:0">
+      <div class="sec-head cleared" style="margin-bottom:0">
         <span class="eyebrow" style="color:var(--lime)">Straight from the neighbors</span>
         <h2>Tucson keeps calling TeeJay back</h2>
         <p>The words below are real Google reviews from TeeJay's customers.</p>
       </div>
-      <div class="rv-score reveal">
+      <div class="rv-score cleared">
         <b>5.0</b>
         <div class="s"><span class="st">★★★★★</span><small>13 Google reviews</small></div>
       </div>
@@ -537,7 +573,7 @@
 <section class="quote" id="book">
   <div class="wrap q-wrap">
     <div class="q-left">
-      <div class="sec-head reveal" style="margin-bottom:0">
+      <div class="sec-head cleared" style="margin-bottom:0">
         <span class="eyebrow">Let's get it gone</span>
         <h2>Book a Tucson pickup</h2>
         <p>Send a quick note or, honestly, just call. TeeJay answers his own phone and can usually tell you a price and a time on the spot.</p>
@@ -547,7 +583,7 @@
         <span class="chip"><span class="pin"></span>Houghton corridor</span>
         <span class="chip"><span class="pin"></span>Across the Tucson area</span>
       </div>
-      <div class="q-callout reveal">
+      <div class="q-callout cleared">
         <span class="eyebrow" style="color:var(--lime)">Fastest way to book</span>
         <div class="ph"><a href="tel:+15203045500">(520) 304-5500</a></div>
         <p>Call or text TeeJay's Junk Removal directly.</p>

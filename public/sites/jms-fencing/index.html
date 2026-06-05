@@ -27,6 +27,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
+  /* motion-intent: restrained; reason: motion mimics a fence going up, rule-lines wipe in like a rail being set and headings settle plumb, so the page reads as the precise, straight-and-true metalwork Jim builds. */
   /* ---- Praxis preview infra (reuse verbatim across previews) ---- */
   *{box-sizing:border-box;margin:0;padding:0}
   img{display:block;max-width:100%}
@@ -259,12 +260,61 @@
   @media(max-width:760px){ .foot-grid{grid-template-columns:1fr 1fr} }
   @media(max-width:460px){ .foot-grid{grid-template-columns:1fr} }
 
-  /* ---- CSS-native scroll reveal (not the banned IO 22px/0.6s reveal) ---- */
+  /* ---- Brand motion: rails get set true ----
+     Scroll-driven, CSS-native, fully guarded. Content is visible by default;
+     motion is pure enhancement. The signature is a short rule-line wipe (a fence
+     rail being drawn in level) and a firm, decisive settle, no soft floaty fade. */
+  .set-true{--ease-set:cubic-bezier(.2,.78,.3,1)}     /* decisive: quick out, hard stop */
   @media (prefers-reduced-motion: no-preference){
     @supports (animation-timeline: view()){
-      .reveal{animation:rise-in linear both;animation-timeline:view();animation-range:entry 0% cover 26%}
+      /* content block settles up and locks, like a panel dropped onto its posts */
+      .set-true{animation:set-panel both var(--ease-set);animation-timeline:view();animation-range:entry 2% cover 22%}
+      /* the kicker rule-line draws in left-to-right like a rail being run */
+      .set-true .kicker::before{animation:rail-run both linear;animation-timeline:view();animation-range:entry 4% cover 20%}
     }
-    @keyframes rise-in{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+    @keyframes set-panel{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+    @keyframes rail-run{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  }
+  .kicker::before{transform-origin:left center}
+
+  /* ---- First-viewport cue: hero settles plumb on load ----
+     Headline, lede and CTAs rise a short distance and lock straight, the way a
+     post is set, tamped and checked level. Fires once, fast. Visible if it fails. */
+  @media (prefers-reduced-motion: no-preference){
+    .hero h1{animation:post-set .42s var(--ease-set) both}
+    .hero p.lede{animation:post-set .42s var(--ease-set) .09s both}
+    .hero .cta-row{animation:post-set .42s var(--ease-set) .17s both}
+    .hero .kicker::before{animation:rail-run .5s linear .05s both}
+    .hero .meta{animation:post-set .42s var(--ease-set) .24s both}
+  }
+  @keyframes post-set{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  /* ---- Interaction cues: decisive, square, no bounce ----
+     Buttons and the form submit press down on click like a panel seated home;
+     the call link snaps a rail underline; focus is a crisp square ring, not a glow. */
+  .btn:active,form.qform .btn:active{transform:translateY(1px)}
+  .nav-call,.pxb,.mobilebar a{transition:background-color .15s ease,color .15s ease,transform .12s ease,box-shadow .15s ease}
+  .nav-call:active{transform:translateY(1px)}
+  /* phone-tap affordance on the mobile call bar: press seats firmly */
+  .mobilebar a:active{transform:translateY(1px)}
+  /* card image already pans on hover; add a rail that runs along the bottom on hover */
+  .bcard{position:relative}
+  .bcard .svc-line{transition:width .28s var(--ease-set)}
+  .bcard:hover .svc-line,.bcard:focus-within .svc-line{width:54px}
+  /* crisp, square keyboard-focus ring in brand rust, reads like a marked-out line */
+  a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:3px}
+  .btn:focus-visible,.btn-ondark:focus-visible{outline-color:var(--rust-bright)}
+
+  /* ---- Reduced motion / no-support: everything rests in final readable state ---- */
+  @media (prefers-reduced-motion: reduce){
+    .set-true,.set-true .kicker::before,
+    .hero h1,.hero p.lede,.hero .cta-row,.hero .kicker::before,.hero .meta{animation:none}
+    .set-true,.hero h1,.hero p.lede,.hero .cta-row,.hero .meta{opacity:1;transform:none}
+    .kicker::before,.hero .kicker::before{transform:scaleX(1)}
+    .btn,.btn-primary,.btn-ghost,.btn-ondark,.btn-onlight-ghost,.nav-call,
+    .bcard img,.gal img,.bcard .svc-line,.nav-call:active,.btn:active{transition:none}
+    .btn:hover,.btn-ondark:hover,.btn-ghost:hover,.btn-onlight-ghost:hover,.nav-call:active,.btn:active,.mobilebar a:active{transform:none}
+    .bcard:hover img,.gal:hover img{transform:none}
   }
   .mono-logo{width:54px;height:54px;display:block;flex:none}
 </style>
@@ -277,7 +327,7 @@
     <span class="pxb-who"><span class="pxb-av"><img src="data:image/jpeg;base64,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" alt="Justin Morrow" width="30" height="30"></span><span class="pxb-id"><b>Justin Morrow</b><span>Tucson web design</span></span></span>
     <span class="pxb-tag">Free preview</span>
     <span class="pxb-msg">I built <b>JMS Fencing</b> a free sample from your Google photos and reviews, no obligation. <span class="dom">jmsfencingaz.com</span> is available, in your name.</span>
-    <a class="pxb-cta" href="https://gopraxis.ai/websites" target="_blank" rel="noopener">See pricing →</a>
+    <a class="pxb-cta" href="https://gopraxis.ai/websites#make-live" target="_blank" rel="noopener">Make this live →</a>
     <a class="pxb-tel" href="tel:+15203968737">Call or text (520) 396-8737</a>
     <span class="pxb-by">by Praxis · gopraxis.ai</span>
   </div>
@@ -373,13 +423,13 @@
 <!-- signature: custom metalwork -->
 <section class="band sig" id="custom">
   <div class="wrap">
-    <div class="sec-head reveal">
+    <div class="sec-head set-true">
       <span class="kicker on-dark">The work most fence crews can't do</span>
       <h2>Custom metalwork, cut and welded by hand</h2>
       <p class="intro">Anyone can set a panel. What sets JMS apart is the metal that gets built one piece at a time, an entry gate with a desert scene cut into steel, gabion rock columns to anchor it, ornamental iron that curves with your wall. You bring the idea, Jim builds it.</p>
     </div>
 
-    <div class="sig-grid reveal">
+    <div class="sig-grid set-true">
       <figure class="sig-main">
         <div class="ar">
           <img src="assets/photo-2.jpg" alt="A custom steel driveway gate by JMS Fencing with a desert scene of saguaros and mountains cut into the center panel, flanked by two gabion rock cage columns." width="4000" height="3000" />
@@ -402,7 +452,7 @@
       </div>
     </div>
 
-    <div class="sig-points reveal">
+    <div class="sig-points set-true">
       <div class="pt">
         <div class="n">01</div>
         <h3>Designed with you</h3>
@@ -425,14 +475,14 @@
 <!-- what we build -->
 <section class="band" id="build" style="background:var(--bone)">
   <div class="wrap">
-    <div class="sec-head reveal">
+    <div class="sec-head set-true">
       <span class="kicker">Every kind of fence and gate</span>
       <h2>What we build</h2>
       <p class="intro">Metal is the specialty, but JMS handles the whole property. New fence, full replacement, a single gate or a storm rebuild, all of it done by the same crew.</p>
     </div>
 
     <div class="build-grid">
-      <figure class="bcard reveal">
+      <figure class="bcard set-true">
         <div class="ar"><img src="assets/photo-7.jpg" alt="Corrugated metal privacy fence and gates by JMS Fencing in warm afternoon light, raw galvanized steel panels." width="800" height="600" /></div>
         <div class="bc-body">
           <span class="svc-name">Metal privacy fence</span>
@@ -440,7 +490,7 @@
           <p>Corrugated steel panels that block the view and shrug off the desert sun.</p>
         </div>
       </figure>
-      <figure class="bcard reveal">
+      <figure class="bcard set-true">
         <div class="ar"><img src="assets/photo-8.jpg" alt="A weathering steel fence by JMS Fencing with a warm rust patina curving along a paver driveway past a barrel cactus." width="800" height="600" /></div>
         <div class="bc-body">
           <span class="svc-name">Weathering steel</span>
@@ -448,7 +498,7 @@
           <p>Corten style steel that ages to a rich rust tone and never needs paint.</p>
         </div>
       </figure>
-      <figure class="bcard reveal">
+      <figure class="bcard set-true">
         <div class="ar"><img src="assets/photo-1.jpg" alt="Ornamental black iron view fencing by JMS Fencing with curved pickets along a stucco wall." width="800" height="600" /></div>
         <div class="bc-body">
           <span class="svc-name">Ornamental iron</span>
@@ -456,7 +506,7 @@
           <p>View fences and railing in black iron, plain bar or scrolled to your taste.</p>
         </div>
       </figure>
-      <figure class="bcard reveal">
+      <figure class="bcard set-true">
         <div class="ar"><img src="assets/photo-5.jpg" alt="A new wood privacy fence by JMS Fencing in fresh cedar pickets curving across a Tucson lot with mesquite trees." width="800" height="600" /></div>
         <div class="bc-body">
           <span class="svc-name">Wood fence</span>
@@ -464,7 +514,7 @@
           <p>Solid privacy fencing in cedar and pine, set on steel posts to stay straight.</p>
         </div>
       </figure>
-      <figure class="bcard reveal">
+      <figure class="bcard set-true">
         <div class="ar"><img src="assets/photo-2.jpg" alt="A custom steel driveway gate by JMS Fencing with a cut desert art panel and gabion stone columns." width="800" height="600" /></div>
         <div class="bc-body">
           <span class="svc-name">Driveway &amp; entry gates</span>
@@ -472,7 +522,7 @@
           <p>Single, double and rolling gates, with openers wired in if you want them.</p>
         </div>
       </figure>
-      <figure class="bcard reveal">
+      <figure class="bcard set-true">
         <div class="ar"><img src="assets/photo-9.jpg" alt="A cedar wood privacy fence by JMS Fencing on steel posts running along a side yard with gravel and a shed." width="800" height="600" /></div>
         <div class="bc-body">
           <span class="svc-name">Repairs &amp; storm rebuilds</span>
@@ -482,7 +532,7 @@
       </figure>
     </div>
 
-    <div class="build-extra reveal">
+    <div class="build-extra set-true">
       <div class="x">
         <div class="xn">Chain link</div>
         <p>Yard, pet and property line fencing, residential or job site.</p>
@@ -506,12 +556,12 @@
 <!-- reviews -->
 <section class="band reviews" id="reviews">
   <div class="wrap">
-    <div class="sec-head reveal">
+    <div class="sec-head set-true">
       <span class="kicker">Straight from Tucson customers</span>
       <h2>People don't hold back on Jim</h2>
     </div>
 
-    <div class="rev-grid reveal">
+    <div class="rev-grid set-true">
       <div class="rev feature">
         <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
         <blockquote>"I'll shout it from the rooftops, JMS Fencing does incredible work with an outstanding crew. Jim bid out an entire rusted corrugated alley run with a double gate, a front yard gate and a side yard decor panel, and whipped the entire job out in two days, without leaving my yard exposed overnight. That top rail on the panels is the icing on the cake. I believe my investment tripled itself in adding value to my home."</blockquote>
@@ -539,7 +589,7 @@
       </div>
     </div>
 
-    <div class="rev-foot reveal">
+    <div class="rev-foot set-true">
       <span class="gbadge">★ 4.6 on Google</span>
       <span>Reviews shown are real and posted by JMS customers on Google. On your live site they pull in automatically and update on their own.</span>
     </div>
@@ -549,12 +599,12 @@
 <!-- recent work gallery -->
 <section class="band" id="work" style="background:var(--iron)">
   <div class="wrap">
-    <div class="sec-head reveal">
+    <div class="sec-head set-true">
       <span class="kicker on-dark">Real jobs around town</span>
       <h2 style="color:var(--bone)">Recent work</h2>
       <p class="intro" style="color:#d8cfc1">Every photo here is a JMS job in and around Tucson. No stock, no borrowed shots.</p>
     </div>
-    <div class="gal-grid reveal">
+    <div class="gal-grid set-true">
       <div class="gal wide tall"><img src="assets/photo-6.jpg" alt="A long corrugated metal privacy fence run by JMS Fencing stretching across a desert lot toward the mountains." width="600" height="800" /></div>
       <div class="gal"><img src="assets/photo-4.jpg" alt="A corrugated galvanized metal fence and gate by JMS Fencing next to a brick pilaster." width="400" height="300" /></div>
       <div class="gal"><img src="assets/photo-10.jpg" alt="A cedar wood fence by JMS Fencing with a rock base course running along a desert backyard." width="400" height="300" /></div>
@@ -569,7 +619,7 @@
 <section class="band quote" id="estimate">
   <div class="wrap">
     <div class="q-grid">
-      <div class="reveal">
+      <div class="set-true">
         <span class="kicker on-dark">Free, no pressure</span>
         <h2>Get a straight number on your fence</h2>
         <p class="q-lede">Send a few details and Jim gets back to you to set up a look at the property. He gives you a straight number, not a sales pitch.</p>
@@ -590,7 +640,7 @@
         </div>
       </div>
 
-      <form class="qform reveal" onsubmit="return submitQuote(event)" novalidate>
+      <form class="qform set-true" onsubmit="return submitQuote(event)" novalidate>
         <div class="row2">
           <div>
             <label class="field-tab" for="name">Your name</label>

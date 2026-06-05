@@ -25,6 +25,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@700;800;900&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
+  /* motion-intent: restrained; reason: One Stop is a fast, fair-price tire and brake shop, so motion clicks into place like a torque wrench, quick and mechanical, and never makes a driver wait. */
   /* ---- Praxis preview infra (reuse verbatim across previews) ---- */
   *{box-sizing:border-box;margin:0;padding:0}
   img{display:block;max-width:100%}
@@ -269,11 +270,61 @@
   .foot-bottom{border-top:1px solid var(--line-d);margin-top:40px;padding-top:18px;font-size:.78rem;color:var(--steel-l);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
   .foot-bottom .stars{color:var(--yellow);letter-spacing:1px}
 
-  /* ---------------- motion: minimal, CSS-native (progressive enhancement; content visible by default) ---------------- */
-  @keyframes rise{to{opacity:1;transform:none}}
+  /* ================= MOTION: mechanical & snappy, CSS-native ==================
+     Direction: a tire shop is fast and precise, so motion behaves like a torque
+     wrench, it seats quickly and clicks to a hard stop. Short throws, crisp
+     settle easing, no float. All of it is progressive enhancement: every element
+     rests at its final, fully readable state, so JS-off / reduced-motion /
+     unsupported-browser / static-screenshot visitors see the whole page.
+     --click is the signature settle curve (quick approach, firm stop, no bounce). */
+  :root{ --click:cubic-bezier(.2,.8,.25,1); }
+
+  /* sharpen the existing interaction feedback so taps/hovers feel mechanical and quick */
+  .btn{transition:transform .2s var(--click),background .2s var(--click),color .2s var(--click),box-shadow .2s var(--click)}
+  .btn:active{transform:translateY(1px) scale(.985)}              /* firm "press" on tap */
+  .nav .call:active,.pxb .pxb-tel:active{transform:translateY(1px)}
+  .navlinks a{transition:border-color .18s var(--click),color .18s var(--click)}
+  .svc{transition:background .18s var(--click),transform .18s var(--click),box-shadow .18s var(--click)}
+  .svc:hover{transform:translateX(3px);box-shadow:inset 4px 0 0 var(--red)}  /* row seats toward the lift */
+  .svc:active{transform:translateX(3px) scale(.997)}
+  .chips span{transition:transform .16s var(--click),background .16s var(--click),color .16s var(--click)}
+  .chips span:hover{transform:translateY(-2px);background:var(--ink);color:var(--yellow)}
+  .gal-grid img{transition:transform .34s var(--click)}            /* quicker, crisper zoom than the old .5s */
+  input,select,textarea{transition:border-color .16s var(--click),box-shadow .16s var(--click)}
+  input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(196,33,48,.16)}  /* tight focus ring affordance */
+
+  /* FIRST-VIEWPORT CUE — the hero column and stop badge seat into place on load.
+     Guarded by @media no-preference; the @keyframes all end at the natural resting
+     state, and without animation the elements are simply already there. */
+  @media(prefers-reduced-motion:no-preference){
+    @keyframes seat-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    /* the badge "torques" in: a small counter-rotate that clicks straight, like a lug seating */
+    @keyframes torque-in{from{opacity:0;transform:rotate(-9deg) scale(.94)}to{opacity:1;transform:rotate(0) scale(1)}}
+    .hero h1,.hero .lead,.hero .cta,.hero .micro{animation:seat-up .42s var(--click) both}
+    .hero .lead{animation-delay:.06s}
+    .hero .cta{animation-delay:.12s}
+    .hero .micro{animation-delay:.18s}
+    .hero-badge .octo{animation:torque-in .5s var(--click) both;animation-delay:.1s}
+  }
+
+  /* SCROLL-DRIVEN CUE — sections "seat" as they enter, with a short mechanical throw.
+     Wrapped in @supports so the opacity:0 resting state ONLY exists where scroll
+     timelines are supported; everywhere else the content is visible by default. */
   @supports (animation-timeline: view()){
     @media(prefers-reduced-motion:no-preference){
-      .rise{opacity:0;transform:translateY(16px);animation:rise linear both;animation-timeline:view();animation-range:entry 0% cover 22%}
+      @keyframes seat-in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+      .seat{opacity:0;animation:seat-in 1ms var(--click) both;animation-timeline:view();animation-range:entry 2% cover 16%}
+    }
+  }
+
+  /* REDUCED MOTION — strip every brand animation/transition and pin final readable states */
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .btn,.btn:active,.nav .call:active,.navlinks a,.svc,.svc:hover,.svc:active,
+    .chips span,.chips span:hover,.gal-grid img,.gal-grid figure:hover img,
+    input,select,textarea,
+    .hero h1,.hero .lead,.hero .cta,.hero .micro,.hero-badge .octo,.seat{
+      animation:none!important;transition:none!important;transform:none!important;opacity:1!important;box-shadow:none!important
     }
   }
 
@@ -307,7 +358,7 @@
     <span class="pxb-who"><span class="pxb-av"><img src="assets/_pxb-avatar.jpg" alt="Justin Morrow" width="30" height="30"></span><span class="pxb-id"><b>Justin Morrow</b><span>Tucson web design</span></span></span>
     <span class="pxb-tag">Free preview</span>
     <span class="pxb-msg">I built <b>One Stop Tires &amp; Service</b> a free sample from your Google photos and reviews, no obligation. <span class="dom">onestoptires.co</span> is available, in your name.</span>
-    <a class="pxb-cta" href="https://gopraxis.ai/websites" target="_blank" rel="noopener">See pricing →</a>
+    <a class="pxb-cta" href="https://gopraxis.ai/websites#make-live" target="_blank" rel="noopener">Make this live →</a>
     <a class="pxb-tel" href="tel:+15203968737">Call or text (520) 396-8737</a>
     <span class="pxb-by">by Praxis · gopraxis.ai</span>
   </div>
@@ -391,7 +442,7 @@
 </div>
 
 <!-- signature: tires new & used -->
-<section class="signature rise" id="tires">
+<section class="signature seat" id="tires">
   <div class="wrap sig-grid">
     <div class="sig-photo">
       <img src="assets/photo-5.jpg" width="4032" height="3024" alt="A row of used tires lined up at One Stop Tires & Service, each marked with its size" />
@@ -417,7 +468,7 @@
 </section>
 
 <!-- services: their own flyer list -->
-<section class="services" id="services">
+<section class="services seat" id="services">
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow">Tires &amp; auto service</span>
@@ -454,7 +505,7 @@
 </section>
 
 <!-- work gallery -->
-<section class="gallery" id="work">
+<section class="gallery seat" id="work">
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow">Straight from the shop</span>
@@ -483,7 +534,7 @@
 </section>
 
 <!-- reviews -->
-<section class="reviews" id="reviews">
+<section class="reviews seat" id="reviews">
   <div class="wrap">
     <div class="sec-head on-dark">
       <span class="eyebrow on-dark">Straight from Google</span>
@@ -536,7 +587,7 @@
 </section>
 
 <!-- quote + hours band -->
-<section class="quote" id="visit">
+<section class="quote seat" id="visit">
   <div class="wrap q-grid">
     <div class="q-left">
       <span class="eyebrow">Pull in or call ahead</span>

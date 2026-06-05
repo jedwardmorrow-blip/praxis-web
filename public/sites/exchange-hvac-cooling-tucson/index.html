@@ -46,7 +46,7 @@
   .pxb-by{font-size:.72rem;color:#9fb0c4;white-space:nowrap}
   @media(max-width:760px){.pxb-in{padding:9px 14px;gap:8px}.pxb-cta,.pxb-tel{flex:0 1 auto}.pxb-by{order:6}}
 /* px-banner:end */
-  /* motion is NOT infra: add brand-appropriate, CSS-native motion in the build (see the design contract) */
+  /* motion-intent: restrained; reason: Exchange answers HVAC emergencies in minutes, so motion settles fast and snaps under the finger to read as a crew that responds, never a slow floaty reveal. */
   .mobilebar{position:fixed;bottom:0;left:0;right:0;z-index:60;display:none;gap:10px;padding:11px 14px;background:rgba(15,17,21,.97);backdrop-filter:blur(8px)}
   .mobilebar a{flex:1;text-align:center;padding:14px;border-radius:12px;font-weight:800}
   @media(max-width:900px){ .mobilebar{display:flex} }
@@ -241,6 +241,58 @@
     }
   }
 
+  /* ---- Brand motion: snappy "comfort-on" first-viewport settle + responsive tap feedback ----
+     Distinct from the scroll .slide above: short crisp travel (~14px / .92 scale), a precise
+     decelerate ease, hero elements snapping into place like a system kicking on. Resting state
+     is the FINAL readable state; the keyframe animates FROM the offset, so content is fully
+     visible if animation support is absent. Enhancement only. */
+  @media(prefers-reduced-motion:no-preference){
+    /* hero copy rests at transform:none, so the generic settle (ending at none) is safe here.
+       The stat band is handled separately below because it rests at a non-identity offset. */
+    .hero-tag.xh-set,.hero h1.xh-set,.hero p.sub.xh-set,.hero .cta.xh-set{animation:xh-settle .34s cubic-bezier(.16,.84,.36,1) both}
+    .hero-tag.xh-set{animation-delay:.04s}
+    .hero h1.xh-set{animation-delay:.10s}
+    .hero p.sub.xh-set{animation-delay:.17s}
+    .hero .cta.xh-set{animation-delay:.23s}
+    @keyframes xh-settle{from{opacity:0;transform:translateY(14px) scale(.992)}to{opacity:1;transform:none}}
+    /* the stat band's resting transform is breakpoint-specific (-50% desktop, -28px/-20px
+       mobile); only run the band settle where -50% is the true rest, so mobile keeps its
+       own offset. Each step settles INTO the resting transform, never flattening it. */
+    @media(min-width:901px){
+      .statband .inner.xh-set{animation:xh-band .4s cubic-bezier(.16,.84,.36,1) .28s both}
+      @keyframes xh-band{from{opacity:0;transform:translateY(calc(-50% + 16px))}to{opacity:1;transform:translateY(-50%)}}
+    }
+  }
+
+  /* responsive press feedback — buttons and the phone link snap in on tap, then release */
+  .btn:active{transform:translateY(1px) scale(.985);transition-duration:.06s}
+  .nav .call{transition:background .16s ease,transform .14s cubic-bezier(.16,.84,.36,1),box-shadow .16s ease}
+  .nav .call:active{transform:translateY(1px) scale(.985);box-shadow:0 0 0 3px rgba(25,198,230,.22)}
+  .hero .cta a.btn svg,.nav .call svg{transition:transform .18s cubic-bezier(.16,.84,.36,1)}
+  .hero .cta a.btn:hover svg,.nav .call:hover svg{transform:translateX(2px)}
+  .mobilebar a{transition:transform .14s cubic-bezier(.16,.84,.36,1),filter .14s ease}
+  .mobilebar a:active{transform:translateY(1px) scale(.99)}
+  /* clock cards: subtle comfort-on cue, the cyan rule warms on hover */
+  .clock-card{transition:transform .18s cubic-bezier(.16,.84,.36,1),box-shadow .18s ease,border-left-color .18s ease}
+  .clock-card:hover{transform:translateX(3px);border-left-color:var(--cyan-d);box-shadow:0 14px 30px -20px rgba(10,37,64,.55)}
+
+  /* reduced-motion: strip all build-zone motion, restore final readable states.
+     (Infra .pxb already handled in its own block above.) */
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .slide,.xh-set,.statband .inner.xh-set{animation:none!important;opacity:1!important}
+    /* hero copy rests with no transform; the stat band keeps whatever resting transform the
+       cascade gives it (-50% desktop, -28px/-20px mobile), so do not force transform on it */
+    .slide,.hero-tag.xh-set,.hero h1.xh-set,.hero p.sub.xh-set,.hero .cta.xh-set{transform:none!important}
+    .hero-tag .pulse{animation:none!important}
+    /* neutralize hover/tap displacement so nothing jumps for motion-sensitive users */
+    .btn:hover,.btn:active,.nav .call:hover,.nav .call:active,
+    .quote:hover,.clock-card:hover,.panel:hover img,.pxb-cta:hover,.pxb-tel:hover,
+    .mobilebar a:active{transform:none!important}
+    .hero .cta a.btn:hover svg,.nav .call:hover svg{transform:none!important}
+    *{transition-duration:.01ms!important}
+  }
+
   @media(max-width:980px){
     .always .wrap,.feature .wrap,.qb-grid{grid-template-columns:1fr;gap:40px}
     .feature .ph{order:-1}
@@ -278,7 +330,7 @@
     <span class="pxb-who"><span class="pxb-av"><img src="assets/_pxb-avatar.jpg" alt="Justin Morrow" width="30" height="30"></span><span class="pxb-id"><b>Justin Morrow</b><span>Tucson web design</span></span></span>
     <span class="pxb-tag">Free preview</span>
     <span class="pxb-msg">I built <b>Exchange HVAC &amp; Cooling Tucson</b> a free sample from your Google photos and reviews, no obligation. <span class="dom">exchangehvaccoolingtucson.com</span> is available, in your name.</span>
-    <a class="pxb-cta" href="https://gopraxis.ai/websites" target="_blank" rel="noopener">See pricing →</a>
+    <a class="pxb-cta" href="https://gopraxis.ai/websites#make-live" target="_blank" rel="noopener">Make this live →</a>
     <a class="pxb-tel" href="tel:+15203968737">Call or text (520) 396-8737</a>
     <span class="pxb-by">by Praxis · gopraxis.ai</span>
   </div>
@@ -318,10 +370,10 @@
   <div class="hero-scrim"></div>
   <div class="hero-grid"></div>
   <div class="hero-inner">
-    <span class="hero-tag"><span class="pulse"></span> Open 24 hours · 7 days a week</span>
-    <h1>Tucson stays cool when <i>the AC keeps running.</i></h1>
-    <p class="sub">Exchange HVAC &amp; Cooling keeps the cold air moving, AC repair, new systems, heating, and mini-splits, with a real person answering day or night.</p>
-    <div class="cta">
+    <span class="hero-tag xh-set"><span class="pulse"></span> Open 24 hours · 7 days a week</span>
+    <h1 class="xh-set">Tucson stays cool when <i>the AC keeps running.</i></h1>
+    <p class="sub xh-set">Exchange HVAC &amp; Cooling keeps the cold air moving, AC repair, new systems, heating, and mini-splits, with a real person answering day or night.</p>
+    <div class="cta xh-set">
       <a class="btn btn-cyan" href="tel:+15203464930">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         Call (520) 346-4930
@@ -332,7 +384,7 @@
 </section>
 
 <div class="statband">
-  <div class="inner">
+  <div class="inner xh-set">
     <div class="stat"><div class="v">5.0<i>★</i></div><div class="l">Google rating</div></div>
     <div class="stat"><div class="v">18</div><div class="l">5-star reviews</div></div>
     <div class="stat"><div class="v">24<i>/7</i></div><div class="l">Phone answered</div></div>

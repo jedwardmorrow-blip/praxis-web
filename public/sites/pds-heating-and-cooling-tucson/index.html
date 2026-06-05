@@ -48,6 +48,7 @@
   @media(max-width:760px){.pxb-in{padding:9px 14px;gap:8px}.pxb-cta,.pxb-tel{flex:0 1 auto}.pxb-by{order:6}}
 /* px-banner:end */
   /* motion is NOT infra: add brand-appropriate, CSS-native motion in the build (see the design contract) */
+  /* motion-intent: restrained; reason: PDS answers a dead AC fast, so motion settles like a gauge snapping to a reading — quick, precise, mechanical — never floaty, so the page feels as responsive as the crew. */
   .mobilebar{position:fixed;bottom:0;left:0;right:0;z-index:60;display:none;gap:10px;padding:11px 14px;background:rgba(15,17,21,.97);backdrop-filter:blur(8px)}
   .mobilebar a{flex:1;text-align:center;padding:14px;border-radius:12px;font-weight:800}
   @media(max-width:900px){ .mobilebar{display:flex} }
@@ -303,6 +304,105 @@
     .revs .hero-q{padding:30px 26px}
     .revs .hero-q blockquote{font-size:1.2rem}
   }
+
+  /* ====================================================================
+     PDS MOTION SYSTEM — "gauge settle"
+     Precision HVAC, fast response. Snappy mechanical settles (220–360ms)
+     on a crisp ease, decisive tap/hover feedback on call + quote actions.
+     CSS-native only. Content is visible by default; every cue is additive
+     and removed under reduced-motion. Distinct from the other HVAC build
+     (own prefix `pds-`, own easing `--pds-snap`, own ranges/durations).
+     ==================================================================== */
+  :root{
+    --pds-snap:cubic-bezier(.2,.9,.25,1);   /* decisive settle, no overshoot */
+    --pds-press:cubic-bezier(.3,.7,.2,1);   /* tight tap feedback */
+  }
+
+  /* --- 1. FIRST-VIEWPORT CUE: hero copy registers like gauges snapping in.
+     Final state is the default (no animation = fully visible). The keyframe
+     only animates the entry; it never leaves content hidden. --- */
+  @media (prefers-reduced-motion:no-preference){
+    .hero .since,
+    .hero h1,
+    .hero .lead,
+    .hero .replace,
+    .hero .cta,
+    .hero .meta{animation:pds-set .34s var(--pds-snap) both}
+    .hero h1{animation-delay:.05s}
+    .hero .lead{animation-delay:.10s}
+    .hero .replace{animation-delay:.15s}
+    .hero .cta{animation-delay:.20s}
+    .hero .meta{animation-delay:.25s}
+    /* the steel stat tab slides off the left edge into place */
+    .hero .tab{animation:pds-tab .40s var(--pds-snap) .22s both}
+  }
+  @keyframes pds-set{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+  @keyframes pds-tab{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+
+  /* --- 2. SCROLL CUE: section heads + service rows lift precisely as they
+     enter. Scroll-driven, so it MUST be wrapped in @supports; the hidden
+     start state lives only inside the guard, so unsupported browsers and
+     static screenshots render the final, fully-visible state. --- */
+  @media (prefers-reduced-motion:no-preference){
+    @supports (animation-timeline:view()){
+      .svc .head,
+      .work .copy,
+      .revs .head,
+      .quote .grid > div,
+      .form-card,
+      .foot-col{animation:pds-lift linear both;animation-timeline:view();animation-range:entry 4% cover 20%}
+      .svc .item{animation:pds-lift linear both;animation-timeline:view();animation-range:entry 0% cover 16%}
+      @keyframes pds-lift{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+    }
+  }
+
+  /* --- 3. INTERACTION CUES: decisive tap + hover feedback on the actions
+     that matter (call, quote, nav). These are transitions on interactive
+     states only — content is unaffected when motion is off. --- */
+  /* primary CTAs press down on tap like a real switch */
+  .btn{transition:transform .16s var(--pds-snap),background .16s ease,border-color .16s ease,color .16s ease,box-shadow .16s ease}
+  .btn-ember:active,.btn-solid:active,.btn-line:active,.btn-line-d:active{transform:translateY(0) scale(.985)}
+  /* header + utility call buttons: lift on hover, press on tap, glow the ember */
+  .nav .callbtn,.callbtn{transition:background .16s ease,transform .16s var(--pds-snap),box-shadow .18s ease}
+  .nav .callbtn:hover{transform:translateY(-1px);box-shadow:0 10px 22px -12px rgba(191,64,17,.8)}
+  .nav .callbtn:active{transform:translateY(0) scale(.97)}
+  /* the phone glyph gives a quick "ringing" tilt when its button is engaged */
+  .nav .callbtn svg,.hero .cta .btn-ember svg{transition:transform .2s var(--pds-snap)}
+  .nav .callbtn:hover svg,.hero .cta .btn-ember:hover svg{transform:rotate(-12deg) scale(1.08)}
+  .nav .callbtn:active svg,.hero .cta .btn-ember:active svg{transform:rotate(4deg) scale(.96)}
+  /* contact + footer phone links nudge toward the reader */
+  .quote .contact a,.foot-col a{transition:color .16s ease,transform .16s var(--pds-snap)}
+  .quote .contact a:hover{transform:translateX(2px)}
+  .quote .contact .ic{transition:transform .18s var(--pds-snap),background .18s ease}
+  .quote .contact a:hover .ic{transform:translateY(-2px)}
+  /* form fields settle into focus; keyboard focus is clearly affordable */
+  .form-card input,.form-card select,.form-card textarea{transition:border-color .16s ease,background .16s ease,box-shadow .16s ease,transform .16s var(--pds-press)}
+  .form-card input:focus,.form-card select:focus,.form-card textarea:focus{box-shadow:0 0 0 3px rgba(232,84,30,.18)}
+  /* mobile call/quote bar buttons press like physical keys */
+  .mobilebar a{transition:transform .14s var(--pds-press),filter .14s ease}
+  .mobilebar a:active{transform:scale(.97);filter:brightness(1.05)}
+  /* sticky service feature panel lifts a touch on hover */
+  .svc .feat{transition:transform .2s var(--pds-snap),box-shadow .2s ease}
+  .svc .feat:hover{transform:translateY(-3px)}
+  /* visible keyboard-focus affordance on every primary action (a11y, not decoration) */
+  .btn:focus-visible,.callbtn:focus-visible,.navlinks a:focus-visible,.quote .contact a:focus-visible,.mobilebar a:focus-visible{outline:2px solid var(--ember);outline-offset:3px;border-radius:var(--edge-sm)}
+
+  /* --- 4. REDUCED MOTION: strip every entry animation + interaction nudge,
+     restore final readable states. Hover/focus colour cues stay (no motion),
+     keyboard focus outline stays (accessibility). --- */
+  @media (prefers-reduced-motion:reduce){
+    .hero .since,.hero h1,.hero .lead,.hero .replace,.hero .cta,.hero .meta,
+    .hero .tab,.svc .head,.svc .item,.work .copy,.revs .head,
+    .quote .grid > div,.form-card,.foot-col{animation:none!important;opacity:1!important;transform:none!important}
+    .btn,.nav .callbtn,.callbtn,.nav .callbtn svg,.hero .cta .btn-ember svg,
+    .quote .contact a,.quote .contact .ic,.form-card input,.form-card select,
+    .form-card textarea,.mobilebar a,.svc .feat{transition:background .16s ease,border-color .16s ease,color .16s ease,box-shadow .16s ease}
+    .btn-ember:active,.btn-solid:active,.btn-line:active,.btn-line-d:active,
+    .nav .callbtn:hover,.nav .callbtn:active,.nav .callbtn:hover svg,.nav .callbtn:active svg,
+    .hero .cta .btn-ember:hover svg,.hero .cta .btn-ember:active svg,
+    .quote .contact a:hover,.quote .contact a:hover .ic,.mobilebar a:active,
+    .svc .feat:hover{transform:none}
+  }
 </style>
 </head>
 <body>
@@ -313,7 +413,7 @@
     <span class="pxb-who"><span class="pxb-av"><img src="assets/_pxb-avatar.jpg" alt="Justin Morrow" width="30" height="30"></span><span class="pxb-id"><b>Justin Morrow</b><span>Tucson web design</span></span></span>
     <span class="pxb-tag">Free preview</span>
     <span class="pxb-msg">I built <b>PDS Heating and Cooling Tucson</b> a free sample from your Google photos and reviews, no obligation. <span class="dom">pdsheatingcoolingtucson.com</span> is available, in your name.</span>
-    <a class="pxb-cta" href="https://gopraxis.ai/websites" target="_blank" rel="noopener">See pricing →</a>
+    <a class="pxb-cta" href="https://gopraxis.ai/websites#make-live" target="_blank" rel="noopener">Make this live →</a>
     <a class="pxb-tel" href="tel:+15203968737">Call or text (520) 396-8737</a>
     <span class="pxb-by">by Praxis · gopraxis.ai</span>
   </div>
