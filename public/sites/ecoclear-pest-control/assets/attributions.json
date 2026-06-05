@@ -1,0 +1,16 @@
+{
+  "photos": [
+    {
+      "file": "photo-1.jpg",
+      "authors": [
+        {
+          "displayName": "stacy mills",
+          "uri": "https://maps.google.com/maps/contrib/109060971650004728360",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjX34auXijSHjkaCpq59DhSmxqph-75VMbQMzOKYNdSAIlnFC5I=s100-p-k-no-mo"
+        }
+      ]
+    }
+  ],
+  "reviews_source": "Google",
+  "note": "Google requires visible attribution for photos and reviews used on the live site."
+}
