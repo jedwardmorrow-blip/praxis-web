@@ -19,209 +19,284 @@
     --text:#14365E; --ink-deep:#0A2545;
     --muted:rgba(20,54,94,0.74); --muted2:rgba(20,54,94,0.52);
     --red:#C42130; --red-deep:#8c1722;
+    --space:clamp(60px,8vw,108px);
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
   html{font-size:16px;scroll-behavior:smooth;}
   body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;line-height:1.65;
-       min-height:100vh;-webkit-font-smoothing:antialiased;}
+       min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative;}
+  /* paper grain */
+  body::before{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
   .bb{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;}
   .mono{font-family:'IBM Plex Mono',monospace;}
   a{color:inherit;text-decoration:none;}
   ::selection{background:var(--navy);color:var(--paper);}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
 
-  /* ── TOP BAR (navy band) ── */
+  /* scroll progress */
+  .progress{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--red);transform-origin:left;
+    transform:scaleX(0);z-index:300;animation:grow linear;animation-timeline:scroll(root block);}
+  @keyframes grow{to{transform:scaleX(1);}}
+
+  /* TOP BAR */
   .topbar{position:sticky;top:0;z-index:100;background:var(--navy);
     border-bottom:1px solid rgba(201,162,75,0.30);
-    display:flex;align-items:center;justify-content:space-between;height:54px;padding:0 24px;}
+    display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 24px;}
   .wordmark{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:800;
-    font-size:1.45rem;letter-spacing:0.04em;color:var(--paper);}
+    font-size:1.5rem;letter-spacing:0.04em;color:var(--paper);display:flex;align-items:center;gap:0;}
   .wordmark span{color:var(--red);}
   .topbar-meta{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.16em;
-    text-transform:uppercase;color:var(--gold);}
+    text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:8px;}
+  .topbar-meta .live{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 2.4s infinite;}
 
-  /* ── SECTION NAV ── */
-  .nav{position:sticky;top:54px;z-index:99;background:var(--bg3);border-bottom:1px solid var(--hair);
+  /* SECTION NAV */
+  .nav{position:sticky;top:56px;z-index:99;background:color-mix(in srgb, var(--bg3) 88%, transparent);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--hair);
     display:flex;overflow-x:auto;scrollbar-width:none;white-space:nowrap;}
   .nav::-webkit-scrollbar{display:none;}
-  .nav a{display:inline-flex;align-items:center;height:42px;padding:0 16px;flex-shrink:0;
+  .nav a{display:inline-flex;align-items:center;height:44px;padding:0 15px;flex-shrink:0;
     font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:600;
-    font-size:0.82rem;letter-spacing:0.07em;color:var(--muted);
+    font-size:0.8rem;letter-spacing:0.07em;color:var(--muted);
     border-bottom:2px solid transparent;transition:color .15s,border-color .15s;}
   .nav a:hover{color:var(--text);}
-  .nav a.active{color:var(--text);border-bottom-color:var(--red);}
+  .nav a.active{color:var(--ink-deep);border-bottom-color:var(--red);}
 
-  /* ── SECTION SHELL ── */
-  section{padding:84px 32px;border-top:1px solid var(--hair);scroll-margin-top:96px;}
+  /* SECTION SHELL */
+  section{padding:var(--space) 32px;border-top:1px solid var(--hair);scroll-margin-top:104px;position:relative;z-index:2;}
   section:nth-of-type(even){background:var(--bg2);}
-  .wrap{max-width:1040px;margin:0 auto;}
-  .eyebrow{display:flex;align-items:center;gap:9px;margin-bottom:18px;}
+  .wrap{max-width:1060px;margin:0 auto;}
+  .eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
   .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;}
   .eyebrow .dot.live{background:var(--red);animation:pulse 2.4s infinite;}
-  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
   .eyebrow .num{font-family:'IBM Plex Mono',monospace;font-size:0.66rem;letter-spacing:0.2em;color:var(--gold-deep);}
   .eyebrow .tag{font-family:'IBM Plex Mono',monospace;font-size:0.66rem;letter-spacing:0.22em;
     text-transform:uppercase;color:var(--muted2);}
   h2{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:700;
-    font-size:clamp(2rem,4.4vw,3.3rem);line-height:1.0;letter-spacing:0.01em;margin-bottom:22px;color:var(--ink-deep);}
+    font-size:clamp(2.1rem,5vw,3.6rem);line-height:0.98;letter-spacing:0.01em;margin-bottom:22px;color:var(--ink-deep);}
   h2 .accent{color:var(--gold-deep);}
-  .lead{font-size:1.08rem;color:var(--text);max-width:72ch;margin-bottom:14px;}
+  .lead{font-size:clamp(1.05rem,1.6vw,1.18rem);color:var(--text);max-width:70ch;margin-bottom:14px;}
   .lead.muted{color:var(--muted);}
-  p.body{color:var(--muted);max-width:74ch;margin-bottom:14px;}
-  .small{font-size:0.86rem;}
+  p.body{color:var(--muted);max-width:72ch;margin-bottom:14px;}
 
-  /* ── COVER ── */
-  .cover{min-height:calc(100vh - 54px);display:flex;flex-direction:column;justify-content:center;
-    border-top:none;background:
-      radial-gradient(120% 80% at 80% 6%, rgba(196,33,48,0.07), transparent 55%),
-      radial-gradient(90% 70% at 0% 100%, rgba(201,162,75,0.14), transparent 55%);}
-  .cover .kicker{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.26em;
-    text-transform:uppercase;color:var(--gold-deep);margin-bottom:26px;}
+  /* reveal on scroll */
+  @keyframes reveal-up{from{opacity:0;transform:translateY(26px);}to{opacity:1;transform:none;}}
+  .reveal{animation:reveal-up linear both;animation-timeline:view();animation-range:entry 0% entry 32%;}
+  @supports not (animation-timeline: view()){.reveal{opacity:1;transform:none;}}
+
+  /* COVER */
+  .cover{min-height:calc(100vh - 56px);display:flex;flex-direction:column;justify-content:center;
+    border-top:none;overflow:hidden;
+    background:
+      radial-gradient(130% 90% at 82% 0%, rgba(196,33,48,0.09), transparent 52%),
+      radial-gradient(95% 75% at -5% 105%, rgba(201,162,75,0.18), transparent 55%);}
+  .cover::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(var(--hair) 1px,transparent 1px),linear-gradient(90deg,var(--hair) 1px,transparent 1px);
+    background-size:64px 64px;opacity:.30;mask-image:radial-gradient(80% 70% at 70% 30%,#000,transparent 75%);}
+  .cover .inner{position:relative;z-index:2;}
+  .cover .kicker{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:0.28em;
+    text-transform:uppercase;color:var(--gold-deep);margin-bottom:28px;opacity:0;animation:fade-in .7s .1s both;}
   .cover h1{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:800;
-    font-size:clamp(2.8rem,8vw,6rem);line-height:0.96;letter-spacing:0.005em;margin-bottom:24px;color:var(--ink-deep);}
+    font-size:clamp(3rem,9vw,7rem);line-height:0.92;letter-spacing:0.004em;margin-bottom:26px;color:var(--ink-deep);}
+  .cover h1 .l1{display:block;opacity:0;animation:rise .9s .2s both cubic-bezier(.2,.7,.2,1);}
+  .cover h1 .l2{display:block;opacity:0;animation:rise .9s .34s both cubic-bezier(.2,.7,.2,1);}
   .cover h1 .red{color:var(--red);}
-  .cover .sub{font-size:1.2rem;color:var(--muted);max-width:60ch;margin-bottom:40px;}
-  .cover .meta-row{display:flex;flex-wrap:wrap;gap:14px 28px;font-family:'IBM Plex Mono',monospace;
+  .cover .sub{font-size:clamp(1.1rem,1.8vw,1.32rem);color:var(--muted);max-width:58ch;margin-bottom:42px;
+    opacity:0;animation:fade-in .8s .55s both;}
+  .cover .meta-row{display:flex;flex-wrap:wrap;gap:14px 30px;font-family:'IBM Plex Mono',monospace;
     font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted2);
-    border-top:1px solid var(--hair);padding-top:22px;}
+    border-top:1px solid var(--hair);padding-top:24px;opacity:0;animation:fade-in .8s .7s both;}
   .cover .meta-row b{color:var(--text);font-weight:600;}
+  @keyframes fade-in{from{opacity:0;}to{opacity:1;}}
+  @keyframes rise{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:none;}}
 
-  /* ── GRID + CARDS ── */
+  /* STAT STRIP */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:34px;background:var(--hair);
+    border:1px solid var(--hair);border-radius:4px;overflow:hidden;}
+  @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr);}}
+  .stat{background:var(--bg3);padding:22px 18px;}
+  .stat .v{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:800;
+    font-size:clamp(2.1rem,3.5vw,2.9rem);line-height:1;color:var(--ink-deep);font-variant-numeric:tabular-nums;}
+  .stat .v .u{color:var(--red);}
+  .stat .k{font-size:0.76rem;color:var(--muted);margin-top:8px;line-height:1.4;}
+
+  /* GRID + CARDS */
   .grid{display:grid;gap:14px;margin-top:8px;}
   .g2{grid-template-columns:repeat(2,1fr);} .g3{grid-template-columns:repeat(3,1fr);}
-  @media(max-width:780px){.g2,.g3{grid-template-columns:1fr;}}
-  .card{background:var(--bg3);border:1px solid var(--hair);border-radius:4px;padding:22px;
-    box-shadow:0 1px 3px rgba(20,54,94,0.05);}
+  @media(max-width:820px){.g2,.g3{grid-template-columns:1fr;}}
+  .card{background:var(--bg3);border:1px solid var(--hair);border-radius:5px;padding:24px;
+    box-shadow:0 1px 3px rgba(20,54,94,0.05);transition:transform .25s,box-shadow .25s,border-color .25s;}
   section:nth-of-type(even) .card{background:var(--card2);}
+  .card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(20,54,94,0.10);
+    border-color:color-mix(in srgb,var(--gold) 55%,var(--hair));}
   .card h3{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:600;
-    font-size:1.18rem;letter-spacing:0.02em;margin-bottom:8px;color:var(--ink-deep);}
+    font-size:1.22rem;letter-spacing:0.02em;margin-bottom:8px;color:var(--ink-deep);}
   .card p{font-size:0.9rem;color:var(--muted);}
   .card .ix{font-family:'IBM Plex Mono',monospace;font-size:0.64rem;letter-spacing:0.16em;
     color:var(--gold-deep);text-transform:uppercase;margin-bottom:12px;display:block;}
 
-  /* ── PULL QUOTE / SPINE ── */
-  .quote{border-left:2px solid var(--hair2);padding:6px 0 6px 22px;margin:26px 0;
-    font-size:1.35rem;line-height:1.4;font-weight:400;max-width:70ch;color:var(--ink-deep);}
-  .quote.spine{border-left-color:var(--red);}
-  .quote .by{display:block;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:0.64rem;
-    letter-spacing:0.18em;text-transform:uppercase;color:var(--muted2);}
+  /* PULL QUOTE / SPINE */
+  .quote{border-left:2px solid var(--hair2);padding:8px 0 8px 24px;margin:30px 0;
+    font-size:clamp(1.35rem,2.6vw,1.75rem);line-height:1.34;font-weight:400;max-width:24ch;color:var(--ink-deep);
+    font-family:'Big Shoulders','Big Shoulders Display',sans-serif;letter-spacing:0.01em;}
+  .quote.spine{border-left-color:var(--red);max-width:30ch;}
+  .quote .by{display:block;margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+    letter-spacing:0.18em;text-transform:uppercase;color:var(--muted2);font-weight:400;}
 
-  /* ── FLOW ── */
-  .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin-top:8px;}
-  .flow .step{flex:1;min-width:128px;background:var(--bg3);border:1px solid var(--hair);border-radius:4px;
-    padding:14px;box-shadow:0 1px 3px rgba(20,54,94,0.05);}
-  section:nth-of-type(even) .flow .step{background:var(--card2);}
-  .flow .step .n{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--gold-deep);letter-spacing:0.14em;}
-  .flow .step .t{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:600;
-    font-size:1rem;margin-top:4px;letter-spacing:0.02em;color:var(--ink-deep);}
-  .flow .step .d{font-size:0.74rem;color:var(--muted);margin-top:4px;line-height:1.5;}
+  /* STRATEGY DIRECTIONS (interactive) */
+  .dir-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 22px;}
+  .dir-tab{border:1px solid var(--hair2);border-radius:3px;padding:12px 16px;text-align:left;
+    background:var(--bg3);transition:all .2s;flex:1;min-width:200px;}
+  section:nth-of-type(even) .dir-tab{background:var(--card2);}
+  .dir-tab .dn{display:block;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.16em;color:var(--gold-deep);text-transform:uppercase;}
+  .dir-tab .dt{display:block;font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:600;font-size:1.18rem;margin-top:5px;color:var(--ink-deep);letter-spacing:0.01em;line-height:1.05;}
+  .dir-tab:hover{border-color:var(--gold);transform:translateY(-2px);}
+  .dir-tab.active{background:var(--navy);border-color:var(--navy);}
+  .dir-tab.active .dt{color:var(--paper);} .dir-tab.active .dn{color:var(--gold);}
+  .dir-tab .rec{display:inline-block;margin-left:6px;font-family:'IBM Plex Mono',monospace;font-size:0.5rem;
+    letter-spacing:0.12em;color:var(--red);border:1px solid var(--red);border-radius:2px;padding:1px 5px;vertical-align:middle;}
+  .dir-panel{display:none;}
+  .dir-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:24px;animation:fade-in .35s both;}
+  @media(max-width:820px){.dir-panel.active{grid-template-columns:1fr;}}
+  .dir-why .lbl{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-deep);margin:18px 0 6px;}
+  .dir-why h3{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:700;font-size:clamp(1.5rem,2.6vw,2rem);color:var(--ink-deep);line-height:1.05;margin-bottom:12px;}
+  .dir-why p{color:var(--muted);font-size:0.95rem;margin-bottom:10px;}
 
-  /* ── ROWS ── */
-  .rows{margin-top:10px;border-top:1px solid var(--hair);}
-  .row{display:grid;grid-template-columns:34px 1.1fr 1.4fr;gap:18px;align-items:start;
-    padding:16px 4px;border-bottom:1px solid var(--hair);}
-  @media(max-width:780px){.row{grid-template-columns:1fr;gap:6px;}}
-  .row .rn{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:700;
-    font-size:1.4rem;color:var(--gold-deep);line-height:1;}
+  /* POST PREVIEW */
+  .post{background:var(--card2);border:1px solid var(--hair2);border-radius:8px;padding:22px 24px;
+    box-shadow:0 6px 22px rgba(20,54,94,0.10);}
+  .post + .post{margin-top:14px;}
+  .post .ph{display:flex;align-items:center;gap:11px;margin-bottom:14px;}
+  .post .av{width:42px;height:42px;border-radius:50%;flex-shrink:0;
+    background:linear-gradient(135deg,var(--gold),var(--navy));display:grid;place-items:center;
+    font-family:'Big Shoulders','Big Shoulders Display';font-weight:800;color:var(--paper);font-size:1rem;}
+  .post .who{font-weight:600;font-size:0.92rem;color:var(--ink-deep);}
+  .post .who span{display:block;font-size:0.68rem;color:var(--muted2);font-weight:400;}
+  .post .pb{font-size:0.92rem;white-space:pre-line;line-height:1.62;color:var(--text);}
+  .post .cmt{margin-top:14px;padding-top:12px;border-top:1px solid var(--hair);font-size:0.78rem;color:var(--muted);}
+  .post .cmt b{color:var(--gold-deep);font-weight:600;}
+  .post .tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.55rem;letter-spacing:0.14em;
+    text-transform:uppercase;color:var(--muted2);margin-bottom:12px;border:1px solid var(--hair);border-radius:2px;padding:2px 7px;}
+
+  /* WORKFLOW STEPPER (interactive) */
+  .stepper{display:flex;gap:0;margin:10px 0 0;position:relative;flex-wrap:wrap;}
+  .step{flex:1;min-width:120px;position:relative;padding:0 6px;}
+  .step button{width:100%;text-align:center;padding:16px 8px 14px;border-radius:4px;border:1px solid var(--hair);
+    background:var(--bg3);transition:all .2s;}
+  section:nth-of-type(even) .step button{background:var(--card2);}
+  .step button:hover{border-color:var(--gold);transform:translateY(-2px);}
+  .step button.active{background:var(--navy);border-color:var(--navy);}
+  .step .sn{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;color:var(--gold-deep);}
+  .step button.active .sn{color:var(--gold);}
+  .step .st{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:600;font-size:1rem;margin-top:3px;color:var(--ink-deep);letter-spacing:0.02em;}
+  .step button.active .st{color:var(--paper);}
+  .step-detail{margin-top:16px;background:var(--bg3);border:1px solid var(--hair);border-left:3px solid var(--red);
+    border-radius:4px;padding:20px 22px;min-height:96px;}
+  section:nth-of-type(even) .step-detail{background:var(--card2);}
+  .step-detail .sd-h{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:700;font-size:1.3rem;color:var(--ink-deep);margin-bottom:6px;}
+  .step-detail .sd-h .where{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;color:var(--gold-deep);text-transform:uppercase;margin-left:10px;vertical-align:middle;}
+  .step-detail p{color:var(--muted);font-size:0.95rem;}
+
+  /* ROWS (gaps) */
+  .rows{margin-top:12px;border-top:1px solid var(--hair);}
+  .row{display:grid;grid-template-columns:34px 1.05fr 1.5fr;gap:18px;align-items:start;
+    padding:18px 6px;border-bottom:1px solid var(--hair);transition:background .2s,padding-left .2s;}
+  .row:hover{background:color-mix(in srgb,var(--gold) 9%,transparent);padding-left:14px;}
+  @media(max-width:820px){.row{grid-template-columns:1fr;gap:6px;}}
+  .row .rn{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:800;
+    font-size:1.5rem;color:var(--gold-deep);line-height:1;}
   .row .rl{font-weight:600;color:var(--ink-deep);}
-  .row .rl .int{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;
+  .row .rl .int{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;
     text-transform:uppercase;color:var(--muted2);display:block;margin-bottom:4px;font-weight:500;}
   .row .rr{color:var(--muted);font-size:0.92rem;}
   .row .rr b{color:var(--ink-deep);font-weight:600;font-style:italic;}
 
-  /* ── BANDS STRIP ── */
-  .bands{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
-  @media(max-width:780px){.bands{grid-template-columns:repeat(2,1fr);}}
-  .band{background:var(--bg3);border:1px solid var(--hair);border-radius:4px;padding:16px;
-    box-shadow:0 1px 3px rgba(20,54,94,0.05);}
+  /* BANDS */
+  .bands{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px;}
+  @media(max-width:820px){.bands{grid-template-columns:repeat(2,1fr);}}
+  .band{background:var(--bg3);border:1px solid var(--hair);border-radius:5px;padding:18px;
+    box-shadow:0 1px 3px rgba(20,54,94,0.05);transition:transform .2s,box-shadow .2s,border-color .2s;}
   section:nth-of-type(even) .band{background:var(--card2);}
+  .band:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(20,54,94,0.10);border-color:var(--gold);}
   .band .rng{font-family:'IBM Plex Mono',monospace;font-size:0.64rem;color:var(--gold-deep);letter-spacing:0.1em;}
   .band .nm{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:700;
-    font-size:1.3rem;margin:5px 0 8px;letter-spacing:0.02em;color:var(--ink-deep);}
+    font-size:1.4rem;margin:6px 0 8px;letter-spacing:0.02em;color:var(--ink-deep);}
   .band .ds{font-size:0.78rem;color:var(--muted);line-height:1.5;}
 
-  /* ── POST PREVIEW ── */
-  .post{background:#FFFDF8;border:1px solid var(--hair2);border-radius:6px;padding:20px 22px;margin-top:8px;
-    box-shadow:0 2px 10px rgba(20,54,94,0.09);}
-  .post .ph{display:flex;align-items:center;gap:11px;margin-bottom:14px;}
-  .post .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--navy));
-    flex-shrink:0;}
-  .post .who{font-weight:600;font-size:0.9rem;color:var(--ink-deep);}
-  .post .who span{display:block;font-size:0.68rem;color:var(--muted2);font-weight:400;}
-  .post .pb{font-size:0.92rem;white-space:pre-line;line-height:1.6;color:var(--text);}
-  .post .cmt{margin-top:14px;padding-top:12px;border-top:1px solid var(--hair);
-    font-size:0.78rem;color:var(--muted);}
-  .post .cmt b{color:var(--gold-deep);font-weight:600;}
-
-  /* ── CALLOUT / FLAG ── */
-  .callout{border:1px solid var(--hair);border-radius:4px;padding:18px 20px;margin-top:16px;
-    background:var(--bg3);}
+  /* CALLOUT */
+  .callout{border:1px solid var(--hair);border-radius:5px;padding:20px 22px;margin-top:18px;background:var(--bg3);}
   section:nth-of-type(even) .callout{background:var(--card2);}
-  .callout.flag{border-color:var(--red);background:rgba(196,33,48,0.06);}
-  .callout .ct{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;
-    text-transform:uppercase;color:var(--red);margin-bottom:8px;}
-  .callout.gold{border-color:var(--hair2);}
-  .callout.gold .ct{color:var(--gold-deep);}
-  .callout p{font-size:0.92rem;color:var(--muted);}
+  .callout.flag{border-color:var(--red);background:color-mix(in srgb,var(--red) 6%,var(--bg3));}
+  .callout.gold{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 9%,var(--bg3));}
+  .callout .ct{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px;}
+  .callout.flag .ct{color:var(--red);} .callout.gold .ct{color:var(--gold-deep);}
+  .callout p{font-size:0.95rem;color:var(--muted);} .callout p b{color:var(--ink-deep);}
 
-  /* ── CHECKLIST ── */
-  .check{list-style:none;margin-top:10px;}
-  .check li{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--hair);font-size:0.95rem;}
+  /* FUNNEL (animated) */
+  .funnel{margin-top:8px;display:flex;flex-direction:column;gap:8px;}
+  .frow{display:grid;grid-template-columns:170px 1fr;gap:14px;align-items:center;}
+  @media(max-width:680px){.frow{grid-template-columns:1fr;gap:2px;}}
+  .frow .fl{font-size:0.82rem;color:var(--muted);} .frow .fl b{color:var(--ink-deep);font-weight:600;}
+  .fbar{height:30px;background:var(--navy);border-radius:3px;transform-origin:left;transform:scaleX(var(--w,1));
+    animation:fgrow linear both;animation-timeline:view();animation-range:entry 0% cover 30%;}
+  @keyframes fgrow{from{transform:scaleX(0);}to{transform:scaleX(var(--w,1));}}
+  @supports not (animation-timeline: view()){.fbar{transform:scaleX(var(--w,1));}}
+  .fbar.b1{background:var(--navy);} .fbar.b2{background:#2C5384;} .fbar.b3{background:var(--gold);} .fbar.b4{background:var(--red);}
+
+  /* CHECKLIST */
+  .check{list-style:none;margin-top:12px;}
+  .check li{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--hair);font-size:0.96rem;}
   .check li .m{color:var(--gold-deep);flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:0.8rem;margin-top:2px;}
-  .check li b{font-weight:600;color:var(--ink-deep);}
-  .check li span{color:var(--muted);}
+  .check li b{font-weight:600;color:var(--ink-deep);} .check li span{color:var(--muted);}
 
-  /* ── PILL ── */
-  .pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;
-    text-transform:uppercase;border:1px solid var(--hair2);color:var(--gold-deep);
-    padding:2px 8px;border-radius:2px;margin-left:8px;vertical-align:middle;}
-
-  /* ── CTA ── */
-  .cta{display:inline-block;background:var(--red);color:var(--paper);font-family:'Big Shoulders','Big Shoulders Display',sans-serif;
-    font-weight:600;font-size:1.05rem;letter-spacing:0.04em;padding:13px 30px;border-radius:3px;margin-top:8px;
-    transition:background .2s;box-shadow:0 3px 12px rgba(196,33,48,0.20);}
-  .cta:hover{background:var(--red-deep);}
-
-  /* ── TIMELINE ── */
+  /* MONTHS */
   .months{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px;}
-  @media(max-width:780px){.months{grid-template-columns:1fr;}}
-  .month{background:var(--bg3);border:1px solid var(--hair);border-radius:4px;padding:20px;
-    box-shadow:0 1px 3px rgba(20,54,94,0.05);}
+  @media(max-width:820px){.months{grid-template-columns:1fr;}}
+  .month{background:var(--bg3);border:1px solid var(--hair);border-radius:5px;padding:22px;
+    box-shadow:0 1px 3px rgba(20,54,94,0.05);transition:transform .2s,box-shadow .2s;}
   section:nth-of-type(even) .month{background:var(--card2);}
-  .month .mh{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.16em;
-    color:var(--gold-deep);text-transform:uppercase;}
-  .month .mt{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:700;
-    font-size:1.4rem;margin:6px 0 4px;letter-spacing:0.01em;color:var(--ink-deep);}
+  .month:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(20,54,94,0.10);}
+  .month .mh{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.16em;color:var(--gold-deep);text-transform:uppercase;}
+  .month .mt{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:700;font-size:1.5rem;margin:6px 0 4px;color:var(--ink-deep);}
   .month .mq{font-size:0.82rem;color:var(--muted);font-style:italic;margin-bottom:12px;}
-  .month ul{list-style:none;} .month li{font-size:0.8rem;color:var(--muted);padding:4px 0;
-    border-top:1px solid var(--hair);}
+  .month ul{list-style:none;} .month li{font-size:0.8rem;color:var(--muted);padding:5px 0;border-top:1px solid var(--hair);}
   .month li:first-child{border-top:none;}
 
-  /* ── FOOTER (navy band) ── */
-  footer{padding:48px 32px;border-top:1px solid var(--hair);text-align:center;background:var(--navy);}
-  footer .wordmark{font-size:1.2rem;color:var(--paper);}
-  footer p{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.16em;
-    text-transform:uppercase;color:rgba(241,232,210,0.6);margin-top:10px;}
+  /* CTA */
+  .cta{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:var(--paper);
+    font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:600;font-size:1.1rem;letter-spacing:0.04em;
+    padding:14px 32px;border-radius:3px;margin-top:8px;transition:background .2s,transform .2s;
+    box-shadow:0 6px 18px rgba(196,33,48,0.22);}
+  .cta:hover{background:var(--red-deep);transform:translateY(-2px);}
 
-  @media print{
-    .nav,.topbar{position:static;}
-    section{page-break-inside:avoid;background:#fff;}
-    body{background:#fff;}
+  /* FOOTER */
+  footer{padding:54px 32px;border-top:1px solid var(--hair);text-align:center;background:var(--navy);position:relative;z-index:2;}
+  footer .wordmark{justify-content:center;font-size:1.3rem;color:var(--paper);}
+  footer p{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.16em;text-transform:uppercase;color:rgba(241,232,210,0.6);margin-top:12px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
+    .reveal,.fbar{opacity:1!important;transform:none!important;}
+    .progress{display:none;}
   }
+  @media print{.nav,.topbar,.progress{position:static;}section{page-break-inside:avoid;background:#fff;}body{background:#fff;}body::before{display:none;}}
 </style>
 </head>
 <body>
+<div class="progress"></div>
 
 <div class="topbar">
   <div class="wordmark">PRAXIS<span>.</span></div>
-  <div class="topbar-meta">Strategy Readout &middot; Aspire</div>
+  <div class="topbar-meta"><span class="live"></span>Strategy Readout &middot; Aspire</div>
 </div>
 
 <nav class="nav" id="nav">
   <a href="#opportunity" class="active">Opportunity</a>
+  <a href="#directions">Directions</a>
   <a href="#engine">Engine</a>
   <a href="#voice">Voice</a>
   <a href="#assessment">Assessment</a>
-  <a href="#pillars">Pillars</a>
   <a href="#gaps">The 8 Gaps</a>
   <a href="#plan">90 Days</a>
   <a href="#engagement">Engagement</a>
@@ -232,15 +307,15 @@
 
 <!-- COVER -->
 <section class="cover" id="top">
-  <div class="wrap">
+  <div class="wrap inner">
     <div class="kicker">Renie Cavallari &middot; LinkedIn &middot; Sponsored Thought Leadership</div>
-    <h1>The Content<br>Engine<span class="red">.</span></h1>
+    <h1><span class="l1">The Content</span><span class="l2">Engine<span class="red">.</span></span></h1>
     <p class="sub">Turning Renie's voice and the Aspire world model into an always-on engine that earns attention and drives reservation-assessment signups.</p>
     <div class="meta-row">
       <span>Prepared by <b>Praxis</b></span>
       <span>For <b>Renie &middot; Bella &middot; Greg</b></span>
       <span>Channel <b>Renie's profile + Thought Leader Ads</b></span>
-      <span>Status <b>Strategy draft v1</b></span>
+      <span>Status <b>Strategy draft v2</b></span>
     </div>
   </div>
 </section>
@@ -248,98 +323,223 @@
 <!-- 01 OPPORTUNITY -->
 <section id="opportunity">
   <div class="wrap">
-    <div class="eyebrow"><span class="num">01</span><span class="dot live"></span><span class="tag">The Opportunity</span></div>
-    <h2>We are cleared to put Renie's voice behind paid reach.</h2>
-    <p class="lead">Aspire has clearance to run sponsored posts on LinkedIn. The play is not random promotion. It is a system: Renie publishes thought leadership in her own voice, Aspire amplifies it as Thought Leader Ads, and every piece quietly routes the right people toward one action, the reservations assessment.</p>
-    <div class="grid g3">
-      <div class="card"><span class="ix">Goal 1</span><h3>Authority</h3><p>Build Renie's personal brand as the voice operators trust on revenue, service, and mindset.</p></div>
+    <div class="eyebrow reveal"><span class="num">01</span><span class="dot live"></span><span class="tag">The Opportunity</span></div>
+    <h2 class="reveal">We are cleared to put Renie's voice <span class="accent">behind paid reach.</span></h2>
+    <p class="lead reveal">Aspire has clearance to run sponsored posts on LinkedIn. This is not random promotion. It is a system: Renie publishes thought leadership in her own voice, Aspire amplifies it as Thought Leader Ads, and every piece quietly routes the right people toward one action, the reservations assessment.</p>
+    <div class="grid g3 reveal">
+      <div class="card"><span class="ix">Goal 1</span><h3>Authority</h3><p>Make Renie the voice operators trust on revenue, service, and the human side of hospitality.</p></div>
       <div class="card"><span class="ix">Goal 2</span><h3>Engagement</h3><p>Earn comments, reshares, and saves. The post must win organically before a dollar amplifies it.</p></div>
       <div class="card"><span class="ix">Goal 3</span><h3>Pipeline</h3><p>Convert the right slice into assessment signups, scored leads that route into the Aspire offer.</p></div>
     </div>
-    <div class="quote spine">"Selling, done right, is the most hospitable thing a reservations team can do."<span class="by">The campaign's through-line, in Renie's words</span></div>
+    <div class="stats reveal">
+      <div class="stat"><div class="v" data-target="71"><span class="n">0</span><span class="u">%</span></div><div class="k">of human potential goes untapped, per Aspire's research</div></div>
+      <div class="stat"><div class="v" data-target="4"><span class="n">0</span><span class="u">%</span></div><div class="k">of performers play full out. The rest are coachable.</div></div>
+      <div class="stat"><div class="v" data-target="68"><span class="n">0</span></div><div class="k">point scale behind the reservations assessment</div></div>
+      <div class="stat"><div class="v" data-target="8"><span class="n">0</span></div><div class="k">ways reservation revenue quietly leaks</div></div>
+    </div>
   </div>
 </section>
 
-<!-- 02 ENGINE -->
+<!-- 02 STRATEGY DIRECTIONS -->
+<section id="directions">
+  <div class="wrap">
+    <div class="eyebrow reveal"><span class="num">02</span><span class="dot live"></span><span class="tag">Strategy Directions</span></div>
+    <h2 class="reveal">Four directions we can take. <span class="accent">One we should lead with.</span></h2>
+    <p class="lead muted reveal">Each direction is a posture the campaign can adopt, with real sample posts in Renie's voice. Click through them. Our recommendation for launch is the first, because of the moment we are in.</p>
+
+    <div class="dir-tabs reveal">
+      <button class="dir-tab active" data-dir="d1"><span class="dn">Direction 01<span class="rec">Lead</span></span><span class="dt">The Human Edge</span></button>
+      <button class="dir-tab" data-dir="d2"><span class="dn">Direction 02</span><span class="dt">Revenue on the Phone</span></button>
+      <button class="dir-tab" data-dir="d3"><span class="dn">Direction 03</span><span class="dt">Service Is a Culture</span></button>
+      <button class="dir-tab" data-dir="d4"><span class="dn">Direction 04</span><span class="dt">Clear the HeadTrash</span></button>
+    </div>
+
+    <div class="dir-panel active" id="d1">
+      <div class="dir-why">
+        <h3>The human edge, in the age of AI.</h3>
+        <p>As AI floods hospitality and every operator is sold a bot for the phones, the most valuable thing in the building becomes the opposite: a real human voice a guest can feel. Renie owns the contrarian-but-true position. Use AI strategically for prep, data, and follow-up. Never automate the connection.</p>
+        <div class="lbl">Why now</div>
+        <p>It is the single most-discussed topic in business, and almost everyone is saying the same thing. Renie says the braver, truer thing, and it is exactly her brand. Highest reach, highest shareability, and a clean hook: is your team's human edge actually sharp?</p>
+        <div class="lbl">Converts via</div>
+        <p>"Measure the human edge your team has on the phone." The assessment scores the very thing AI can't replace.</p>
+      </div>
+      <div>
+        <div class="post">
+          <div class="tag">Sample &middot; hero post</div>
+          <div class="ph"><div class="av">R</div><div class="who">Renie Cavallari<span>Founder &amp; Chief Instigator, Aspire</span></div></div>
+          <div class="pb">Every resort is racing to put AI on the phones.
+
+Thirty years of listening to guests tells me the opposite is about to pay off. The more the world automates, the more a real human voice becomes the thing people will pay a premium for.
+
+Your guests can get a chatbot anywhere. What they cannot get anywhere is someone who catches the small hesitation when they say "it's our anniversary," and makes the whole call about that.
+
+So use AI for what it is great at. The prep. The data. The follow-up nobody has time for. But the moment a guest is deciding whether to trust you with their once-a-year escape? That is human work, and it is the most valuable real estate in your business.
+
+Automate the busywork. Never automate the connection.
+
+Where is your team letting a screen do what a voice should?</div>
+          <div class="cmt"><b>First comment:</b> We built a 5-minute assessment that scores the human edge your reservations team has on the phone. Link below.</div>
+        </div>
+        <div class="post">
+          <div class="tag">Sample &middot; short reframe</div>
+          <div class="pb">"Will AI replace our reservations team?"
+
+Wrong question.
+
+The right one: in a world drowning in automation, what is a genuinely human voice suddenly worth?
+
+More than it ever has been. Do not cut the one thing that is about to become your edge.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dir-panel" id="d2">
+      <div class="dir-why">
+        <h3>The revenue hiding on the phone.</h3>
+        <p>Most resorts lose more revenue in their reservation calls than they ever lose to the OTAs. Not to a competitor, to a "sure, I can book that for you" when the guest was ready to be guided toward more. The leak is invisible because the call still converted, just at the floor instead of the ceiling.</p>
+        <div class="lbl">Why now</div>
+        <p>Budget and RevPAR pressure make this land with GMs and revenue leaders who read everything through the P&amp;L.</p>
+        <div class="lbl">Converts via</div>
+        <p>The clearest path to the diagnostic. "You can't fix a leak you can't see. Here is the one that finds yours."</p>
+      </div>
+      <div>
+        <div class="post">
+          <div class="tag">Sample &middot; revenue post</div>
+          <div class="ph"><div class="av">R</div><div class="who">Renie Cavallari<span>Founder &amp; Chief Instigator, Aspire</span></div></div>
+          <div class="pb">Most resorts lose more revenue on the phone than they ever lose to the OTAs.
+
+Not to a competitor. To a "sure, I can book that for you," when the guest was hoping to be guided toward more.
+
+The leak is invisible because the call still converted. It just converted at the floor instead of the ceiling.
+
+You cannot fix a leak you cannot see.</div>
+          <div class="cmt"><b>First comment:</b> Comment SCORE and I will send you the 5-minute diagnostic that finds yours.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dir-panel" id="d3">
+      <div class="dir-why">
+        <h3>Service is a culture, not a script.</h3>
+        <p>You cannot train your way to great service one script at a time. You build a culture where selling and caring are the same act. This is the purest expression of Aspire's brand, and it carries the line Renie says best: selling, done right, is the most hospitable thing you can do.</p>
+        <div class="lbl">Why now</div>
+        <p>Differentiation in a market where every property claims great service. This is the brand-building direction.</p>
+        <div class="lbl">Converts via</div>
+        <p>Softer sell, deeper trust. Routes to the assessment as a way to see whether your culture shows up on the call.</p>
+      </div>
+      <div>
+        <div class="post">
+          <div class="tag">Sample &middot; the original you liked</div>
+          <div class="ph"><div class="av">R</div><div class="who">Renie Cavallari<span>Founder &amp; Chief Instigator, Aspire</span></div></div>
+          <div class="pb">Your reservations team thinks selling will ruin the guest experience.
+
+The opposite is true. The most hospitable thing you can do is help a guest get more of what they came for. The couple booking an anniversary doesn't want the cheapest room. They want the night to be unforgettable.
+
+When an agent "just takes the order," that isn't service. It's a missed chance to care.
+
+Selling, done right, is hospitality.
+
+What is one way your team could help guests get more of what they came for?</div>
+          <div class="cmt"><b>First comment:</b> The 5-minute assessment shows where your service does, and doesn't, turn into revenue.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dir-panel" id="d4">
+      <div class="dir-why">
+        <h3>Clear the head trash.</h3>
+        <p>The number one thing killing reservation revenue isn't the market, the rates, or the OTAs. It is head trash, the quiet beliefs that cap a team before a single call. This is Renie's signature concept and her broadest-reach material.</p>
+        <div class="lbl">Why now</div>
+        <p>Widest audience. Mindset content travels far beyond hospitality and builds the top of the funnel fast.</p>
+        <div class="lbl">Converts via</div>
+        <p>Warms a broad audience, then narrows. Lower direct conversion, highest reach and follower growth.</p>
+      </div>
+      <div>
+        <div class="post">
+          <div class="tag">Sample &middot; mindset post</div>
+          <div class="ph"><div class="av">R</div><div class="who">Renie Cavallari<span>Founder &amp; Chief Instigator, Aspire</span></div></div>
+          <div class="pb">The number one thing killing your reservation revenue isn't the market, the rates, or the OTAs.
+
+It's head trash.
+
+The agent who believes "people only care about price" will prove themselves right on every call. The one who believes "I'm here to help them have the trip of their life" will prove that one right instead.
+
+Same phone. Same rate sheet. Completely different revenue.
+
+Mindset isn't soft. It's the highest-leverage thing on your floor.</div>
+          <div class="cmt"><b>First comment:</b> Curious where your team's head is at? The assessment makes it visible. Link below.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout gold reveal"><div class="ct">Recommendation</div><p><b>Lead the launch with Direction 01, The Human Edge.</b> It is the most timely, the most shareable, and the most unmistakably Renie. Open the campaign on the AI conversation everyone is already having, then rotate in revenue, culture, and mindset as the audience warms.</p></div>
+  </div>
+</section>
+
+<!-- 03 ENGINE -->
 <section id="engine">
   <div class="wrap">
-    <div class="eyebrow"><span class="num">02</span><span class="dot"></span><span class="tag">How It Works</span></div>
-    <h2>One engine. <span class="accent">Three layers of content, only one is sensitive.</span></h2>
-    <p class="lead muted">The reason "let Greg run Aspire's content from Praxis" felt complicated is data sovereignty. The fix: the engine never moves Aspire's corpus. It produces three classes of content, and only one is private.</p>
-    <div class="grid g3">
+    <div class="eyebrow reveal"><span class="num">03</span><span class="dot"></span><span class="tag">How It Works</span></div>
+    <h2 class="reveal">One engine. <span class="accent">Three layers of content, only one is sensitive.</span></h2>
+    <p class="lead muted reveal">The reason "let Greg run Aspire's content from Praxis" felt complicated is data sovereignty. The fix: the engine never moves Aspire's corpus. Tap each stage to see how it works.</p>
+    <div class="grid g3 reveal" style="margin-bottom:26px">
       <div class="card"><span class="ix">Stays private</span><h3>Proprietary source</h3><p>The 892-source world model, assessment data, methodology. Lives in Aspire's project. Greg never needs the raw corpus.</p></div>
       <div class="card"><span class="ix">Shareable</span><h3>Derived voice layer</h3><p>Renie's voice profile, content pillars, approved hooks. Publishable by nature, a brand's voice is meant for the public.</p></div>
       <div class="card"><span class="ix">Public by design</span><h3>The posts</h3><p>The LinkedIn output itself. The least sensitive thing in the system.</p></div>
     </div>
-    <div class="flow">
-      <div class="step"><div class="n">01</div><div class="t">Source</div><div class="d">World model + voice canon, Aspire-side</div></div>
-      <div class="step"><div class="n">02</div><div class="t">Voice</div><div class="d">Renie profile + pillars</div></div>
-      <div class="step"><div class="n">03</div><div class="t">Draft</div><div class="d">On-voice posts per theme</div></div>
-      <div class="step"><div class="n">04</div><div class="t">Bless</div><div class="d">Bella + Renie approve themes</div></div>
-      <div class="step"><div class="n">05</div><div class="t">Publish</div><div class="d">Renie's profile, then sponsor</div></div>
-      <div class="step"><div class="n">06</div><div class="t">Learn</div><div class="d">Performance feeds back in</div></div>
+    <div class="stepper reveal" id="stepper">
+      <div class="step"><button data-h="Source" data-w="Aspire-side" data-d="The world model and the voice canon (keynotes, the poetry, the frameworks) sit in Aspire's own Supabase project. Nothing proprietary ever leaves." class="active"><span class="sn">01</span><span class="st">Source</span></button></div>
+      <div class="step"><button data-h="Voice" data-w="Derived layer" data-d="A synthesized Renie voice profile and content pillars are distilled from the source. This is publishable by nature, and it is the only thing Greg needs to operate."><span class="sn">02</span><span class="st">Voice</span></button></div>
+      <div class="step"><button data-h="Draft" data-w="On-voice" data-d="The engine drafts posts on an approved theme, grounded in a specific source idea so they sound like Renie and never generic. A human edits before anything ships."><span class="sn">03</span><span class="st">Draft</span></button></div>
+      <div class="step"><button data-h="Bless" data-w="Theme-level" data-d="Bella and Renie approve the monthly theme once, not every post. That single gate enforces governance without slowing the cadence."><span class="sn">04</span><span class="st">Bless</span></button></div>
+      <div class="step"><button data-h="Publish" data-w="Renie + ads" data-d="Posts go out organically from Renie's profile, then Aspire sponsors the winners as Thought Leader Ads from Campaign Manager."><span class="sn">05</span><span class="st">Publish</span></button></div>
+      <div class="step"><button data-h="Learn" data-w="Feedback loop" data-d="Engagement and conversion data flow back into the world model, so the engine concentrates on the hooks and themes that actually produce assessments."><span class="sn">06</span><span class="st">Learn</span></button></div>
     </div>
-    <div class="callout gold"><div class="ct">The boundary, honored</div><p>The engine lives in Aspire's project. Greg operates it with a key. Praxis holds the playbook and the build, not the corpus. Renie owns the brand and the approval. Built by Praxis, operated by Greg, blessed by Renie, hosted in Aspire's house.</p></div>
+    <div class="step-detail" id="stepDetail">
+      <div class="sd-h">Source <span class="where">Aspire-side</span></div>
+      <p>The world model and the voice canon (keynotes, the poetry, the frameworks) sit in Aspire's own Supabase project. Nothing proprietary ever leaves.</p>
+    </div>
+    <div class="callout gold reveal"><div class="ct">The boundary, honored</div><p>Built by Praxis, operated by Greg, blessed by Renie, hosted in Aspire's house. Greg operates with a key into the engine, never the raw corpus.</p></div>
   </div>
 </section>
 
-<!-- 03 VOICE -->
+<!-- 04 VOICE -->
 <section id="voice">
   <div class="wrap">
-    <div class="eyebrow"><span class="num">03</span><span class="dot"></span><span class="tag">Renie's Voice</span></div>
-    <h2>It has to read as genuinely hers.</h2>
-    <p class="lead muted">Ghostwriting a company page is forgiving. Ghostwriting a real person's first-person feed is not. The voice profile below is grounded in her keynotes, her speaking material, and her poetry, so every post sounds like Renie and not like a brand.</p>
-    <div class="grid g2">
+    <div class="eyebrow reveal"><span class="num">04</span><span class="dot"></span><span class="tag">Renie's Voice</span></div>
+    <h2 class="reveal">It has to read as <span class="accent">genuinely hers.</span></h2>
+    <p class="lead muted reveal">Ghostwriting a company page is forgiving. Ghostwriting a real person's first-person feed is not. The profile is grounded in her keynotes, her speaking material, and her poetry, so every post sounds like Renie.</p>
+    <div class="grid g2 reveal">
       <div class="card"><span class="ix">How she builds a point</span><h3>Reframe, truth, proof, story, action</h3><p>Open with a provocative question. State a blunt truth. Back it with a number. Tell a self-deprecating story where she is the example. Close on action.</p></div>
       <div class="card"><span class="ix">Her lexicon</span><h3>Plain, bold, hers</h3><p>Head trash. Play full out. Shine your light. Human beings, not human doings. "Hope is not a strategy." "No one gives you stress, you give it to yourself."</p></div>
     </div>
-    <div class="grid g2" style="margin-top:14px">
-      <div class="card"><span class="ix">Sounds like Renie</span><p style="color:var(--ink-deep);font-style:italic">"Here is the truth no one says out loud: no one gives you stress. You hand it to yourself. I did it yesterday, guilty over a haircut. Get over it. Give to yourself first, or you have nothing left to give anyone."</p></div>
-      <div class="card"><span class="ix">Does not sound like Renie</span><p style="font-style:italic">"In today's fast-paced environment, leaders should prioritize self-care to optimize wellbeing and productivity." Hedged, no story, no edge, no number.</p></div>
-    </div>
+    <div class="quote spine reveal">Automate the busywork. Never automate the connection.<span class="by">The launch line, in Renie's voice</span></div>
   </div>
 </section>
 
-<!-- 04 ASSESSMENT -->
+<!-- 05 ASSESSMENT -->
 <section id="assessment">
   <div class="wrap">
-    <div class="eyebrow"><span class="num">04</span><span class="dot live"></span><span class="tag">The Conversion Target</span></div>
-    <h2>Every post points to one thing: the assessment.</h2>
-    <p class="lead muted">A reservations sales assessment. 17 questions, scored <span class="mono">17&ndash;68</span>, sorted into four bands. It diagnoses how well a team turns inquiries into bookings, and reframes order-taking into a buying environment. The four bands are also the campaign's best engagement device: "which one is your team?"</p>
-    <div class="bands">
+    <div class="eyebrow reveal"><span class="num">05</span><span class="dot live"></span><span class="tag">The Conversion Target</span></div>
+    <h2 class="reveal">Every post points to one thing: <span class="accent">the assessment.</span></h2>
+    <p class="lead muted reveal">A reservations sales assessment. 17 questions, scored <span class="mono">17&ndash;68</span>, sorted into four bands. It diagnoses how well a team turns inquiries into bookings, and it doubles as the campaign's best engagement device: which one is your team?</p>
+    <div class="bands reveal">
       <div class="band"><div class="rng">17&ndash;32</div><div class="nm">Foundation</div><div class="ds">Still taking orders. Reset from transactional to a buying environment.</div></div>
       <div class="band"><div class="rng">33&ndash;47</div><div class="nm">Consistency</div><div class="ds">Good, but it depends who is on shift. Make it repeatable.</div></div>
       <div class="band"><div class="rng">48&ndash;59</div><div class="nm">Sharpening</div><div class="ds">Selling well, leaving the premium on the table.</div></div>
       <div class="band"><div class="rng">60&ndash;68</div><div class="nm">Sustain &amp; Scale</div><div class="ds">The top tier. Benchmark, certify, and coach to stay there.</div></div>
     </div>
-    <div class="callout flag"><div class="ct">One build item before launch</div><p>The funnel is mostly built: a self-serve quiz path, magic-link reports, and HubSpot sync already exist. But the default flow has been event-cohort and wave-released. Cold LinkedIn traffic needs the default set to instant: complete, score, report, no wait. A small flip, not a rebuild.</p></div>
-  </div>
-</section>
-
-<!-- 05 PILLARS -->
-<section id="pillars">
-  <div class="wrap">
-    <div class="eyebrow"><span class="num">05</span><span class="dot"></span><span class="tag">Content Pillars</span></div>
-    <h2>Six pillars, tilted toward the people who would take the assessment.</h2>
-    <p class="lead muted">Renie's voice is broad. The assessment is specific to hospitality reservations revenue. So the content aims at that buyer: revenue, reservations, and GM leaders. Each pillar is a real Aspire frame.</p>
-    <div class="grid g3">
-      <div class="card"><span class="ix">Pillar 01 &middot; Mindset</span><h3>Clear the HeadTrash</h3><p>Perspective drives performance. Thoughts drive behavior.</p></div>
-      <div class="card"><span class="ix">Pillar 02 &middot; Service</span><h3>Service Is a Culture</h3><p>You cannot train your way to great service. The differentiator pillar.</p></div>
-      <div class="card"><span class="ix">Pillar 03 &middot; Performance</span><h3>Play Full Out</h3><p>The four levels. Passion as fuel. Only the top tier plays all in.</p></div>
-      <div class="card"><span class="ix">Pillar 04 &middot; Leadership</span><h3>Lead in Alignment</h3><p>Misalignment is the most expensive thing in the business.</p></div>
-      <div class="card"><span class="ix">Pillar 05 &middot; Change</span><h3>Disrupt the Status Quo</h3><p>Change is like bad weather. Hope is not a strategy.</p></div>
-      <div class="card"><span class="ix">Pillar 06 &middot; Human</span><h3>Give to Yourself</h3><p>The relatable, reshare-friendly pillar that builds the broad audience.</p></div>
-    </div>
+    <div class="callout flag reveal"><div class="ct">One build item before launch</div><p>The funnel is mostly built: a self-serve quiz path, magic-link reports, and HubSpot sync already exist. But the default flow was event-cohort and wave-released. Cold LinkedIn traffic needs the default set to instant: complete, score, report, no wait. A small flip, not a rebuild.</p></div>
   </div>
 </section>
 
 <!-- 06 GAPS -->
 <section id="gaps">
   <div class="wrap">
-    <div class="eyebrow"><span class="num">06</span><span class="dot"></span><span class="tag">The Content Engine Inside the Assessment</span></div>
-    <h2>The 8 gap patterns become 8 public hooks.</h2>
-    <p class="lead muted">The assessment already names the eight ways reservation revenue leaks. Each internal diagnosis becomes a public, non-judgmental hook in Renie's voice that ends at "find your gap, take the assessment."</p>
-    <div class="rows">
+    <div class="eyebrow reveal"><span class="num">06</span><span class="dot"></span><span class="tag">The Engine Inside the Assessment</span></div>
+    <h2 class="reveal">The 8 gap patterns become <span class="accent">8 public hooks.</span></h2>
+    <p class="lead muted reveal">The assessment already names the eight ways reservation revenue leaks. Each internal diagnosis becomes a public, non-judgmental hook that ends at "find your gap, take the assessment."</p>
+    <div class="rows reveal">
       <div class="row"><div class="rn">1</div><div class="rl"><span class="int">Order-Taker Identity</span>Identity</div><div class="rr"><b>"Your reservations team is a revenue team that happens to answer the phone."</b> Call handlers, or revenue creators?</div></div>
       <div class="row"><div class="rn">2</div><div class="rl"><span class="int">Conversation Quality</span>The conversation</div><div class="rr"><b>"Friendly is not the same as effective."</b> The difference is the questions great agents ask before they quote a price.</div></div>
       <div class="row"><div class="rn">3</div><div class="rl"><span class="int">Premium Product Story</span>The story</div><div class="rr"><b>"Guests don't buy the suite. They buy what it makes possible."</b> Defaulting to price is a story problem, not a discount problem.</div></div>
@@ -355,19 +555,19 @@
 <!-- 07 PLAN -->
 <section id="plan">
   <div class="wrap">
-    <div class="eyebrow"><span class="num">07</span><span class="dot"></span><span class="tag">The 90-Day Plan</span></div>
-    <h2>A theme a month. A format a week.</h2>
-    <p class="lead muted">A monthly theme gives depth and a campaign arc. A weekly format rotation keeps it from going stale, which LinkedIn punishes. Roughly three posts a week, with the band self-diagnostic as the recurring conversion post and the link always in the first comment.</p>
-    <div class="months">
-      <div class="month"><div class="mh">Month 1 &middot; Gaps 1 + 8</div><div class="mt">Identity</div><div class="mq">"It is not an order desk."</div><ul><li>HeadTrash + Service Is a Culture</li><li>Reframe the team from cost to revenue</li><li>Anchor the campaign's spine</li></ul></div>
-      <div class="month"><div class="mh">Month 2 &middot; Gaps 2 + 3 + 7</div><div class="mt">The Stay</div><div class="mq">"Sell the stay, not the room."</div><ul><li>Buying environment, benefit language</li><li>Premium story, experience design</li><li>The consultative conversation</li></ul></div>
-      <div class="month"><div class="mh">Month 3 &middot; Gaps 4 + 5 + 6</div><div class="mt">Make It Stick</div><div class="mq">"Stop the leak."</div><ul><li>Lead in Alignment, leadership365</li><li>Follow-up, coaching cadence</li><li>Selling with visibility</li></ul></div>
+    <div class="eyebrow reveal"><span class="num">07</span><span class="dot"></span><span class="tag">The 90-Day Plan</span></div>
+    <h2 class="reveal">A theme a month. <span class="accent">A format a week.</span></h2>
+    <p class="lead muted reveal">A monthly theme gives depth and a campaign arc. A weekly format rotation keeps it from going stale, which LinkedIn punishes. Roughly three posts a week, with the band self-diagnostic as the recurring conversion post.</p>
+    <div class="months reveal">
+      <div class="month"><div class="mh">Month 1 &middot; The Human Edge</div><div class="mt">AI &amp; Connection</div><div class="mq">"Automate the busywork. Never automate the connection."</div><ul><li>Open on the AI conversation</li><li>Human voice as the premium differentiator</li><li>Anchor Renie's contrarian position</li></ul></div>
+      <div class="month"><div class="mh">Month 2 &middot; The Stay</div><div class="mt">Sell the Stay</div><div class="mq">"Sell the stay, not the room."</div><ul><li>Buying environment, benefit language</li><li>Premium story, experience design</li><li>The consultative conversation</li></ul></div>
+      <div class="month"><div class="mh">Month 3 &middot; Make It Stick</div><div class="mt">Stop the Leak</div><div class="mq">"Training is an event. Performance is a habit."</div><ul><li>Follow-up and lifecycle revenue</li><li>Coaching cadence, alignment</li><li>Selling with visibility</li></ul></div>
     </div>
-    <div class="flow" style="margin-top:18px">
-      <div class="step"><div class="n">Week 1</div><div class="t">Reframe</div><div class="d">Provocative hot take. Built for reach.</div></div>
-      <div class="step"><div class="n">Week 2</div><div class="t">Story</div><div class="d">A personal Renie story. Trust and reshares.</div></div>
-      <div class="step"><div class="n">Week 3</div><div class="t">Teach</div><div class="d">A carousel on one gap. Saves and shares.</div></div>
-      <div class="step"><div class="n">Week 4</div><div class="t">Diagnose</div><div class="d">"Which band are you?" The conversion post.</div></div>
+    <div class="grid reveal" style="grid-template-columns:repeat(4,1fr);margin-top:18px">
+      <div class="card"><span class="ix">Week 1</span><h3>Reframe</h3><p>A provocative hot take. Built for reach.</p></div>
+      <div class="card"><span class="ix">Week 2</span><h3>Story</h3><p>A personal Renie story. Trust and reshares.</p></div>
+      <div class="card"><span class="ix">Week 3</span><h3>Teach</h3><p>A carousel on one idea. Saves and shares.</p></div>
+      <div class="card"><span class="ix">Week 4</span><h3>Diagnose</h3><p>"Which band are you?" The conversion post.</p></div>
     </div>
   </div>
 </section>
@@ -375,26 +575,13 @@
 <!-- 08 ENGAGEMENT -->
 <section id="engagement">
   <div class="wrap">
-    <div class="eyebrow"><span class="num">08</span><span class="dot"></span><span class="tag">Engagement Mechanics</span></div>
-    <h2>How we actually earn comments, likes, and reshares.</h2>
-    <div class="grid g2">
-      <div class="card"><span class="ix">Reach discipline</span><h3>Link in the first comment</h3><p>LinkedIn suppresses posts with outbound links in the body. The link goes in the first comment, or we run comment-to-DM ("comment SCORE and I'll send it"), which also captures a lead.</p></div>
-      <div class="card"><span class="ix">Comment trigger</span><h3>End on one real question</h3><p>Comments are the single strongest signal. "Which of these is your team?" framing turns a post into a conversation.</p></div>
+    <div class="eyebrow reveal"><span class="num">08</span><span class="dot"></span><span class="tag">Engagement Mechanics</span></div>
+    <h2 class="reveal">How we actually earn <span class="accent">comments, likes, and reshares.</span></h2>
+    <div class="grid g2 reveal">
+      <div class="card"><span class="ix">Reach discipline</span><h3>Link in the first comment</h3><p>LinkedIn suppresses posts with outbound links in the body. The link goes in the first comment, or we run comment-to-DM, which also captures a lead.</p></div>
+      <div class="card"><span class="ix">Comment trigger</span><h3>End on one real question</h3><p>Comments are the single strongest signal. "Which of these is your team?" turns a post into a conversation.</p></div>
       <div class="card"><span class="ix">First 90 minutes</span><h3>Reply fast</h3><p>Renie, or Greg on her behalf, replies to every comment in the first 60 to 90 minutes. That window compounds reach.</p></div>
       <div class="card"><span class="ix">Proof</span><h3>Feature client wins</h3><p>Auberge and others, with permission. Social proof plus their network reach.</p></div>
-    </div>
-    <div class="post">
-      <div class="ph"><div class="av"></div><div class="who">Renie Cavallari<span>Founder &amp; Chief Instigator, Aspire</span></div></div>
-      <div class="pb">Your reservations team thinks selling will ruin the guest experience.
-
-The opposite is true. The most hospitable thing you can do is help a guest get more of what they came for. The couple booking an anniversary doesn't want the cheapest room. They want the night to be unforgettable.
-
-When an agent "just takes the order," that isn't service. It's a missed chance to care.
-
-Selling, done right, is hospitality.
-
-What is one way your team could help guests get more of what they came for?</div>
-      <div class="cmt"><b>First comment:</b> We built a 5-minute assessment that shows exactly where reservation revenue leaks. Link below.</div>
     </div>
   </div>
 </section>
@@ -402,14 +589,14 @@ What is one way your team could help guests get more of what they came for?</div
 <!-- 09 OPERATING -->
 <section id="operating">
   <div class="wrap">
-    <div class="eyebrow"><span class="num">09</span><span class="dot"></span><span class="tag">Operating Model</span></div>
-    <h2>Who does what.</h2>
-    <p class="lead muted">Approval happens at the theme level, not the post level. Bella and Renie bless a month's theme once. Greg then operates with autonomy inside it. That single constraint enforces governance without slowing anyone down.</p>
-    <div class="grid g2">
-      <div class="card"><span class="ix">Operator</span><h3>Greg</h3><p>Creates, edits, and schedules every post. Runs the cadence and replies in the engagement window. Works from a key into the engine, never the raw corpus.</p></div>
+    <div class="eyebrow reveal"><span class="num">09</span><span class="dot"></span><span class="tag">Operating Model</span></div>
+    <h2 class="reveal">Who does what.</h2>
+    <p class="lead muted reveal">Approval happens at the theme level, not the post level. Bella and Renie bless a month's theme once. Greg then operates with autonomy inside it.</p>
+    <div class="grid g2 reveal">
+      <div class="card"><span class="ix">Operator</span><h3>Greg</h3><p>Creates, edits, and schedules every post. Runs the cadence and the engagement window. Works from a key into the engine, never the raw corpus.</p></div>
       <div class="card"><span class="ix">Approvers</span><h3>Bella &amp; Renie</h3><p>Bless the monthly theme and the voice. They review themes, not a weekly queue.</p></div>
       <div class="card"><span class="ix">Builder</span><h3>Praxis</h3><p>Builds and orchestrates the engine, holds the playbook, closes the performance loop.</p></div>
-      <div class="card"><span class="ix">The face</span><h3>Renie's profile</h3><p>Posts publish organically from Renie, then Aspire sponsors them as Thought Leader Ads from Campaign Manager.</p></div>
+      <div class="card"><span class="ix">The face</span><h3>Renie's profile</h3><p>Posts publish organically from Renie, then Aspire sponsors them as Thought Leader Ads.</p></div>
     </div>
   </div>
 </section>
@@ -417,55 +604,94 @@ What is one way your team could help guests get more of what they came for?</div
 <!-- 10 OUTLOOK -->
 <section id="outlook">
   <div class="wrap">
-    <div class="eyebrow"><span class="num">10</span><span class="dot"></span><span class="tag">What Success Looks Like</span></div>
-    <h2>Judge it on a 90-day curve, not a week-one spike.</h2>
-    <p class="lead muted">This is a compounding authority and pipeline play, not a short-term lead firehose. Here is what good looks like at each checkpoint, so the team measures it on the right timeline and a strong program is not killed early on the wrong metric.</p>
-    <div class="months">
-      <div class="month"><div class="mh">Day 0 to 30</div><div class="mt">Prove the Voice</div><div class="mq">Goal: it sounds unmistakably like Renie, and we post without fail.</div><ul><li>Three posts a week, held consistently</li><li>The audience confirms it reads as her</li><li>Engagement baseline set: which hooks land</li><li>First assessment completions trickle in</li></ul></div>
-      <div class="month"><div class="mh">Day 31 to 60</div><div class="mt">Build the Audience</div><div class="mq">Goal: grow the right followers and a pool worth retargeting.</div><ul><li>Follower and comment growth among reservations, revenue, and GM leaders</li><li>Reshares climbing, band self-diagnostic posts outperforming</li><li>A retargeting pool large enough to sponsor to</li><li>A steady, small flow of assessment starts</li></ul></div>
-      <div class="month"><div class="mh">Day 61 to 90</div><div class="mt">Convert and Compound</div><div class="mq">Goal: a qualified, growing trickle of leads and clear conversion data.</div><ul><li>Completed assessments Greg can work as warm leads</li><li>A clear read on which pillars and gaps convert</li><li>Spend concentrating on the winners</li><li>Authority signals: profile views, inbound DMs</li></ul></div>
+    <div class="eyebrow reveal"><span class="num">10</span><span class="dot"></span><span class="tag">What Success Looks Like</span></div>
+    <h2 class="reveal">Judge it on a 90-day curve, <span class="accent">not a week-one spike.</span></h2>
+    <p class="lead muted reveal">This is a compounding authority and pipeline play, not a short-term lead firehose. Here is what good looks like at each checkpoint, so a strong program isn't cut early on the wrong metric.</p>
+    <div class="months reveal">
+      <div class="month"><div class="mh">Day 0 to 30</div><div class="mt">Prove the Voice</div><div class="mq">It sounds unmistakably like Renie, and we post without fail.</div><ul><li>Three posts a week, held consistently</li><li>The audience confirms it reads as her</li><li>Engagement baseline set: which hooks land</li></ul></div>
+      <div class="month"><div class="mh">Day 31 to 60</div><div class="mt">Build the Audience</div><div class="mq">Grow the right followers and a pool worth retargeting.</div><ul><li>Growth among reservations, revenue, GM leaders</li><li>Reshares climbing, diagnostics outperforming</li><li>A steady, small flow of assessment starts</li></ul></div>
+      <div class="month"><div class="mh">Day 61 to 90</div><div class="mt">Convert &amp; Compound</div><div class="mq">A qualified, growing trickle of leads and clear data.</div><ul><li>Completed assessments Greg works as warm leads</li><li>A clear read on what converts</li><li>Spend concentrating on the winners</li></ul></div>
     </div>
-    <div class="callout gold"><div class="ct">The honest measure</div><p>Impressions are a diagnostic, not a goal. The north star is compounding authority plus a qualified pipeline. Direct cold-traffic signups will be modest at first, conversion is the hardest part of this and improves as the audience warms and the funnel tightens. If month one is judged on signup volume alone, a good program gets cut before it compounds. Set that expectation with everyone before the first post runs.</p></div>
+    <div class="callout gold reveal" style="margin-top:24px"><div class="ct">The funnel, honestly</div><p style="margin-bottom:14px">Reach is large, conversion is the hard part, and it tightens as the audience warms. Plan for the shape, not a week-one spike.</p>
+      <div class="funnel">
+        <div class="frow"><div class="fl"><b>Impressions</b> sponsored reach</div><div class="fbar b1" style="--w:1"></div></div>
+        <div class="frow"><div class="fl"><b>Engagement</b> comments, reshares</div><div class="fbar b2" style="--w:0.5"></div></div>
+        <div class="frow"><div class="fl"><b>Assessment starts</b> the curious</div><div class="fbar b3" style="--w:0.2"></div></div>
+        <div class="frow"><div class="fl"><b>Qualified leads</b> Greg works</div><div class="fbar b4" style="--w:0.08"></div></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- 11 SIGN-OFF + NEXT -->
+<!-- 11 SIGN-OFF -->
 <section id="signoff">
   <div class="wrap">
-    <div class="eyebrow"><span class="num">11</span><span class="dot live"></span><span class="tag">Sign-off &amp; Next Steps</span></div>
-    <h2>What Renie needs to bless before anything runs.</h2>
-    <p class="lead muted">The band and gap language below is drafted and pending Renie's validation. It must be blessed before it goes near a public post.</p>
-    <ul class="check">
-      <li><span class="m">[ ]</span><span><b>Band names</b> and the internal revenue labels. Public names are Foundation, Consistency, Sharpening, Sustain &amp; Scale.</span></li>
+    <div class="eyebrow reveal"><span class="num">11</span><span class="dot live"></span><span class="tag">Sign-off &amp; Next Steps</span></div>
+    <h2 class="reveal">What Renie needs to bless <span class="accent">before anything runs.</span></h2>
+    <p class="lead muted reveal">The band and gap language is drafted and pending Renie's validation. It must be blessed before it goes near a public post.</p>
+    <ul class="check reveal">
+      <li><span class="m">[ ]</span><span><b>The launch angle</b>, the AI-and-human-connection position as Month 1's spine.</span></li>
+      <li><span class="m">[ ]</span><span><b>Band names</b> and the internal revenue labels. Public names: Foundation, Consistency, Sharpening, Sustain &amp; Scale.</span></li>
       <li><span class="m">[ ]</span><span><b>Gap language</b> and her preferred Aspire-native naming for the eight hooks.</span></li>
-      <li><span class="m">[ ]</span><span><b>Friendly vs consultative</b> selling, the line she draws between warm service and real selling.</span></li>
       <li><span class="m">[ ]</span><span><b>The AI position</b>, what is and is not safe to say about technology and automation.</span></li>
-      <li><span class="m">[ ]</span><span><b>The spine</b>, her voice on service-to-revenue, the differentiator the whole campaign rests on.</span></li>
+      <li><span class="m">[ ]</span><span><b>The spine</b>, her voice on service-to-revenue, the differentiator the campaign rests on.</span></li>
     </ul>
-    <div class="callout gold" style="margin-top:26px"><div class="ct">This month</div><p>1. Bless the voice profile and the six pillars. &nbsp; 2. Flip the assessment to instant self-serve for cold traffic. &nbsp; 3. Get the <b>aspire&hellip;to be</b> book into the world model to strengthen voice grounding. &nbsp; 4. Pilot one pillar to pressure-test the voice. &nbsp; 5. Stand up Greg's operating interface.</p></div>
-    <div style="margin-top:28px"><a href="#top" class="cta">Pilot Month 1: Identity &rarr;</a></div>
+    <div class="callout gold reveal" style="margin-top:26px"><div class="ct">This month</div><p>1. Pick the launch direction (we recommend The Human Edge). &nbsp; 2. Bless the voice profile and pillars. &nbsp; 3. Flip the assessment to instant self-serve. &nbsp; 4. Add the <b>aspire&hellip;to be</b> book to strengthen voice grounding. &nbsp; 5. Pilot Month 1 and stand up Greg's interface.</p></div>
+    <div style="margin-top:30px"><a href="#directions" class="cta">Review the directions &rarr;</a></div>
   </div>
 </section>
 
 <footer>
   <div class="wordmark">PRAXIS<span style="color:var(--red)">.</span></div>
-  <p>Operational &middot; Intelligence &nbsp;|&nbsp; Strategy draft v1 &nbsp;|&nbsp; Language pending Renie validation</p>
+  <p>Operational &middot; Intelligence &nbsp;|&nbsp; Strategy draft v2 &nbsp;|&nbsp; Language pending Renie validation</p>
 </footer>
 
 <script>
+  // section nav scroll-spy
   const links = [...document.querySelectorAll('#nav a')];
   const map = {};
   links.forEach(a => { const id = a.getAttribute('href').slice(1); const el = document.getElementById(id); if (el) map[id] = a; });
-  const obs = new IntersectionObserver((entries) => {
+  const navObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const a = map[e.target.id]; if (a){ a.classList.add('active'); a.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'}); }
+    }});
+  }, { rootMargin: '-48% 0px -50% 0px' });
+  Object.values(map).forEach(a => { const el = document.getElementById(a.getAttribute('href').slice(1)); if (el) navObs.observe(el); });
+
+  // strategy direction tabs
+  const tabs = [...document.querySelectorAll('.dir-tab')];
+  const panels = [...document.querySelectorAll('.dir-panel')];
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    t.classList.add('active');
+    const p = document.getElementById(t.dataset.dir); if (p) p.classList.add('active');
+  }));
+
+  // engine stepper
+  const steps = [...document.querySelectorAll('#stepper button')];
+  const detail = document.getElementById('stepDetail');
+  steps.forEach(b => b.addEventListener('click', () => {
+    steps.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    detail.innerHTML = '<div class="sd-h">' + b.dataset.h + ' <span class="where">' + b.dataset.w + '</span></div><p>' + b.dataset.d + '</p>';
+  }));
+
+  // stat count-up
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const statObs = new IntersectionObserver((entries, obs) => {
     entries.forEach(e => {
-      if (e.isIntersecting) {
-        links.forEach(l => l.classList.remove('active'));
-        const a = map[e.target.id];
-        if (a) { a.classList.add('active'); a.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'}); }
-      }
+      if (!e.isIntersecting) return;
+      const box = e.target; const target = +box.dataset.target; const out = box.querySelector('.n');
+      obs.unobserve(box);
+      if (reduce){ out.textContent = target; return; }
+      const dur = 1100; const t0 = performance.now();
+      const tick = (now) => { const p = Math.min(1,(now-t0)/dur); out.textContent = Math.round(target*(1-Math.pow(1-p,3))); if (p<1) requestAnimationFrame(tick); };
+      requestAnimationFrame(tick);
     });
-  }, { rootMargin: '-45% 0px -50% 0px' });
-  Object.values(map).forEach(a => { const el = document.getElementById(a.getAttribute('href').slice(1)); if (el) obs.observe(el); });
+  }, { threshold: 0.6 });
+  document.querySelectorAll('.stat .v[data-target]').forEach(s => statObs.observe(s));
 </script>
 </body>
 </html>
