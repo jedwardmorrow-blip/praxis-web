@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#14365E">
+<meta name="robots" content="noindex, nofollow">
+<title>Praxis. Aspire LinkedIn Content Engine</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2314365E'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23C42130'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,500..900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F1E8D2; --bg2:#ECE3CB; --bg3:#FBF6E9; --card2:#FFFDF8;
+    --navy:#14365E; --navy-deep:#0A2545; --paper:#F1E8D2;
+    --gold:#C9A24B; --gold-deep:#9a7a2f;
+    --hair:rgba(20,54,94,0.16); --hair2:rgba(20,54,94,0.32);
+    --text:#14365E; --ink-deep:#0A2545;
+    --muted:rgba(20,54,94,0.74); --muted2:rgba(20,54,94,0.52);
+    --red:#C42130; --red-deep:#8c1722;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;line-height:1.65;
+       min-height:100vh;-webkit-font-smoothing:antialiased;}
+  .bb{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--navy);color:var(--paper);}
+
+  /* ── TOP BAR (navy band) ── */
+  .topbar{position:sticky;top:0;z-index:100;background:var(--navy);
+    border-bottom:1px solid rgba(201,162,75,0.30);
+    display:flex;align-items:center;justify-content:space-between;height:54px;padding:0 24px;}
+  .wordmark{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:800;
+    font-size:1.45rem;letter-spacing:0.04em;color:var(--paper);}
+  .wordmark span{color:var(--red);}
+  .topbar-meta{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.16em;
+    text-transform:uppercase;color:var(--gold);}
+
+  /* ── SECTION NAV ── */
+  .nav{position:sticky;top:54px;z-index:99;background:var(--bg3);border-bottom:1px solid var(--hair);
+    display:flex;overflow-x:auto;scrollbar-width:none;white-space:nowrap;}
+  .nav::-webkit-scrollbar{display:none;}
+  .nav a{display:inline-flex;align-items:center;height:42px;padding:0 16px;flex-shrink:0;
+    font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:600;
+    font-size:0.82rem;letter-spacing:0.07em;color:var(--muted);
+    border-bottom:2px solid transparent;transition:color .15s,border-color .15s;}
+  .nav a:hover{color:var(--text);}
+  .nav a.active{color:var(--text);border-bottom-color:var(--red);}
+
+  /* ── SECTION SHELL ── */
+  section{padding:84px 32px;border-top:1px solid var(--hair);scroll-margin-top:96px;}
+  section:nth-of-type(even){background:var(--bg2);}
+  .wrap{max-width:1040px;margin:0 auto;}
+  .eyebrow{display:flex;align-items:center;gap:9px;margin-bottom:18px;}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+  .eyebrow .dot.live{background:var(--red);animation:pulse 2.4s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+  .eyebrow .num{font-family:'IBM Plex Mono',monospace;font-size:0.66rem;letter-spacing:0.2em;color:var(--gold-deep);}
+  .eyebrow .tag{font-family:'IBM Plex Mono',monospace;font-size:0.66rem;letter-spacing:0.22em;
+    text-transform:uppercase;color:var(--muted2);}
+  h2{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:700;
+    font-size:clamp(2rem,4.4vw,3.3rem);line-height:1.0;letter-spacing:0.01em;margin-bottom:22px;color:var(--ink-deep);}
+  h2 .accent{color:var(--gold-deep);}
+  .lead{font-size:1.08rem;color:var(--text);max-width:72ch;margin-bottom:14px;}
+  .lead.muted{color:var(--muted);}
+  p.body{color:var(--muted);max-width:74ch;margin-bottom:14px;}
+  .small{font-size:0.86rem;}
+
+  /* ── COVER ── */
+  .cover{min-height:calc(100vh - 54px);display:flex;flex-direction:column;justify-content:center;
+    border-top:none;background:
+      radial-gradient(120% 80% at 80% 6%, rgba(196,33,48,0.07), transparent 55%),
+      radial-gradient(90% 70% at 0% 100%, rgba(201,162,75,0.14), transparent 55%);}
+  .cover .kicker{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.26em;
+    text-transform:uppercase;color:var(--gold-deep);margin-bottom:26px;}
+  .cover h1{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:800;
+    font-size:clamp(2.8rem,8vw,6rem);line-height:0.96;letter-spacing:0.005em;margin-bottom:24px;color:var(--ink-deep);}
+  .cover h1 .red{color:var(--red);}
+  .cover .sub{font-size:1.2rem;color:var(--muted);max-width:60ch;margin-bottom:40px;}
+  .cover .meta-row{display:flex;flex-wrap:wrap;gap:14px 28px;font-family:'IBM Plex Mono',monospace;
+    font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted2);
+    border-top:1px solid var(--hair);padding-top:22px;}
+  .cover .meta-row b{color:var(--text);font-weight:600;}
+
+  /* ── GRID + CARDS ── */
+  .grid{display:grid;gap:14px;margin-top:8px;}
+  .g2{grid-template-columns:repeat(2,1fr);} .g3{grid-template-columns:repeat(3,1fr);}
+  @media(max-width:780px){.g2,.g3{grid-template-columns:1fr;}}
+  .card{background:var(--bg3);border:1px solid var(--hair);border-radius:4px;padding:22px;
+    box-shadow:0 1px 3px rgba(20,54,94,0.05);}
+  section:nth-of-type(even) .card{background:var(--card2);}
+  .card h3{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:600;
+    font-size:1.18rem;letter-spacing:0.02em;margin-bottom:8px;color:var(--ink-deep);}
+  .card p{font-size:0.9rem;color:var(--muted);}
+  .card .ix{font-family:'IBM Plex Mono',monospace;font-size:0.64rem;letter-spacing:0.16em;
+    color:var(--gold-deep);text-transform:uppercase;margin-bottom:12px;display:block;}
+
+  /* ── PULL QUOTE / SPINE ── */
+  .quote{border-left:2px solid var(--hair2);padding:6px 0 6px 22px;margin:26px 0;
+    font-size:1.35rem;line-height:1.4;font-weight:400;max-width:70ch;color:var(--ink-deep);}
+  .quote.spine{border-left-color:var(--red);}
+  .quote .by{display:block;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:0.64rem;
+    letter-spacing:0.18em;text-transform:uppercase;color:var(--muted2);}
+
+  /* ── FLOW ── */
+  .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin-top:8px;}
+  .flow .step{flex:1;min-width:128px;background:var(--bg3);border:1px solid var(--hair);border-radius:4px;
+    padding:14px;box-shadow:0 1px 3px rgba(20,54,94,0.05);}
+  section:nth-of-type(even) .flow .step{background:var(--card2);}
+  .flow .step .n{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--gold-deep);letter-spacing:0.14em;}
+  .flow .step .t{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:600;
+    font-size:1rem;margin-top:4px;letter-spacing:0.02em;color:var(--ink-deep);}
+  .flow .step .d{font-size:0.74rem;color:var(--muted);margin-top:4px;line-height:1.5;}
+
+  /* ── ROWS ── */
+  .rows{margin-top:10px;border-top:1px solid var(--hair);}
+  .row{display:grid;grid-template-columns:34px 1.1fr 1.4fr;gap:18px;align-items:start;
+    padding:16px 4px;border-bottom:1px solid var(--hair);}
+  @media(max-width:780px){.row{grid-template-columns:1fr;gap:6px;}}
+  .row .rn{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:700;
+    font-size:1.4rem;color:var(--gold-deep);line-height:1;}
+  .row .rl{font-weight:600;color:var(--ink-deep);}
+  .row .rl .int{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;
+    text-transform:uppercase;color:var(--muted2);display:block;margin-bottom:4px;font-weight:500;}
+  .row .rr{color:var(--muted);font-size:0.92rem;}
+  .row .rr b{color:var(--ink-deep);font-weight:600;font-style:italic;}
+
+  /* ── BANDS STRIP ── */
+  .bands{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
+  @media(max-width:780px){.bands{grid-template-columns:repeat(2,1fr);}}
+  .band{background:var(--bg3);border:1px solid var(--hair);border-radius:4px;padding:16px;
+    box-shadow:0 1px 3px rgba(20,54,94,0.05);}
+  section:nth-of-type(even) .band{background:var(--card2);}
+  .band .rng{font-family:'IBM Plex Mono',monospace;font-size:0.64rem;color:var(--gold-deep);letter-spacing:0.1em;}
+  .band .nm{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:700;
+    font-size:1.3rem;margin:5px 0 8px;letter-spacing:0.02em;color:var(--ink-deep);}
+  .band .ds{font-size:0.78rem;color:var(--muted);line-height:1.5;}
+
+  /* ── POST PREVIEW ── */
+  .post{background:#FFFDF8;border:1px solid var(--hair2);border-radius:6px;padding:20px 22px;margin-top:8px;
+    box-shadow:0 2px 10px rgba(20,54,94,0.09);}
+  .post .ph{display:flex;align-items:center;gap:11px;margin-bottom:14px;}
+  .post .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--navy));
+    flex-shrink:0;}
+  .post .who{font-weight:600;font-size:0.9rem;color:var(--ink-deep);}
+  .post .who span{display:block;font-size:0.68rem;color:var(--muted2);font-weight:400;}
+  .post .pb{font-size:0.92rem;white-space:pre-line;line-height:1.6;color:var(--text);}
+  .post .cmt{margin-top:14px;padding-top:12px;border-top:1px solid var(--hair);
+    font-size:0.78rem;color:var(--muted);}
+  .post .cmt b{color:var(--gold-deep);font-weight:600;}
+
+  /* ── CALLOUT / FLAG ── */
+  .callout{border:1px solid var(--hair);border-radius:4px;padding:18px 20px;margin-top:16px;
+    background:var(--bg3);}
+  section:nth-of-type(even) .callout{background:var(--card2);}
+  .callout.flag{border-color:var(--red);background:rgba(196,33,48,0.06);}
+  .callout .ct{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;
+    text-transform:uppercase;color:var(--red);margin-bottom:8px;}
+  .callout.gold{border-color:var(--hair2);}
+  .callout.gold .ct{color:var(--gold-deep);}
+  .callout p{font-size:0.92rem;color:var(--muted);}
+
+  /* ── CHECKLIST ── */
+  .check{list-style:none;margin-top:10px;}
+  .check li{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--hair);font-size:0.95rem;}
+  .check li .m{color:var(--gold-deep);flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:0.8rem;margin-top:2px;}
+  .check li b{font-weight:600;color:var(--ink-deep);}
+  .check li span{color:var(--muted);}
+
+  /* ── PILL ── */
+  .pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;
+    text-transform:uppercase;border:1px solid var(--hair2);color:var(--gold-deep);
+    padding:2px 8px;border-radius:2px;margin-left:8px;vertical-align:middle;}
+
+  /* ── CTA ── */
+  .cta{display:inline-block;background:var(--red);color:var(--paper);font-family:'Big Shoulders','Big Shoulders Display',sans-serif;
+    font-weight:600;font-size:1.05rem;letter-spacing:0.04em;padding:13px 30px;border-radius:3px;margin-top:8px;
+    transition:background .2s;box-shadow:0 3px 12px rgba(196,33,48,0.20);}
+  .cta:hover{background:var(--red-deep);}
+
+  /* ── TIMELINE ── */
+  .months{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px;}
+  @media(max-width:780px){.months{grid-template-columns:1fr;}}
+  .month{background:var(--bg3);border:1px solid var(--hair);border-radius:4px;padding:20px;
+    box-shadow:0 1px 3px rgba(20,54,94,0.05);}
+  section:nth-of-type(even) .month{background:var(--card2);}
+  .month .mh{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.16em;
+    color:var(--gold-deep);text-transform:uppercase;}
+  .month .mt{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-weight:700;
+    font-size:1.4rem;margin:6px 0 4px;letter-spacing:0.01em;color:var(--ink-deep);}
+  .month .mq{font-size:0.82rem;color:var(--muted);font-style:italic;margin-bottom:12px;}
+  .month ul{list-style:none;} .month li{font-size:0.8rem;color:var(--muted);padding:4px 0;
+    border-top:1px solid var(--hair);}
+  .month li:first-child{border-top:none;}
+
+  /* ── FOOTER (navy band) ── */
+  footer{padding:48px 32px;border-top:1px solid var(--hair);text-align:center;background:var(--navy);}
+  footer .wordmark{font-size:1.2rem;color:var(--paper);}
+  footer p{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.16em;
+    text-transform:uppercase;color:rgba(241,232,210,0.6);margin-top:10px;}
+
+  @media print{
+    .nav,.topbar{position:static;}
+    section{page-break-inside:avoid;background:#fff;}
+    body{background:#fff;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wordmark">PRAXIS<span>.</span></div>
+  <div class="topbar-meta">Strategy Readout &middot; Aspire</div>
+</div>
+
+<nav class="nav" id="nav">
+  <a href="#opportunity" class="active">Opportunity</a>
+  <a href="#engine">Engine</a>
+  <a href="#voice">Voice</a>
+  <a href="#assessment">Assessment</a>
+  <a href="#pillars">Pillars</a>
+  <a href="#gaps">The 8 Gaps</a>
+  <a href="#plan">90 Days</a>
+  <a href="#engagement">Engagement</a>
+  <a href="#operating">Operating</a>
+  <a href="#outlook">Outlook</a>
+  <a href="#signoff">Sign-off</a>
+</nav>
+
+<!-- COVER -->
+<section class="cover" id="top">
+  <div class="wrap">
+    <div class="kicker">Renie Cavallari &middot; LinkedIn &middot; Sponsored Thought Leadership</div>
+    <h1>The Content<br>Engine<span class="red">.</span></h1>
+    <p class="sub">Turning Renie's voice and the Aspire world model into an always-on engine that earns attention and drives reservation-assessment signups.</p>
+    <div class="meta-row">
+      <span>Prepared by <b>Praxis</b></span>
+      <span>For <b>Renie &middot; Bella &middot; Greg</b></span>
+      <span>Channel <b>Renie's profile + Thought Leader Ads</b></span>
+      <span>Status <b>Strategy draft v1</b></span>
+    </div>
+  </div>
+</section>
+
+<!-- 01 OPPORTUNITY -->
+<section id="opportunity">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">01</span><span class="dot live"></span><span class="tag">The Opportunity</span></div>
+    <h2>We are cleared to put Renie's voice behind paid reach.</h2>
+    <p class="lead">Aspire has clearance to run sponsored posts on LinkedIn. The play is not random promotion. It is a system: Renie publishes thought leadership in her own voice, Aspire amplifies it as Thought Leader Ads, and every piece quietly routes the right people toward one action, the reservations assessment.</p>
+    <div class="grid g3">
+      <div class="card"><span class="ix">Goal 1</span><h3>Authority</h3><p>Build Renie's personal brand as the voice operators trust on revenue, service, and mindset.</p></div>
+      <div class="card"><span class="ix">Goal 2</span><h3>Engagement</h3><p>Earn comments, reshares, and saves. The post must win organically before a dollar amplifies it.</p></div>
+      <div class="card"><span class="ix">Goal 3</span><h3>Pipeline</h3><p>Convert the right slice into assessment signups, scored leads that route into the Aspire offer.</p></div>
+    </div>
+    <div class="quote spine">"Selling, done right, is the most hospitable thing a reservations team can do."<span class="by">The campaign's through-line, in Renie's words</span></div>
+  </div>
+</section>
+
+<!-- 02 ENGINE -->
+<section id="engine">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">02</span><span class="dot"></span><span class="tag">How It Works</span></div>
+    <h2>One engine. <span class="accent">Three layers of content, only one is sensitive.</span></h2>
+    <p class="lead muted">The reason "let Greg run Aspire's content from Praxis" felt complicated is data sovereignty. The fix: the engine never moves Aspire's corpus. It produces three classes of content, and only one is private.</p>
+    <div class="grid g3">
+      <div class="card"><span class="ix">Stays private</span><h3>Proprietary source</h3><p>The 892-source world model, assessment data, methodology. Lives in Aspire's project. Greg never needs the raw corpus.</p></div>
+      <div class="card"><span class="ix">Shareable</span><h3>Derived voice layer</h3><p>Renie's voice profile, content pillars, approved hooks. Publishable by nature, a brand's voice is meant for the public.</p></div>
+      <div class="card"><span class="ix">Public by design</span><h3>The posts</h3><p>The LinkedIn output itself. The least sensitive thing in the system.</p></div>
+    </div>
+    <div class="flow">
+      <div class="step"><div class="n">01</div><div class="t">Source</div><div class="d">World model + voice canon, Aspire-side</div></div>
+      <div class="step"><div class="n">02</div><div class="t">Voice</div><div class="d">Renie profile + pillars</div></div>
+      <div class="step"><div class="n">03</div><div class="t">Draft</div><div class="d">On-voice posts per theme</div></div>
+      <div class="step"><div class="n">04</div><div class="t">Bless</div><div class="d">Bella + Renie approve themes</div></div>
+      <div class="step"><div class="n">05</div><div class="t">Publish</div><div class="d">Renie's profile, then sponsor</div></div>
+      <div class="step"><div class="n">06</div><div class="t">Learn</div><div class="d">Performance feeds back in</div></div>
+    </div>
+    <div class="callout gold"><div class="ct">The boundary, honored</div><p>The engine lives in Aspire's project. Greg operates it with a key. Praxis holds the playbook and the build, not the corpus. Renie owns the brand and the approval. Built by Praxis, operated by Greg, blessed by Renie, hosted in Aspire's house.</p></div>
+  </div>
+</section>
+
+<!-- 03 VOICE -->
+<section id="voice">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">03</span><span class="dot"></span><span class="tag">Renie's Voice</span></div>
+    <h2>It has to read as genuinely hers.</h2>
+    <p class="lead muted">Ghostwriting a company page is forgiving. Ghostwriting a real person's first-person feed is not. The voice profile below is grounded in her keynotes, her speaking material, and her poetry, so every post sounds like Renie and not like a brand.</p>
+    <div class="grid g2">
+      <div class="card"><span class="ix">How she builds a point</span><h3>Reframe, truth, proof, story, action</h3><p>Open with a provocative question. State a blunt truth. Back it with a number. Tell a self-deprecating story where she is the example. Close on action.</p></div>
+      <div class="card"><span class="ix">Her lexicon</span><h3>Plain, bold, hers</h3><p>Head trash. Play full out. Shine your light. Human beings, not human doings. "Hope is not a strategy." "No one gives you stress, you give it to yourself."</p></div>
+    </div>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card"><span class="ix">Sounds like Renie</span><p style="color:var(--ink-deep);font-style:italic">"Here is the truth no one says out loud: no one gives you stress. You hand it to yourself. I did it yesterday, guilty over a haircut. Get over it. Give to yourself first, or you have nothing left to give anyone."</p></div>
+      <div class="card"><span class="ix">Does not sound like Renie</span><p style="font-style:italic">"In today's fast-paced environment, leaders should prioritize self-care to optimize wellbeing and productivity." Hedged, no story, no edge, no number.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 ASSESSMENT -->
+<section id="assessment">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">04</span><span class="dot live"></span><span class="tag">The Conversion Target</span></div>
+    <h2>Every post points to one thing: the assessment.</h2>
+    <p class="lead muted">A reservations sales assessment. 17 questions, scored <span class="mono">17&ndash;68</span>, sorted into four bands. It diagnoses how well a team turns inquiries into bookings, and reframes order-taking into a buying environment. The four bands are also the campaign's best engagement device: "which one is your team?"</p>
+    <div class="bands">
+      <div class="band"><div class="rng">17&ndash;32</div><div class="nm">Foundation</div><div class="ds">Still taking orders. Reset from transactional to a buying environment.</div></div>
+      <div class="band"><div class="rng">33&ndash;47</div><div class="nm">Consistency</div><div class="ds">Good, but it depends who is on shift. Make it repeatable.</div></div>
+      <div class="band"><div class="rng">48&ndash;59</div><div class="nm">Sharpening</div><div class="ds">Selling well, leaving the premium on the table.</div></div>
+      <div class="band"><div class="rng">60&ndash;68</div><div class="nm">Sustain &amp; Scale</div><div class="ds">The top tier. Benchmark, certify, and coach to stay there.</div></div>
+    </div>
+    <div class="callout flag"><div class="ct">One build item before launch</div><p>The funnel is mostly built: a self-serve quiz path, magic-link reports, and HubSpot sync already exist. But the default flow has been event-cohort and wave-released. Cold LinkedIn traffic needs the default set to instant: complete, score, report, no wait. A small flip, not a rebuild.</p></div>
+  </div>
+</section>
+
+<!-- 05 PILLARS -->
+<section id="pillars">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">05</span><span class="dot"></span><span class="tag">Content Pillars</span></div>
+    <h2>Six pillars, tilted toward the people who would take the assessment.</h2>
+    <p class="lead muted">Renie's voice is broad. The assessment is specific to hospitality reservations revenue. So the content aims at that buyer: revenue, reservations, and GM leaders. Each pillar is a real Aspire frame.</p>
+    <div class="grid g3">
+      <div class="card"><span class="ix">Pillar 01 &middot; Mindset</span><h3>Clear the HeadTrash</h3><p>Perspective drives performance. Thoughts drive behavior.</p></div>
+      <div class="card"><span class="ix">Pillar 02 &middot; Service</span><h3>Service Is a Culture</h3><p>You cannot train your way to great service. The differentiator pillar.</p></div>
+      <div class="card"><span class="ix">Pillar 03 &middot; Performance</span><h3>Play Full Out</h3><p>The four levels. Passion as fuel. Only the top tier plays all in.</p></div>
+      <div class="card"><span class="ix">Pillar 04 &middot; Leadership</span><h3>Lead in Alignment</h3><p>Misalignment is the most expensive thing in the business.</p></div>
+      <div class="card"><span class="ix">Pillar 05 &middot; Change</span><h3>Disrupt the Status Quo</h3><p>Change is like bad weather. Hope is not a strategy.</p></div>
+      <div class="card"><span class="ix">Pillar 06 &middot; Human</span><h3>Give to Yourself</h3><p>The relatable, reshare-friendly pillar that builds the broad audience.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 GAPS -->
+<section id="gaps">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">06</span><span class="dot"></span><span class="tag">The Content Engine Inside the Assessment</span></div>
+    <h2>The 8 gap patterns become 8 public hooks.</h2>
+    <p class="lead muted">The assessment already names the eight ways reservation revenue leaks. Each internal diagnosis becomes a public, non-judgmental hook in Renie's voice that ends at "find your gap, take the assessment."</p>
+    <div class="rows">
+      <div class="row"><div class="rn">1</div><div class="rl"><span class="int">Order-Taker Identity</span>Identity</div><div class="rr"><b>"Your reservations team is a revenue team that happens to answer the phone."</b> Call handlers, or revenue creators?</div></div>
+      <div class="row"><div class="rn">2</div><div class="rl"><span class="int">Conversation Quality</span>The conversation</div><div class="rr"><b>"Friendly is not the same as effective."</b> The difference is the questions great agents ask before they quote a price.</div></div>
+      <div class="row"><div class="rn">3</div><div class="rl"><span class="int">Premium Product Story</span>The story</div><div class="rr"><b>"Guests don't buy the suite. They buy what it makes possible."</b> Defaulting to price is a story problem, not a discount problem.</div></div>
+      <div class="row"><div class="rn">4</div><div class="rl"><span class="int">Lifecycle Revenue Leakage</span>The follow-up</div><div class="rr"><b>"The booking you lost was a not-on-the-first-call, and no one followed up."</b> Who owns follow-up? Usually no one.</div></div>
+      <div class="row"><div class="rn">5</div><div class="rl"><span class="int">Coaching &amp; Sustainment</span>The habit</div><div class="rr"><b>"Training is an event. Performance is a habit."</b> The lift fades in 30 days because no one coached it on day 31.</div></div>
+      <div class="row"><div class="rn">6</div><div class="rl"><span class="int">Technology Visibility</span>The blind spot</div><div class="rr"><b>"Your agent is selling blind."</b> At the moment of sale, what does the agent actually know about the guest?</div></div>
+      <div class="row"><div class="rn">7</div><div class="rl"><span class="int">Experience Design</span>The whole stay</div><div class="rr"><b>"Sell the stay, not the room."</b> The room is the floor. The experience is the ceiling.</div></div>
+      <div class="row"><div class="rn">8</div><div class="rl"><span class="int">Service-to-Revenue &middot; the spine</span>The reframe</div><div class="rr"><b>"Selling, done right, is the most hospitable thing you can do."</b> The data calls this Aspire's strongest differentiator.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 PLAN -->
+<section id="plan">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">07</span><span class="dot"></span><span class="tag">The 90-Day Plan</span></div>
+    <h2>A theme a month. A format a week.</h2>
+    <p class="lead muted">A monthly theme gives depth and a campaign arc. A weekly format rotation keeps it from going stale, which LinkedIn punishes. Roughly three posts a week, with the band self-diagnostic as the recurring conversion post and the link always in the first comment.</p>
+    <div class="months">
+      <div class="month"><div class="mh">Month 1 &middot; Gaps 1 + 8</div><div class="mt">Identity</div><div class="mq">"It is not an order desk."</div><ul><li>HeadTrash + Service Is a Culture</li><li>Reframe the team from cost to revenue</li><li>Anchor the campaign's spine</li></ul></div>
+      <div class="month"><div class="mh">Month 2 &middot; Gaps 2 + 3 + 7</div><div class="mt">The Stay</div><div class="mq">"Sell the stay, not the room."</div><ul><li>Buying environment, benefit language</li><li>Premium story, experience design</li><li>The consultative conversation</li></ul></div>
+      <div class="month"><div class="mh">Month 3 &middot; Gaps 4 + 5 + 6</div><div class="mt">Make It Stick</div><div class="mq">"Stop the leak."</div><ul><li>Lead in Alignment, leadership365</li><li>Follow-up, coaching cadence</li><li>Selling with visibility</li></ul></div>
+    </div>
+    <div class="flow" style="margin-top:18px">
+      <div class="step"><div class="n">Week 1</div><div class="t">Reframe</div><div class="d">Provocative hot take. Built for reach.</div></div>
+      <div class="step"><div class="n">Week 2</div><div class="t">Story</div><div class="d">A personal Renie story. Trust and reshares.</div></div>
+      <div class="step"><div class="n">Week 3</div><div class="t">Teach</div><div class="d">A carousel on one gap. Saves and shares.</div></div>
+      <div class="step"><div class="n">Week 4</div><div class="t">Diagnose</div><div class="d">"Which band are you?" The conversion post.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 ENGAGEMENT -->
+<section id="engagement">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">08</span><span class="dot"></span><span class="tag">Engagement Mechanics</span></div>
+    <h2>How we actually earn comments, likes, and reshares.</h2>
+    <div class="grid g2">
+      <div class="card"><span class="ix">Reach discipline</span><h3>Link in the first comment</h3><p>LinkedIn suppresses posts with outbound links in the body. The link goes in the first comment, or we run comment-to-DM ("comment SCORE and I'll send it"), which also captures a lead.</p></div>
+      <div class="card"><span class="ix">Comment trigger</span><h3>End on one real question</h3><p>Comments are the single strongest signal. "Which of these is your team?" framing turns a post into a conversation.</p></div>
+      <div class="card"><span class="ix">First 90 minutes</span><h3>Reply fast</h3><p>Renie, or Greg on her behalf, replies to every comment in the first 60 to 90 minutes. That window compounds reach.</p></div>
+      <div class="card"><span class="ix">Proof</span><h3>Feature client wins</h3><p>Auberge and others, with permission. Social proof plus their network reach.</p></div>
+    </div>
+    <div class="post">
+      <div class="ph"><div class="av"></div><div class="who">Renie Cavallari<span>Founder &amp; Chief Instigator, Aspire</span></div></div>
+      <div class="pb">Your reservations team thinks selling will ruin the guest experience.
+
+The opposite is true. The most hospitable thing you can do is help a guest get more of what they came for. The couple booking an anniversary doesn't want the cheapest room. They want the night to be unforgettable.
+
+When an agent "just takes the order," that isn't service. It's a missed chance to care.
+
+Selling, done right, is hospitality.
+
+What is one way your team could help guests get more of what they came for?</div>
+      <div class="cmt"><b>First comment:</b> We built a 5-minute assessment that shows exactly where reservation revenue leaks. Link below.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 OPERATING -->
+<section id="operating">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">09</span><span class="dot"></span><span class="tag">Operating Model</span></div>
+    <h2>Who does what.</h2>
+    <p class="lead muted">Approval happens at the theme level, not the post level. Bella and Renie bless a month's theme once. Greg then operates with autonomy inside it. That single constraint enforces governance without slowing anyone down.</p>
+    <div class="grid g2">
+      <div class="card"><span class="ix">Operator</span><h3>Greg</h3><p>Creates, edits, and schedules every post. Runs the cadence and replies in the engagement window. Works from a key into the engine, never the raw corpus.</p></div>
+      <div class="card"><span class="ix">Approvers</span><h3>Bella &amp; Renie</h3><p>Bless the monthly theme and the voice. They review themes, not a weekly queue.</p></div>
+      <div class="card"><span class="ix">Builder</span><h3>Praxis</h3><p>Builds and orchestrates the engine, holds the playbook, closes the performance loop.</p></div>
+      <div class="card"><span class="ix">The face</span><h3>Renie's profile</h3><p>Posts publish organically from Renie, then Aspire sponsors them as Thought Leader Ads from Campaign Manager.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 OUTLOOK -->
+<section id="outlook">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">10</span><span class="dot"></span><span class="tag">What Success Looks Like</span></div>
+    <h2>Judge it on a 90-day curve, not a week-one spike.</h2>
+    <p class="lead muted">This is a compounding authority and pipeline play, not a short-term lead firehose. Here is what good looks like at each checkpoint, so the team measures it on the right timeline and a strong program is not killed early on the wrong metric.</p>
+    <div class="months">
+      <div class="month"><div class="mh">Day 0 to 30</div><div class="mt">Prove the Voice</div><div class="mq">Goal: it sounds unmistakably like Renie, and we post without fail.</div><ul><li>Three posts a week, held consistently</li><li>The audience confirms it reads as her</li><li>Engagement baseline set: which hooks land</li><li>First assessment completions trickle in</li></ul></div>
+      <div class="month"><div class="mh">Day 31 to 60</div><div class="mt">Build the Audience</div><div class="mq">Goal: grow the right followers and a pool worth retargeting.</div><ul><li>Follower and comment growth among reservations, revenue, and GM leaders</li><li>Reshares climbing, band self-diagnostic posts outperforming</li><li>A retargeting pool large enough to sponsor to</li><li>A steady, small flow of assessment starts</li></ul></div>
+      <div class="month"><div class="mh">Day 61 to 90</div><div class="mt">Convert and Compound</div><div class="mq">Goal: a qualified, growing trickle of leads and clear conversion data.</div><ul><li>Completed assessments Greg can work as warm leads</li><li>A clear read on which pillars and gaps convert</li><li>Spend concentrating on the winners</li><li>Authority signals: profile views, inbound DMs</li></ul></div>
+    </div>
+    <div class="callout gold"><div class="ct">The honest measure</div><p>Impressions are a diagnostic, not a goal. The north star is compounding authority plus a qualified pipeline. Direct cold-traffic signups will be modest at first, conversion is the hardest part of this and improves as the audience warms and the funnel tightens. If month one is judged on signup volume alone, a good program gets cut before it compounds. Set that expectation with everyone before the first post runs.</p></div>
+  </div>
+</section>
+
+<!-- 11 SIGN-OFF + NEXT -->
+<section id="signoff">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">11</span><span class="dot live"></span><span class="tag">Sign-off &amp; Next Steps</span></div>
+    <h2>What Renie needs to bless before anything runs.</h2>
+    <p class="lead muted">The band and gap language below is drafted and pending Renie's validation. It must be blessed before it goes near a public post.</p>
+    <ul class="check">
+      <li><span class="m">[ ]</span><span><b>Band names</b> and the internal revenue labels. Public names are Foundation, Consistency, Sharpening, Sustain &amp; Scale.</span></li>
+      <li><span class="m">[ ]</span><span><b>Gap language</b> and her preferred Aspire-native naming for the eight hooks.</span></li>
+      <li><span class="m">[ ]</span><span><b>Friendly vs consultative</b> selling, the line she draws between warm service and real selling.</span></li>
+      <li><span class="m">[ ]</span><span><b>The AI position</b>, what is and is not safe to say about technology and automation.</span></li>
+      <li><span class="m">[ ]</span><span><b>The spine</b>, her voice on service-to-revenue, the differentiator the whole campaign rests on.</span></li>
+    </ul>
+    <div class="callout gold" style="margin-top:26px"><div class="ct">This month</div><p>1. Bless the voice profile and the six pillars. &nbsp; 2. Flip the assessment to instant self-serve for cold traffic. &nbsp; 3. Get the <b>aspire&hellip;to be</b> book into the world model to strengthen voice grounding. &nbsp; 4. Pilot one pillar to pressure-test the voice. &nbsp; 5. Stand up Greg's operating interface.</p></div>
+    <div style="margin-top:28px"><a href="#top" class="cta">Pilot Month 1: Identity &rarr;</a></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wordmark">PRAXIS<span style="color:var(--red)">.</span></div>
+  <p>Operational &middot; Intelligence &nbsp;|&nbsp; Strategy draft v1 &nbsp;|&nbsp; Language pending Renie validation</p>
+</footer>
+
+<script>
+  const links = [...document.querySelectorAll('#nav a')];
+  const map = {};
+  links.forEach(a => { const id = a.getAttribute('href').slice(1); const el = document.getElementById(id); if (el) map[id] = a; });
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = map[e.target.id];
+        if (a) { a.classList.add('active'); a.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'}); }
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  Object.values(map).forEach(a => { const el = document.getElementById(a.getAttribute('href').slice(1)); if (el) obs.observe(el); });
+</script>
+</body>
+</html>
