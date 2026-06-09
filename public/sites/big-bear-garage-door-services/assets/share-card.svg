@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16352a"/>
+      <stop offset="1" stop-color="#0e2419"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="85%" cy="8%" r="60%">
+      <stop offset="0" stop-color="#e8a33d" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#e8a33d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <!-- faint garage-door panel lines -->
+  <g stroke="#f6f1e7" stroke-opacity="0.05" stroke-width="2">
+    <line x1="760" y1="0" x2="760" y2="630"/>
+    <line x1="0" y1="150" x2="1200" y2="150"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="450" x2="1200" y2="450"/>
+  </g>
+  <!-- door icon mark -->
+  <g transform="translate(86,150)">
+    <rect x="0" y="0" width="92" height="86" rx="6" fill="none" stroke="#e8a33d" stroke-width="6"/>
+    <line x1="0" y1="29" x2="92" y2="29" stroke="#e8a33d" stroke-width="5"/>
+    <line x1="0" y1="58" x2="92" y2="58" stroke="#e8a33d" stroke-width="5"/>
+  </g>
+  <!-- flag -->
+  <g transform="translate(86,300)">
+    <rect x="0" y="0" width="430" height="44" rx="22" fill="#f6f1e7" fill-opacity="0.08" stroke="#e8a33d" stroke-opacity="0.4" stroke-width="1.5"/>
+    <circle cx="28" cy="22" r="7" fill="#e8a33d"/>
+    <text x="48" y="29" fill="#f3e7cf" font-size="20" font-weight="700" letter-spacing="1">NORTH TUCSON · SAME-DAY MOST DAYS</text>
+  </g>
+  <!-- wordmark / headline -->
+  <text x="84" y="430" fill="#f6f1e7" font-size="104" font-weight="900" letter-spacing="1">BIG BEAR</text>
+  <text x="90" y="478" fill="#e8a33d" font-size="30" font-weight="800" letter-spacing="9">GARAGE DOOR SERVICES</text>
+  <text x="84" y="540" fill="#e4dccb" font-size="30" font-weight="600">Broken spring, off-track door, dead opener? We fix it.</text>
+  <!-- rating + phone -->
+  <text x="84" y="588" fill="#e8a33d" font-size="26" font-weight="800">★★★★★ 5.0 · 16 Google reviews</text>
+  <text x="640" y="588" fill="#f6f1e7" font-size="26" font-weight="800">(520) 204-7899</text>
+</svg>
