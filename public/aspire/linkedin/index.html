@@ -246,6 +246,50 @@
   @supports not (animation-timeline: view()){.fbar{transform:scaleX(var(--w,1));}}
   .fbar.b1{background:var(--navy);} .fbar.b2{background:#2C5384;} .fbar.b3{background:var(--gold);} .fbar.b4{background:var(--red);}
 
+  /* CAMPAIGN CONTROL PANEL */
+  .control-shell{background:var(--navy);color:var(--paper);border-radius:8px;border:1px solid rgba(201,162,75,0.36);
+    padding:26px;box-shadow:0 18px 44px rgba(10,37,69,0.20);overflow:hidden;position:relative;}
+  .control-shell::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.14;
+    background-image:linear-gradient(rgba(241,232,210,0.18) 1px,transparent 1px),linear-gradient(90deg,rgba(241,232,210,0.18) 1px,transparent 1px);
+    background-size:38px 38px;}
+  .control-shell > *{position:relative;z-index:1;}
+  .control-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;border-bottom:1px solid rgba(241,232,210,0.18);padding-bottom:18px;margin-bottom:18px;}
+  @media(max-width:780px){.control-top{display:block;}.control-status{margin-top:14px;}}
+  .control-top h3{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-size:clamp(1.8rem,3vw,2.5rem);line-height:1;color:var(--paper);letter-spacing:0.01em;margin-bottom:8px;}
+  .control-top p{color:rgba(241,232,210,0.72);font-size:0.92rem;max-width:58ch;}
+  .control-status{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);text-align:right;white-space:nowrap;}
+  @media(max-width:780px){.control-status{text-align:left;white-space:normal;}}
+  .control-status .blink{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);margin-right:8px;animation:pulse 2.2s infinite;}
+  .lane-controls{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0;}
+  .lane-btn{border:1px solid rgba(241,232,210,0.24);border-radius:3px;padding:11px 14px;color:rgba(241,232,210,0.76);
+    font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;transition:all .2s;background:rgba(241,232,210,0.04);}
+  .lane-btn:hover{border-color:var(--gold);color:var(--paper);transform:translateY(-2px);}
+  .lane-btn.active{background:var(--paper);color:var(--navy);border-color:var(--paper);}
+  .signal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px;}
+  @media(max-width:900px){.signal-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:520px){.signal-grid{grid-template-columns:1fr;}}
+  .signal{border:1px solid rgba(241,232,210,0.18);background:rgba(241,232,210,0.055);border-radius:5px;padding:16px;}
+  .signal .sk{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+  .signal .sv{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-size:2.3rem;line-height:0.95;color:var(--paper);font-weight:800;font-variant-numeric:tabular-nums;}
+  .signal .sd{font-size:0.75rem;color:rgba(241,232,210,0.66);margin-top:7px;line-height:1.35;}
+  .flow-path{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:18px;}
+  @media(max-width:860px){.flow-path{grid-template-columns:1fr;}}
+  .flow-node{border:1px solid rgba(241,232,210,0.18);background:rgba(241,232,210,0.035);border-radius:5px;padding:14px;min-height:112px;}
+  .flow-node.active{border-color:var(--gold);background:rgba(201,162,75,0.13);}
+  .flow-node.done{border-color:rgba(241,232,210,0.34);}
+  .flow-node .fn{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;letter-spacing:0.14em;color:var(--gold);text-transform:uppercase;}
+  .flow-node .fh{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-size:1.16rem;font-weight:700;color:var(--paper);margin:6px 0 5px;line-height:1.05;}
+  .flow-node .fd{font-size:0.72rem;color:rgba(241,232,210,0.66);line-height:1.35;}
+  .control-bottom{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin-top:18px;}
+  @media(max-width:860px){.control-bottom{grid-template-columns:1fr;}}
+  .decision-panel,.operator-panel{border:1px solid rgba(241,232,210,0.18);border-radius:5px;background:rgba(241,232,210,0.055);padding:18px;}
+  .decision-panel .dh,.operator-panel .dh{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+  .decision-panel .take{font-family:'Big Shoulders','Big Shoulders Display',sans-serif;font-size:1.5rem;line-height:1.05;color:var(--paper);margin-bottom:8px;font-weight:700;}
+  .decision-panel p,.operator-panel p{font-size:0.86rem;color:rgba(241,232,210,0.70);}
+  .operator-list{list-style:none;margin-top:10px;}
+  .operator-list li{font-size:0.78rem;color:rgba(241,232,210,0.68);padding:7px 0;border-top:1px solid rgba(241,232,210,0.12);}
+  .operator-list li b{color:var(--paper);font-weight:600;}
+
   /* CHECKLIST */
   .check{list-style:none;margin-top:12px;}
   .check li{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--hair);font-size:0.96rem;}
@@ -302,6 +346,7 @@
   <a href="#gaps">The 8 Gaps</a>
   <a href="#plan">90 Days</a>
   <a href="#engagement">Engagement</a>
+  <a href="#control">Control</a>
   <a href="#operating">Operating</a>
   <a href="#outlook">Outlook</a>
   <a href="#signoff">Sign-off</a>
@@ -317,7 +362,7 @@
       <span>Prepared by <b>Praxis</b></span>
       <span>For <b>Renie &middot; Bella &middot; Greg</b></span>
       <span>Channel <b>Renie's profile + Thought Leader Ads</b></span>
-      <span>Status <b>Strategy draft v5</b></span>
+      <span>Status <b>Strategy draft v6</b></span>
     </div>
   </div>
 </section>
@@ -625,10 +670,66 @@ Mindset isn't soft. It's the highest-leverage thing on your floor.</div>
   </div>
 </section>
 
-<!-- 09 OPERATING -->
+<!-- 09 CONTROL -->
+<section id="control">
+  <div class="wrap">
+    <div class="eyebrow reveal"><span class="num">09</span><span class="dot live"></span><span class="tag">Campaign Control Panel</span></div>
+    <h2 class="reveal">Make the campaign feel <span class="accent">alive.</span></h2>
+    <p class="lead muted reveal">This is the picture to show Greg and Bella: the posts do not just publish. They create source-tagged motion into the assessment, the CIC, and the next sales action. The values below are an example weekly snapshot until the campaign is live.</p>
+
+    <div class="control-shell reveal" id="campaignControl">
+      <div class="control-top">
+        <div>
+          <h3>Weekly campaign signal.</h3>
+          <p>Pick a topic lane to see how the readout changes. The real version should be fed from the CIC so Greg updates the pipeline once, and the strategy page reflects the aggregate campaign picture.</p>
+        </div>
+        <div class="control-status"><span class="blink"></span>Example snapshot &middot; Week 02</div>
+      </div>
+      <div class="lane-controls" aria-label="Campaign topic lanes">
+        <button class="lane-btn active" data-lane="revenue">Revenue Leak</button>
+        <button class="lane-btn" data-lane="ai">Human Edge + AI</button>
+        <button class="lane-btn" data-lane="stay">Sell the Stay</button>
+        <button class="lane-btn" data-lane="followup">Hot Lead Follow-up</button>
+        <button class="lane-btn" data-lane="headtrash">HeadTrash</button>
+      </div>
+      <div class="signal-grid" aria-live="polite">
+        <div class="signal"><div class="sk">Tracked clicks</div><div class="sv" id="metricClicks">186</div><div class="sd" id="metricClicksNote">Strongest early intent signal.</div></div>
+        <div class="signal"><div class="sk">Assessment starts</div><div class="sv" id="metricStarts">42</div><div class="sd" id="metricStartsNote">Landing page is doing enough to test.</div></div>
+        <div class="signal"><div class="sk">Completions</div><div class="sv" id="metricCompletions">19</div><div class="sd" id="metricCompletionsNote">Watch drop-off after question set.</div></div>
+        <div class="signal"><div class="sk">Qualified accounts</div><div class="sv" id="metricQualified">6</div><div class="sd" id="metricQualifiedNote">Greg has clear follow-up work.</div></div>
+      </div>
+      <div class="flow-path" aria-label="Campaign to CIC flow">
+        <div class="flow-node done"><div class="fn">01</div><div class="fh">Post</div><div class="fd" id="flowPost">Revenue Leak sponsored post ships from Renie's profile.</div></div>
+        <div class="flow-node done"><div class="fn">02</div><div class="fh">Source tag</div><div class="fd" id="flowTag">linkedin_revenue_leak_01</div></div>
+        <div class="flow-node done"><div class="fn">03</div><div class="fh">Assessment</div><div class="fd">Clicks become starts, starts become completed diagnostics.</div></div>
+        <div class="flow-node active"><div class="fn">04</div><div class="fh">CIC</div><div class="fd">Account, band, source, and offer path appear for Bella and Greg.</div></div>
+        <div class="flow-node"><div class="fn">05</div><div class="fh">Follow-up</div><div class="fd" id="flowFollow">Greg follows qualified accounts with the revenue leakage frame.</div></div>
+        <div class="flow-node"><div class="fn">06</div><div class="fh">Next test</div><div class="fd" id="flowNext">Double down or tighten the conversion path next week.</div></div>
+      </div>
+      <div class="control-bottom">
+        <div class="decision-panel">
+          <div class="dh">Decision rule</div>
+          <div class="take" id="decisionTake">Increase spend only if completions create qualified accounts.</div>
+          <p id="decisionBody">Revenue Leak should be the first paid test. If clicks and starts are strong but completions lag, keep the topic and fix assessment friction before changing the message.</p>
+        </div>
+        <div class="operator-panel">
+          <div class="dh">How Greg updates it</div>
+          <p>Preferred path: Greg updates leads and stages in the CIC. This page reads only the aggregate campaign signal.</p>
+          <ul class="operator-list">
+            <li><b>Now:</b> use this as the weekly readout mock.</li>
+            <li><b>Interim:</b> power the numbers from a small JSON or Sheet.</li>
+            <li><b>Best:</b> feed the snapshot directly from CIC campaign sources.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 OPERATING -->
 <section id="operating">
   <div class="wrap">
-    <div class="eyebrow reveal"><span class="num">09</span><span class="dot"></span><span class="tag">Operating Model</span></div>
+    <div class="eyebrow reveal"><span class="num">10</span><span class="dot"></span><span class="tag">Operating Model</span></div>
     <h2 class="reveal">Who does what, <span class="accent">and where the data goes.</span></h2>
     <p class="lead muted reveal">Approval happens at the theme level, not the post level. Bella and Renie bless a month's theme once. Greg then operates with autonomy inside it. The CIC becomes the campaign memory: which post created the lead, whether they started the assessment, what band they landed in, and what follow-up should happen next.</p>
     <div class="grid g2 reveal">
@@ -641,10 +742,10 @@ Mindset isn't soft. It's the highest-leverage thing on your floor.</div>
   </div>
 </section>
 
-<!-- 10 OUTLOOK -->
+<!-- 11 OUTLOOK -->
 <section id="outlook">
   <div class="wrap">
-    <div class="eyebrow reveal"><span class="num">10</span><span class="dot"></span><span class="tag">What Success Looks Like</span></div>
+    <div class="eyebrow reveal"><span class="num">11</span><span class="dot"></span><span class="tag">What Success Looks Like</span></div>
     <h2 class="reveal">Judge it on a 90-day curve, <span class="accent">not a week-one spike.</span></h2>
     <p class="lead muted reveal">This is a compounding authority and pipeline play, not a short-term lead firehose. Here is what good looks like at each checkpoint, so a strong program isn't cut early on the wrong metric.</p>
     <div class="months reveal">
@@ -669,10 +770,10 @@ Mindset isn't soft. It's the highest-leverage thing on your floor.</div>
   </div>
 </section>
 
-<!-- 11 SIGN-OFF -->
+<!-- 12 SIGN-OFF -->
 <section id="signoff">
   <div class="wrap">
-    <div class="eyebrow reveal"><span class="num">11</span><span class="dot live"></span><span class="tag">Sign-off &amp; Next Steps</span></div>
+    <div class="eyebrow reveal"><span class="num">12</span><span class="dot live"></span><span class="tag">Sign-off &amp; Next Steps</span></div>
     <h2 class="reveal">What Renie needs to bless <span class="accent">before anything runs.</span></h2>
     <p class="lead muted reveal">The band and gap language is drafted and pending Renie's validation. It must be blessed before it goes near a public post.</p>
     <ul class="check reveal">
@@ -683,6 +784,7 @@ Mindset isn't soft. It's the highest-leverage thing on your floor.</div>
       <li><span class="m">[ ]</span><span><b>Gap language</b> and her preferred Aspire-native naming for the eight hooks.</span></li>
       <li><span class="m">[ ]</span><span><b>The first sponsored post</b>, including the direct assessment URL in the body for paid placement.</span></li>
       <li><span class="m">[ ]</span><span><b>The CIC tracking model</b>, including campaign source tags, weekly readout metrics, assessment state, qualified account status, and next follow-up.</span></li>
+      <li><span class="m">[ ]</span><span><b>The Campaign Control Panel</b>, the weekly view Greg and Bella use to decide which lane to double down on.</span></li>
       <li><span class="m">[ ]</span><span><b>The spine</b>, her voice on service-to-revenue, the differentiator the campaign rests on.</span></li>
     </ul>
     <div class="callout gold reveal" style="margin-top:26px"><div class="ct">This month</div><p>1. Bless the data claims. &nbsp; 2. Lead with Revenue Leak and preserve Human Edge + AI as the second lane. &nbsp; 3. Insert the tracked assessment URL into the first sponsored post. &nbsp; 4. Flip the assessment to instant self-serve. &nbsp; 5. Track every click, start, completion, and qualified account inside the CIC.</p></div>
@@ -691,7 +793,7 @@ Mindset isn't soft. It's the highest-leverage thing on your floor.</div>
 
 <footer>
   <div class="wordmark">PRAXIS<span style="color:var(--red)">.</span></div>
-  <p>Operational &middot; Intelligence &nbsp;|&nbsp; Strategy draft v5 &nbsp;|&nbsp; Data claims pending Renie validation</p>
+  <p>Operational &middot; Intelligence &nbsp;|&nbsp; Strategy draft v6 &nbsp;|&nbsp; Data claims pending Renie validation</p>
 </footer>
 
 <script>
@@ -725,6 +827,111 @@ Mindset isn't soft. It's the highest-leverage thing on your floor.</div>
     b.classList.add('active');
     detail.innerHTML = '<div class="sd-h">' + b.dataset.h + ' <span class="where">' + b.dataset.w + '</span></div><p>' + b.dataset.d + '</p>';
   }));
+
+  // campaign control panel
+  const laneData = {
+    revenue: {
+      clicks: 186, starts: 42, completions: 19, qualified: 6,
+      clickNote: 'Strongest early intent signal.',
+      startNote: 'Landing page is doing enough to test.',
+      completionNote: 'Watch drop-off after question set.',
+      qualifiedNote: 'Greg has clear follow-up work.',
+      post: "Revenue Leak sponsored post ships from Renie's profile.",
+      tag: 'linkedin_revenue_leak_01',
+      follow: 'Greg follows qualified accounts with the revenue leakage frame.',
+      next: 'Keep this as the lead paid lane and test a shorter CTA.',
+      take: 'Increase spend only if completions create qualified accounts.',
+      body: 'Revenue Leak should be the first paid test. If clicks and starts are strong but completions lag, keep the topic and fix assessment friction before changing the message.'
+    },
+    ai: {
+      clicks: 142, starts: 28, completions: 11, qualified: 3,
+      clickNote: 'High conversation potential.',
+      startNote: 'Good warm-up lane, softer direct conversion.',
+      completionNote: 'Works best with a clear diagnostic bridge.',
+      qualifiedNote: 'Useful, but likely needs retargeting.',
+      post: 'Human Edge + AI post creates discussion around automation and the guest conversation.',
+      tag: 'linkedin_human_edge_ai_02',
+      follow: 'Bella routes engaged operators to the human-performance diagnostic.',
+      next: 'Use as the second lane and retarget engaged readers with Revenue Leak.',
+      take: 'Use AI for reach, then pull the audience back to the diagnostic.',
+      body: 'Human Edge + AI should stay active because it is timely and Renie-forward. It should not carry the conversion burden alone; pair it with a direct Revenue Leak retargeting post.'
+    },
+    stay: {
+      clicks: 118, starts: 31, completions: 16, qualified: 5,
+      clickNote: 'Fewer clicks, stronger fit.',
+      startNote: 'Strong topic-to-assessment relevance.',
+      completionNote: 'Good completion quality.',
+      qualifiedNote: 'Likely high-value hospitality buyers.',
+      post: 'Sell the Stay post reframes reservations around experiential selling.',
+      tag: 'linkedin_sell_the_stay_03',
+      follow: 'Greg follows with premium product and experience-story questions.',
+      next: 'Turn this into a carousel or client-facing example post.',
+      take: 'This may be the best quality lane after Revenue Leak.',
+      body: 'Sell the Stay is less flashy than AI, but it is highly Aspire-native. If qualified account quality is strong, give it a dedicated Month 3 push.'
+    },
+    followup: {
+      clicks: 96, starts: 24, completions: 13, qualified: 4,
+      clickNote: 'Practical operators lean in.',
+      startNote: 'Strong for teams with known process gaps.',
+      completionNote: 'Good diagnostic follow-through.',
+      qualifiedNote: 'Operational pain converts.',
+      post: 'Hot Lead Follow-up post names the lost booking that may still be recoverable.',
+      tag: 'linkedin_hot_lead_followup_04',
+      follow: 'Greg asks who owns follow-up and what happens after no-book calls.',
+      next: 'Package with a simple follow-up audit offer.',
+      take: 'Use this lane when the buyer needs a concrete operational fix.',
+      body: 'Hot Lead Follow-up is a strong practical lane. It may not get the broadest reach, but it can create cleaner sales conversations with teams that already know follow-up is broken.'
+    },
+    headtrash: {
+      clicks: 164, starts: 18, completions: 7, qualified: 2,
+      clickNote: 'Broadest reach, softest intent.',
+      startNote: 'Needs a sharper assessment bridge.',
+      completionNote: 'Use as audience warming.',
+      qualifiedNote: 'Better for brand than pipeline.',
+      post: 'HeadTrash post builds Renie affinity and broad leadership engagement.',
+      tag: 'linkedin_headtrash_05',
+      follow: 'Bella watches engagement, Greg avoids over-qualifying weak fit.',
+      next: 'Use this for organic reach before paid conversion tests.',
+      take: 'Keep HeadTrash for brand warmth, not primary conversion.',
+      body: 'HeadTrash is Renie-signature and valuable, but it should not be the first paid conversion bet. Use it to build trust and then retarget with the diagnostic.'
+    }
+  };
+  const laneButtons = [...document.querySelectorAll('.lane-btn')];
+  const controlIds = {
+    clicks: document.getElementById('metricClicks'),
+    starts: document.getElementById('metricStarts'),
+    completions: document.getElementById('metricCompletions'),
+    qualified: document.getElementById('metricQualified'),
+    clickNote: document.getElementById('metricClicksNote'),
+    startNote: document.getElementById('metricStartsNote'),
+    completionNote: document.getElementById('metricCompletionsNote'),
+    qualifiedNote: document.getElementById('metricQualifiedNote'),
+    post: document.getElementById('flowPost'),
+    tag: document.getElementById('flowTag'),
+    follow: document.getElementById('flowFollow'),
+    next: document.getElementById('flowNext'),
+    take: document.getElementById('decisionTake'),
+    body: document.getElementById('decisionBody')
+  };
+  const setLane = (key) => {
+    const d = laneData[key]; if (!d) return;
+    laneButtons.forEach(b => b.classList.toggle('active', b.dataset.lane === key));
+    controlIds.clicks.textContent = d.clicks;
+    controlIds.starts.textContent = d.starts;
+    controlIds.completions.textContent = d.completions;
+    controlIds.qualified.textContent = d.qualified;
+    controlIds.clickNote.textContent = d.clickNote;
+    controlIds.startNote.textContent = d.startNote;
+    controlIds.completionNote.textContent = d.completionNote;
+    controlIds.qualifiedNote.textContent = d.qualifiedNote;
+    controlIds.post.textContent = d.post;
+    controlIds.tag.textContent = d.tag;
+    controlIds.follow.textContent = d.follow;
+    controlIds.next.textContent = d.next;
+    controlIds.take.textContent = d.take;
+    controlIds.body.textContent = d.body;
+  };
+  laneButtons.forEach(b => b.addEventListener('click', () => setLane(b.dataset.lane)));
 
   // stat count-up
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
