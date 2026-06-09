@@ -1,0 +1,66 @@
+{
+  "photos": [
+    {
+      "file": "photo-1.jpg",
+      "authors": [
+        {
+          "displayName": "Seth Hodgeman",
+          "uri": "https://maps.google.com/maps/contrib/104109309177099752590",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjW8etv73XbKlZ_1_Jbffr0kwakK2_dymEta52KFPAOdFGBZI5I2=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-2.jpg",
+      "authors": [
+        {
+          "displayName": "Seth Hodgeman",
+          "uri": "https://maps.google.com/maps/contrib/104109309177099752590",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjW8etv73XbKlZ_1_Jbffr0kwakK2_dymEta52KFPAOdFGBZI5I2=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-3.jpg",
+      "authors": [
+        {
+          "displayName": "Seth Hodgeman",
+          "uri": "https://maps.google.com/maps/contrib/104109309177099752590",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjW8etv73XbKlZ_1_Jbffr0kwakK2_dymEta52KFPAOdFGBZI5I2=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-4.jpg",
+      "authors": [
+        {
+          "displayName": "Troy Meyer",
+          "uri": "https://maps.google.com/maps/contrib/100369020539761772655",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocJMtatTogQjS8RYJ4707h8lZQL9ixmi-WOXrbBlzmvLSqFqPg=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-5.jpg",
+      "authors": [
+        {
+          "displayName": "Seth Hodgeman",
+          "uri": "https://maps.google.com/maps/contrib/104109309177099752590",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjW8etv73XbKlZ_1_Jbffr0kwakK2_dymEta52KFPAOdFGBZI5I2=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-6.jpg",
+      "authors": [
+        {
+          "displayName": "Troy Meyer",
+          "uri": "https://maps.google.com/maps/contrib/100369020539761772655",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocJMtatTogQjS8RYJ4707h8lZQL9ixmi-WOXrbBlzmvLSqFqPg=s100-p-k-no-mo"
+        }
+      ]
+    }
+  ],
+  "reviews_source": "Google",
+  "note": "Google requires visible attribution for photos and reviews used on the live site."
+}
