@@ -7,7 +7,7 @@ import { Nav } from "@/components/v4/nav"
 import { FooterV4 } from "@/components/v4/footer"
 
 const justinEmail =
-  "mailto:justin@gopraxis.ai?subject=Apache%20Business%20Systems%20%C2%B7%20Website%20%2B%20Discovery%20Sprint"
+  "https://mail.google.com/mail/?view=cm&fs=1&to=justin@gopraxis.ai&su=Apache%20Business%20Systems%20%C2%B7%20Website%20%2B%20Discovery%20Sprint"
 const apachePreview = "https://apache-business-systems.vercel.app"
 
 const inspectList = [
@@ -377,13 +377,16 @@ export default function ApachePage() {
             say.
           </p>
           <div className="ax-cta-row">
-            <a className="ax-cta" href={justinEmail}>
+            <a className="ax-cta" href={justinEmail} target="_blank" rel="noopener noreferrer">
               Email Justin <span className="arr">→</span>
             </a>
             <Link className="ax-cta2" href="/">
               Explore Praxis <span className="arr">→</span>
             </Link>
           </div>
+          <p className="ax-contact-note">
+            Or reach me directly at <a href="mailto:justin@gopraxis.ai">justin@gopraxis.ai</a>
+          </p>
         </section>
       </main>
       <FooterV4 />

@@ -111,6 +111,9 @@
 .apache-sprint .ax-cta2:hover{ background: var(--gold); color: var(--canvas); }
 .apache-sprint .ax-cta2 .arr{ color: var(--red); }
 .apache-sprint .ax-cta2:hover .arr{ color: var(--canvas); transform: translateX(4px); }
+.apache-sprint .ax-contact-note{ font-family: var(--mono); font-size: 12px; letter-spacing: .04em; color: var(--paper-mute); margin-top: 18px; }
+.apache-sprint .ax-contact-note a{ color: var(--gold); border-bottom: 1px solid var(--rule); }
+.apache-sprint .ax-contact-note a:hover{ color: var(--gold-paper); }
 
 @keyframes ax-rise{ to{ transform: translateY(0); } }
 @keyframes ax-fade{ to{ opacity: 1; } }
