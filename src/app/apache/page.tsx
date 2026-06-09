@@ -157,7 +157,7 @@ export default function ApachePage() {
                 Sixty years of Apache, finally shown in full, and a site that brings the next
                 customer to the <span className="gold">door</span>.
               </p>
-              <h1 className="ax-h1">
+              <h1 className="ax-h1" aria-label="A new website, built on what actually pays.">
                 <span className="ln">
                   <i>A new website,</i>
                 </span>
@@ -175,6 +175,14 @@ export default function ApachePage() {
                 learn where the revenue and the leads actually come from, so the new site leads with
                 what drives the business, not just a sharper version of the old one.
               </p>
+              <div className="ax-cta-row ax-hero-actions">
+                <a className="ax-cta" href={justinEmail} target="_blank" rel="noopener noreferrer">
+                  Email Justin <span className="arr">→</span>
+                </a>
+                <a className="ax-cta2" href={apachePreview} target="_blank" rel="noopener noreferrer">
+                  View preview <span className="arr">→</span>
+                </a>
+              </div>
               <p className="ax-meta">
                 <span className="lbl">The deal, up front</span>
                 <br />

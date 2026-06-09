@@ -1507,7 +1507,7 @@ footer.site-foot { background: #000; color: var(--paper); padding: 56px 56px 40p
   .header { padding: 12px 16px; gap: 12px; }
   .h-nav { display: none; }
   .h-actions { gap: 10px; }
-  .h-portal { display: inline-block; }
+  .h-portal { display: none; }
   .h-cta { padding: 9px 12px; font-size: 10px; letter-spacing: 0.14em; }
   .h-wm { font-size: 18px; }
   .h-sub { font-size: 8.5px; }
@@ -1519,7 +1519,7 @@ footer.site-foot { background: #000; color: var(--paper); padding: 56px 56px 40p
   /* Meta bar smaller */
 
   /* Section padding tighter */
-  .hero { padding: 60px 20px 60px; }
+  .hero { padding: 42px 20px 54px; }
   .ds-hero { padding: 54px 20px 58px; grid-template-columns: 1fr; gap: 32px; }
   .ds-hero h1 { font-size: 58px; line-height: 0.94; }
   .ds-lede { font-size: 17px; }
@@ -1588,15 +1588,18 @@ footer.site-foot { background: #000; color: var(--paper); padding: 56px 56px 40p
   .atom-section { padding: 56px 0 50px; }
 
   /* Hero typography mobile */
+  .hero-left { display: flex; flex-direction: column; }
+  .hero-badge-wrap { display: none; }
   .hero-left h1 { font-size: 56px; line-height: 0.95; }
-  .hero-left .wedge-leader { font-size: 22px; line-height: 1.35; max-width: none; }
-  .hero-left .hero-clarifier { font-size: 17px; margin-top: 22px; max-width: none; }
-  .hero-left .hero-meta-line { font-size: 14px; max-width: none; }
+  .hero-left .eye { font-size: 9.5px; line-height: 1.8; letter-spacing: 0.2em; }
+  .hero-left .wedge-leader { font-size: 21px; line-height: 1.32; max-width: none; margin-top: 18px; }
+  .hero-left .hero-clarifier { font-size: 16px; line-height: 1.42; margin-top: 18px; max-width: none; }
+  .hero-left .hero-meta-line { font-size: 13.5px; line-height: 1.45; margin-top: 12px; max-width: none; }
   .hero-left .subhead { display: none; }
-  .hero-proof { font-size: 11px; line-height: 1.6; }
+  .hero-proof { order: 2; margin-top: 16px; padding-top: 13px; font-size: 10px; line-height: 1.55; }
   .hero-proof .label { font-size: 9px; }
   .hero-proof .sep { margin: 0 5px; }
-  .hero-cta-row { gap: 12px; margin-top: 22px; }
+  .hero-cta-row { order: 1; gap: 10px; margin-top: 18px; }
   .hero-cta, .hero-cta-secondary { padding: 12px 16px; font-size: 11px; flex: 1 1 auto; text-align: center; }
   .hero-cta-meta { font-size: 10px; }
   .hero-badge-large { width: 60px; height: 60px; }

@@ -115,6 +115,16 @@
   .web-sec { padding: 64px 24px; }
 }
 @media (max-width: 560px) {
+  .web-hero { gap: 30px; padding: 38px 20px 36px; }
+  .web-preview { order: initial; }
+  .web-hero h1 { font-size: 3.05rem; margin-top: 13px; }
+  .web-lede { font-size: 1rem; line-height: 1.52; margin-top: 15px; }
+  .web-proof-line { font-size: 10.5px; line-height: 1.55; margin-top: 18px; }
+  .web-preview-body { padding: 18px 18px 20px; }
+  .web-pv-h { font-size: 1.72rem; }
+  .web-pv-photos span { height: 44px; }
+  .web-band-inner { padding: 48px 20px; }
+  .web-sec { padding: 58px 20px; }
   .web-steps { grid-template-columns: 1fr; }
   .web-price-amt .mo { font-size: 2.6rem; }
 }
