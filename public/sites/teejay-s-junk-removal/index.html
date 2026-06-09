@@ -56,25 +56,26 @@
   /* ===================================================================
      TeeJay's Junk Removal — bespoke build
      Direction: energetic, friendly, fast local hauling.
-     Palette pulled toward the brand: bold haul-green + dark slate +
-     bright lime accent + warm white, with the logo's desert-sunset
-     orange as a small secondary tie-in.
+     Palette pulled straight from the real logo: a warm Sonoran-desert
+     sunset — oxblood maroon, burnt sienna, amber/gold, warm cream. No
+     green (the logo has none); the old haul-green + acid-lime read cold
+     against the warm mark. Sunset orange is a lead accent, not a tie-in.
      Type: Onest (display, sturdy + friendly) + Albert Sans (body).
      =================================================================== */
   @import url('https://fonts.googleapis.com/css2?family=Onest:wght@500;600;700;800;900&family=Albert+Sans:wght@400;500;600;700&display=swap');
 
   :root{
-    --green:#1f7a3d;        /* haul green, primary */
-    --green-deep:#14532a;   /* deep green */
-    --slate:#1c2128;        /* dark slate */
-    --lime:#c5f02d;         /* bright lime accent */
-    --sun:#f5821f;          /* desert-sunset orange (from logo), used sparingly */
-    --cream:#fbf7ef;        /* warm white sections */
+    --green:#a83a16;        /* BURNT SIENNA — primary (logo sun + desert). token name kept */
+    --green-deep:#5a1a0d;   /* deep OXBLOOD maroon (logo background) — dark sections/hero */
+    --slate:#2a1610;        /* warm near-black brown — body text + darkest panels */
+    --lime:#efa12a;         /* AMBER/GOLD accent (logo lettering + sun). token name kept */
+    --sun:#ec6a1a;          /* sunset orange (from logo) — a lead warm accent */
+    --cream:#faf2e0;        /* warm cream sections (logo cream) */
     --white:#ffffff;
-    --muted:#4f5f54;        /* muted green-gray text (AA on cream/white) */
-    --line:#e4e0d4;         /* hairlines on cream */
-    --shadow:0 18px 42px -22px rgba(20,83,42,.55);
-    --shadow-sm:0 8px 22px -14px rgba(28,33,40,.45);
+    --muted:#6c5346;        /* warm brown-gray text (AA on cream/white) */
+    --line:#ece1ce;         /* warm hairlines on cream */
+    --shadow:0 18px 42px -22px rgba(90,26,13,.55);
+    --shadow-sm:0 8px 22px -14px rgba(42,22,16,.45);
     --r:18px;               /* rounded, friendly */
     --r-lg:26px;
     --ease:cubic-bezier(.2,.85,.25,1);
@@ -91,13 +92,13 @@
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:'Onest',sans-serif;font-weight:800;font-size:1.02rem;padding:15px 26px;border-radius:999px;border:0;cursor:pointer;transition:transform .12s var(--ease),box-shadow .12s var(--ease),background .12s ease;will-change:transform}
   .btn svg{width:19px;height:19px;flex:none}
   .btn:focus-visible{outline:none}
-  .btn-lime{background:var(--lime);color:var(--slate);box-shadow:0 10px 0 -2px #93b81f}
-  .btn-lime:hover,.btn-lime:focus-visible{transform:translateY(-2px);box-shadow:0 13px 0 -2px #93b81f}
-  .btn-lime:focus-visible{box-shadow:0 13px 0 -2px #93b81f,0 0 0 4px rgba(31,122,61,.35)}
-  .btn-lime:active{transform:translateY(3px);box-shadow:0 6px 0 -2px #93b81f}
+  .btn-lime{background:var(--lime);color:var(--slate);box-shadow:0 10px 0 -2px #a8650f}
+  .btn-lime:hover,.btn-lime:focus-visible{transform:translateY(-2px);box-shadow:0 13px 0 -2px #a8650f}
+  .btn-lime:focus-visible{box-shadow:0 13px 0 -2px #a8650f,0 0 0 4px rgba(168,58,22,.35)}
+  .btn-lime:active{transform:translateY(3px);box-shadow:0 6px 0 -2px #a8650f}
   .btn-green{background:var(--green);color:#fff;box-shadow:0 10px 0 -2px var(--green-deep)}
   .btn-green:hover,.btn-green:focus-visible{transform:translateY(-2px);box-shadow:0 13px 0 -2px var(--green-deep)}
-  .btn-green:focus-visible{box-shadow:0 13px 0 -2px var(--green-deep),0 0 0 4px rgba(197,240,45,.4)}
+  .btn-green:focus-visible{box-shadow:0 13px 0 -2px var(--green-deep),0 0 0 4px rgba(239,161,42,.4)}
   .btn-green:active{transform:translateY(3px);box-shadow:0 6px 0 -2px var(--green-deep)}
   .btn-ghost{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.6)}
   .btn-ghost:hover,.btn-ghost:focus-visible{border-color:var(--lime);color:var(--lime)}
@@ -172,12 +173,12 @@
 
   /* ---------- hero ---------- */
   .hero{background:
-      radial-gradient(120% 90% at 88% -10%, rgba(197,240,45,.16), transparent 55%),
-      linear-gradient(160deg,#163a23 0%, var(--green-deep) 48%, #0f3d20 100%);
+      radial-gradient(120% 90% at 88% -10%, rgba(239,161,42,.16), transparent 55%),
+      linear-gradient(160deg,#8a2d12 0%, var(--green-deep) 48%, #3a1207 100%);
     color:#fff;position:relative;overflow:hidden}
   .hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:22px 22px;opacity:.5;pointer-events:none}
   .hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center;padding-top:64px;padding-bottom:64px}
-  .h-tag{display:inline-flex;align-items:center;gap:9px;background:rgba(197,240,45,.14);border:1px solid rgba(197,240,45,.5);color:var(--lime);font-family:'Onest',sans-serif;font-weight:800;font-size:.74rem;letter-spacing:.06em;padding:7px 14px;border-radius:999px;text-transform:uppercase}
+  .h-tag{display:inline-flex;align-items:center;gap:9px;background:rgba(239,161,42,.14);border:1px solid rgba(239,161,42,.5);color:var(--lime);font-family:'Onest',sans-serif;font-weight:800;font-size:.74rem;letter-spacing:.06em;padding:7px 14px;border-radius:999px;text-transform:uppercase}
   .hero h1{font-size:clamp(2.5rem,5.6vw,4.15rem);font-weight:900;margin:18px 0 0}
   .hero h1 .hl{color:var(--lime)}
   .hero p.lede{font-size:1.16rem;color:#dcebd9;margin:18px 0 0;max-width:46ch}
@@ -203,7 +204,7 @@
   .trust{background:var(--slate);color:var(--cream)}
   .trust .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding-top:24px;padding-bottom:24px}
   .t-item{display:flex;align-items:center;gap:13px;padding:8px 12px}
-  .t-item .ic{flex:none;width:44px;height:44px;border-radius:13px;background:rgba(197,240,45,.14);display:flex;align-items:center;justify-content:center;color:var(--lime)}
+  .t-item .ic{flex:none;width:44px;height:44px;border-radius:13px;background:rgba(239,161,42,.14);display:flex;align-items:center;justify-content:center;color:var(--lime)}
   .t-item .ic svg{width:23px;height:23px}
   .t-item b{font-family:'Onest',sans-serif;font-weight:800;font-size:1.02rem;color:#fff;display:block;line-height:1.1}
   .t-item span{font-size:.82rem;color:#b7c2b9}
@@ -220,7 +221,7 @@
   .haul-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:34px}
   .haul-card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:22px 20px;display:flex;gap:15px;align-items:flex-start;transition:transform .14s var(--ease),box-shadow .14s var(--ease),border-color .14s ease}
   .haul-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:#cfe0c6}
-  .haul-card .hi{flex:none;width:48px;height:48px;border-radius:13px;background:linear-gradient(150deg,var(--green),var(--green-deep));display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 8px 16px -8px rgba(20,83,42,.7)}
+  .haul-card .hi{flex:none;width:48px;height:48px;border-radius:13px;background:linear-gradient(150deg,var(--green),var(--green-deep));display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 8px 16px -8px rgba(90,26,13,.7)}
   .haul-card .hi svg{width:25px;height:25px}
   .haul-card h3{font-size:1.12rem;font-weight:800;color:var(--slate)}
   .haul-card p{font-size:.94rem;color:var(--muted);margin-top:5px}
@@ -262,7 +263,7 @@
   .reviews .sec-head h2{color:#fff}
   .reviews .sec-head p{color:#bfe0c2}
   .rv-top{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
-  .rv-score{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.07);border:1px solid rgba(197,240,45,.3);border-radius:16px;padding:14px 20px}
+  .rv-score{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.07);border:1px solid rgba(239,161,42,.3);border-radius:16px;padding:14px 20px}
   .rv-score b{font-family:'Onest',sans-serif;font-size:2.4rem;font-weight:900;color:var(--lime);line-height:1}
   .rv-score .s small{display:block;font-size:.82rem;color:#cfe3cc}
   .rv-score .s .st{color:var(--lime);letter-spacing:2px;font-size:1rem}
@@ -295,7 +296,7 @@
   .fld{margin-bottom:14px}
   .fld label{display:block;font-weight:700;font-size:.86rem;color:var(--slate);margin-bottom:6px}
   .fld input,.fld textarea,.fld select{width:100%;font-family:inherit;font-size:1rem;color:var(--slate);background:var(--cream);border:1.5px solid var(--line);border-radius:13px;padding:13px 15px;transition:border-color .14s ease,box-shadow .14s ease}
-  .fld input:focus,.fld textarea:focus,.fld select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px rgba(31,122,61,.14);background:#fff}
+  .fld input:focus,.fld textarea:focus,.fld select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px rgba(168,58,22,.14);background:#fff}
   .fld textarea{min-height:92px;resize:vertical}
   .fld-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   form.qf .btn{width:100%;margin-top:6px}
