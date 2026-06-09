@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">KP Cactus and Tree saguaro mark</title>
+  <desc id="desc">A square desert-green and gold KP mark with a stylized saguaro cactus.</desc>
+  <rect width="512" height="512" rx="86" fill="#11130f"/>
+  <rect x="34" y="34" width="444" height="444" rx="64" fill="none" stroke="#b98634" stroke-width="18"/>
+  <circle cx="256" cy="224" r="142" fill="#eff6e8"/>
+  <g fill="#4f9a68">
+    <rect x="236" y="102" width="40" height="218" rx="20"/>
+    <path d="M236 198c-49 0-78-29-78-78v-21c0-15 12-27 27-27s27 12 27 27v18c0 18 7 27 24 27z"/>
+    <path d="M276 180c49 0 78-29 78-78V82c0-15-12-27-27-27s-27 12-27 27v17c0 18-7 27-24 27z"/>
+  </g>
+  <path d="M151 335c52 36 157 37 211 0" fill="none" stroke="#b98634" stroke-width="16" stroke-linecap="round"/>
+  <text x="256" y="424" text-anchor="middle" font-family="Georgia, serif" font-size="92" font-weight="700" fill="#f4ead5">KP</text>
+</svg>

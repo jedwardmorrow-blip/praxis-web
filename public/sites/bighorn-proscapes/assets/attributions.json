@@ -1,0 +1,106 @@
+{
+  "photos": [
+    {
+      "file": "photo-1.jpg",
+      "authors": [
+        {
+          "displayName": "Bighorn Proscapes LLC",
+          "uri": "https://maps.google.com/maps/contrib/102392375053211568806",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWZ0Vy8CGrD58WGpgnIx_bxOQAo9-hE98EbbiimI5ngoZZvq7mp=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-2.jpg",
+      "authors": [
+        {
+          "displayName": "Steve Smith",
+          "uri": "https://maps.google.com/maps/contrib/115964516754710391330",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjV-V54HaJiSltCha871Fd_-qUKJ1eNzS4Lh8zLnVNjkP-yGgovY=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-3.jpg",
+      "authors": [
+        {
+          "displayName": "Bighorn Proscapes LLC",
+          "uri": "https://maps.google.com/maps/contrib/102392375053211568806",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWZ0Vy8CGrD58WGpgnIx_bxOQAo9-hE98EbbiimI5ngoZZvq7mp=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-4.jpg",
+      "authors": [
+        {
+          "displayName": "Bighorn Proscapes LLC",
+          "uri": "https://maps.google.com/maps/contrib/102392375053211568806",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWZ0Vy8CGrD58WGpgnIx_bxOQAo9-hE98EbbiimI5ngoZZvq7mp=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-5.jpg",
+      "authors": [
+        {
+          "displayName": "Gloria Soto",
+          "uri": "https://maps.google.com/maps/contrib/116222691055528223998",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocJ-VFzoWosF3E-P7fTv4ZMVVR25mTAHQQ3g1vDR1P0pDwzIlA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-6.jpg",
+      "authors": [
+        {
+          "displayName": "Bighorn Proscapes LLC",
+          "uri": "https://maps.google.com/maps/contrib/102392375053211568806",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWZ0Vy8CGrD58WGpgnIx_bxOQAo9-hE98EbbiimI5ngoZZvq7mp=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-7.jpg",
+      "authors": [
+        {
+          "displayName": "Bighorn Proscapes LLC",
+          "uri": "https://maps.google.com/maps/contrib/102392375053211568806",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWZ0Vy8CGrD58WGpgnIx_bxOQAo9-hE98EbbiimI5ngoZZvq7mp=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-8.jpg",
+      "authors": [
+        {
+          "displayName": "Bighorn Proscapes LLC",
+          "uri": "https://maps.google.com/maps/contrib/102392375053211568806",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWZ0Vy8CGrD58WGpgnIx_bxOQAo9-hE98EbbiimI5ngoZZvq7mp=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-9.jpg",
+      "authors": [
+        {
+          "displayName": "Brad Kilburn",
+          "uri": "https://maps.google.com/maps/contrib/107885660454192153124",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocKxXGNT29X2as-unCcpGWteqvWf_gryefxR-OuZN-_JxwVdSA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-10.jpg",
+      "authors": [
+        {
+          "displayName": "Kristine Pepping",
+          "uri": "https://maps.google.com/maps/contrib/107828858129331634657",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWksI8HVjRHIUiGGca_tpJ3sC-73H9d5qOnIFwlbZXHnHiOG1Gn=s100-p-k-no-mo"
+        }
+      ]
+    }
+  ],
+  "reviews_source": "Google",
+  "note": "Google requires visible attribution for photos and reviews used on the live site."
+}

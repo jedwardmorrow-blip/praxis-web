@@ -1,0 +1,56 @@
+{
+  "photos": [
+    {
+      "file": "photo-1.jpg",
+      "authors": [
+        {
+          "displayName": "PDS Heating and Cooling Tucson",
+          "uri": "https://maps.google.com/maps/contrib/102251434405474576594",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjX_4s47nM8xY5YO6HqzxEgiOtHtcTjp7lQ-_ffkHCe7YiTzDLI=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-2.jpg",
+      "authors": [
+        {
+          "displayName": "PDS Heating and Cooling Tucson",
+          "uri": "https://maps.google.com/maps/contrib/102251434405474576594",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjX_4s47nM8xY5YO6HqzxEgiOtHtcTjp7lQ-_ffkHCe7YiTzDLI=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-3.jpg",
+      "authors": [
+        {
+          "displayName": "PDS Heating and Cooling Tucson",
+          "uri": "https://maps.google.com/maps/contrib/102251434405474576594",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjX_4s47nM8xY5YO6HqzxEgiOtHtcTjp7lQ-_ffkHCe7YiTzDLI=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-4.jpg",
+      "authors": [
+        {
+          "displayName": "Kathryn Schodroski",
+          "uri": "https://maps.google.com/maps/contrib/109406348756591589944",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocJQc7B0k2h_xlurynOT6KupRWdBwwHCNn17W6faSvGz-WIBsQ=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-5.jpg",
+      "authors": [
+        {
+          "displayName": "PDS Heating and Cooling Tucson",
+          "uri": "https://maps.google.com/maps/contrib/102251434405474576594",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjX_4s47nM8xY5YO6HqzxEgiOtHtcTjp7lQ-_ffkHCe7YiTzDLI=s100-p-k-no-mo"
+        }
+      ]
+    }
+  ],
+  "reviews_source": "Google",
+  "note": "Google requires visible attribution for photos and reviews used on the live site."
+}

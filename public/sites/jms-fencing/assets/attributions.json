@@ -1,0 +1,106 @@
+{
+  "photos": [
+    {
+      "file": "photo-1.jpg",
+      "authors": [
+        {
+          "displayName": "Jim Stover",
+          "uri": "https://maps.google.com/maps/contrib/117934805688877621684",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocKWUXVSYz4TY99Bdh2fotRUbU6yEGqe6JqQSTRherCgpQqfzA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-2.jpg",
+      "authors": [
+        {
+          "displayName": "Jim Stover",
+          "uri": "https://maps.google.com/maps/contrib/117934805688877621684",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocKWUXVSYz4TY99Bdh2fotRUbU6yEGqe6JqQSTRherCgpQqfzA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-3.jpg",
+      "authors": [
+        {
+          "displayName": "Jim Stover",
+          "uri": "https://maps.google.com/maps/contrib/117934805688877621684",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocKWUXVSYz4TY99Bdh2fotRUbU6yEGqe6JqQSTRherCgpQqfzA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-4.jpg",
+      "authors": [
+        {
+          "displayName": "Ryan H.",
+          "uri": "https://maps.google.com/maps/contrib/112270536584910435568",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjVPvnziZq_yrTuPzxl4CZna2Yx8k5REU0QmPQBCO0Z1hUKTNeYu=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-5.jpg",
+      "authors": [
+        {
+          "displayName": "Jim Stover",
+          "uri": "https://maps.google.com/maps/contrib/117934805688877621684",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocKWUXVSYz4TY99Bdh2fotRUbU6yEGqe6JqQSTRherCgpQqfzA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-6.jpg",
+      "authors": [
+        {
+          "displayName": "Jim Stover",
+          "uri": "https://maps.google.com/maps/contrib/117934805688877621684",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocKWUXVSYz4TY99Bdh2fotRUbU6yEGqe6JqQSTRherCgpQqfzA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-7.jpg",
+      "authors": [
+        {
+          "displayName": "Elizabeth Rusiecki",
+          "uri": "https://maps.google.com/maps/contrib/106718097210116760833",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjV-m7gbWq6oNyile3bOHzBw7i819vXY-xIivhzZKYiume28EoM=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-8.jpg",
+      "authors": [
+        {
+          "displayName": "Jim Stover",
+          "uri": "https://maps.google.com/maps/contrib/117934805688877621684",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocKWUXVSYz4TY99Bdh2fotRUbU6yEGqe6JqQSTRherCgpQqfzA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-9.jpg",
+      "authors": [
+        {
+          "displayName": "Jim Stover",
+          "uri": "https://maps.google.com/maps/contrib/117934805688877621684",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocKWUXVSYz4TY99Bdh2fotRUbU6yEGqe6JqQSTRherCgpQqfzA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-10.jpg",
+      "authors": [
+        {
+          "displayName": "Jim Stover",
+          "uri": "https://maps.google.com/maps/contrib/117934805688877621684",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocKWUXVSYz4TY99Bdh2fotRUbU6yEGqe6JqQSTRherCgpQqfzA=s100-p-k-no-mo"
+        }
+      ]
+    }
+  ],
+  "reviews_source": "Google",
+  "note": "Google requires visible attribution for photos and reviews used on the live site."
+}
