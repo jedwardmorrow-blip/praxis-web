@@ -82,8 +82,9 @@ export default function DiscoverySprintPage() {
         <section className="ds-hero">
           <div className="ds-hero-copy">
             <div className="ds-kicker">§ Discovery Sprint · Praxis</div>
-            <h1>
+            <h1 aria-label="One painful workflow. Five business days.">
               One painful workflow<span className="red">.</span>
+              {" "}
               <br />
               Five business days<span className="gold">.</span>
             </h1>

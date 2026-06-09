@@ -16,9 +16,11 @@ export function PullTyper() {
     if (typeof window === "undefined") return
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     if (reduce) {
-      setText(PULL_TEXT)
-      setDone(true)
-      return
+      const raf = requestAnimationFrame(() => {
+        setText(PULL_TEXT)
+        setDone(true)
+      })
+      return () => cancelAnimationFrame(raf)
     }
 
     const node = ref.current
@@ -33,7 +35,7 @@ export function PullTyper() {
       }
       setText(PULL_TEXT.slice(0, i + 1))
       const ch = PULL_TEXT.charAt(i)
-      const delay = ch === "." || ch === "?" ? 220 : ch === "," || ch === ";" ? 80 : Math.random() * 12 + 24
+      const delay = ch === "." || ch === "?" ? 90 : ch === "," || ch === ";" ? 40 : Math.random() * 8 + 10
       timer = setTimeout(() => type(i + 1), delay)
     }
 

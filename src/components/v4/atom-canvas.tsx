@@ -43,7 +43,13 @@ export default function AtomCanvas() {
     camera.position.set(11, 5.5, 13)
     camera.lookAt(0, 0, 0)
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false })
+    let renderer: THREE.WebGLRenderer
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false })
+    } catch (error) {
+      console.warn("Praxis atom WebGL renderer unavailable; leaving static fallback.", error)
+      return
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setSize(W, H)
     renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -418,14 +424,18 @@ export default function AtomCanvas() {
     canvas.addEventListener("mouseleave", onMouseLeave)
 
     // Animate loop
-    const clock = new THREE.Clock()
     let raf = 0
     let running = true
+    let lastFrame = performance.now()
+    let elapsed = 0
     const animate = () => {
       if (!running) return
       raf = requestAnimationFrame(animate)
-      const dt = clock.getDelta()
-      const t = clock.elapsedTime
+      const now = performance.now()
+      const dt = Math.min((now - lastFrame) / 1000, 0.05)
+      lastFrame = now
+      elapsed += dt
+      const t = elapsed
       orbitGroups.forEach((g) => {
         g.rotation.y += dt * ((g.userData as { speed: number }).speed ?? 0.05)
       })
@@ -485,8 +495,6 @@ export default function AtomCanvas() {
           // ignore disposal errors during teardown
         }
       })
-      // null out canvas ref
-      renderer.forceContextLoss()
     }
   }, [])
 

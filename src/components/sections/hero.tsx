@@ -22,11 +22,12 @@ export function Hero() {
           <span className="sep">·</span> Est. 2026
         </div>
         <p className="wedge-leader">
-          Every off-the-shelf tool failed our operation. So we built our own
+          Off-the-shelf tools rarely capture how real operations actually work
           <span className="red">.</span>
         </p>
-        <h1>
+        <h1 aria-label="Operators who build.">
           <span className="word w1">Operators</span>
+          {" "}
           <br />
           <span className="word w2">who</span>{" "}
           <span className="word w3">
@@ -41,14 +42,14 @@ export function Hero() {
           Founder-led. Fixed-scope. One painful workflow at a time.
         </p>
         <div className="hero-proof">
-          <span className="label">Live proof · drawn from production right now</span>
-          <span className="pn">Cultivo</span>
+          <span className="label">Production-tested operating patterns</span>
+          <span className="pn">Ops layer</span>
           <span className="sep">·</span>
           <span className="pn">156</span> tables<span className="sep">·</span>
           <span className="pn">12</span> modules<span className="sep">·</span>
           <span className="live-now">
             <span className="pulse-inline" />
-            multi-state production today
+            field-tested workflows
           </span>
         </div>
         <div className="hero-cta-row">
@@ -69,7 +70,7 @@ export function Hero() {
       <div className="hero-right">
         <div className="live">
           <div className="live-bar">
-            <span>Cultivo · cannabis flagship · live state</span>
+            <span>Operating system · anonymized live state</span>
             <span className="right">
               <span className="pulse" />
               <span>Operational</span>
@@ -98,8 +99,8 @@ export function Hero() {
             </div>
           </div>
           <div className="live-foot">
-            One Praxis-owned product, running production today. The same patterns ship in every
-            client engagement.
+            One production-tested operating model. The same patterns ship in every client
+            engagement.
           </div>
         </div>
       </div>

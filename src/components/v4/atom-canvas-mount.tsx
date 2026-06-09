@@ -14,15 +14,26 @@ export function AtomCanvasMount() {
   const wrapRef = useRef<HTMLDivElement>(null)
   const [shouldMount, setShouldMount] = useState(false)
   const [reduceMotion, setReduceMotion] = useState(false)
+  const [webglUnavailable, setWebglUnavailable] = useState(false)
 
   useEffect(() => {
     if (typeof window === "undefined") return
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
-    setReduceMotion(mq.matches)
+    const raf = requestAnimationFrame(() => {
+      const probe = document.createElement("canvas")
+      const hasWebgl = Boolean(
+        probe.getContext("webgl2") ||
+          probe.getContext("webgl") ||
+          probe.getContext("experimental-webgl")
+      )
+      setReduceMotion(mq.matches)
+      setWebglUnavailable(!hasWebgl)
+    })
+    return () => cancelAnimationFrame(raf)
   }, [])
 
   useEffect(() => {
-    if (reduceMotion) return
+    if (reduceMotion || webglUnavailable) return
     const node = wrapRef.current
     if (!node) return
     const obs = new IntersectionObserver(
@@ -39,11 +50,15 @@ export function AtomCanvasMount() {
     )
     obs.observe(node)
     return () => obs.disconnect()
-  }, [reduceMotion])
+  }, [reduceMotion, webglUnavailable])
 
   return (
     <div ref={wrapRef} className="atom-stage-wrap">
-      {shouldMount ? <AtomCanvas /> : <AtomFallback reduce={reduceMotion} />}
+      {shouldMount && !webglUnavailable ? (
+        <AtomCanvas />
+      ) : (
+        <AtomFallback reduce={reduceMotion || webglUnavailable} />
+      )}
     </div>
   )
 }

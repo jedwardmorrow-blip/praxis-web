@@ -95,8 +95,9 @@ export default function WebsitesPage() {
         <section className="web-hero">
           <div>
             <div className="ds-kicker">§ Local Web Presence · Praxis</div>
-            <h1>
+            <h1 aria-label="A real website. Built before you pay.">
               A real website<span className="red">.</span>
+              {" "}
               <br />
               Built before you pay<span className="gold">.</span>
             </h1>

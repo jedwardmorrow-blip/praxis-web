@@ -91,8 +91,9 @@ export default function TextBackCallBackPage() {
         <section className="tb-hero">
           <div className="tb-hero-copy">
             <div className="ds-kicker">§ Local Response Layer · Praxis</div>
-            <h1>
+            <h1 aria-label="AI text-back. Human call-back.">
               AI text-back<span className="red">.</span>
+              {" "}
               <br />
               Human call-back<span className="gold">.</span>
             </h1>

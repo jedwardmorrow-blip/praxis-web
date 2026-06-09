@@ -17,8 +17,8 @@ export function CountUp({ to, durationMs = 1400 }: Props) {
     if (typeof window === "undefined") return
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     if (reduce) {
-      setValue(to)
-      return
+      const raf = requestAnimationFrame(() => setValue(to))
+      return () => cancelAnimationFrame(raf)
     }
     const el = ref.current
     if (!el) return

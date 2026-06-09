@@ -292,7 +292,7 @@ export default function CannabisPage() {
                         <div className="h-1.5 w-10 rounded-sm" style={{ background: "oklch(0.95 0 0 / 0.06)" }} />
                       </div>
                       {/* Rows */}
-                      {rows.map(({ label: rowLabel, val, accent }) => (
+                      {rows.map(({ label: rowLabel, accent }) => (
                         <div
                           key={rowLabel}
                           className="flex items-center gap-3 py-1.5 px-2 rounded-sm"

@@ -2,6 +2,7 @@ import "./v4.css"
 
 import { Nav } from "@/components/v4/nav"
 import { FooterV4 } from "@/components/v4/footer"
+import { ScrollReveals } from "@/components/v4/scroll-reveals"
 import { JsonLd } from "@/components/json-ld"
 import { Hero } from "@/components/sections/hero"
 import { Atom } from "@/components/sections/atom"
@@ -36,7 +37,7 @@ const organizationJsonLd = {
     "AI Agents",
     "Operational Intelligence",
     "Business Process Automation",
-    "Cannabis Operations Software",
+    "Operations Workflow Software",
   ],
   founder: [
     {
@@ -57,6 +58,7 @@ export default function Home() {
   return (
     <div className="v4-page">
       <JsonLd data={organizationJsonLd} />
+      <ScrollReveals />
       <Nav />
       <main id="main">
         <Hero />
