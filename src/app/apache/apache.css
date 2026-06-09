@@ -1,0 +1,134 @@
+/* Apache Business Systems — website overhaul / Discovery Sprint page.
+   Scoped entirely under .apache-sprint so it cannot affect any other route.
+   Uses the live v4 color tokens (:root in v4.css) and the app's next/font vars. */
+
+.apache-sprint{
+  --disp: var(--font-big-shoulders), "Big Shoulders Display", Impact, sans-serif;
+  --sans: var(--font-plex-sans), "IBM Plex Sans", system-ui, sans-serif;
+  --mono: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  --type: var(--font-special-elite), "Special Elite", serif;
+}
+.apache-sprint main{ position: relative; z-index: 2; }
+.apache-sprint .red{ color: var(--red); }
+.apache-sprint .gold{ color: var(--gold); }
+.apache-sprint .arr{ color: var(--gold); margin-left: 9px; display: inline-block; transition: transform .3s ease; }
+.apache-sprint .ax-wrap, .apache-sprint .ax-band, .apache-sprint .ax-hero, .apache-sprint .ax-final{
+  max-width: 1280px; margin: 0 auto; padding-left: clamp(22px,5vw,56px); padding-right: clamp(22px,5vw,56px);
+}
+
+/* hero */
+.apache-sprint .ax-hero{ padding-top: clamp(56px,8vw,96px); padding-bottom: clamp(44px,6vw,76px); position: relative; }
+.apache-sprint .ax-hero::before{ content:""; position:absolute; inset:0; pointer-events:none; background: radial-gradient(ellipse 60% 45% at 28% 34%, rgba(201,162,75,.10), transparent 70%); }
+.apache-sprint .ax-hero-grid{ position: relative; display: grid; grid-template-columns: 7fr 5fr; gap: clamp(36px,5vw,64px); align-items: center; }
+.apache-sprint .ax-eye{ font-family: var(--mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); }
+.apache-sprint .ax-eye .sep{ color: var(--paper-faint); margin: 0 8px; }
+.apache-sprint .ax-lead-type{ font-family: var(--type); font-size: clamp(18px,2.2vw,24px); line-height: 1.45; color: var(--paper); margin-top: 22px; max-width: 32ch; }
+.apache-sprint .ax-h1{ font-family: var(--disp); font-weight: 900; text-transform: uppercase; line-height: .92; letter-spacing: .005em; font-size: clamp(56px,8vw,120px); margin-top: 18px; color: var(--paper); }
+.apache-sprint .ax-h1 .ln{ display: block; overflow: hidden; }
+.apache-sprint .ax-h1 .ln i{ display: block; font-style: normal; transform: translateY(105%); animation: ax-rise .9s cubic-bezier(.16,1,.3,1) forwards; }
+.apache-sprint .ax-clar{ font-family: var(--sans); font-weight: 500; font-size: clamp(16px,1.6vw,20px); line-height: 1.5; color: var(--paper); margin-top: 30px; max-width: 54ch; opacity: 0; animation: ax-fade .8s ease 1s forwards; }
+.apache-sprint .ax-meta{ margin-top: 20px; padding-top: 15px; border-top: .5px dashed var(--rule-soft); font-family: var(--mono); font-size: 11px; letter-spacing: .06em; line-height: 1.8; color: var(--paper-dim); max-width: 62ch; opacity: 0; animation: ax-fade .8s ease 1.15s forwards; }
+.apache-sprint .ax-meta .lbl{ color: var(--gold); text-transform: uppercase; letter-spacing: .18em; font-size: 10px; }
+
+/* command panel */
+.apache-sprint .ax-panel{ border: 1px solid var(--rule); background: linear-gradient(160deg, rgba(20,54,94,.5), rgba(3,16,31,.5)); opacity: 0; animation: ax-fade 1s ease .5s forwards; }
+.apache-sprint .ax-panel .bar{ display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 11px 16px; border-bottom: 1px solid var(--rule-soft); font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--paper-mute); }
+.apache-sprint .ax-panel .live{ color: var(--red); display: inline-flex; align-items: center; gap: 6px; }
+.apache-sprint .ax-panel .pulse{ width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: ax-pulse 2s ease-in-out infinite; }
+.apache-sprint .ax-panel .core{ display: grid; grid-template-columns: repeat(3,1fr); border-bottom: 1px solid var(--rule-soft); }
+.apache-sprint .ax-panel .stat{ padding: 18px 14px; text-align: center; border-right: 1px solid var(--rule-soft); }
+.apache-sprint .ax-panel .stat:last-child{ border-right: 0; }
+.apache-sprint .ax-panel .stat .n{ font-family: var(--disp); font-weight: 900; font-size: 34px; color: var(--gold); line-height: 1; }
+.apache-sprint .ax-panel .stat .l{ font-family: var(--mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--paper-mute); margin-top: 7px; }
+.apache-sprint .ax-panel .list{ padding: 16px; }
+.apache-sprint .ax-panel .row{ display: flex; align-items: center; gap: 11px; padding: 7px 0; font-family: var(--mono); font-size: 12px; color: var(--paper-dim); letter-spacing: .02em; }
+.apache-sprint .ax-panel .mk{ width: 7px; height: 7px; flex: none; border: 1px solid var(--gold); transform: rotate(45deg); }
+.apache-sprint .ax-panel .foot{ padding: 13px 16px; border-top: 1px solid var(--rule-soft); font-family: var(--mono); font-size: 10.5px; letter-spacing: .04em; line-height: 1.6; color: var(--paper-mute); }
+
+/* section scaffolding */
+.apache-sprint .ax-band{ border-top: 1px solid var(--rule-soft); padding-top: clamp(54px,8vw,96px); padding-bottom: clamp(54px,8vw,96px); }
+.apache-sprint .ax-tag{ font-family: var(--mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 18px; }
+.apache-sprint .ax-h2{ font-family: var(--disp); font-weight: 900; text-transform: uppercase; font-size: clamp(34px,5vw,62px); line-height: .95; max-width: 20ch; color: var(--paper); }
+.apache-sprint .ax-lead{ font-family: var(--sans); font-size: clamp(16px,1.6vw,20px); color: var(--paper-dim); max-width: 60ch; line-height: 1.55; }
+.apache-sprint .ax-job-grid{ display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(30px,5vw,64px); align-items: start; }
+
+/* website wins */
+.apache-sprint .ax-wins{ display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--rule-soft); border: 1px solid var(--rule-soft); margin-top: clamp(34px,5vw,48px); }
+.apache-sprint .ax-win{ background: var(--canvas); padding: clamp(22px,2.4vw,30px); transition: background .3s; }
+.apache-sprint .ax-win:hover{ background: var(--canvas-deep); }
+.apache-sprint .ax-win h3{ font-family: var(--disp); font-weight: 800; text-transform: uppercase; font-size: 20px; color: var(--paper); letter-spacing: .01em; }
+.apache-sprint .ax-win p{ font-family: var(--sans); color: var(--paper-dim); font-size: 14.5px; line-height: 1.55; margin-top: 11px; }
+.apache-sprint .ax-systems-line{ font-family: var(--sans); font-size: clamp(15px,1.5vw,18px); color: var(--paper-dim); max-width: 64ch; margin-top: 28px; line-height: 1.6; }
+.apache-sprint .ax-systems-line a{ color: var(--gold); border-bottom: 1px solid var(--rule); white-space: nowrap; }
+.apache-sprint .ax-systems-line a:hover{ color: var(--gold-paper); }
+.apache-sprint .ax-systems-line a:hover .arr{ transform: translateX(4px); }
+
+/* lenses */
+.apache-sprint .ax-lenses{ display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule-soft); border: 1px solid var(--rule-soft); margin-top: clamp(34px,5vw,48px); }
+.apache-sprint .ax-lens{ background: var(--canvas); padding: clamp(26px,3vw,40px); transition: background .3s; }
+.apache-sprint .ax-lens:hover{ background: var(--canvas-deep); }
+.apache-sprint .ax-lens .ln-tag{ font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); }
+.apache-sprint .ax-lens h3{ font-family: var(--disp); font-weight: 800; text-transform: uppercase; font-size: clamp(24px,3vw,36px); margin-top: 14px; color: var(--paper); }
+.apache-sprint .ax-lens p{ font-family: var(--sans); color: var(--paper-dim); font-size: 15px; line-height: 1.6; margin-top: 14px; }
+.apache-sprint .ax-lens .out{ margin-top: 18px; padding-top: 14px; border-top: .5px dashed var(--rule-soft); font-family: var(--mono); font-size: 11px; letter-spacing: .04em; line-height: 1.6; color: var(--paper-mute); }
+.apache-sprint .ax-lens .out b{ color: var(--gold); text-transform: uppercase; letter-spacing: .14em; font-size: 10px; display: block; margin-bottom: 5px; }
+
+/* timeline */
+.apache-sprint .ax-timeline{ display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: var(--rule-soft); border: 1px solid var(--rule-soft); margin-top: clamp(34px,5vw,48px); }
+.apache-sprint .ax-step{ background: var(--canvas); padding: 24px 20px; }
+.apache-sprint .ax-step .num{ font-family: var(--disp); font-weight: 900; font-size: 30px; color: var(--red); line-height: 1; }
+.apache-sprint .ax-step h4{ font-family: var(--disp); font-weight: 700; font-size: 18px; text-transform: uppercase; color: var(--paper); margin-top: 12px; letter-spacing: .01em; }
+.apache-sprint .ax-step p{ font-family: var(--sans); color: var(--paper-mute); font-size: 13.5px; line-height: 1.55; margin-top: 10px; }
+.apache-sprint .ax-pace{ margin-top: 20px; font-family: var(--mono); font-size: 11px; letter-spacing: .04em; color: var(--paper-mute); line-height: 1.7; }
+
+/* deliverables */
+.apache-sprint .ax-inv{ display: grid; grid-template-columns: 5fr 7fr; gap: clamp(30px,5vw,64px); align-items: start; }
+.apache-sprint .ax-inv-h{ font-family: var(--disp); font-weight: 900; text-transform: uppercase; font-size: clamp(40px,6vw,80px); line-height: .9; color: var(--paper); }
+.apache-sprint .ax-delivs{ display: flex; flex-direction: column; }
+.apache-sprint .ax-deliv{ display: flex; gap: 18px; padding: 17px 0; border-bottom: .5px solid var(--rule-soft); align-items: baseline; }
+.apache-sprint .ax-deliv .dn{ font-family: var(--mono); font-size: 12px; color: var(--gold); letter-spacing: .1em; flex: none; width: 28px; }
+.apache-sprint .ax-deliv p{ font-family: var(--sans); font-size: 17px; color: var(--paper); line-height: 1.45; }
+.apache-sprint .ax-deliv p .m{ display: block; font-size: 13.5px; color: var(--paper-mute); margin-top: 4px; line-height: 1.5; }
+.apache-sprint .ax-own{ font-family: var(--mono); font-size: 11px; letter-spacing: .04em; color: var(--gold); margin-top: 18px; }
+
+/* straight talk */
+.apache-sprint .ax-pb{ display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule-soft); border: 1px solid var(--rule-soft); margin-top: clamp(32px,5vw,46px); }
+.apache-sprint .ax-pb .pb{ background: var(--canvas); padding: clamp(26px,3vw,38px); }
+.apache-sprint .ax-pb .pb.muted{ background: var(--canvas-deep); }
+.apache-sprint .ax-pb .pb h3{ font-family: var(--disp); font-weight: 800; font-size: 23px; text-transform: uppercase; color: var(--paper); }
+.apache-sprint .ax-pb .pb p{ font-family: var(--sans); color: var(--paper-dim); font-size: 15px; line-height: 1.6; margin-top: 13px; }
+
+/* final */
+.apache-sprint .ax-final{ text-align: center; padding-top: clamp(64px,9vw,116px); padding-bottom: clamp(64px,9vw,116px); border-top: 1px solid var(--rule); }
+.apache-sprint .ax-final .ax-lead-type{ margin: 16px auto 0; max-width: 36ch; }
+.apache-sprint .ax-final-h{ font-family: var(--disp); font-weight: 900; text-transform: uppercase; font-size: clamp(40px,7vw,92px); line-height: .9; color: var(--paper); margin-top: 14px; }
+.apache-sprint .ax-final-p{ font-family: var(--sans); color: var(--paper-dim); font-size: clamp(16px,1.7vw,20px); max-width: 50ch; margin: 22px auto 0; line-height: 1.55; }
+.apache-sprint .ax-cta-row{ display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 34px; }
+.apache-sprint .ax-cta{ background: var(--red); color: var(--paper); padding: 15px 26px; font-family: var(--mono); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; text-decoration: none; transition: background .2s; }
+.apache-sprint .ax-cta:hover{ background: var(--red-deep); }
+.apache-sprint .ax-cta:hover .arr{ transform: translateX(4px); }
+.apache-sprint .ax-cta2{ background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 14px 24px; font-family: var(--mono); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; text-decoration: none; transition: all .2s; }
+.apache-sprint .ax-cta2:hover{ background: var(--gold); color: var(--canvas); }
+.apache-sprint .ax-cta2 .arr{ color: var(--red); }
+.apache-sprint .ax-cta2:hover .arr{ color: var(--canvas); transform: translateX(4px); }
+
+@keyframes ax-rise{ to{ transform: translateY(0); } }
+@keyframes ax-fade{ to{ opacity: 1; } }
+@keyframes ax-pulse{ 0%,100%{ opacity: 1; transform: scale(1); } 50%{ opacity: .5; transform: scale(.82); } }
+
+@media (max-width: 980px){
+  .apache-sprint .ax-hero-grid{ grid-template-columns: 1fr; gap: 34px; }
+  .apache-sprint .ax-job-grid{ grid-template-columns: 1fr; gap: 22px; }
+  .apache-sprint .ax-wins{ grid-template-columns: 1fr 1fr; }
+  .apache-sprint .ax-timeline{ grid-template-columns: 1fr 1fr; }
+  .apache-sprint .ax-inv{ grid-template-columns: 1fr; gap: 24px; }
+}
+@media (max-width: 680px){
+  .apache-sprint .ax-lenses, .apache-sprint .ax-wins, .apache-sprint .ax-timeline, .apache-sprint .ax-pb{ grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce){
+  .apache-sprint .ax-h1 .ln i,
+  .apache-sprint .ax-clar,
+  .apache-sprint .ax-meta,
+  .apache-sprint .ax-panel{ animation: none; opacity: 1; transform: none; }
+}
