@@ -1520,10 +1520,11 @@ footer.site-foot { background: #000; color: var(--paper); padding: 56px 56px 40p
 
   /* Section padding tighter */
   .hero { padding: 42px 20px 54px; }
-  .ds-hero { padding: 54px 20px 58px; grid-template-columns: 1fr; gap: 32px; }
-  .ds-hero h1 { font-size: 58px; line-height: 0.94; }
-  .ds-lede { font-size: 17px; }
-  .ds-proof-line { font-size: 10px; }
+  .ds-hero { padding: 44px 20px 54px; grid-template-columns: 1fr; gap: 28px; }
+  .ds-hero h1 { font-size: 50px; line-height: 0.91; margin-top: 14px; }
+  .ds-lede { font-size: 16px; line-height: 1.42; margin-top: 20px; }
+  .ds-page .ds-cta-row { gap: 10px; margin-top: 22px; }
+  .ds-proof-line { font-size: 9.5px; line-height: 1.55; margin-top: 16px; padding-top: 13px; }
   .ds-command-panel { box-shadow: none; }
   .ds-panel-bar { align-items: flex-start; flex-direction: column; }
   .ds-panel-core { grid-template-columns: 1fr; }
