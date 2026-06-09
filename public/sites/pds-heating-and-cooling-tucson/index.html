@@ -14,7 +14,7 @@
 <meta name="twitter:title" content="PDS Heating and Cooling, Tucson 4.9 stars on Google" />
 <meta name="twitter:description" content="Honest AC repair, installs, ductless, and heating for Tucson and Nogales. ROC #344639. Call (520) 313-2107." />
 <meta name="twitter:image" content="https://gopraxis.ai/sites/pds-heating-and-cooling-tucson/assets/photo-1.jpg" />
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='10' fill='%23181a1c'/><text x='32' y='45' font-family='Arial Black,Arial,sans-serif' font-size='30' font-weight='900' text-anchor='middle' fill='%237ed321'>PDS</text></svg>" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <!-- PDS Heating and Cooling, Tucson and Nogales. Bespoke build from brand-brief.json. -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -55,11 +55,12 @@
 
   /* ====================================================================
      PDS Heating and Cooling — bespoke design system
-     Palette derived from the real PDS truck magnet (photo-5): lime-green
-     "PDS" wordmark, charcoal/black type, steel-gray equipment, white field.
-     Direction: warm heating-forward HVAC, structured warm-industrial,
-     medium-hard edges. Ember orange carries the heating energy; the real
-     PDS lime stays as the wordmark + secondary accent so the mark is theirs.
+     Palette from the real PDS logo (Instagram): a warm-to-cool gradient —
+     sun orange/red flowing into snowflake blue — charcoal type on a bone field.
+     Direction: the heating + cooling duality of their own mark. Ember warm
+     carries the heat; a clean cool blue carries the AC. Structured, medium-hard
+     industrial edges. (The --lime* token names are kept but now hold the brand
+     blue; the earlier lime-green was a wrong guess off a truck-magnet photo.)
      ==================================================================== */
   :root{
     --char:#181a1c;      /* deep charcoal — the wordmark black */
@@ -75,9 +76,9 @@
     --ember:#e8541e;     /* ember orange — heating accent */
     --ember-d:#bf4011;   /* darker ember, AA text on light */
     --ember-l:#ff7a3d;   /* ember on dark */
-    --lime:#7ed321;      /* the real PDS green — wordmark + accent */
-    --lime-d:#4f8a13;    /* AA lime text on light */
-    --lime-on-dark:#9fe34a;
+    --lime:#1f86d0;      /* PDS cooling blue — the snowflake half of the real mark */
+    --lime-d:#175e9c;    /* AA blue text on light */
+    --lime-on-dark:#5cb8f2;
     --maxw:1180px;
     --brand-1:var(--ember-d);  /* infra alias (mobile bar) — deeper ember for white-label AA */
     --brand-2:var(--lime);     /* infra alias */
@@ -171,6 +172,18 @@
   .marquee .item{display:inline-flex;align-items:center;gap:12px;padding:16px 30px;white-space:nowrap;font-family:"Big Shoulders Display";font-weight:700;font-size:1.18rem;letter-spacing:.04em;text-transform:uppercase}
   .marquee .item .d{color:var(--ember-l);font-size:1.3rem;line-height:0}
   .marquee .item.lime{color:var(--lime-on-dark)}
+
+  /* ---------- meet Jesus: the human + speed proof ---------- */
+  .meet{background:var(--bone-2);border-bottom:1px solid var(--line)}
+  .meet .meet-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+  .meet h2{font-size:clamp(2.1rem,4.4vw,3.3rem);color:var(--char);margin-top:14px}
+  .meet p{margin-top:18px;color:var(--soft);font-size:1.08rem;line-height:1.62;max-width:48ch}
+  .meet p b{color:var(--char)}
+  .meet .meet-stats{display:flex;flex-direction:column;gap:15px}
+  .meet .stat{background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--lime);border-radius:var(--edge);padding:18px 22px}
+  .meet .stat b{display:block;font-family:"Big Shoulders Display";font-weight:800;text-transform:uppercase;font-size:1.4rem;color:var(--char);letter-spacing:.01em;line-height:1}
+  .meet .stat span{display:block;margin-top:6px;color:var(--soft);font-size:.94rem;line-height:1.45}
+  @media(max-width:900px){.meet .meet-grid{grid-template-columns:1fr;gap:30px}}
 
   /* ---------- section scaffold ---------- */
   section{padding:90px 0}
@@ -431,6 +444,8 @@
       <span class="lic">ROC #344639</span>
       <span class="dot"></span>
       <span>Serving Tucson &amp; Nogales, AZ</span>
+      <span class="dot"></span>
+      <span>Se habla español</span>
     </div>
     <div class="row">
       <span><span class="star">★</span> <b>4.9</b> on Google</span>
@@ -444,8 +459,7 @@
 <header>
   <div class="wrap nav">
     <a class="mark" href="#top" aria-label="PDS Heating and Cooling home">
-      <span class="badge"><span>PDS</span></span>
-      <span class="wm"><b>PDS</b><small>Heating &amp; Cooling</small></span>
+      <img class="logo" src="assets/logo.svg" alt="PDS Heating and Cooling" width="780" height="240" style="height:46px;width:auto;display:block" />
     </a>
     <nav class="navlinks">
       <a href="#services">Services</a>
@@ -478,7 +492,11 @@
         </div>
         <div class="meta">
           <span class="stars">★★★★★</span>
-          <b>4.9</b> from 30 Google reviews
+          <b>4.9</b> from 30 reviews
+          <span class="sep"></span>
+          Free estimates
+          <span class="sep"></span>
+          <b>Se habla español</b>
           <span class="sep"></span>
           ROC #344639
         </div>
@@ -505,6 +523,8 @@
     <span class="item lime">Heating</span><span class="item"><span class="d">●</span></span>
     <span class="item">ROC #344639</span><span class="item"><span class="d">●</span></span>
     <span class="item lime">4.9 Stars on Google</span><span class="item"><span class="d">●</span></span>
+    <span class="item">Free Estimates</span><span class="item"><span class="d">●</span></span>
+    <span class="item lime">Se Habla Español</span><span class="item"><span class="d">●</span></span>
     <!-- duplicate for seamless loop -->
     <span class="item lime">Fast Response</span><span class="item"><span class="d">●</span></span>
     <span class="item">Repairs &amp; Tune-Ups</span><span class="item"><span class="d">●</span></span>
@@ -513,8 +533,28 @@
     <span class="item lime">Heating</span><span class="item"><span class="d">●</span></span>
     <span class="item">ROC #344639</span><span class="item"><span class="d">●</span></span>
     <span class="item lime">4.9 Stars on Google</span><span class="item"><span class="d">●</span></span>
+    <span class="item">Free Estimates</span><span class="item"><span class="d">●</span></span>
+    <span class="item lime">Se Habla Español</span><span class="item"><span class="d">●</span></span>
   </div>
 </div>
+
+<!-- meet Jesus: the human behind the reviews + speed proof -->
+<section class="meet">
+  <div class="wrap">
+    <div class="meet-grid">
+      <div>
+        <span class="kick">The name you'll hear</span>
+        <h2>Most folks just ask for Jesus.</h2>
+        <p>Read the reviews and one name keeps coming up. Jesus shows up fast, finds the problem, tells you straight what's wrong in plain English, and cleans up before he leaves. No call center, no rotating crew of strangers, just the person Tucson keeps asking for by name.</p>
+      </div>
+      <div class="meet-stats">
+        <div class="stat"><b>Within the hour</b><span>One Google review: the AC was back up and running on a same-day call.</span></div>
+        <div class="stat"><b>Plain English</b><span>You'll know what's wrong, and why, before any work starts.</span></div>
+        <div class="stat"><b>Cleaned up</b><span>The job isn't done until your home is left tidy.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- services: asymmetric numbered list + sticky feature panel -->
 <section class="svc" id="services">
