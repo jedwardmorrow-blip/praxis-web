@@ -1,0 +1,86 @@
+{
+  "photos": [
+    {
+      "file": "photo-1.jpg",
+      "authors": [
+        {
+          "displayName": "Cruz Yocupicio Landscaping",
+          "uri": "https://maps.google.com/maps/contrib/112989159056680829240",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjXY-DpBy1WMwRu0TN2K9usbFhe3bDkS4SMgpS42PZPaLYRj-EA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-2.jpg",
+      "authors": [
+        {
+          "displayName": "Cruz Yocupicio Landscaping",
+          "uri": "https://maps.google.com/maps/contrib/112989159056680829240",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjXY-DpBy1WMwRu0TN2K9usbFhe3bDkS4SMgpS42PZPaLYRj-EA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-3.jpg",
+      "authors": [
+        {
+          "displayName": "Cruz Yocupicio Landscaping",
+          "uri": "https://maps.google.com/maps/contrib/112989159056680829240",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjXY-DpBy1WMwRu0TN2K9usbFhe3bDkS4SMgpS42PZPaLYRj-EA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-4.jpg",
+      "authors": [
+        {
+          "displayName": "Cruz Yocupicio Landscaping",
+          "uri": "https://maps.google.com/maps/contrib/112989159056680829240",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjXY-DpBy1WMwRu0TN2K9usbFhe3bDkS4SMgpS42PZPaLYRj-EA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-5.jpg",
+      "authors": [
+        {
+          "displayName": "Cruz Yocupicio Landscaping",
+          "uri": "https://maps.google.com/maps/contrib/112989159056680829240",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjXY-DpBy1WMwRu0TN2K9usbFhe3bDkS4SMgpS42PZPaLYRj-EA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-6.jpg",
+      "authors": [
+        {
+          "displayName": "Cruz Yocupicio Landscaping",
+          "uri": "https://maps.google.com/maps/contrib/112989159056680829240",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjXY-DpBy1WMwRu0TN2K9usbFhe3bDkS4SMgpS42PZPaLYRj-EA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-7.jpg",
+      "authors": [
+        {
+          "displayName": "Cruz Yocupicio Landscaping",
+          "uri": "https://maps.google.com/maps/contrib/112989159056680829240",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjXY-DpBy1WMwRu0TN2K9usbFhe3bDkS4SMgpS42PZPaLYRj-EA=s100-p-k-no-mo"
+        }
+      ]
+    },
+    {
+      "file": "photo-8.jpg",
+      "authors": [
+        {
+          "displayName": "Cruz Yocupicio Landscaping",
+          "uri": "https://maps.google.com/maps/contrib/112989159056680829240",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjXY-DpBy1WMwRu0TN2K9usbFhe3bDkS4SMgpS42PZPaLYRj-EA=s100-p-k-no-mo"
+        }
+      ]
+    }
+  ],
+  "reviews_source": "Google",
+  "note": "Google requires visible attribution for photos and reviews used on the live site."
+}
