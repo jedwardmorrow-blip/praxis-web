@@ -341,7 +341,7 @@ export default function ApachePage() {
             What the first call covers<span className="red">.</span>
           </h2>
           <p className="ax-q-intro">
-            One conversation, about an hour, Jon and Viktor together. It gets recorded so I can
+            One conversation, about an hour, Jon and Victor together. It gets recorded so I can
             listen instead of scribbling notes, and so nothing gets lost or remembered wrong.
             Nothing here is a test and none of it needs preparation. This is just so you know
             what&apos;s coming.
