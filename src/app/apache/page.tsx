@@ -123,6 +123,23 @@ const deliverables = [
   },
 ]
 
+const sprintThemes = [
+  "Where the money actually comes from today, and which parts are growing or shrinking.",
+  "Where new customers come from, and what finding them currently costs.",
+  "What deserves more of your energy, and what deserves less.",
+  "How work moves through the shop, from the phone ringing to the invoice getting paid.",
+  "What the website should say about Apache, and the story it should tell.",
+]
+
+const bringList = [
+  "Revenue by category for the last year, even rough",
+  "The ZoomInfo invoice, and who actually uses it",
+  "How many service contracts are active right now",
+  "Which parts of Zoho actually get used",
+  "The three customer testimonial videos, wherever they live",
+  "Top ten customers last quarter, and what each buys",
+]
+
 export const metadata: Metadata = {
   title: "Apache Business Systems · Website Overhaul · Praxis",
   description:
@@ -311,8 +328,55 @@ export default function ApachePage() {
             ))}
           </div>
           <p className="ax-pace">
-            <span className="gold">On pace:</span> five steps, not five back-to-back days. A couple
-            of short calls over a couple of weeks, because a working shop has no afternoons to clear.
+            <span className="gold">On pace:</span> five steps, not five back-to-back days. One
+            focused call, the rest in short messages around the shop&apos;s schedule, because a
+            working shop has no afternoons to clear.
+          </p>
+        </section>
+
+        {/* SPRINT QUESTIONS */}
+        <section className="ax-band" id="sprint-questions">
+          <span className="ax-tag">§ Sprint questions</span>
+          <h2 className="ax-h2">
+            What the first call covers<span className="red">.</span>
+          </h2>
+          <p className="ax-q-intro">
+            One conversation, about an hour, Jon and Viktor together. It gets recorded so I can
+            listen instead of scribbling notes, and so nothing gets lost or remembered wrong.
+            Nothing here is a test and none of it needs preparation. This is just so you know
+            what&apos;s coming.
+          </p>
+          <div className="ax-q-grid">
+            <div className="ax-themes">
+              {sprintThemes.map((t, i) => (
+                <div className="ax-q" key={t}>
+                  <span className="qn">{String(i + 1).padStart(2, "0")}</span>
+                  <p>{t}</p>
+                </div>
+              ))}
+            </div>
+            <aside className="ax-panel ax-bring" aria-label="Worth having handy">
+              <div className="bar">
+                <span>Worth having handy</span>
+                <span>No prep required</span>
+              </div>
+              <div className="list">
+                {bringList.map((item) => (
+                  <div className="row" key={item}>
+                    <span className="mk" />
+                    {item}
+                  </div>
+                ))}
+              </div>
+              <div className="foot">
+                None of this is homework. If a number isn&apos;t handy, a rough guess is fine,
+                and we&apos;ll firm it up after the call.
+              </div>
+            </aside>
+          </div>
+          <p className="ax-pace">
+            <span className="gold">After the call:</span> the homework is mine. You&apos;ll see
+            everything that comes out of it before it goes anywhere.
           </p>
         </section>
 

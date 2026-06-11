@@ -83,6 +83,16 @@
 .apache-sprint .ax-step p{ font-family: var(--sans); color: var(--paper-mute); font-size: 13.5px; line-height: 1.55; margin-top: 10px; }
 .apache-sprint .ax-pace{ margin-top: 20px; font-family: var(--mono); font-size: 11px; letter-spacing: .04em; color: var(--paper-mute); line-height: 1.7; }
 
+/* sprint questions */
+.apache-sprint .ax-q-intro{ font-family: var(--sans); font-size: clamp(15px,1.5vw,18px); color: var(--paper-dim); max-width: 58ch; line-height: 1.6; margin-top: 20px; }
+.apache-sprint .ax-q-grid{ display: grid; grid-template-columns: 7fr 5fr; gap: clamp(30px,5vw,64px); align-items: start; margin-top: clamp(30px,4vw,44px); }
+.apache-sprint .ax-themes{ display: flex; flex-direction: column; }
+.apache-sprint .ax-q{ display: flex; gap: 18px; padding: 18px 0; border-bottom: .5px solid var(--rule-soft); align-items: baseline; }
+.apache-sprint .ax-q:first-child{ padding-top: 4px; }
+.apache-sprint .ax-q .qn{ font-family: var(--mono); font-size: 12px; color: var(--gold); letter-spacing: .1em; flex: none; width: 28px; }
+.apache-sprint .ax-q p{ font-family: var(--sans); font-size: clamp(16px,1.7vw,19px); color: var(--paper); line-height: 1.5; }
+.apache-sprint .ax-bring{ opacity: 1; animation: none; }
+
 /* deliverables */
 .apache-sprint .ax-inv{ display: grid; grid-template-columns: 5fr 7fr; gap: clamp(30px,5vw,64px); align-items: start; }
 .apache-sprint .ax-inv-h{ font-family: var(--disp); font-weight: 900; text-transform: uppercase; font-size: clamp(40px,6vw,80px); line-height: .9; color: var(--paper); }
@@ -125,6 +135,7 @@
 @media (max-width: 980px){
   .apache-sprint .ax-hero-grid{ grid-template-columns: 1fr; gap: 34px; }
   .apache-sprint .ax-job-grid{ grid-template-columns: 1fr; gap: 22px; }
+  .apache-sprint .ax-q-grid{ grid-template-columns: 1fr; gap: 26px; }
   .apache-sprint .ax-wins{ grid-template-columns: 1fr 1fr; }
   .apache-sprint .ax-timeline{ grid-template-columns: 1fr 1fr; }
   .apache-sprint .ax-inv{ grid-template-columns: 1fr; gap: 24px; }
@@ -156,6 +167,8 @@
   .apache-sprint .ax-lens p{ font-size: 14.5px; line-height: 1.58; }
   .apache-sprint .ax-deliv{ gap: 13px; }
   .apache-sprint .ax-deliv p{ font-size: 15.5px; }
+  .apache-sprint .ax-q{ gap: 13px; padding: 15px 0; }
+  .apache-sprint .ax-q p{ font-size: 15.5px; }
 }
 @media (prefers-reduced-motion: reduce){
   .apache-sprint .ax-h1 .ln i,
