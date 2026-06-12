@@ -8,7 +8,6 @@ import { FooterV4 } from "@/components/v4/footer"
 
 const justinEmail =
   "https://mail.google.com/mail/?view=cm&fs=1&to=justin@gopraxis.ai&su=Apache%20Business%20Systems%20%C2%B7%20Website%20%2B%20Discovery%20Sprint"
-const apachePreview = "https://apache-business-systems.vercel.app"
 
 const inspectList = [
   "Where the revenue actually lives",
@@ -196,8 +195,8 @@ export default function ApachePage() {
                 <a className="ax-cta" href={justinEmail} target="_blank" rel="noopener noreferrer">
                   Email Justin <span className="arr">→</span>
                 </a>
-                <a className="ax-cta2" href={apachePreview} target="_blank" rel="noopener noreferrer">
-                  View preview <span className="arr">→</span>
+                <a className="ax-cta2" href="#sprint-questions">
+                  What the call covers <span className="arr">→</span>
                 </a>
               </div>
               <p className="ax-meta">
@@ -281,10 +280,8 @@ export default function ApachePage() {
           </div>
           <p className="ax-systems-line">
             Praxis streamlines operational efficiency through systems. The website is the first of
-            those systems, and the one your customers see.{" "}
-            <a href={apachePreview} target="_blank" rel="noopener noreferrer">
-              See where the new site is headed <span className="arr">→</span>
-            </a>
+            those systems, and the one your customers see. You&apos;ll see it first as a working
+            draft, built on what the Sprint finds.
           </p>
         </section>
 
