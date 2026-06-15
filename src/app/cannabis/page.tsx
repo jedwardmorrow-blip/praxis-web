@@ -26,35 +26,313 @@ export const metadata: Metadata = {
 const problems = [
   {
     num: "01",
-    title: "Compliance is a full-time job",
-    body: "Seed-to-sale tracking, GMP documentation, audit preparation — whatever your regulatory framework, compliance should be a background process, not a dedicated headcount. When your team is manually reconciling tags and paperwork, you're paying compliance tax on every hour of the day.",
+    title: "Inventory stops matching reality",
+    body: "Product moves through cultivation, production, packaging, sales, transfers, returns, adjustments, and compliance systems. Every handoff creates a place where the system of record can drift from the floor.",
   },
   {
     num: "02",
-    title: "Your operation lives in one person's head",
-    body: "Routes, vendor relationships, manifest logic, exception handling — it all runs through the person who's been there the longest. When they're out, the operation slows. When they leave, it breaks.",
+    title: "The exception path lives in one person's head",
+    body: "Routes, vendor promises, batch decisions, manifest logic, compliance edge cases, customer rules. The operation keeps moving because someone remembers what the software never captured.",
   },
   {
     num: "03",
-    title: "You can't see your business in real time",
-    body: "Margin by SKU. On-time delivery rate. Inventory position across locations. If these numbers require a meeting or a spreadsheet to surface, you're making decisions on lag.",
+    title: "The close starts before accounting sees it",
+    body: "Margin, cash, sellable inventory, production yield, and transfer accuracy are decided upstream. By the time finance is reconciling the mess, the operational failure has already happened.",
   },
 ]
 
 const outputs = [
   {
-    label: "Custom Software",
-    body: "Built for how your operation actually runs — not a template, not an off-the-shelf tool with a cannabis skin on it.",
+    label: "Operating map",
+    body: "A clear picture of where work starts, changes hands, gets corrected, and stops matching the system of record.",
   },
   {
-    label: "AI Agents",
-    body: "Agents that know your business: your routes, your compliance requirements, your vendors, your team structure. Not a generic chatbot.",
+    label: "Workflow system",
+    body: "Production, inventory, distribution, compliance, reporting, and team handoffs shaped around how the operation actually runs.",
   },
   {
-    label: "Institutional Memory",
-    body: "Everything we learn about your operation gets encoded into a system that remembers. Your workflows, your exceptions, your vendor logic — documented once, available to every tool and agent we build. Your business is never explained twice.",
+    label: "AI memory",
+    body: "SOPs, exceptions, vendor logic, manager notes, and operational rules documented once, then made usable across the tools and agents we build.",
   },
 ]
+
+const operatingSignals = [
+  { label: "Inventory", sub: "real time", x: 50, y: 11, tone: "gold", mark: "INV" },
+  { label: "Sales", sub: "orders", x: 82, y: 37, tone: "paper", mark: "SLS" },
+  { label: "Delivery", sub: "fleet", x: 77, y: 71, tone: "gold", mark: "DLV" },
+  { label: "Compliance", sub: "traceability", x: 50, y: 88, tone: "paper", mark: "CMP" },
+  { label: "Finance", sub: "cash flow", x: 23, y: 71, tone: "gold", mark: "FIN" },
+  { label: "Production", sub: "planning", x: 18, y: 37, tone: "paper", mark: "PRD" },
+]
+
+const operatingRows = [
+  ["Source of truth", "inventory, batches, orders, tasks, exceptions"],
+  ["Handoff points", "cultivation -> production -> sales -> delivery"],
+  ["AI memory", "SOPs, notes, retrieval, draft work, review gates"],
+  ["Human control", "approval where judgment, compliance, or money matters"],
+]
+
+const sprintSteps = [
+  {
+    label: "Map",
+    body: "We trace one painful workflow from first input to final decision: who touches it, where it pauses, where data gets corrected, and where managers lose visibility.",
+  },
+  {
+    label: "Prove",
+    body: "We build a working proof around the actual operating logic: a dashboard, intake path, exception queue, AI-assisted documentation loop, or automation pattern.",
+  },
+  {
+    label: "Decide",
+    body: "You leave with a clear operating map, prioritized build path, and a recommendation on whether the workflow is worth rebuilding.",
+  },
+]
+
+const proofSurfaces = [
+  {
+    label: "Command center",
+    title: "Rooms, tasks, harvest risk.",
+    body: "One place to see which rooms are active, which work is late, and what needs attention before it becomes an inventory or revenue problem.",
+    accent: "red",
+  },
+  {
+    label: "Room overview",
+    title: "The floor, rendered as state.",
+    body: "Plant counts, cycle timing, room readiness, harvest windows, and exceptions surface without waiting for a manager recap.",
+    accent: "gold",
+  },
+  {
+    label: "Harvest flow",
+    title: "Handoffs stay visible.",
+    body: "Incoming harvests, drying rooms, strain groups, and completion states stay attached to the work instead of disappearing into notes.",
+    accent: "paper",
+  },
+]
+
+function OperatingSchematic() {
+  return (
+    <div id="cannabis-atlas" className="relative z-10">
+      <div
+        className="relative min-h-[560px] overflow-hidden border border-border bg-card/70 lg:min-h-[640px]"
+        style={{ borderRadius: "var(--radius)" }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 48%, oklch(0.78 0.09 78 / 0.16), transparent 31%), radial-gradient(circle at 52% 48%, oklch(0.57 0.18 28 / 0.13), transparent 10%), linear-gradient(135deg, oklch(0.95 0 0 / 0.045), transparent 46%)",
+          }}
+          aria-hidden="true"
+        />
+
+        <svg
+          className="pointer-events-none absolute left-1/2 top-[48%] aspect-square w-[84%] max-w-[560px] -translate-x-1/2 -translate-y-1/2"
+          viewBox="0 0 640 640"
+          preserveAspectRatio="xMidYMid meet"
+          aria-hidden="true"
+        >
+          <defs>
+            <linearGradient id="cannabis-flow" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stopColor="oklch(0.78 0.09 78 / 0.22)" />
+              <stop offset="52%" stopColor="oklch(0.95 0 0 / 0.10)" />
+              <stop offset="100%" stopColor="oklch(0.57 0.18 28 / 0.20)" />
+            </linearGradient>
+            <radialGradient id="cannabis-core" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="oklch(0.57 0.18 28 / 0.82)" />
+              <stop offset="56%" stopColor="oklch(0.57 0.18 28 / 0.24)" />
+              <stop offset="100%" stopColor="oklch(0.57 0.18 28 / 0)" />
+            </radialGradient>
+          </defs>
+          <path
+            d="M78 305 C150 132 390 78 519 194 C639 303 554 522 392 562 C205 607 42 474 78 305Z"
+            fill="none"
+            stroke="url(#cannabis-flow)"
+            strokeWidth="1.6"
+          />
+          <path
+            d="M112 430 C212 334 273 136 320 80 C360 150 427 331 528 430"
+            fill="none"
+            stroke="oklch(0.95 0 0 / 0.12)"
+            strokeWidth="1.1"
+          />
+          <path
+            d="M112 218 C215 297 250 382 320 556 C377 389 426 298 528 218"
+            fill="none"
+            stroke="oklch(0.95 0 0 / 0.10)"
+            strokeWidth="1.1"
+          />
+          <path
+            d="M118 208 H522 M124 432 H516 M320 76 V564"
+            fill="none"
+            stroke="oklch(0.95 0 0 / 0.10)"
+            strokeWidth="1"
+          />
+          {[88, 132, 176, 221].map((radius) => (
+            <circle
+              key={radius}
+              cx="320"
+              cy="320"
+              r={radius}
+              fill="none"
+              stroke="oklch(0.78 0.09 78 / 0.12)"
+              strokeDasharray={radius % 2 === 0 ? "4 12" : "2 16"}
+              strokeWidth="1"
+            />
+          ))}
+          {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle) => {
+            const rad = (angle * Math.PI) / 180
+            const x1 = 320 + Math.cos(rad) * 238
+            const y1 = 320 + Math.sin(rad) * 238
+            const x2 = 320 + Math.cos(rad) * 249
+            const y2 = 320 + Math.sin(rad) * 249
+            return (
+              <line
+                key={angle}
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                stroke="oklch(0.78 0.09 78 / 0.34)"
+                strokeWidth="1.4"
+              />
+            )
+          })}
+          <ellipse cx="320" cy="320" rx="124" ry="42" fill="none" stroke="oklch(0.95 0 0 / 0.10)" strokeWidth="1" transform="rotate(28 320 320)" />
+          <ellipse cx="320" cy="320" rx="124" ry="42" fill="none" stroke="oklch(0.95 0 0 / 0.10)" strokeWidth="1" transform="rotate(-28 320 320)" />
+          <ellipse cx="320" cy="320" rx="38" ry="124" fill="none" stroke="oklch(0.95 0 0 / 0.10)" strokeWidth="1" />
+          <circle cx="320" cy="320" r="48" fill="none" stroke="oklch(0.78 0.09 78 / 0.36)" strokeWidth="1.2" />
+          <circle cx="320" cy="320" r="26" fill="url(#cannabis-core)" />
+          <circle cx="320" cy="320" r="13" fill="oklch(0.57 0.18 28)" />
+        </svg>
+
+        <div className="relative flex min-h-[560px] flex-col justify-between p-5 sm:p-7 lg:min-h-[640px]">
+          <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
+            <span className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-muted-foreground">
+              Cannabis operating atlas
+            </span>
+            <span className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-brand">
+              Praxis model / live system
+            </span>
+          </div>
+
+          <div className="relative mx-auto my-2 aspect-square w-full max-w-[560px]">
+            {operatingSignals.map((node) => (
+              <div
+                key={node.label}
+                className="absolute -translate-x-1/2 -translate-y-1/2"
+                style={{ left: `${node.x}%`, top: `${node.y}%` }}
+              >
+                <div
+                  className="grid h-16 w-16 place-items-center border bg-background/82 shadow-[0_0_34px_oklch(0_0_0/0.28)] backdrop-blur-sm sm:h-[4.6rem] sm:w-[4.6rem]"
+                  style={{
+                    borderColor:
+                      node.tone === "gold"
+                        ? "oklch(0.78 0.09 78 / 0.42)"
+                        : "oklch(0.95 0 0 / 0.18)",
+                    borderRadius: "999px",
+                    }}
+                  >
+                  <span className="font-mono text-[0.58rem] tracking-[0.08em] text-foreground">
+                    {node.mark}
+                  </span>
+                </div>
+                <div className="mt-3 whitespace-nowrap text-center font-mono text-[0.6rem] uppercase tracking-[0.12em] text-foreground">
+                  {node.label}
+                </div>
+                <div className="mt-1 whitespace-nowrap text-center font-mono text-[0.52rem] uppercase tracking-[0.12em] text-muted-foreground">
+                  {node.sub}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 gap-px bg-border sm:grid-cols-2">
+            {operatingRows.map(([label, value]) => (
+              <div key={label} className="bg-background/76 p-4">
+                <div className="font-mono text-[0.58rem] uppercase tracking-[0.16em] text-brand">
+                  {label}
+                </div>
+                <div className="mt-2 text-[0.8rem] leading-[1.55] text-muted-foreground">
+                  {value}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ProofSurface({
+  surface,
+  index,
+}: {
+  surface: (typeof proofSurfaces)[number]
+  index: number
+}) {
+  const accent =
+    surface.accent === "red"
+      ? "oklch(0.57 0.18 28)"
+      : surface.accent === "gold"
+        ? "oklch(0.78 0.09 78)"
+        : "oklch(0.95 0 0 / 0.82)"
+
+  return (
+    <div
+      className="group relative min-h-[520px] overflow-hidden border border-border bg-card"
+      style={{ borderRadius: "var(--radius)" }}
+    >
+      <div className="p-6">
+        <div className="flex items-center justify-between border-b border-border pb-4">
+          <span className="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted-foreground">
+            {surface.label}
+          </span>
+          <span className="font-mono text-[0.62rem] uppercase tracking-[0.16em]" style={{ color: accent }}>
+            0{index + 1}
+          </span>
+        </div>
+        <h3 className="mt-6 font-heading text-[1.55rem] font-bold leading-[1.05] tracking-[0.02em] text-foreground">
+          {surface.title}
+        </h3>
+        <p className="mt-4 text-[0.88rem] leading-[1.72] text-muted-foreground">
+          {surface.body}
+        </p>
+      </div>
+
+      <div className="absolute inset-x-5 bottom-5 overflow-hidden border border-border bg-background/74 p-4">
+        <div className="mb-4 flex items-center gap-2 border-b border-border pb-3">
+          <span className="h-2 w-2 rounded-full" style={{ background: accent }} />
+          <span className="h-1.5 w-20 rounded-sm bg-foreground/20" />
+          <span className="ml-auto h-1.5 w-10 rounded-sm bg-foreground/10" />
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          {Array.from({ length: 9 }).map((_, itemIndex) => {
+            const active = (itemIndex + index) % 4 === 0
+            const tall = itemIndex === 4 || itemIndex === 7
+            return (
+              <div
+                key={itemIndex}
+                className="min-h-16 border p-2"
+                style={{
+                  minHeight: tall ? 96 : 72,
+                  borderColor: active ? accent : "oklch(0.95 0 0 / 0.06)",
+                  background: active
+                    ? "linear-gradient(180deg, oklch(0.57 0.18 28 / 0.16), oklch(0.95 0 0 / 0.025))"
+                    : "oklch(0.95 0 0 / 0.025)",
+                }}
+              >
+                <div className="h-1.5 w-11 rounded-sm bg-foreground/20" />
+                <div className="mt-3 h-5 w-5 rounded-full border" style={{ borderColor: active ? accent : "oklch(0.95 0 0 / 0.12)" }} />
+                <div className="mt-3 h-1 w-full rounded-sm bg-foreground/10" />
+                <div className="mt-1.5 h-1 w-2/3 rounded-sm bg-foreground/10" />
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function CannabisPage() {
   return (
@@ -80,7 +358,7 @@ export default function CannabisPage() {
 
       <main>
         {/* ── Hero ── */}
-        <section className="relative min-h-screen flex flex-col justify-center px-6 sm:px-16 lg:px-24 pt-28 pb-20 overflow-hidden">
+        <section className="relative min-h-screen grid grid-cols-1 lg:grid-cols-[1.02fr_0.98fr] gap-12 xl:gap-18 items-center px-6 sm:px-16 lg:px-24 pt-28 pb-24 overflow-hidden">
           {/* dot-grid texture */}
           <div
             className="pointer-events-none absolute inset-0 z-0"
@@ -91,31 +369,62 @@ export default function CannabisPage() {
             }}
             aria-hidden="true"
           />
+          <div
+            className="pointer-events-none absolute inset-x-0 top-0 h-[55vh] z-0"
+            style={{
+              background:
+                "radial-gradient(circle at 74% 31%, oklch(0.72 0.09 74 / 0.16), transparent 34%), radial-gradient(circle at 16% 82%, oklch(0.57 0.18 29 / 0.08), transparent 30%)",
+            }}
+            aria-hidden="true"
+          />
 
-          <div className="relative z-10 max-w-[900px]">
-            <p className="text-[0.65rem] font-semibold tracking-[0.22em] uppercase text-brand mb-6">
-              Cannabis Operations
-            </p>
+          <div className="relative z-10 max-w-[920px]">
             <h1
-              className="font-heading font-bold tracking-[-0.01em] leading-[1.03] text-foreground mb-6"
-              style={{ fontSize: "clamp(2.4rem, 5.5vw, 5rem)" }}
+              className="font-heading font-black tracking-[0] leading-[0.91] text-foreground mb-7 uppercase"
+              style={{ fontSize: "clamp(3.35rem, 8.2vw, 8.9rem)" }}
             >
-              Cannabis is one of the most operationally complex industries in America.
-              We build the systems that let you run it.
+              The operating layer underneath cannabis.
             </h1>
-            <p className="text-[1.05rem] text-muted-foreground leading-[1.78] max-w-[560px] mb-10">
-              Custom software. AI that actually knows your operation — your routes,
-              your compliance rules, your team structure. Built for how you run,
-              not adapted from something built for someone else.
+            <p className="text-[1.08rem] text-muted-foreground leading-[1.78] max-w-[640px] mb-10">
+              Praxis builds the operating intelligence cannabis teams usually carry
+              in people, spreadsheets, state systems, and workarounds: the workflows,
+              rules, exceptions, and memory that make the business run.
             </p>
-            <a
-              href="#contact"
-              className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white text-[0.78rem] font-semibold tracking-[0.12em] uppercase px-8 py-4 transition-all duration-200 hover:-translate-y-px no-underline"
-              style={{ borderRadius: "var(--radius)" }}
-            >
-              Tell us about your operation
-            </a>
+            <div className="flex flex-wrap items-center gap-4">
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white text-[0.78rem] font-semibold tracking-[0.12em] uppercase px-8 py-4 transition-all duration-200 hover:-translate-y-px no-underline"
+                style={{ borderRadius: "var(--radius)" }}
+              >
+                Send one workflow
+              </a>
+              <Link
+                href="/discovery-sprint"
+                className="inline-flex items-center gap-2 border border-border text-foreground hover:border-brand text-[0.78rem] font-semibold tracking-[0.12em] uppercase px-8 py-4 transition-all duration-200 no-underline"
+                style={{ borderRadius: "var(--radius)" }}
+              >
+                See the sprint path
+              </Link>
+            </div>
+            <div className="mt-9 grid grid-cols-3 max-w-[640px] border-y border-border">
+              {[
+                ["156", "tables"],
+                ["12", "modules"],
+                ["1", "operating memory"],
+              ].map(([value, label]) => (
+                <div key={label} className="py-4 pr-4 border-r border-border last:border-r-0 last:pl-4">
+                  <div className="font-heading text-[2rem] leading-none text-foreground">
+                    {value}
+                  </div>
+                  <div className="mt-1 text-[0.64rem] font-mono uppercase tracking-[0.16em] text-muted-foreground">
+                    {label}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
+
+          <OperatingSchematic />
 
           {/* Scroll hint */}
           <div
@@ -128,73 +437,91 @@ export default function CannabisPage() {
         </section>
 
         {/* ── The Problem ── */}
-        <section className="w-full px-6 sm:px-16 lg:px-24 py-24 bg-surface">
-          <div className="max-w-[1100px] mx-auto">
-            <p className="text-[0.65rem] font-semibold tracking-[0.22em] uppercase text-brand mb-5">
-              The Problem
-            </p>
-            <h2
-              className="font-heading font-bold tracking-[-0.01em] leading-[1.04] text-foreground mb-14"
-              style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)" }}
-            >
-              Where cannabis operations break down.
-            </h2>
-
-            <div className="flex flex-col gap-0.5">
+        <section className="relative w-full px-6 sm:px-16 lg:px-24 py-24 bg-surface overflow-hidden">
+          <div
+            className="absolute inset-0 opacity-60"
+            style={{
+              background:
+                "linear-gradient(180deg, transparent, oklch(0.075 0 0 / 0.76)), repeating-linear-gradient(90deg, transparent 0 92px, oklch(0.95 0 0 / 0.018) 92px 93px)",
+            }}
+            aria-hidden="true"
+          />
+          <div className="relative max-w-[1180px] mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-14 items-start">
+              <div>
+                <h2
+                  className="font-heading font-black tracking-[0] leading-[0.95] text-foreground uppercase"
+                  style={{ fontSize: "clamp(2.7rem, 6vw, 6.4rem)" }}
+                >
+                  Where the work breaks.
+                </h2>
+                <p className="mt-6 text-[0.98rem] text-muted-foreground leading-[1.78] max-w-[520px]">
+                  The software usually arrives after the damage. Praxis starts where
+                  the work changes hands, because that is where cannabis operations
+                  lose trust in the record.
+                </p>
+              </div>
+              <div className="flex flex-col gap-4">
               {problems.map(({ num, title, body }) => (
                 <div
                   key={num}
-                  className="group p-7 bg-card border-l-2 border-border hover:border-foreground/15 hover:bg-card-hover transition-all duration-200"
+                    className="group relative overflow-hidden border border-border bg-background/56 p-7 transition-all duration-300 hover:border-brand/40"
                 >
-                  <p className="text-[0.65rem] font-semibold tracking-[0.16em] text-muted-foreground mb-2.5">
+                    <span
+                      className="absolute left-0 top-0 h-full w-1 bg-brand/50"
+                      aria-hidden="true"
+                    />
+                    <span
+                      className="absolute left-0 right-0 top-1/2 h-px bg-brand/20"
+                      aria-hidden="true"
+                    />
+                    <p className="relative text-[0.65rem] font-semibold tracking-[0.16em] text-brand mb-2.5">
                     {num}
                   </p>
-                  <h3 className="font-heading font-bold text-[1rem] tracking-[0.04em] text-foreground mb-2">
+                    <h3 className="relative font-heading font-bold text-[1.12rem] tracking-[0.03em] text-foreground mb-2">
                     {title}
                   </h3>
-                  <p className="text-[0.88rem] text-muted-foreground leading-[1.72]">
+                    <p className="relative text-[0.9rem] text-muted-foreground leading-[1.72]">
                     {body}
                   </p>
                 </div>
               ))}
+              </div>
             </div>
           </div>
         </section>
 
         {/* ── What We Build ── */}
         <section className="w-full px-6 sm:px-16 lg:px-24 py-24">
-          <div className="max-w-[1100px] mx-auto">
-            <p className="text-[0.65rem] font-semibold tracking-[0.22em] uppercase text-brand mb-5">
-              What We Build
-            </p>
+          <div className="max-w-[1180px] mx-auto">
             <h2
-              className="font-heading font-bold tracking-[-0.01em] leading-[1.04] text-foreground mb-4"
-              style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)" }}
+              className="font-heading font-black tracking-[0] leading-[0.96] text-foreground mb-4 uppercase"
+              style={{ fontSize: "clamp(2.45rem, 5vw, 5rem)" }}
             >
-              Three things. Tightly integrated.
+              The build is not the first move. The map is.
             </h2>
             <p className="text-[0.95rem] text-muted-foreground leading-[1.78] max-w-[580px] mb-14">
-              Not a stack of SaaS tools. Not a consultant&apos;s deck. Purpose-built
-              systems that fit how cannabis businesses actually operate.
+              Not a stack of SaaS tools. Not a consultant&apos;s deck. The operating
+              layer that lets cannabis teams trust the tools they already have.
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-0.5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border">
               {outputs.map(({ label, body }, i) => (
-                <div key={label} className="group relative p-10 bg-card overflow-hidden">
+                <div key={label} className="group relative p-8 lg:p-10 bg-background overflow-hidden min-h-[300px]">
                   <span
-                    className="absolute top-0 left-0 w-0.5 h-0 bg-border transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:h-full"
+                    className="absolute top-0 left-0 w-full h-0.5 bg-brand/40 origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
                     aria-hidden="true"
                   />
                   <div
-                    className="font-heading font-bold leading-none tracking-[0.02em] mb-6"
+                    className="font-heading font-black leading-none tracking-[0] mb-8"
                     style={{
-                      fontSize: "3rem",
-                      color: "oklch(0.95 0 0 / 0.11)",
+                      fontSize: "clamp(3.6rem, 7vw, 6.6rem)",
+                      color: "oklch(0.95 0 0 / 0.075)",
                     }}
                   >
                     {String(i + 1).padStart(2, "0")}
                   </div>
-                  <h3 className="font-heading font-bold text-[1.2rem] tracking-[0.03em] text-foreground mb-3">
+                  <h3 className="font-heading font-bold text-[1.35rem] tracking-[0.03em] text-foreground mb-3">
                     {label}
                   </h3>
                   <p className="text-[0.88rem] text-muted-foreground leading-[1.72]">
@@ -206,109 +533,31 @@ export default function CannabisPage() {
           </div>
         </section>
 
-        {/* ── Platform Preview ── */}
-        <section className="w-full px-6 sm:px-16 lg:px-24 py-24 bg-surface">
-          <div className="max-w-[1100px] mx-auto">
-            <p className="text-[0.65rem] font-semibold tracking-[0.22em] uppercase text-brand mb-5">
-              In Production
-            </p>
+        {/* ── Operator Origin ── */}
+        <section className="w-full px-6 sm:px-16 lg:px-24 py-24 bg-card">
+          <div className="max-w-[1180px] mx-auto grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-12 items-center">
+            <div>
             <h2
-              className="font-heading font-bold tracking-[-0.01em] leading-[1.04] text-foreground mb-4"
-              style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)" }}
+                className="font-heading font-black tracking-[0] leading-[0.96] text-foreground mb-5 uppercase"
+                style={{ fontSize: "clamp(2.4rem, 5vw, 5.2rem)" }}
             >
-              Built and running in the field.
+                Built from the operator side.
             </h2>
-            <p className="text-[0.95rem] text-muted-foreground leading-[1.78] max-w-[560px] mb-14">
-              Not mockups. These are live screens from CultOps — a platform we built
-              to run a multi-state cannabis operation and now operate as a product.
+            <p className="text-[0.98rem] text-muted-foreground leading-[1.8] max-w-[720px]">
+              Praxis grew out of real cannabis operating work: inventory, production,
+              distribution, compliance, reporting, training, and the daily handoffs
+              where systems usually break. The work is turning operational knowledge
+              into tools teams can actually use.
             </p>
-
-            <div className="flex flex-col gap-6">
-              {[
-                {
-                  label: "Cultivation Command Center",
-                  desc: "Every flower room in one view. Plant counts, strain mix, day-in-cycle, tasks due, harvest countdowns — all live.",
-                  rows: [
-                    { label: "FLW-06", val: "314 plants · 26 strains · D54 · 10d to harvest", accent: true },
-                    { label: "FLW-07", val: "274 plants · 6 strains · D12 · 55d to harvest", accent: false },
-                    { label: "FLW-09", val: "268 plants · 7 strains · D38 · 26d to harvest", accent: false },
-                    { label: "FLW-10", val: "298 plants · 9 strains · D31 · 33d to harvest", accent: true },
-                  ],
-                },
-                {
-                  label: "Distribution Command Center",
-                  desc: "Routes, manifests, driver status, and on-time delivery rate — across every active run, in real time.",
-                  rows: [
-                    { label: "Route 14 — Tucson North", val: "6 stops · 3 delivered · ETA on schedule", accent: true },
-                    { label: "Route 09 — Phoenix West", val: "4 stops · 4 delivered · Complete", accent: false },
-                    { label: "Route 22 — Scottsdale", val: "5 stops · 1 delivered · Delayed 18 min", accent: true },
-                    { label: "Route 31 — Mesa / Tempe", val: "7 stops · 0 delivered · Departs 2:30 PM", accent: false },
-                  ],
-                },
-                {
-                  label: "Production Command Center",
-                  desc: "Processing batches, extraction runs, packaging queue, and output yield — all tracked against plan.",
-                  rows: [
-                    { label: "Batch PRD-2241", val: "Trim · 42 lbs input · In progress", accent: false },
-                    { label: "Batch PRD-2242", val: "Extraction · 18 lbs · Awaiting lab", accent: true },
-                    { label: "Batch PRD-2239", val: "Packaging · 312 units · Complete", accent: false },
-                    { label: "Batch PRD-2243", val: "Cure · 88 lbs · Day 14 of 21", accent: true },
-                  ],
-                },
-              ].map(({ label, desc, rows }) => (
-                <div
-                  key={label}
-                  className="grid grid-cols-1 lg:grid-cols-2 gap-0.5 bg-card overflow-hidden"
-                >
-                  {/* Text side */}
-                  <div className="p-10 flex flex-col justify-center">
-                    <p className="text-[0.65rem] font-semibold tracking-[0.18em] uppercase text-muted-foreground mb-3">
-                      {label}
-                    </p>
-                    <p className="text-[0.92rem] text-foreground leading-[1.75]">
-                      {desc}
-                    </p>
+            </div>
+            <div className="grid grid-cols-2 gap-px bg-border">
+              {operatingRows.map(([label, value]) => (
+                <div key={label} className="bg-background p-5 min-h-[132px]">
+                  <div className="text-[0.62rem] font-mono uppercase tracking-[0.16em] text-brand mb-4">
+                    {label}
                   </div>
-
-                  {/* Visual side — placeholder for GIF */}
-                  <div
-                    className="min-h-[260px] flex items-center justify-center p-8"
-                    style={{ background: "oklch(0.085 0 0)" }}
-                  >
-                    <div
-                      className="w-full flex flex-col gap-2"
-                      style={{
-                        border: "1px solid oklch(0.95 0 0 / 0.07)",
-                        borderRadius: "4px",
-                        padding: "16px",
-                        background: "oklch(0.10 0 0)",
-                      }}
-                    >
-                      {/* Fake nav bar */}
-                      <div className="flex items-center gap-2 pb-2 mb-1" style={{ borderBottom: "1px solid oklch(0.95 0 0 / 0.06)" }}>
-                        <div className="h-1 w-1 rounded-full" style={{ background: "oklch(0.95 0 0 / 0.25)" }} />
-                        <div className="h-1.5 w-20 rounded-sm" style={{ background: "oklch(0.95 0 0 / 0.12)" }} />
-                        <div className="flex-1" />
-                        <div className="h-1.5 w-10 rounded-sm" style={{ background: "oklch(0.95 0 0 / 0.06)" }} />
-                      </div>
-                      {/* Rows */}
-                      {rows.map(({ label: rowLabel, accent }) => (
-                        <div
-                          key={rowLabel}
-                          className="flex items-center gap-3 py-1.5 px-2 rounded-sm"
-                          style={{ background: accent ? "oklch(0.95 0 0 / 0.03)" : "transparent" }}
-                        >
-                          <div
-                            className="h-1.5 w-1.5 rounded-full flex-shrink-0"
-                            style={{ background: accent ? "oklch(0.95 0 0 / 0.35)" : "oklch(0.95 0 0 / 0.15)" }}
-                          />
-                          <div className="flex flex-col gap-1 flex-1 min-w-0">
-                            <div className="h-1.5 rounded-sm" style={{ width: "35%", background: "oklch(0.95 0 0 / 0.22)" }} />
-                            <div className="h-1 rounded-sm" style={{ width: "75%", background: "oklch(0.95 0 0 / 0.08)" }} />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                  <div className="text-[0.9rem] text-foreground leading-[1.6]">
+                    {value}
                   </div>
                 </div>
               ))}
@@ -316,24 +565,95 @@ export default function CannabisPage() {
           </div>
         </section>
 
-        {/* ── Proof ── */}
-        <section className="w-full px-6 sm:px-16 lg:px-24 py-20 bg-card">
-          <div className="max-w-[900px] mx-auto">
-            <p className="text-[0.65rem] font-semibold tracking-[0.22em] uppercase text-brand mb-6">
-              Proof of Work
+        {/* ── Discovery Sprint ── */}
+        <section className="w-full px-6 sm:px-16 lg:px-24 py-24">
+          <div className="max-w-[1180px] mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-12 items-start">
+              <div>
+                <h2
+                  className="font-heading font-black tracking-[0] leading-[0.96] text-foreground mb-5 uppercase"
+                  style={{ fontSize: "clamp(2.4rem, 5vw, 5rem)" }}
+                >
+                  Five days to find the operating truth.
+                </h2>
+                <p className="text-[0.95rem] text-muted-foreground leading-[1.78] max-w-[560px]">
+                  A Discovery Sprint is the first pass: one workflow, five business
+                  days, a practical map of where the work breaks, and a working proof
+                  of what should exist next.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 gap-px bg-border">
+                {sprintSteps.map((step, index) => (
+                  <div
+                    key={step.label}
+                    className="bg-card p-7"
+                  >
+                    <p className="text-[0.65rem] font-semibold tracking-[0.16em] text-brand mb-2">
+                      {String(index + 1).padStart(2, "0")}
+                    </p>
+                    <h3 className="font-heading font-bold text-[1.15rem] tracking-[0.04em] text-foreground mb-2">
+                      {step.label}
+                    </h3>
+                    <p className="text-[0.88rem] text-muted-foreground leading-[1.72]">
+                      {step.body}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Platform Preview ── */}
+        <section
+          id="operating-surface"
+          className="relative w-full px-6 sm:px-16 lg:px-24 py-24 bg-surface overflow-hidden"
+        >
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(circle at 80% 18%, oklch(0.68 0.08 75 / 0.12), transparent 32%), radial-gradient(circle at 12% 78%, oklch(0.58 0.19 28 / 0.10), transparent 26%)",
+            }}
+            aria-hidden="true"
+          />
+          <div className="relative max-w-[1180px] mx-auto">
+            <h2
+              className="font-heading font-black tracking-[0] leading-[0.96] text-foreground mb-4 uppercase"
+              style={{ fontSize: "clamp(2.4rem, 5vw, 5.2rem)" }}
+            >
+              The proof is an operating surface.
+            </h2>
+            <p className="text-[0.95rem] text-muted-foreground leading-[1.78] max-w-[560px] mb-14">
+              We found raw CultOps screenshots locally and used them as reference.
+              The public page keeps the proof stylized and redacted until you decide
+              what internal operating data should be shown.
             </p>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+              {proofSurfaces.map((surface, index) => (
+                <ProofSurface key={surface.label} surface={surface} index={index} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Proof ── */}
+        <section className="w-full px-6 sm:px-16 lg:px-24 py-24 bg-card">
+          <div className="max-w-[980px] mx-auto">
             <blockquote
-              className="font-heading font-bold tracking-[-0.01em] leading-[1.08] text-foreground"
-              style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.8rem)" }}
+              className="font-heading font-black tracking-[0] leading-[0.98] text-foreground uppercase"
+              style={{ fontSize: "clamp(2rem, 4.4vw, 4.8rem)" }}
             >
               We didn&apos;t build CultOps for a portfolio. We built it because our
               own multi-state cannabis operation — cultivation, processing,
               distribution, compliance — would have failed without it.
             </blockquote>
             <p className="mt-6 text-[0.88rem] text-muted-foreground leading-[1.72]">
-              156 tables. 12 operational modules. Running in production today across
-              multiple US states. The operator who built the software is the same
-              person who ran the floor. Now we build for other operators.
+              156 tables. 12 operational modules. Built from the same problems this
+              page names: inventory drift, production handoffs, sales allocation,
+              compliance records, reporting lag, and operational knowledge trapped
+              in people&apos;s heads.
             </p>
           </div>
         </section>
@@ -344,19 +664,17 @@ export default function CannabisPage() {
           className="w-full px-6 sm:px-16 lg:px-24 py-24 bg-surface"
         >
           <div className="max-w-[680px] mx-auto">
-            <p className="text-[0.65rem] font-semibold tracking-[0.22em] uppercase text-brand mb-5">
-              Work With Us
-            </p>
             <h2
-              className="font-heading font-bold tracking-[-0.01em] leading-[1.04] text-foreground mb-4"
-              style={{ fontSize: "clamp(1.9rem, 3.8vw, 3rem)" }}
+              className="font-heading font-black tracking-[0] leading-[0.98] text-foreground mb-5 uppercase"
+              style={{ fontSize: "clamp(2.3rem, 5vw, 4.8rem)" }}
             >
-              Tell us about your operation.
+              Send one workflow worth inspecting.
             </h2>
             <p className="text-[0.95rem] text-muted-foreground leading-[1.75] mb-6">
-              We take on a limited number of engagements. Cannabis operators with
-              real operational complexity — compliance burden, distribution chaos,
-              knowledge trapped in people&apos;s heads — are exactly who we work with.
+              For cannabis operators, Praxis builds the operating layer underneath
+              the tools: workflow systems, AI-enabled documentation, reporting
+              surfaces, and institutional memory. If the workflow is not worth a
+              build, the map will show that too.
             </p>
             <p className="text-[0.82rem] text-muted-foreground leading-[1.65] mb-10"
                style={{ borderLeft: "1px solid oklch(0.95 0 0 / 0.08)", paddingLeft: "16px" }}
