@@ -41,6 +41,14 @@ export default function CheckPage() {
               <br />
               leverage.
             </h1>
+            <div className="check-hero-actions" aria-label="Leverage map actions">
+              <a className="check-start-primary" href="#map">
+                Start the leverage map <span aria-hidden="true">→</span>
+              </a>
+              <a className="check-start-secondary" href="#map">
+                Takes 3-5 min
+              </a>
+            </div>
             <p>
               Map one messy operating moment and get a practical read on where AI, software, or
               better context could actually help the work run cleaner.
@@ -63,6 +71,9 @@ export default function CheckPage() {
               The output gives you a leverage pattern, the first fix to inspect, and what the
               workflow could look like after one focused improvement pass.
             </p>
+            <a className="check-panel-start" href="#map">
+              Begin with one real moment
+            </a>
           </div>
         </section>
 
