@@ -4,7 +4,6 @@ import "./check.css"
 import type { Metadata } from "next"
 import { Nav } from "@/components/v4/nav"
 import { FooterV4 } from "@/components/v4/footer"
-import { LeverageMapForm } from "./leverage-map-form"
 
 export const metadata: Metadata = {
   title: "Praxis Leverage Map",
@@ -42,10 +41,10 @@ export default function CheckPage() {
               leverage.
             </h1>
             <div className="check-hero-actions" aria-label="Leverage map actions">
-              <a className="check-start-primary" href="#map">
+              <a className="check-start-primary" href="/check/start">
                 Start the leverage map <span aria-hidden="true">→</span>
               </a>
-              <a className="check-start-secondary" href="#map">
+              <a className="check-start-secondary" href="/check/start">
                 Takes 3-5 min
               </a>
             </div>
@@ -71,13 +70,11 @@ export default function CheckPage() {
               The output gives you a leverage pattern, the first fix to inspect, and what the
               workflow could look like after one focused improvement pass.
             </p>
-            <a className="check-panel-start" href="#map">
+            <a className="check-panel-start" href="/check/start">
               Begin with one real moment
             </a>
           </div>
         </section>
-
-        <LeverageMapForm />
       </main>
       <FooterV4 />
     </div>

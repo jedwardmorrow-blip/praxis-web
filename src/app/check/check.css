@@ -155,6 +155,47 @@
   font-size: 11px;
 }
 
+.check-start-shell {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 44px 56px 100px;
+}
+
+.check-start-intro {
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 18px;
+  padding-bottom: 24px;
+}
+
+.check-back-link {
+  display: inline-block;
+  margin-bottom: 28px;
+  color: var(--gold);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.check-start-intro h1 {
+  color: var(--paper);
+  font-family: var(--font-big-shoulders), "Big Shoulders Display", sans-serif;
+  font-size: clamp(58px, 7vw, 108px);
+  line-height: 0.9;
+  margin-top: 10px;
+  max-width: 900px;
+  text-transform: uppercase;
+}
+
+.check-start-intro p {
+  color: var(--paper-dim);
+  font-size: clamp(17px, 1.7vw, 22px);
+  line-height: 1.5;
+  margin-top: 18px;
+  max-width: 760px;
+}
+
 .check-workbench {
   max-width: 1320px;
   margin: 0 auto;
@@ -568,7 +609,8 @@
   }
 
   .check-hero,
-  .check-workbench {
+  .check-workbench,
+  .check-start-shell {
     padding-left: 22px;
     padding-right: 22px;
     width: 100%;
@@ -622,6 +664,15 @@
   .check-workbench .sec-h {
     font-size: 42px;
     line-height: 0.96;
+    max-width: 100%;
+  }
+
+  .check-start-shell {
+    padding-top: 32px;
+  }
+
+  .check-start-intro h1 {
+    font-size: 48px;
     max-width: 100%;
   }
 
