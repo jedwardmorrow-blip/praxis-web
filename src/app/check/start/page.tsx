@@ -43,6 +43,7 @@ export default function StartLeverageMapPage() {
               Answer from the messy middle. The map works best when the example is specific,
               recent, and annoying enough that the team already feels it.
             </p>
+            <div className="check-trust-line">No generic AI score. No email until the end.</div>
           </div>
           <LeverageMapForm />
         </section>

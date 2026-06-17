@@ -48,6 +48,7 @@ export default function CheckPage() {
                 Takes 3-5 min
               </a>
             </div>
+            <div className="check-trust-line">No generic AI score. No email until the end.</div>
             <p>
               Map one messy operating moment and get a practical read on where AI, software, or
               better context could actually help the work run cleaner.

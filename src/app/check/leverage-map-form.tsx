@@ -51,6 +51,35 @@ const emptyInput: LeverageMapInput = {
   openToSession: "",
 }
 
+const EXAMPLE_PROMPTS = [
+  {
+    label: "Missed follow-up",
+    title: "A good lead came in, then got cold",
+    brokenMoment: "lead_followup",
+    story:
+      "A real lead came in through a call, form, or message. The first response was not tight, the details lived in a few places, and by the time someone followed up the opportunity had already lost momentum.",
+  },
+  {
+    label: "Owner bottleneck",
+    title: "The decision came back to you",
+    brokenMoment: "owner_decision",
+    story:
+      "A normal operating decision stalled because the team needed owner context, judgment, or approval. Nothing was technically broken, but the business could not move cleanly without one person stepping back into the workflow.",
+  },
+  {
+    label: "Status confusion",
+    title: "Nobody had the current answer",
+    brokenMoment: "customer_update",
+    story:
+      "A customer, manager, or team member needed a simple status update. The answer existed somewhere, but it took too much hunting through calls, texts, inboxes, notes, or people to know what was actually true.",
+  },
+] satisfies Array<{
+  label: string
+  title: string
+  brokenMoment: LeverageMapInput["brokenMoment"]
+  story: string
+}>
+
 export function LeverageMapForm() {
   const [form, setForm] = useState<LeverageMapInput>(emptyInput)
   const [stepIndex, setStepIndex] = useState(0)
@@ -138,25 +167,53 @@ export function LeverageMapForm() {
       <form className="check-form wizard" onSubmit={handleSubmit}>
         {stepIndex === 0 ? (
           <section className="check-block">
-          <div className="check-block-label">
-            <span>{activeStep.eyebrow}</span>
-            <strong>{activeStep.title}</strong>
-          </div>
-          <ChoiceGrid
-            title="Which recent moment is closest?"
-            value={form.brokenMoment}
-            options={BROKEN_MOMENTS}
-            onChange={(value) => update("brokenMoment", value)}
-            large
-          />
-          <Field label="What happened?" hint="Plain English is best. Name the handoff, delay, customer, report, or owner interruption.">
-            <textarea
-              value={form.momentStory}
-              onChange={(e) => update("momentStory", e.target.value)}
-              rows={5}
-              placeholder="Example: A quote request came in after hours, the details landed in voicemail, the owner had to ask two people what happened, and the customer was already talking to another company by the next morning."
+            <div className="check-block-label">
+              <span>{activeStep.eyebrow}</span>
+              <strong>{activeStep.title}</strong>
+            </div>
+            <div className="check-example-strip" aria-label="Example operating messes">
+              <div>
+                <span>Need a starting point?</span>
+                <p>Pick the closest example and rewrite it in your words.</p>
+              </div>
+              <div className="check-example-grid">
+                {EXAMPLE_PROMPTS.map((prompt) => (
+                  <button
+                    key={prompt.label}
+                    type="button"
+                    onClick={() => {
+                      setError("")
+                      setForm((current) => ({
+                        ...current,
+                        brokenMoment: prompt.brokenMoment,
+                        momentStory: prompt.story,
+                      }))
+                    }}
+                  >
+                    <span>{prompt.label}</span>
+                    {prompt.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <ChoiceGrid
+              title="Which recent moment is closest?"
+              value={form.brokenMoment}
+              options={BROKEN_MOMENTS}
+              onChange={(value) => update("brokenMoment", value)}
+              large
             />
-          </Field>
+            <Field
+              label="What happened?"
+              hint="Plain English is best. Name the handoff, delay, customer, report, or owner interruption."
+            >
+              <textarea
+                value={form.momentStory}
+                onChange={(e) => update("momentStory", e.target.value)}
+                rows={5}
+                placeholder="Example: A quote request came in after hours, the details landed in voicemail, the owner had to ask two people what happened, and the customer was already talking to another company by the next morning."
+              />
+            </Field>
           </section>
         ) : null}
 
@@ -355,6 +412,15 @@ export function LeverageMapForm() {
             <span>90 day picture</span>
             <p>{result.result.ninety_day_picture}</p>
           </div>
+          <div className="check-session-next">
+            <span>Recommended next step</span>
+            <h3>Want Justin to map this with you?</h3>
+            <p>
+              Bring this exact workflow into a focused AI Leverage Session. We will trace the
+              handoff, identify the first useful intervention, and decide whether this is worth
+              turning into a real operating system improvement.
+            </p>
+          </div>
           <div className="check-result-actions">
             <a
               className="hero-cta"
@@ -362,7 +428,7 @@ export function LeverageMapForm() {
                 `Hi Justin,\n\nI completed the Praxis Leverage Map.\n\nCompany: ${form.company}\nPattern: ${result.result.pattern_label}\nFirst fix: ${result.result.first_fix}\n\nI'd like to talk about an AI Leverage Session.\n\n- ${form.name}`,
               )}`}
             >
-              Request AI Leverage Session <span className="arr">→</span>
+              Map this with Justin <span className="arr">→</span>
             </a>
             <button
               type="button"
