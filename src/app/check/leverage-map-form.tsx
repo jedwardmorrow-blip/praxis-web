@@ -17,6 +17,13 @@ import {
   type LeverageMapScore,
 } from "@/lib/leverage-map"
 
+const STEPS = [
+  { eyebrow: "01", title: "Pick the messy moment", short: "Moment" },
+  { eyebrow: "02", title: "Trace the handoff", short: "Handoff" },
+  { eyebrow: "03", title: "Measure the consequence", short: "Consequence" },
+  { eyebrow: "04", title: "Unlock the readout", short: "Contact" },
+] as const
+
 type ApiResult = {
   score: LeverageMapScore
   result: LeverageMapAiResult
@@ -46,34 +53,27 @@ const emptyInput: LeverageMapInput = {
 
 export function LeverageMapForm() {
   const [form, setForm] = useState<LeverageMapInput>(emptyInput)
+  const [stepIndex, setStepIndex] = useState(0)
   const [result, setResult] = useState<ApiResult | null>(null)
   const [error, setError] = useState("")
   const [submitting, setSubmitting] = useState(false)
 
-  const completion = useMemo(() => {
-    const fields = [
-      form.company,
-      form.name,
-      form.email,
-      form.businessKind,
-      form.teamSize,
-      form.brokenMoment,
-      form.momentStory,
-      form.peopleTouches.length ? "x" : "",
-      form.truthLocations.length ? "x" : "",
-      form.frictions.length ? "x" : "",
-      form.consequences.length ? "x" : "",
-      form.painStatement,
-      form.frequency,
-      form.costBand,
-      form.perfectEmployee,
-      form.openToSession,
-    ]
-    return Math.round((fields.filter(Boolean).length / fields.length) * 100)
-  }, [form])
+  const activeStep = STEPS[stepIndex]
+  const completion = useMemo(() => Math.round(((stepIndex + 1) / STEPS.length) * 100), [stepIndex])
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (stepIndex < STEPS.length - 1) {
+      goNext()
+      return
+    }
+
+    const validationError = validateStep(stepIndex, form)
+    if (validationError) {
+      setError(validationError)
+      return
+    }
+
     setError("")
     setSubmitting(true)
     setResult(null)
@@ -82,7 +82,7 @@ export function LeverageMapForm() {
       const response = await fetch("/api/leverage-map", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+          body: JSON.stringify(form),
       })
       const payload = await response.json()
       if (!response.ok) throw new Error(payload?.error || "Could not create leverage map")
@@ -101,62 +101,46 @@ export function LeverageMapForm() {
     <section className="check-workbench" id="map">
       <div className="check-workbench-head">
         <div>
-          <span className="sec-tag">Start with one real operating moment</span>
+          <span className="sec-tag">Praxis Leverage Map</span>
           <h2 className="sec-h">
-            The better the mess, the better the map<span className="red">.</span>
+            Find your first AI leverage point<span className="red">.</span>
           </h2>
         </div>
         <div className="check-progress" aria-label={`Map completion ${completion}%`}>
-          <span>{completion}% mapped</span>
+          <span>
+            Step {stepIndex + 1} of {STEPS.length} · {activeStep.short}
+          </span>
           <div>
             <i style={{ width: `${completion}%` }} />
           </div>
         </div>
       </div>
 
-      <form className="check-form" onSubmit={submit}>
-        <section className="check-block identity">
-          <div className="check-block-label">
-            <span>01</span>
-            <strong>Who is this for?</strong>
-          </div>
-          <div className="check-grid two">
-            <Field label="Company" required>
-              <input value={form.company} onChange={(e) => update("company", e.target.value)} required />
-            </Field>
-            <Field label="Business type" required>
-              <input
-                value={form.businessKind}
-                onChange={(e) => update("businessKind", e.target.value)}
-                placeholder="e.g. HVAC, CPA firm, distributor, clinic"
-                required
-              />
-            </Field>
-            <Field label="Your name" required>
-              <input value={form.name} onChange={(e) => update("name", e.target.value)} required />
-            </Field>
-            <Field label="Email" required>
-              <input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} required />
-            </Field>
-            <Field label="Phone">
-              <input value={form.phone} onChange={(e) => update("phone", e.target.value)} />
-            </Field>
-            <Field label="Role">
-              <input value={form.role} onChange={(e) => update("role", e.target.value)} placeholder="Owner, operator, manager..." />
-            </Field>
-          </div>
-          <ChoiceGrid
-            title="Daily operating size"
-            value={form.teamSize}
-            options={TEAM_SIZES}
-            onChange={(value) => update("teamSize", value)}
-          />
-        </section>
+      <div className="check-stepper" aria-label="Leverage map steps">
+        {STEPS.map((step, index) => (
+          <button
+            key={step.short}
+            type="button"
+            className={index === stepIndex ? "active" : index < stepIndex ? "complete" : ""}
+            onClick={() => {
+              if (index <= stepIndex) {
+                setError("")
+                setStepIndex(index)
+              }
+            }}
+          >
+            <span>{step.eyebrow}</span>
+            {step.short}
+          </button>
+        ))}
+      </div>
 
-        <section className="check-block">
+      <form className="check-form wizard" onSubmit={handleSubmit}>
+        {stepIndex === 0 ? (
+          <section className="check-block">
           <div className="check-block-label">
-            <span>02</span>
-            <strong>Pick the messy moment</strong>
+            <span>{activeStep.eyebrow}</span>
+            <strong>{activeStep.title}</strong>
           </div>
           <ChoiceGrid
             title="Which recent moment is closest?"
@@ -173,12 +157,14 @@ export function LeverageMapForm() {
               placeholder="Example: A quote request came in after hours, the details landed in voicemail, the owner had to ask two people what happened, and the customer was already talking to another company by the next morning."
             />
           </Field>
-        </section>
+          </section>
+        ) : null}
 
-        <section className="check-block">
+        {stepIndex === 1 ? (
+          <section className="check-block">
           <div className="check-block-label">
-            <span>03</span>
-            <strong>Trace the handoff</strong>
+            <span>{activeStep.eyebrow}</span>
+            <strong>{activeStep.title}</strong>
           </div>
           <MultiGrid
             title="Who usually touches this?"
@@ -198,12 +184,14 @@ export function LeverageMapForm() {
             options={FRICTIONS}
             onChange={(values) => update("frictions", values)}
           />
-        </section>
+          </section>
+        ) : null}
 
-        <section className="check-block">
+        {stepIndex === 2 ? (
+          <section className="check-block">
           <div className="check-block-label">
-            <span>04</span>
-            <strong>Measure the consequence</strong>
+            <span>{activeStep.eyebrow}</span>
+            <strong>{activeStep.title}</strong>
           </div>
           <MultiGrid
             title="What did it cost?"
@@ -240,20 +228,86 @@ export function LeverageMapForm() {
               placeholder="This is the hidden leverage question. Describe the judgment, context, or sequence that a strong person already carries."
             />
           </Field>
+          </section>
+        ) : null}
+
+        {stepIndex === 3 ? (
+          <section className="check-block identity">
+            <div className="check-block-label">
+              <span>{activeStep.eyebrow}</span>
+              <strong>{activeStep.title}</strong>
+            </div>
+            <p className="check-unlock-copy">
+              Your leverage readout is generated after this step. We ask for context last so you can map
+              the workflow before handing over contact info.
+            </p>
+            <div className="check-grid two">
+              <Field label="Company" required>
+                <input value={form.company} onChange={(e) => update("company", e.target.value)} />
+              </Field>
+              <Field label="Business type" required>
+                <input
+                  value={form.businessKind}
+                  onChange={(e) => update("businessKind", e.target.value)}
+                  placeholder="e.g. HVAC, CPA firm, distributor, clinic"
+                />
+              </Field>
+              <Field label="Your name" required>
+                <input value={form.name} onChange={(e) => update("name", e.target.value)} />
+              </Field>
+              <Field label="Email" required>
+                <input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} />
+              </Field>
+              <Field label="Phone">
+                <input value={form.phone} onChange={(e) => update("phone", e.target.value)} />
+              </Field>
+              <Field label="Role">
+                <input
+                  value={form.role}
+                  onChange={(e) => update("role", e.target.value)}
+                  placeholder="Owner, operator, manager..."
+                />
+              </Field>
+            </div>
+            <ChoiceGrid
+              title="Daily operating size"
+              value={form.teamSize}
+              options={TEAM_SIZES}
+              onChange={(value) => update("teamSize", value)}
+            />
           <ChoiceGrid
-            title="Would you want a 60-90 minute on-site AI Leverage Session if the map shows a real opportunity?"
+              title="Would you want a 60-90 minute AI Leverage Session if the map shows a real opportunity?"
             value={form.openToSession}
             options={SESSION_OPENNESS}
             onChange={(value) => update("openToSession", value)}
           />
-        </section>
+          </section>
+        ) : null}
 
         <div className="check-submit-row">
+          {stepIndex > 0 ? (
+            <button
+              type="button"
+              className="check-back"
+              onClick={() => {
+                setError("")
+                setStepIndex((current) => Math.max(0, current - 1))
+              }}
+            >
+              Back
+            </button>
+          ) : null}
           <button className="check-submit" type="submit" disabled={submitting}>
-            {submitting ? "Mapping..." : "Create leverage map"}
+            {submitting
+              ? "Mapping..."
+              : stepIndex === STEPS.length - 1
+                ? "Create leverage map"
+                : "Continue"}
           </button>
           <p>
-            You will get the pattern immediately. Justin gets the CRM summary and follow-up angle.
+            {stepIndex === STEPS.length - 1
+              ? "You get the practical readout immediately. Justin gets the internal CRM summary."
+              : "No contact info yet. Build the map first, then unlock the result at the end."}
           </p>
         </div>
         {error ? <div className="check-error">{error}</div> : null}
@@ -273,41 +327,51 @@ export function LeverageMapForm() {
           </div>
           <div className="check-result-grid">
             <article className="check-readout">
-              <span>Operator readout</span>
+              <span>Here is what we heard</span>
               <p>{result.result.operator_readout}</p>
             </article>
             <article>
-              <span>Why it matters</span>
-              <p>{result.result.why_it_matters}</p>
+              <span>What you are already doing right</span>
+              <p>{result.result.what_you_are_already_doing_right}</p>
             </article>
             <article>
-              <span>First workflow to inspect</span>
-              <p>{result.result.first_workflow_to_inspect}</p>
+              <span>Where the cost hides</span>
+              <p>{result.result.where_it_costs_you}</p>
             </article>
             <article>
-              <span>Follow-up angle</span>
-              <p>{result.result.follow_up_opener}</p>
+              <span>What an intervention looks like</span>
+              <p>{result.result.what_an_intervention_looks_like}</p>
+            </article>
+            <article>
+              <span>First fix</span>
+              <p>{result.result.first_fix}</p>
+            </article>
+            <article>
+              <span>Why this is fixable</span>
+              <p>{result.result.why_this_is_fixable}</p>
             </article>
           </div>
-          <div className="check-questions">
-            <span>Session questions</span>
-            {result.result.session_questions.map((question, index) => (
-              <p key={question}>
-                <strong>{String(index + 1).padStart(2, "0")}</strong>
-                {question}
-              </p>
-            ))}
+          <div className="check-questions check-public-next">
+            <span>90 day picture</span>
+            <p>{result.result.ninety_day_picture}</p>
           </div>
           <div className="check-result-actions">
             <a
               className="hero-cta"
               href={`mailto:justin@gopraxis.ai?subject=Praxis%20Leverage%20Map%20-%20${encodeURIComponent(form.company)}&body=${encodeURIComponent(
-                `Hi Justin,\n\nI completed the Praxis Leverage Map.\n\nCompany: ${form.company}\nPattern: ${result.result.pattern_label}\nFirst workflow: ${result.result.first_workflow_to_inspect}\n\nI'd like to talk about an AI Leverage Session.\n\n- ${form.name}`,
+                `Hi Justin,\n\nI completed the Praxis Leverage Map.\n\nCompany: ${form.company}\nPattern: ${result.result.pattern_label}\nFirst fix: ${result.result.first_fix}\n\nI'd like to talk about an AI Leverage Session.\n\n- ${form.name}`,
               )}`}
             >
               Request AI Leverage Session <span className="arr">→</span>
             </a>
-            <button type="button" onClick={() => setResult(null)} className="check-reset">
+            <button
+              type="button"
+              onClick={() => {
+                setResult(null)
+                setStepIndex(0)
+              }}
+              className="check-reset"
+            >
               Edit answers
             </button>
           </div>
@@ -319,6 +383,47 @@ export function LeverageMapForm() {
   function update<K extends keyof LeverageMapInput>(key: K, value: LeverageMapInput[K]) {
     setForm((current) => ({ ...current, [key]: value }))
   }
+
+  function goNext() {
+    const validationError = validateStep(stepIndex, form)
+    if (validationError) {
+      setError(validationError)
+      return
+    }
+    setError("")
+    setStepIndex((current) => Math.min(STEPS.length - 1, current + 1))
+    window.setTimeout(() => {
+      document.getElementById("map")?.scrollIntoView({ behavior: "smooth", block: "start" })
+    }, 40)
+  }
+}
+
+function validateStep(stepIndex: number, form: LeverageMapInput) {
+  if (stepIndex === 0) {
+    if (!form.brokenMoment) return "Pick the messy moment closest to what happened."
+    if (form.momentStory.trim().length < 20) return "Add a little more detail about what happened."
+  }
+  if (stepIndex === 1) {
+    if (!form.peopleTouches.length) return "Pick at least one person or team that touches the workflow."
+    if (!form.truthLocations.length) return "Pick where the truth usually lives."
+    if (!form.frictions.length) return "Pick at least one thing that made the handoff harder."
+  }
+  if (stepIndex === 2) {
+    if (!form.consequences.length) return "Pick at least one consequence."
+    if (!form.painStatement) return "Pick the sentence that hits hardest."
+    if (!form.frequency) return "Pick how often this shows up."
+    if (!form.costBand) return "Pick the rough monthly weight, even if it is unknown."
+    if (form.perfectEmployee.trim().length < 20) return "Describe what a strong employee would know or do."
+  }
+  if (stepIndex === 3) {
+    if (!form.company.trim()) return "Add the company name to unlock the readout."
+    if (!form.businessKind.trim()) return "Add the business type."
+    if (!form.name.trim()) return "Add your name."
+    if (!form.email.includes("@")) return "Add a valid email."
+    if (!form.teamSize) return "Pick the operating size."
+    if (!form.openToSession) return "Pick whether an AI Leverage Session is on the table."
+  }
+  return ""
 }
 
 function Field({

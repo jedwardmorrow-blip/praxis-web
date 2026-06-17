@@ -79,7 +79,7 @@ async function generateAiResult(input: LeverageMapInput, score: LeverageMapScore
   const apiKey = cleanEnv(process.env.OPENAI_API_KEY)
   if (!apiKey) return fallback
 
-  const model = cleanEnv(process.env.OPENAI_LEVERAGE_MAP_MODEL) || cleanEnv(process.env.OPENAI_MODEL) || "gpt-4.1-mini"
+  const model = cleanEnv(process.env.OPENAI_LEVERAGE_MAP_MODEL) || cleanEnv(process.env.OPENAI_MODEL) || "gpt-4.1"
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
@@ -95,7 +95,7 @@ async function generateAiResult(input: LeverageMapInput, score: LeverageMapScore
         {
           role: "system",
           content:
-            "You are the Praxis Leverage Map interpreter. Praxis sells practical operational AI work to owner-led businesses. Return only valid JSON. Do not recommend generic AI tools. Do not say 'diagnostic', 'maturity', or 'competency'. Do not promise ROI. Write like a sharp operator mapping one real workflow. Keep it specific to the submitted operating mess.",
+            "You are the Praxis Leverage Map interpreter. Praxis sells practical operational AI work to owner-led businesses. Return only valid JSON. Do not recommend generic AI tools. Do not say 'diagnostic', 'maturity', 'competency', or 'quiz'. Do not promise ROI. Write like a sharp operator mapping one real workflow. Keep it specific to the submitted operating mess. The user-facing result should feel like a useful mini-consulting artifact, not a score report.",
         },
         {
           role: "user",
@@ -104,17 +104,33 @@ async function generateAiResult(input: LeverageMapInput, score: LeverageMapScore
               output_shape: {
                 pattern_label: "short label, may combine primary + secondary",
                 result_title: "one of the provided result bands",
-                operator_readout: "2-3 sentences, plain English, highly specific",
-                why_it_matters: "1-2 sentences about the consequence and leverage point",
-                first_workflow_to_inspect: "one concrete workflow to map first",
-                session_questions: "array of exactly 3 strong questions Justin should ask",
-                follow_up_opener: "one natural follow-up opener using their mess",
-                crm_summary: "one internal CRM summary sentence",
-                confidence: "low | medium | high",
+                operator_readout: "specific multi-sentence read of their mess; quote or mirror their submitted language where useful",
+                what_you_are_already_doing_right: "one grounding note that reduces defensiveness and names the useful signal they already provided",
+                where_it_costs_you: "specific operational spot where leverage is hiding and how the cost shows up",
+                what_an_intervention_looks_like: "plain-English first intervention specific to their workflow; no generic AI tool list",
+                first_fix: "one small, concrete place to start proving leverage",
+                why_this_is_fixable: "explain why this is a tractable workflow issue, not a personal/team failure",
+                ninety_day_picture: "what good looks like after acting for 90 days, without ROI promises",
+                internal: {
+                  session_questions: "array of exactly 3 strong questions Justin should ask; never for user display",
+                  follow_up_opener: "one natural follow-up opener using their mess",
+                  crm_summary: "one internal CRM summary sentence",
+                  confidence: "low | medium | high",
+                  lead_score: "integer 1-9 based on fit and urgency",
+                  likely_buyer_mindset: "what this buyer is probably thinking",
+                  recommended_offer: "AI Leverage Session | Discovery Sprint | Clarifying workflow call | Nurture",
+                  sales_angle: "specific sales angle Justin should take",
+                  urgency_reason: "why now, or why not yet",
+                  follow_up_subject: "short email subject",
+                  follow_up_sms: "short text-safe follow-up",
+                  disqualification_flags: "array of short flags, empty if none",
+                },
               },
               guardrails: [
-                "Use the submitted answer language when useful.",
+                "Mine momentStory and perfectEmployee hardest; those are the real signal.",
+                "Use the submitted answer language when useful so the readout feels personally observed.",
                 "Prefer handoff, context, ownership, status, and reusable judgment language.",
+                "Frame the business as capable; do not shame the owner or team.",
                 "If the answer is thin, keep confidence low and make the next step clarifying.",
               ],
             },
@@ -159,7 +175,7 @@ async function saveLead(input: LeverageMapInput, score: LeverageMapScore, aiResu
       contact_phone: input.phone || null,
       source: "inbound_form",
       stage: "Identified",
-      pain_summary: aiResult.crm_summary,
+      pain_summary: aiResult.internal.crm_summary,
       world_model_notes: buildWorldModelNotes(input, score, aiResult),
       tier_discussed: score.composite >= 6 ? "Discovery Sprint" : "Other",
       signal_depth: score.signalDepth,
@@ -201,8 +217,16 @@ async function notifyJustin(
     ["Team size", input.teamSize ? TEAM_SIZES[input.teamSize] : null],
     ["Pattern", aiResult.pattern_label],
     ["Signal", `${score.composite}/9 (${score.resultBand})`],
-    ["Follow-up opener", aiResult.follow_up_opener],
-    ["First workflow", aiResult.first_workflow_to_inspect],
+    ["Follow-up opener", aiResult.internal.follow_up_opener],
+    ["First fix", aiResult.first_fix],
+    ["Lead score", aiResult.internal.lead_score],
+    ["Buyer mindset", aiResult.internal.likely_buyer_mindset],
+    ["Recommended offer", aiResult.internal.recommended_offer],
+    ["Sales angle", aiResult.internal.sales_angle],
+    ["Urgency", aiResult.internal.urgency_reason],
+    ["Subject", aiResult.internal.follow_up_subject],
+    ["SMS", aiResult.internal.follow_up_sms],
+    ["Flags", aiResult.internal.disqualification_flags.join(", ")],
     ["Story", input.momentStory],
   ]
 
@@ -254,9 +278,21 @@ function buildWorldModelNotes(input: LeverageMapInput, score: LeverageMapScore, 
     `Story: ${input.momentStory || "Not provided"}`,
     `Strong employee answer: ${input.perfectEmployee || "Not provided"}`,
     `Operator readout: ${aiResult.operator_readout}`,
-    `First workflow: ${aiResult.first_workflow_to_inspect}`,
-    `Session questions: ${aiResult.session_questions.join(" | ")}`,
-    `Follow-up opener: ${aiResult.follow_up_opener}`,
+    `First fix: ${aiResult.first_fix}`,
+    `Already doing right: ${aiResult.what_you_are_already_doing_right}`,
+    `Where it costs: ${aiResult.where_it_costs_you}`,
+    `Intervention: ${aiResult.what_an_intervention_looks_like}`,
+    `90 day picture: ${aiResult.ninety_day_picture}`,
+    `Session questions: ${aiResult.internal.session_questions.join(" | ")}`,
+    `Follow-up opener: ${aiResult.internal.follow_up_opener}`,
+    `Lead score: ${aiResult.internal.lead_score}`,
+    `Buyer mindset: ${aiResult.internal.likely_buyer_mindset}`,
+    `Recommended offer: ${aiResult.internal.recommended_offer}`,
+    `Sales angle: ${aiResult.internal.sales_angle}`,
+    `Urgency: ${aiResult.internal.urgency_reason}`,
+    `Subject: ${aiResult.internal.follow_up_subject}`,
+    `SMS: ${aiResult.internal.follow_up_sms}`,
+    `Disqualification flags: ${aiResult.internal.disqualification_flags.join(", ") || "None"}`,
   ].join("\n")
 }
 
@@ -277,20 +313,38 @@ function labelInput(input: LeverageMapInput) {
 }
 
 function normalizeAiResult(parsed: Record<string, unknown>, fallback: LeverageMapAiResult): LeverageMapAiResult {
+  const internal = parsed.internal && typeof parsed.internal === "object" ? (parsed.internal as Record<string, unknown>) : {}
+  const sessionQuestions = asStringArray(internal.session_questions).slice(0, 3)
+  const leadScore = asNumber(internal.lead_score)
+
   return {
     pattern_label: asString(parsed.pattern_label) || fallback.pattern_label,
     result_title: asString(parsed.result_title) || fallback.result_title,
     operator_readout: asString(parsed.operator_readout) || fallback.operator_readout,
-    why_it_matters: asString(parsed.why_it_matters) || fallback.why_it_matters,
-    first_workflow_to_inspect: asString(parsed.first_workflow_to_inspect) || fallback.first_workflow_to_inspect,
-    session_questions: asStringArray(parsed.session_questions).slice(0, 3).length
-      ? asStringArray(parsed.session_questions).slice(0, 3)
-      : fallback.session_questions,
-    follow_up_opener: asString(parsed.follow_up_opener) || fallback.follow_up_opener,
-    crm_summary: asString(parsed.crm_summary) || fallback.crm_summary,
-    confidence: ["low", "medium", "high"].includes(asString(parsed.confidence))
-      ? (asString(parsed.confidence) as LeverageMapAiResult["confidence"])
-      : fallback.confidence,
+    what_you_are_already_doing_right:
+      asString(parsed.what_you_are_already_doing_right) || fallback.what_you_are_already_doing_right,
+    where_it_costs_you: asString(parsed.where_it_costs_you) || fallback.where_it_costs_you,
+    what_an_intervention_looks_like:
+      asString(parsed.what_an_intervention_looks_like) || fallback.what_an_intervention_looks_like,
+    first_fix: asString(parsed.first_fix) || fallback.first_fix,
+    why_this_is_fixable: asString(parsed.why_this_is_fixable) || fallback.why_this_is_fixable,
+    ninety_day_picture: asString(parsed.ninety_day_picture) || fallback.ninety_day_picture,
+    internal: {
+      session_questions: sessionQuestions.length ? sessionQuestions : fallback.internal.session_questions,
+      follow_up_opener: asString(internal.follow_up_opener) || fallback.internal.follow_up_opener,
+      crm_summary: asString(internal.crm_summary) || fallback.internal.crm_summary,
+      confidence: asConfidence(internal.confidence) || fallback.internal.confidence,
+      lead_score: leadScore ? Math.max(1, Math.min(9, Math.round(leadScore))) : fallback.internal.lead_score,
+      likely_buyer_mindset: asString(internal.likely_buyer_mindset) || fallback.internal.likely_buyer_mindset,
+      recommended_offer: asString(internal.recommended_offer) || fallback.internal.recommended_offer,
+      sales_angle: asString(internal.sales_angle) || fallback.internal.sales_angle,
+      urgency_reason: asString(internal.urgency_reason) || fallback.internal.urgency_reason,
+      follow_up_subject: asString(internal.follow_up_subject) || fallback.internal.follow_up_subject,
+      follow_up_sms: asString(internal.follow_up_sms) || fallback.internal.follow_up_sms,
+      disqualification_flags: asStringArray(internal.disqualification_flags).length
+        ? asStringArray(internal.disqualification_flags)
+        : fallback.internal.disqualification_flags,
+    },
   }
 }
 
@@ -300,6 +354,20 @@ function asString(value: unknown) {
 
 function asStringArray(value: unknown) {
   return Array.isArray(value) ? value.map(asString).filter(Boolean) : []
+}
+
+function asNumber(value: unknown) {
+  if (typeof value === "number" && Number.isFinite(value)) return value
+  if (typeof value === "string") {
+    const parsed = Number(value)
+    return Number.isFinite(parsed) ? parsed : 0
+  }
+  return 0
+}
+
+function asConfidence(value: unknown): LeverageMapAiResult["internal"]["confidence"] | "" {
+  const confidence = asString(value)
+  return confidence === "low" || confidence === "medium" || confidence === "high" ? confidence : ""
 }
 
 function asKnown<T extends Record<string, unknown>>(value: unknown, dictionary: T) {

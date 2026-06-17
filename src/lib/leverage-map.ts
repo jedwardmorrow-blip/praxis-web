@@ -189,12 +189,26 @@ export type LeverageMapAiResult = {
   pattern_label: string
   result_title: string
   operator_readout: string
-  why_it_matters: string
-  first_workflow_to_inspect: string
-  session_questions: string[]
-  follow_up_opener: string
-  crm_summary: string
-  confidence: "low" | "medium" | "high"
+  what_you_are_already_doing_right: string
+  where_it_costs_you: string
+  what_an_intervention_looks_like: string
+  first_fix: string
+  why_this_is_fixable: string
+  ninety_day_picture: string
+  internal: {
+    session_questions: string[]
+    follow_up_opener: string
+    crm_summary: string
+    confidence: "low" | "medium" | "high"
+    lead_score: number
+    likely_buyer_mindset: string
+    recommended_offer: string
+    sales_angle: string
+    urgency_reason: string
+    follow_up_subject: string
+    follow_up_sms: string
+    disqualification_flags: string[]
+  }
 }
 
 export function scoreLeverageMap(input: LeverageMapInput): LeverageMapScore {
@@ -324,17 +338,31 @@ export function fallbackAiResult(input: LeverageMapInput, score: LeverageMapScor
   return {
     pattern_label: second ? `${pattern.label} + ${second}` : pattern.label,
     result_title: score.resultBand,
-    operator_readout: `${company} appears to have a ${pattern.label.toLowerCase()} pattern: ${pattern.publicLine} The useful next move is to inspect the real path around ${moment}, not shop for a generic AI tool.`,
-    why_it_matters: `This matters because the visible symptom is ${consequence.toLowerCase()}, but the leverage is probably in how context, ownership, and follow-up move through the business.`,
-    first_workflow_to_inspect: "Map the first request, handoff, decision point, and customer/team update around the selected messy moment.",
-    session_questions: [
-      "Where does this workflow start, and who owns the next action when it arrives?",
-      "Where does the truth live when the team needs status, context, or history?",
-      "What would a strong employee know instantly that the current system makes hard to see?",
-    ],
-    follow_up_opener: `You mentioned ${moment}. I would start by mapping where the context lives, who owns the handoff, and what keeps coming back to you or the team.`,
-    crm_summary: `${score.resultBand}: ${pattern.label}. Composite ${score.composite}/9. ${input.momentStory || pattern.publicLine}`,
-    confidence: score.composite >= 8 ? "high" : score.composite >= 6 ? "medium" : "low",
+    operator_readout: `${company} appears to have a ${pattern.label.toLowerCase()} pattern: ${pattern.publicLine} The useful next move is to inspect the real path around ${moment}, especially how context, ownership, and status move before anyone reaches for another tool.`,
+    what_you_are_already_doing_right: "You already have a real operating moment to inspect. That is better than starting with a vague AI idea because the leverage can be tied to work people already recognize.",
+    where_it_costs_you: `The visible symptom is ${consequence.toLowerCase()}, but the cost is probably hiding in the moments when context has to be rebuilt, ownership is unclear, or the next step waits on a person instead of a system.`,
+    what_an_intervention_looks_like: "A useful first intervention would capture the request, the current owner, the needed context, and the next customer or team update in one reusable workflow, with a human review step before anything sensitive goes out.",
+    first_fix: "Map the first request, handoff, decision point, and customer/team update around the selected messy moment.",
+    why_this_is_fixable: "This is fixable because the issue has a shape: a trigger, a handoff, a source of truth, and a recurring next step. Those are the pieces a lightweight AI-assisted workflow can make visible before it becomes a bigger problem.",
+    ninety_day_picture: "In 90 days, the goal is not a flashy AI rollout. The goal is one proven workflow where the team can see status faster, reuse the right context, and spend less time asking who has the answer.",
+    internal: {
+      session_questions: [
+        "Where does this workflow start, and who owns the next action when it arrives?",
+        "Where does the truth live when the team needs status, context, or history?",
+        "What would a strong employee know instantly that the current system makes hard to see?",
+      ],
+      follow_up_opener: `You mentioned ${moment}. I would start by mapping where the context lives, who owns the handoff, and what keeps coming back to you or the team.`,
+      crm_summary: `${score.resultBand}: ${pattern.label}. Composite ${score.composite}/9. ${input.momentStory || pattern.publicLine}`,
+      confidence: score.composite >= 8 ? "high" : score.composite >= 6 ? "medium" : "low",
+      lead_score: score.composite,
+      likely_buyer_mindset: score.composite >= 6 ? "Feels the pain and may buy if the first fix is concrete." : "Curious, but needs clearer pain before pushing.",
+      recommended_offer: score.composite >= 6 ? "AI Leverage Session" : "Clarifying workflow call",
+      sales_angle: "Anchor the conversation around one repeated workflow, not a broad AI transformation pitch.",
+      urgency_reason: score.composite >= 6 ? "Frequent or costly friction is already visible." : "Signal is present but the business impact needs confirmation.",
+      follow_up_subject: `${company} leverage map`,
+      follow_up_sms: `This is Justin with Praxis. Your map points to ${pattern.label.toLowerCase()} around ${moment}. Worth a quick look at the first fix?`,
+      disqualification_flags: input.openToSession === "no" ? ["Not open to a session right now"] : [],
+    },
   }
 }
 

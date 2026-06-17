@@ -33,14 +33,17 @@ export default function CheckPage() {
           <div className="check-hero-copy">
             <div className="check-kicker">Praxis Leverage Map</div>
             <h1>
-              Pick one real mess<span>.</span>
+              Pick one
               <br />
-              Find the leverage.
+              real mess<span>.</span>
+              <br />
+              Find the
+              <br />
+              leverage.
             </h1>
             <p>
-              This is not an AI maturity quiz. It is a short workflow map that turns one messy
-              operating moment into a practical read on where AI, software, or better context could
-              actually matter.
+              Map one messy operating moment and get a practical read on where AI, software, or
+              better context could actually help the work run cleaner.
             </p>
           </div>
           <div className="check-hero-panel" aria-label="Leverage map promise">
@@ -57,8 +60,8 @@ export default function CheckPage() {
               <strong>See the pattern</strong>
             </div>
             <p>
-              The output gives you a leverage pattern, the first workflow to inspect, and the
-              questions Justin would ask in an AI Leverage Session.
+              The output gives you a leverage pattern, the first fix to inspect, and what the
+              workflow could look like after one focused improvement pass.
             </p>
           </div>
         </section>
