@@ -10,14 +10,6 @@
       "destination": "/aspire/assessment-language-validation.html"
     },
     {
-      "source": "/aspire/client-intelligence",
-      "destination": "/aspire/client-intelligence/index.html"
-    },
-    {
-      "source": "/aspire/cic",
-      "destination": "/aspire/client-intelligence/index.html"
-    },
-    {
       "source": "/world-model",
       "destination": "/world-model.html"
     },
