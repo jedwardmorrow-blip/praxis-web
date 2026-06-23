@@ -68,6 +68,11 @@ export function LeverageMapReadout({
         <span className="lm-label">Why this is fixable</span>
         {result.why_this_is_fixable}
       </p>
+
+      <div className="lm-unlock">
+        <span className="lm-label">What a session unlocks</span>
+        <p>{result.what_the_session_unlocks}</p>
+      </div>
     </article>
   )
 }

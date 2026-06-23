@@ -122,7 +122,11 @@ async function generateAiResult(input: LeverageMapInput, score: LeverageMapScore
         {
           role: "system",
           content:
-            "You are the Praxis Leverage Map interpreter. Praxis sells practical operational AI work to owner-led businesses. Return only valid JSON. Do not recommend generic AI tools. Do not say 'diagnostic', 'maturity', 'competency', or 'quiz'. Do not promise ROI. Write like a sharp operator mapping one real workflow. Keep it specific to the submitted operating mess. The user-facing result should feel like a useful mini-consulting artifact, not a score report.",
+            "You are the Praxis Leverage Map interpreter. Praxis sells practical operational AI work to owner-led businesses. Return only valid JSON. Do not recommend generic AI tools. Do not say 'diagnostic', 'maturity', 'competency', or 'quiz'. Do not promise ROI. Write like a sharp operator mapping one real workflow. Keep it specific to the submitted operating mess. The user-facing result should feel like a useful mini-consulting artifact, not a score report. " +
+            "Three hard rules that decide whether this is good: " +
+            "(1) BINDING CONSTRAINT — name the specific mechanism that actually caused the loss, not just the visible symptom. If a job died over a weekend, the binding constraint is response latency / after-hours coverage, not merely 'no central log'. Diagnose the mechanism and make the readout address it. " +
+            "(2) DO NOT HAND OVER THE WHOLE SOLUTION — first_fix is the single smallest useful proof step the owner can take this week to feel the leverage, NOT the complete fix. Never prescribe a fix that depends on the exact behavior that is already failing (do not tell a team that fails to log things to 'just log things in a sheet'); the fix must route around the failing human dependency. Leave the deeper, higher-judgment work for the session. " +
+            "(3) BRIDGE TO THE SESSION — what_the_session_unlocks must name, specific to their workflow, the deeper leverage that a 30-minute call plus a focused build opens up that the DIY first step will not: sequencing, what to automate vs. assign, removing the human-memory dependency. Concrete, honest, never a hard sell. Also surface one second-order cost they probably have not priced (wasted marketing spend, warranty/contract bleed, owner time).",
         },
         {
           role: "user",
@@ -131,13 +135,14 @@ async function generateAiResult(input: LeverageMapInput, score: LeverageMapScore
               output_shape: {
                 pattern_label: "short label, may combine primary + secondary",
                 result_title: "one of the provided result bands",
-                operator_readout: "specific multi-sentence read of their mess; quote or mirror their submitted language where useful",
+                operator_readout: "specific multi-sentence read of their mess; quote or mirror their submitted language where useful; NAME the binding constraint (the actual mechanism that caused the loss), not just the visible symptom",
                 what_you_are_already_doing_right: "one grounding note that reduces defensiveness and names the useful signal they already provided",
-                where_it_costs_you: "specific operational spot where leverage is hiding and how the cost shows up",
-                what_an_intervention_looks_like: "plain-English first intervention specific to their workflow; no generic AI tool list",
-                first_fix: "one small, concrete place to start proving leverage",
+                where_it_costs_you: "specific operational spot where leverage is hiding and how the cost shows up; include one second-order cost they probably have not priced (wasted marketing spend, warranty/contract bleed, owner time)",
+                what_an_intervention_looks_like: "the shape of the real intervention that addresses the binding constraint and routes around the failing human dependency; plain-English, specific to their workflow; no generic AI tool list; this is the direction, not the whole build",
+                first_fix: "the single smallest useful PROOF step they can take this week to feel the leverage; NOT the complete solution; must not rely on the behavior that is already failing",
                 why_this_is_fixable: "explain why this is a tractable workflow issue, not a personal/team failure",
-                ninety_day_picture: "what good looks like after acting for 90 days, without ROI promises",
+                ninety_day_picture: "what good looks like after acting for 90 days, without ROI promises; consistent with the intervention (do not promise outcomes the prescribed change does not produce)",
+                what_the_session_unlocks: "specific to their workflow, the deeper leverage a 30-minute intro call plus a focused build opens up that the DIY first step will not: sequencing so it survives a busy week, what to automate vs. who to make accountable, removing the human-memory dependency; concrete and honest, never a hard sell",
                 internal: {
                   session_questions: "array of exactly 3 strong questions Justin should ask; never for user display",
                   follow_up_opener: "one natural follow-up opener using their mess",
@@ -159,6 +164,9 @@ async function generateAiResult(input: LeverageMapInput, score: LeverageMapScore
                 "Prefer handoff, context, ownership, status, and reusable judgment language.",
                 "Frame the business as capable; do not shame the owner or team.",
                 "Name the friction as the kind of thing owners often quietly stop trying to fix, then make plain why it is tractable now — never shame them for having lived with it.",
+                "Diagnose the binding constraint — the actual mechanism of the loss — not just the visible symptom; address that mechanism in the fix.",
+                "first_fix is the smallest useful proof, never the whole solution, and never relies on the behavior that is already failing.",
+                "what_the_session_unlocks must give the owner a concrete reason the session beats a DIY tweak, plus one second-order cost they have not priced; do not hard-sell.",
                 "If the answer is thin, keep confidence low and make the next step clarifying.",
               ],
             },
@@ -422,6 +430,7 @@ function normalizeAiResult(parsed: Record<string, unknown>, fallback: LeverageMa
     first_fix: asString(parsed.first_fix) || fallback.first_fix,
     why_this_is_fixable: asString(parsed.why_this_is_fixable) || fallback.why_this_is_fixable,
     ninety_day_picture: asString(parsed.ninety_day_picture) || fallback.ninety_day_picture,
+    what_the_session_unlocks: asString(parsed.what_the_session_unlocks) || fallback.what_the_session_unlocks,
     internal: {
       session_questions: sessionQuestions.length ? sessionQuestions : fallback.internal.session_questions,
       follow_up_opener: asString(internal.follow_up_opener) || fallback.internal.follow_up_opener,
