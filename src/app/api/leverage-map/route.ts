@@ -13,39 +13,66 @@ import {
   TEAM_SIZES,
   TRUTH_LOCATIONS,
   fallbackAiResult,
+  firstNameOf,
   scoreLeverageMap,
+  toPublicResult,
   type LeverageMapAiResult,
   type LeverageMapInput,
   type LeverageMapScore,
+  type StoredLeverageMap,
 } from "@/lib/leverage-map"
 
 export const dynamic = "force-dynamic"
 
 const NOTIFY_EMAILS = ["Justin@gopraxis.ai"]
+const SITE_URL = "https://gopraxis.ai"
 
 export async function POST(req: Request) {
-  let input: LeverageMapInput
+  let raw: unknown
   try {
-    input = sanitizeInput(await req.json())
+    raw = await req.json()
   } catch {
     return Response.json({ error: "Invalid leverage map submission" }, { status: 400 })
   }
 
-  const required = [input.company, input.name, input.email, input.businessKind, input.brokenMoment]
+  // Honeypot: a hidden field real users never see. Bots fill it; we keep the
+  // public endpoint cheap by skipping the model call, the lead insert, and the email.
+  const honeypot = raw && typeof raw === "object" ? asString((raw as Record<string, unknown>)._hp) : ""
+
+  const input = sanitizeInput(raw)
+
+  const required = [input.company, input.name, input.email, input.brokenMoment]
   if (required.some((value) => !value?.trim())) {
     return Response.json({ error: "Missing required fields" }, { status: 400 })
   }
 
   const score = scoreLeverageMap(input)
+
+  if (honeypot) {
+    return Response.json({
+      ok: true,
+      leadId: null,
+      mapToken: null,
+      score,
+      result: toPublicResult(fallbackAiResult(input, score)),
+      deterministicFallback: true,
+    })
+  }
+
   const aiResult = await generateAiResult(input, score)
-  const lead = await saveLead(input, score, aiResult)
-  await notifyJustin(input, score, aiResult, lead?.id ?? null)
+  const token = crypto.randomUUID().replace(/-/g, "")
+  const lead = await saveLead(input, score, aiResult, token)
+  const mapToken = lead ? token : null
+  await notifyJustin(input, score, aiResult, lead?.id ?? null, mapToken)
+  if (mapToken) await emailProspectMap(input, score, aiResult, mapToken)
 
   return Response.json({
     ok: true,
     leadId: lead?.id ?? null,
+    mapToken,
     score,
-    result: aiResult,
+    // Only the public slice reaches the browser — never the internal block.
+    result: toPublicResult(aiResult),
     deterministicFallback: !process.env.OPENAI_API_KEY,
   })
 }
@@ -131,6 +158,7 @@ async function generateAiResult(input: LeverageMapInput, score: LeverageMapScore
                 "Use the submitted answer language when useful so the readout feels personally observed.",
                 "Prefer handoff, context, ownership, status, and reusable judgment language.",
                 "Frame the business as capable; do not shame the owner or team.",
+                "Name the friction as the kind of thing owners often quietly stop trying to fix, then make plain why it is tractable now — never shame them for having lived with it.",
                 "If the answer is thin, keep confidence low and make the next step clarifying.",
               ],
             },
@@ -160,10 +188,25 @@ async function generateAiResult(input: LeverageMapInput, score: LeverageMapScore
   }
 }
 
-async function saveLead(input: LeverageMapInput, score: LeverageMapScore, aiResult: LeverageMapAiResult) {
+async function saveLead(
+  input: LeverageMapInput,
+  score: LeverageMapScore,
+  aiResult: LeverageMapAiResult,
+  token: string,
+) {
   const supabaseUrl = cleanEnv(process.env.SUPABASE_URL)
   const supabaseKey = cleanEnv(process.env.SUPABASE_SERVICE_ROLE_KEY)
   if (!supabaseUrl || !supabaseKey) return null
+
+  // Self-contained, PII-light payload the public map page renders. The internal
+  // sales block is stripped here so it can never be read off the shareable URL.
+  const storedMap: StoredLeverageMap = {
+    company: input.company,
+    firstName: firstNameOf(input.name),
+    score,
+    result: toPublicResult(aiResult),
+    createdAt: new Date().toISOString(),
+  }
 
   const supabase = createClient(supabaseUrl, supabaseKey)
   const { data, error } = await supabase
@@ -184,6 +227,8 @@ async function saveLead(input: LeverageMapInput, score: LeverageMapScore, aiResu
       signal_composite: score.composite,
       surfaced_pains: score.surfacedPains,
       next_action: score.recommendedNextAction,
+      public_token: token,
+      leverage_map: storedMap,
     })
     .select("id")
     .single()
@@ -201,6 +246,7 @@ async function notifyJustin(
   score: LeverageMapScore,
   aiResult: LeverageMapAiResult,
   leadId: string | null,
+  mapToken: string | null,
 ) {
   const resendKey = cleanEnv(process.env.RESEND_API_KEY)
   if (!resendKey) return
@@ -209,6 +255,7 @@ async function notifyJustin(
   const subject = `Praxis Leverage Map: ${input.company} · ${aiResult.pattern_label} · ${score.composite}/9`
   const rows: Array<[string, string | number | null | undefined]> = [
     ["Lead ID", leadId],
+    ["Map link", mapToken ? `${SITE_URL}/check/map/${mapToken}` : null],
     ["Company", input.company],
     ["Name", input.name],
     ["Email", input.email],
@@ -255,6 +302,52 @@ async function notifyJustin(
     })
   } catch (error) {
     console.error("Resend leverage map error:", error)
+  }
+}
+
+// Send the prospect their own keepable copy: a link to the persistent map plus
+// the single most useful line (the first fix). Their map is the artifact that
+// keeps working after they close the tab — this is what makes it shareable.
+async function emailProspectMap(
+  input: LeverageMapInput,
+  score: LeverageMapScore,
+  aiResult: LeverageMapAiResult,
+  token: string,
+) {
+  const resendKey = cleanEnv(process.env.RESEND_API_KEY)
+  if (!resendKey || !input.email.includes("@")) return
+
+  const mapUrl = `${SITE_URL}/check/map/${token}`
+  const bookingUrl = cleanEnv(process.env.NEXT_PUBLIC_PRAXIS_BOOKING_URL)
+  const first = firstNameOf(input.name)
+  const resend = new Resend(resendKey)
+
+  try {
+    await resend.emails.send({
+      from: "PRAXIS Leverage Map <noreply@gopraxis.ai>",
+      to: [input.email],
+      replyTo: "Justin@gopraxis.ai",
+      subject: `Your Praxis Leverage Map · ${aiResult.pattern_label}`,
+      html: `
+        <div style="background:#0a2545;color:#F1E8D2;font-family:'IBM Plex Sans',Arial,sans-serif;padding:32px 28px;max-width:560px;margin:0 auto">
+          <p style="color:#C9A24B;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 18px">Praxis Leverage Map</p>
+          <p style="font-size:16px;line-height:1.6;margin:0 0 16px">Hi ${escapeHtml(first)}, your leverage map is ready.</p>
+          <p style="font-size:16px;line-height:1.6;margin:0 0 8px">We read your map as a <strong>${escapeHtml(aiResult.pattern_label)}</strong> pattern. The first place to look:</p>
+          <p style="font-size:16px;line-height:1.6;border-left:2px solid #C9A24B;padding-left:14px;margin:0 0 22px;color:#F1E8D2">${escapeHtml(aiResult.first_fix)}</p>
+          <p style="margin:0 0 22px">
+            <a href="${escapeHtml(mapUrl)}" style="background:#C42130;color:#F1E8D2;text-decoration:none;padding:13px 22px;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;display:inline-block">Open your full map →</a>
+          </p>
+          ${
+            bookingUrl
+              ? `<p style="font-size:14px;line-height:1.6;margin:0 0 8px;color:#F1E8D2cc">Want to map it with Justin? <a href="${escapeHtml(bookingUrl)}" style="color:#C9A24B">Book a 60-90 minute AI Leverage Session</a>.</p>`
+              : `<p style="font-size:14px;line-height:1.6;margin:0 0 8px;color:#F1E8D2cc">Want to map it with Justin? Reply to this email and we'll set up an AI Leverage Session.</p>`
+          }
+          <p style="font-size:12px;line-height:1.6;margin:24px 0 0;color:#F1E8D299">PRAXIS · Operational Intelligence · gopraxis.ai</p>
+        </div>
+      `,
+    })
+  } catch (error) {
+    console.error("Resend prospect map error:", error)
   }
 }
 

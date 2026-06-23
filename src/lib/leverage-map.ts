@@ -285,7 +285,7 @@ export function scoreLeverageMap(input: LeverageMapInput): LeverageMapScore {
 
   const imaginationGap = clampScore(
     1 +
-      Number(meaningfulStory || input.brokenMoment) +
+      Number(meaningfulStory || Boolean(input.brokenMoment)) +
       Number((frequent || costly) && input.openToSession !== "no"),
   )
 
@@ -368,4 +368,51 @@ export function fallbackAiResult(input: LeverageMapInput, score: LeverageMapScor
 
 function clampScore(n: number) {
   return Math.max(1, Math.min(3, n))
+}
+
+// The prospect-facing slice of the readout. The `internal` block (session
+// questions, sales angle, lead score) must NEVER reach the browser or the
+// shareable map page, so the public payload is built by stripping it.
+export type PublicLeverageResult = Omit<LeverageMapAiResult, "internal">
+
+export function toPublicResult(result: LeverageMapAiResult): PublicLeverageResult {
+  // Enumerate the public fields explicitly so the internal block can never leak,
+  // even if new internal keys are added later.
+  return {
+    pattern_label: result.pattern_label,
+    result_title: result.result_title,
+    operator_readout: result.operator_readout,
+    what_you_are_already_doing_right: result.what_you_are_already_doing_right,
+    where_it_costs_you: result.where_it_costs_you,
+    what_an_intervention_looks_like: result.what_an_intervention_looks_like,
+    first_fix: result.first_fix,
+    why_this_is_fixable: result.why_this_is_fixable,
+    ninety_day_picture: result.ninety_day_picture,
+  }
+}
+
+// The relocated "problem you've given up on" framing. It misfires as a cold
+// opener, but lands as an earned line in the OUTPUT: it names the resignation
+// the owner has swallowed and immediately reframes it as tractable.
+export function reframeLine(score: LeverageMapScore): string {
+  if (score.composite >= 6) {
+    return "This is the kind of operating friction most owners quietly learn to live with. It does not have to stay that way."
+  }
+  if (score.composite >= 4) {
+    return "A mess like this is easy to live with and easy to underestimate. It is also more fixable than it tends to feel."
+  }
+  return "Even a small recurring mess like this is worth naming before it hardens into just how we do it."
+}
+
+export function firstNameOf(name: string): string {
+  return name.trim().split(/\s+/)[0] || "there"
+}
+
+// Shape stored in praxis_leads.leverage_map and rendered by /check/map/[token].
+export type StoredLeverageMap = {
+  company: string
+  firstName: string
+  score: LeverageMapScore
+  result: PublicLeverageResult
+  createdAt: string
 }

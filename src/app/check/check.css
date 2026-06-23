@@ -211,6 +211,10 @@
   margin-top: 18px;
 }
 
+.check-start-intro > .sec-tag {
+  display: block;
+}
+
 .check-workbench {
   max-width: 1320px;
   margin: 0 auto;
@@ -570,29 +574,55 @@
 }
 
 .check-score {
-  border: 1px solid rgba(196, 33, 48, 0.72);
-  min-width: 160px;
-  padding: 16px;
-  text-align: center;
+  border: 1px solid rgba(201, 162, 75, 0.55);
+  min-width: 210px;
+  max-width: 280px;
+  padding: 18px;
+  background: rgba(3, 16, 31, 0.4);
+  text-align: left;
 }
 
-.check-score span {
+.check-score-eyebrow {
   display: block;
-  font-family: var(--font-big-shoulders), "Big Shoulders Display", sans-serif;
-  font-size: 58px;
-  line-height: 0.9;
-  color: var(--red);
-}
-
-.check-score strong {
-  display: block;
-  color: var(--paper-dim);
+  color: var(--gold);
   font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
   font-size: 10px;
-  letter-spacing: 0.14em;
-  line-height: 1.45;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
+}
+
+.check-score-band {
+  display: block;
+  margin-top: 10px;
+  color: var(--paper);
+  font-family: var(--font-big-shoulders), "Big Shoulders Display", sans-serif;
+  font-size: clamp(30px, 3.4vw, 44px);
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.check-score-meter {
+  display: block;
+  height: 7px;
+  margin-top: 14px;
+  border: 1px solid var(--rule-soft);
+  background: rgba(3, 16, 31, 0.6);
+}
+
+.check-score-meter i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--red), var(--gold));
+}
+
+.check-score small {
+  display: block;
   margin-top: 8px;
+  color: var(--paper-mute);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .check-result-grid {
@@ -818,5 +848,1064 @@
   .check-result article,
   .check-result article:nth-child(even) {
     border-right: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .check-page {
+    background:
+      radial-gradient(circle at 88% 8%, rgba(196, 33, 48, 0.12), transparent 22rem),
+      var(--canvas);
+  }
+
+  .check-hero,
+  .check-workbench,
+  .check-start-shell {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .check-hero-copy,
+  .check-hero-panel,
+  .check-hero p {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .check-hero {
+    gap: 18px;
+    padding-top: 28px;
+    padding-bottom: 18px;
+  }
+
+  .check-kicker {
+    margin-bottom: 12px;
+  }
+
+  .check-hero h1 {
+    font-size: clamp(48px, 15vw, 62px);
+    line-height: 0.88;
+  }
+
+  .check-hero p,
+  .check-start-intro p {
+    font-size: 16px;
+    line-height: 1.46;
+    margin-top: 14px;
+  }
+
+  .check-hero-actions {
+    gap: 10px;
+  }
+
+  .check-start-primary,
+  .check-start-secondary,
+  .check-panel-start {
+    min-height: 54px;
+    padding: 15px 16px;
+    text-align: center;
+  }
+
+  .check-hero-panel {
+    padding: 16px;
+  }
+
+  .check-panel-core {
+    gap: 11px 14px;
+    padding: 18px 0;
+  }
+
+  .check-panel-core span {
+    font-size: 36px;
+  }
+
+  .check-panel-core strong {
+    font-size: 18px;
+  }
+
+  .check-start-shell {
+    padding-top: 22px;
+    padding-bottom: 34px;
+  }
+
+  .check-back-link {
+    display: block;
+    margin-bottom: 18px;
+  }
+
+  .check-start-intro {
+    margin-bottom: 12px;
+    padding-bottom: 18px;
+  }
+
+  .check-start-intro h1 {
+    font-size: clamp(44px, 13vw, 56px);
+    line-height: 0.88;
+  }
+
+  .check-workbench {
+    padding: 10px 16px 126px;
+    scroll-margin-top: 8px;
+  }
+
+  .check-workbench-head {
+    gap: 16px;
+    padding-bottom: 16px;
+  }
+
+  .check-workbench .sec-h {
+    font-size: 38px;
+    line-height: 0.92;
+  }
+
+  .check-progress {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .check-stepper {
+    display: flex;
+    gap: 8px;
+    margin: 16px -16px 0;
+    overflow-x: auto;
+    padding: 0 16px 4px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .check-stepper button {
+    flex: 0 0 112px;
+    min-height: 50px;
+    padding: 10px 11px;
+    scroll-snap-align: start;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  .check-form,
+  .check-form.wizard {
+    gap: 16px;
+    margin-top: 14px;
+  }
+
+  .check-block {
+    padding: 16px;
+  }
+
+  .check-block-label {
+    margin-bottom: 16px;
+  }
+
+  .check-example-strip {
+    gap: 12px;
+    margin-bottom: 18px;
+    padding: 14px;
+  }
+
+  .check-example-grid {
+    display: flex;
+    gap: 10px;
+    margin-right: -14px;
+    overflow-x: auto;
+    padding: 2px 14px 4px 0;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .check-example-grid button {
+    flex: 0 0 82%;
+    min-height: 112px;
+    padding: 14px;
+    scroll-snap-align: start;
+  }
+
+  .check-choice-group {
+    margin-top: 16px;
+  }
+
+  .check-choice-grid,
+  .check-choice-grid.large,
+  .check-choice-grid.multi {
+    gap: 8px;
+  }
+
+  .check-choice-grid button,
+  .check-reset {
+    min-height: 54px;
+    padding: 13px 14px;
+    font-size: 15px;
+  }
+
+  .check-field input,
+  .check-field textarea {
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  .check-field textarea {
+    min-height: 148px;
+  }
+
+  .check-submit-row {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 0 -16px;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    border: 1px solid rgba(201, 162, 75, 0.2);
+    background:
+      linear-gradient(180deg, rgba(10, 37, 69, 0.92), rgba(3, 16, 31, 0.98)),
+      var(--canvas-deep);
+    box-shadow: 0 -16px 42px rgba(0, 0, 0, 0.34);
+  }
+
+  .check-submit-row:has(.check-back) {
+    grid-template-columns: 0.46fr 1fr;
+  }
+
+  .check-submit-row p {
+    grid-column: 1 / -1;
+    max-width: none;
+    font-size: 12px;
+    line-height: 1.38;
+  }
+
+  .check-submit,
+  .check-back {
+    min-width: 0;
+    min-height: 52px;
+    padding: 14px 12px;
+    width: 100%;
+  }
+
+  .check-result {
+    margin-top: 28px;
+  }
+
+  .check-result-top,
+  .check-result article,
+  .check-questions,
+  .check-session-next,
+  .check-result-actions {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .check-result h2 {
+    font-size: 42px;
+  }
+
+  .check-score {
+    min-width: 0;
+  }
+
+  .check-result article p,
+  .check-session-next p,
+  .check-public-next p {
+    font-size: 16px;
+  }
+
+  .check-readout p {
+    font-size: 17px !important;
+  }
+
+  .check-result-actions .hero-cta,
+  .check-result-actions .check-reset {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Keep assessment spacing ahead of the global V4 reset after CSS bundling. */
+.check-page .check-hero {
+  padding: 68px 56px 26px;
+}
+
+.check-page .check-start-shell {
+  padding: 44px 56px 100px;
+}
+
+.check-page .check-workbench {
+  padding: 22px 56px 100px;
+}
+
+.check-page .check-hero-panel {
+  padding: 24px;
+}
+
+.check-page .check-block {
+  padding: 26px;
+}
+
+.check-page .check-example-strip {
+  padding: 18px;
+}
+
+.check-page .check-result-top {
+  padding: 28px;
+}
+
+.check-page .check-result article,
+.check-page .check-questions,
+.check-page .check-session-next {
+  padding: 24px 28px;
+}
+
+.check-page .check-result-actions {
+  padding: 24px 28px 28px;
+}
+
+@media (max-width: 980px) {
+  .check-page .check-hero,
+  .check-page .check-workbench,
+  .check-page .check-start-shell {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .check-page .check-hero {
+    padding-top: 38px;
+  }
+
+  .check-page .check-start-shell {
+    padding-top: 32px;
+  }
+
+  .check-page .check-hero-panel,
+  .check-page .check-block {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 720px) {
+  .check-page .check-hero {
+    padding: 28px 16px 18px;
+  }
+
+  .check-page .check-start-shell {
+    padding: 22px 16px 34px;
+  }
+
+  .check-page .check-workbench {
+    padding: 10px 16px 126px;
+  }
+
+  .check-page .check-hero-panel,
+  .check-page .check-block {
+    padding: 16px;
+  }
+
+  .check-page .check-example-strip {
+    padding: 14px;
+  }
+
+  .check-page .check-submit-row {
+    margin-right: 0;
+    margin-left: 0;
+    padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
+  }
+
+  .check-page .check-result-top,
+  .check-page .check-result article,
+  .check-page .check-questions,
+  .check-page .check-session-next,
+  .check-page .check-result-actions {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Leverage Map A+ pass: step motion, loading state, free-text coaching,
+   progress resume, lighter step 4, reframed signal, calendar CTA.
+--------------------------------------------------------------------------- */
+
+.check-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.check-resumed {
+  margin-top: 16px;
+  color: var(--paper-mute);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.check-resumed button {
+  border: 0;
+  background: none;
+  color: var(--gold);
+  font: inherit;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.check-step-body {
+  outline: none;
+  animation: checkStepIn 0.34s ease both;
+}
+
+@keyframes checkStepIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.check-strength {
+  display: grid;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.check-strength-track {
+  height: 5px;
+  border: 1px solid var(--rule-soft);
+  background: rgba(3, 16, 31, 0.5);
+}
+
+.check-strength-track i {
+  display: block;
+  height: 100%;
+  background: var(--paper-mute);
+  transition:
+    width 0.25s ease,
+    background 0.25s ease;
+}
+
+.check-strength span {
+  color: var(--paper-mute);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.check-strength.thin .check-strength-track i {
+  background: var(--red);
+}
+
+.check-strength.ok .check-strength-track i {
+  background: var(--gold);
+}
+
+.check-strength.strong .check-strength-track i {
+  background: linear-gradient(90deg, var(--gold), #7fae6b);
+}
+
+.check-strength.strong span {
+  color: var(--gold);
+}
+
+.check-choice-count {
+  margin-left: 10px;
+  color: var(--paper-mute);
+  letter-spacing: 0.1em;
+}
+
+.check-optional-divider {
+  margin: 28px 0 4px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--rule-soft);
+}
+
+.check-optional-divider span {
+  color: var(--gold);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.check-optional-divider p {
+  color: var(--paper-mute);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+.check-loading {
+  margin-top: 24px;
+  border: 1px solid var(--gold);
+  background:
+    linear-gradient(135deg, rgba(201, 162, 75, 0.08), rgba(3, 16, 31, 0.3)),
+    var(--canvas-deep);
+  padding: 48px 32px;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 18px;
+  box-shadow: 0 32px 100px rgba(0, 0, 0, 0.28);
+}
+
+.check-loading strong {
+  color: var(--paper);
+  font-family: var(--font-big-shoulders), "Big Shoulders Display", sans-serif;
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.check-loading > p {
+  color: var(--paper-mute);
+  font-size: 15px;
+  line-height: 1.55;
+  max-width: 460px;
+}
+
+.check-loading-phases {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.check-loading-phases li {
+  color: var(--paper-mute);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  opacity: 0.5;
+  transition:
+    opacity 0.25s ease,
+    color 0.25s ease;
+}
+
+.check-loading-phases li::before {
+  content: "○ ";
+  color: var(--rule-soft);
+}
+
+.check-loading-phases li.active {
+  color: var(--paper);
+  opacity: 1;
+}
+
+.check-loading-phases li.active::before {
+  content: "▸ ";
+  color: var(--red);
+}
+
+.check-loading-phases li.done {
+  color: var(--gold);
+  opacity: 0.9;
+}
+
+.check-loading-phases li.done::before {
+  content: "✓ ";
+  color: var(--gold);
+}
+
+.check-loading-orbit {
+  position: relative;
+  width: 54px;
+  height: 54px;
+}
+
+.check-loading-orbit i {
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  border-top-color: var(--red);
+  border-radius: 50%;
+  animation: checkSpin 1s linear infinite;
+}
+
+.check-loading-orbit i:nth-child(2) {
+  inset: 8px;
+  border-top-color: var(--gold);
+  animation-duration: 1.4s;
+  animation-direction: reverse;
+}
+
+.check-loading-orbit i:nth-child(3) {
+  inset: 16px;
+  border-top-color: var(--paper-dim);
+  animation-duration: 1.8s;
+}
+
+@keyframes checkSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.check-secondary-link {
+  color: var(--gold);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.check-secondary-link:hover {
+  border-bottom-color: var(--gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .check-step-body {
+    animation: none;
+  }
+
+  .check-loading-orbit i,
+  .lm-sk {
+    animation: none;
+  }
+
+  .check-strength-track i,
+  .check-progress i,
+  .check-score-meter i {
+    transition: none;
+  }
+}
+
+/* ===========================================================================
+   STRUCTURAL REDESIGN (Approach A — "one mess, one map")
+   New opener, lighter Act 2, skeleton load, and the editorial Leverage Map
+   artifact shared by the inline result and the persistent /check/map/[token].
+   =========================================================================== */
+
+/* --- Act 1 opener --- */
+.check-opener {
+  margin-bottom: 22px;
+}
+
+.check-opener-q {
+  font-family: var(--font-big-shoulders), "Big Shoulders Display", sans-serif;
+  font-weight: 800;
+  font-size: clamp(26px, 3.4vw, 40px);
+  line-height: 1.04;
+  letter-spacing: 0.004em;
+  text-transform: uppercase;
+  color: var(--paper);
+  max-width: 880px;
+}
+
+.check-opener-sub {
+  color: var(--paper-dim);
+  font-size: clamp(15px, 1.5vw, 18px);
+  line-height: 1.55;
+  margin-top: 12px;
+  max-width: 640px;
+}
+
+/* --- Act 2: trace clusters (all optional) --- */
+.check-trace-copy {
+  color: var(--paper-mute);
+  font-size: 15px;
+  line-height: 1.55;
+  max-width: 720px;
+  margin: -6px 0 4px;
+}
+
+.check-trace-cluster {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 0.75px dashed var(--rule-soft);
+}
+
+.check-cluster-label {
+  display: block;
+  color: var(--gold);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* --- Skeleton load (skeletons, not spinners) --- */
+.lm-skeleton {
+  width: 100%;
+  max-width: 560px;
+  display: grid;
+  gap: 14px;
+  justify-items: stretch;
+  text-align: left;
+}
+
+.lm-sk {
+  display: block;
+  height: 14px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--paper-ghost) 0%,
+    rgba(241, 232, 210, 0.22) 50%,
+    var(--paper-ghost) 100%
+  );
+  background-size: 220% 100%;
+  animation: lmShimmer 1.4s ease-in-out infinite;
+}
+
+.lm-sk-eyebrow {
+  width: 38%;
+  height: 10px;
+}
+
+.lm-sk-title {
+  width: 72%;
+  height: 34px;
+  margin-bottom: 6px;
+}
+
+.lm-sk-line.w60 {
+  width: 60%;
+}
+.lm-sk-line.w80 {
+  width: 80%;
+}
+.lm-sk-line.w95 {
+  width: 95%;
+}
+
+@keyframes lmShimmer {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}
+
+/* --- The editorial Leverage Map (shared) --- */
+.check-result-wrap {
+  margin-top: 42px;
+}
+
+.lm {
+  max-width: 900px;
+  border-top: 1px solid var(--gold);
+  padding-top: 30px;
+}
+
+.lm-head {
+  padding-bottom: 26px;
+  border-bottom: 0.75px dashed var(--rule-soft);
+}
+
+.lm-eyebrow {
+  display: block;
+  color: var(--gold);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.lm-pattern {
+  font-family: var(--font-big-shoulders), "Big Shoulders Display", sans-serif;
+  font-weight: 900;
+  font-size: clamp(44px, 6.2vw, 88px);
+  line-height: 0.92;
+  letter-spacing: 0.004em;
+  text-transform: uppercase;
+  color: var(--paper);
+  margin-top: 14px;
+}
+
+.lm-signal {
+  margin-top: 14px;
+  color: var(--paper-mute);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.lm-label {
+  display: block;
+  color: var(--gold);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.lm-read {
+  margin: 28px 0 0;
+  padding-left: 20px;
+  border-left: 2px solid var(--gold);
+}
+
+.lm-read p {
+  color: var(--paper);
+  font-size: clamp(19px, 2.1vw, 24px);
+  line-height: 1.5;
+  max-width: 760px;
+}
+
+.lm-grounding {
+  margin-top: 26px;
+  color: var(--paper-dim);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 760px;
+}
+
+.lm-reframe {
+  margin: 30px 0;
+  padding: 22px 0;
+  border-top: 0.75px dashed var(--rule-soft);
+  border-bottom: 0.75px dashed var(--rule-soft);
+  font-family: var(--font-special-elite), "Special Elite", serif;
+  font-size: clamp(18px, 2vw, 23px);
+  line-height: 1.5;
+  color: var(--paper);
+  max-width: 760px;
+}
+
+.lm-moves {
+  list-style: none;
+  margin: 30px 0 0;
+  padding: 0;
+}
+
+.lm-move {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 8px 22px;
+  padding: 26px 0;
+  border-top: 0.75px solid var(--rule-soft);
+}
+
+.lm-move:first-child {
+  border-top: 0;
+}
+
+.lm-move-no {
+  font-family: var(--font-big-shoulders), "Big Shoulders Display", sans-serif;
+  font-weight: 800;
+  font-size: 46px;
+  line-height: 0.9;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.lm-move.key .lm-move-no {
+  color: var(--red);
+}
+
+.lm-move-body h3 {
+  font-family: var(--font-big-shoulders), "Big Shoulders Display", sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 2.4vw, 30px);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+
+.lm-move-body p {
+  color: var(--paper-dim);
+  font-size: 17px;
+  line-height: 1.62;
+  margin-top: 10px;
+  max-width: 720px;
+}
+
+.lm-move.key .lm-move-body p:first-of-type {
+  color: var(--paper);
+  font-size: 18px;
+}
+
+.lm-move-sub {
+  color: var(--paper-mute) !important;
+  font-size: 15px !important;
+}
+
+.lm-fixable {
+  margin-top: 4px;
+  padding-top: 24px;
+  border-top: 0.75px solid var(--rule-soft);
+  color: var(--paper-dim);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 760px;
+}
+
+/* --- Session next + actions (inline result and map page) --- */
+.lm-session-next {
+  margin-top: 30px;
+  border: 1px solid var(--rule);
+  background:
+    linear-gradient(135deg, rgba(196, 33, 48, 0.12), rgba(201, 162, 75, 0.06)),
+    rgba(3, 16, 31, 0.32);
+  padding: 28px;
+}
+
+.lm-session-next span {
+  display: block;
+  color: var(--gold);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.lm-session-next h3 {
+  font-family: var(--font-big-shoulders), "Big Shoulders Display", sans-serif;
+  font-weight: 800;
+  font-size: clamp(32px, 4vw, 56px);
+  line-height: 0.92;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+
+.lm-session-next p {
+  color: var(--paper-dim);
+  font-size: 17px;
+  line-height: 1.58;
+  margin-top: 14px;
+  max-width: 880px;
+}
+
+.lm-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.lm-actions .hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lm-print {
+  cursor: pointer;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--gold);
+  padding: 13px 20px;
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: border-color 0.18s ease, color 0.18s ease;
+}
+
+.lm-print:hover {
+  border-color: var(--gold);
+  color: var(--paper);
+}
+
+.lm-emailed {
+  margin-top: 16px;
+  color: var(--paper-mute);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+/* --- Persistent map page shell --- */
+.check-map-shell {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 44px 56px 100px;
+}
+
+.check-map-shell .check-back-link {
+  margin-bottom: 30px;
+}
+
+@media (max-width: 720px) {
+  .lm-move {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 20px 0;
+  }
+
+  .lm-move-no {
+    font-size: 32px;
+  }
+
+  .lm-read p {
+    font-size: 19px;
+  }
+
+  .check-map-shell {
+    padding: 22px 16px 80px;
+  }
+
+  .lm-session-next {
+    padding: 20px;
+  }
+
+  .lm-actions .hero-cta,
+  .lm-print {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* --- Print: graceful light artifact (Save as PDF) --- */
+@media print {
+  .check-map-page .header,
+  .check-map-page .footer,
+  .check-map-page nav,
+  .check-map-page .check-back-link,
+  .check-map-page .lm-session-next,
+  .check-map-page .lm-actions {
+    display: none !important;
+  }
+
+  .check-map-page,
+  .check-map-page.v4-page {
+    background: #ffffff !important;
+    color: var(--light-ink) !important;
+  }
+
+  .check-map-page::before {
+    display: none !important;
+  }
+
+  .check-map-page .lm-pattern,
+  .check-map-page .lm-move-body h3 {
+    color: var(--light-ink) !important;
+  }
+
+  .check-map-page .lm-eyebrow,
+  .check-map-page .lm-label,
+  .check-map-page .lm-move-no {
+    color: #9a7d2e !important;
+  }
+
+  .check-map-page .lm-read p,
+  .check-map-page .lm-reframe,
+  .check-map-page .lm-grounding,
+  .check-map-page .lm-move-body p,
+  .check-map-page .lm-fixable,
+  .check-map-page .lm-signal {
+    color: var(--light-ink) !important;
+  }
+
+  .check-map-page .lm,
+  .check-map-page .lm-read {
+    border-color: #9a7d2e !important;
   }
 }
