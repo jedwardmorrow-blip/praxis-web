@@ -29,6 +29,9 @@ const NOTIFY_EMAILS = ["Justin@gopraxis.ai"]
 const SITE_URL = "https://gopraxis.ai"
 
 type EmailStatus = "sent" | "failed" | "skipped"
+// A send returns its status plus the Resend message id, so delivery webhooks
+// (delivered/bounced/complained) can be correlated back to this exact lead.
+type EmailSend = { status: EmailStatus; id: string | null }
 
 export async function POST(req: Request) {
   let raw: unknown
@@ -79,9 +82,11 @@ export async function POST(req: Request) {
 
   // Send the prospect email first so its outcome can be reported to Justin and
   // recorded on the lead — a swallowed Resend failure must not stay invisible.
-  const prospectStatus: EmailStatus = mapToken ? await emailProspectMap(input, aiResult, mapToken) : "skipped"
-  const notifyStatus: EmailStatus = await notifyJustin(input, score, aiResult, lead?.id ?? null, mapToken, prospectStatus)
-  if (lead?.id) await updateLeadEmailStatus(lead.id, prospectStatus, notifyStatus)
+  const prospect: EmailSend = mapToken
+    ? await emailProspectMap(input, aiResult, mapToken)
+    : { status: "skipped", id: null }
+  const notify: EmailSend = await notifyJustin(input, score, aiResult, lead?.id ?? null, mapToken, prospect.status)
+  if (lead?.id) await updateLeadEmailStatus(lead.id, prospect, notify)
 
   return Response.json({
     ok: true,
@@ -273,9 +278,9 @@ async function notifyJustin(
   leadId: string | null,
   mapToken: string | null,
   prospectStatus: EmailStatus,
-): Promise<EmailStatus> {
+): Promise<EmailSend> {
   const resendKey = cleanEnv(process.env.RESEND_API_KEY)
-  if (!resendKey) return "skipped"
+  if (!resendKey) return { status: "skipped", id: null }
 
   const prospectEmailLine =
     prospectStatus === "sent"
@@ -312,7 +317,7 @@ async function notifyJustin(
   ]
 
   try {
-    const { error } = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: "PRAXIS Leverage Map <noreply@gopraxis.ai>",
       to: NOTIFY_EMAILS,
       subject,
@@ -336,12 +341,12 @@ async function notifyJustin(
     })
     if (error) {
       console.error("Resend notify error:", error)
-      return "failed"
+      return { status: "failed", id: null }
     }
-    return "sent"
+    return { status: "sent", id: data?.id ?? null }
   } catch (error) {
     console.error("Resend leverage map error:", error)
-    return "failed"
+    return { status: "failed", id: null }
   }
 }
 
@@ -352,9 +357,9 @@ async function emailProspectMap(
   input: LeverageMapInput,
   aiResult: LeverageMapAiResult,
   token: string,
-): Promise<EmailStatus> {
+): Promise<EmailSend> {
   const resendKey = cleanEnv(process.env.RESEND_API_KEY)
-  if (!resendKey || !input.email.includes("@")) return "skipped"
+  if (!resendKey || !input.email.includes("@")) return { status: "skipped", id: null }
 
   const mapUrl = `${SITE_URL}/check/map/${token}`
   const bookingUrl = cleanEnv(process.env.NEXT_PUBLIC_PRAXIS_BOOKING_URL)
@@ -362,7 +367,7 @@ async function emailProspectMap(
   const resend = new Resend(resendKey)
 
   try {
-    const { error } = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: "PRAXIS Leverage Map <noreply@gopraxis.ai>",
       to: [input.email],
       replyTo: "Justin@gopraxis.ai",
@@ -387,18 +392,18 @@ async function emailProspectMap(
     })
     if (error) {
       console.error("Resend prospect map error:", error)
-      return "failed"
+      return { status: "failed", id: null }
     }
-    return "sent"
+    return { status: "sent", id: data?.id ?? null }
   } catch (error) {
     console.error("Resend prospect map error:", error)
-    return "failed"
+    return { status: "failed", id: null }
   }
 }
 
 // Record the per-send email outcome on the lead so a swallowed Resend failure
 // is visible in the CRM, not just lost in function logs.
-async function updateLeadEmailStatus(leadId: string, prospect: EmailStatus, notify: EmailStatus) {
+async function updateLeadEmailStatus(leadId: string, prospect: EmailSend, notify: EmailSend) {
   const supabaseUrl = cleanEnv(process.env.SUPABASE_URL)
   const supabaseKey = cleanEnv(process.env.SUPABASE_SERVICE_ROLE_KEY)
   if (!supabaseUrl || !supabaseKey) return
@@ -406,7 +411,15 @@ async function updateLeadEmailStatus(leadId: string, prospect: EmailStatus, noti
   const supabase = createClient(supabaseUrl, supabaseKey)
   const { error } = await supabase
     .from("praxis_leads")
-    .update({ email_status: { prospect, notify, at: new Date().toISOString() } })
+    .update({
+      email_status: {
+        prospect: prospect.status,
+        prospect_id: prospect.id,
+        notify: notify.status,
+        notify_id: notify.id,
+        at: new Date().toISOString(),
+      },
+    })
     .eq("id", leadId)
 
   if (error) console.error("Supabase email_status update error:", error)
