@@ -74,9 +74,9 @@ export default async function LeverageMapPage({
             <span>Recommended next step</span>
             <h3>Want Justin to map this with you?</h3>
             <p>
-              Bring this exact workflow into a focused AI Leverage Session. We trace the handoff,
-              name the first useful intervention, and decide together whether it is worth turning
-              into a real operating-system improvement.
+              Start with a focused 30-minute intro call. We trace the handoff, name the first
+              useful intervention, and decide together whether it is worth a full 60-90 minute AI
+              Leverage Session.
             </p>
           </div>
 

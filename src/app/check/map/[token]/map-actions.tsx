@@ -18,7 +18,7 @@ export function MapActions({ patternLabel, firstFix }: { patternLabel: string; f
         href={href}
         {...(BOOKING_URL ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
-        Book your AI Leverage Session <span className="arr">→</span>
+        Book a 30-minute intro call <span className="arr">→</span>
       </a>
       <button type="button" className="lm-print" onClick={() => window.print()}>
         Save as PDF

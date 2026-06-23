@@ -525,15 +525,15 @@ export function LeverageMapForm() {
             <span>Recommended next step</span>
             <h3>Want Justin to map this with you?</h3>
             <p>
-              Bring this exact workflow into a focused AI Leverage Session. We trace the handoff,
-              identify the first useful intervention, and decide whether it is worth turning into a
-              real operating-system improvement.
+              Start with a focused 30-minute intro call. We trace the handoff, name the first
+              useful intervention, and decide together whether it is worth a full 60-90 minute AI
+              Leverage Session.
             </p>
           </div>
 
           <div className="lm-actions">
             <a className="hero-cta" href={primaryCtaHref(form, result.result)} {...primaryCtaTarget()}>
-              Book your AI Leverage Session <span className="arr">→</span>
+              Book a 30-minute intro call <span className="arr">→</span>
             </a>
             {result.mapToken ? (
               <a
