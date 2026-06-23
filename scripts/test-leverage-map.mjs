@@ -146,8 +146,39 @@ async function runCase(c) {
   }
 }
 
+// Failure paths. The required-field check runs BEFORE the honeypot short-circuit
+// and before scoring, and malformed JSON is rejected at parse time, so every case
+// here returns 400 with ZERO side effects (no OpenAI, no lead, no email).
+const FAILURE_CASES = [
+  { name: "malformed JSON body -> 400", raw: "{ not valid json", expect: 400 },
+  { name: "empty object -> 400 (missing required)", raw: "{}", expect: 400 },
+  {
+    name: "missing brokenMoment -> 400",
+    raw: JSON.stringify({ company: "Test Co", name: "Tester", email: "t@example.com" }),
+    expect: 400,
+  },
+  {
+    name: "blank required values -> 400",
+    raw: JSON.stringify({ company: "  ", name: "", email: "", brokenMoment: "" }),
+    expect: 400,
+  },
+]
+
+async function runFailureCase(c) {
+  const fails = []
+  let res
+  try {
+    res = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: c.raw })
+  } catch (err) {
+    return { name: c.name, ok: false, fails: [`request threw: ${err.message}`] }
+  }
+  assert(res.status === c.expect, `http ${res.status} (expected ${c.expect})`, fails)
+  return { name: c.name, ok: fails.length === 0, fails, band: "-", composite: "-", pattern: "400" }
+}
+
 const results = []
 for (const c of CASES) results.push(await runCase(c))
+for (const c of FAILURE_CASES) results.push(await runFailureCase(c))
 
 let passed = 0
 for (const r of results) {
