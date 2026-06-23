@@ -411,6 +411,20 @@ export function firstNameOf(name: string): string {
   return name.trim().split(/\s+/)[0] || "there"
 }
 
+// A genuinely low-content submission. A completed quiz always floors at the
+// "Clarify First" band (we never tell an engaged prospect "Not Yet"), so the
+// real triage signal is INTERNAL: distinguish a thin/likely-junk lead from a
+// real-but-early one so it can be qualified before spending build time. This
+// stays out of the public score; it is surfaced only in the internal flags.
+export function isThinSubmission(input: LeverageMapInput): boolean {
+  return (
+    input.momentStory.trim().length < 40 &&
+    input.perfectEmployee.trim().length === 0 &&
+    input.frictions.length === 0 &&
+    input.consequences.length === 0
+  )
+}
+
 // Shape stored in praxis_leads.leverage_map and rendered by /check/map/[token].
 export type StoredLeverageMap = {
   company: string

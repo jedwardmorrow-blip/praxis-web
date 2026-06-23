@@ -14,6 +14,7 @@ import {
   TRUTH_LOCATIONS,
   fallbackAiResult,
   firstNameOf,
+  isThinSubmission,
   scoreLeverageMap,
   toPublicResult,
   type LeverageMapAiResult,
@@ -26,6 +27,8 @@ export const dynamic = "force-dynamic"
 
 const NOTIFY_EMAILS = ["Justin@gopraxis.ai"]
 const SITE_URL = "https://gopraxis.ai"
+
+type EmailStatus = "sent" | "failed" | "skipped"
 
 export async function POST(req: Request) {
   let raw: unknown
@@ -60,11 +63,25 @@ export async function POST(req: Request) {
   }
 
   const aiResult = await generateAiResult(input, score)
+
+  // Internal triage flag: a thin/likely-junk lead looks identical to a real
+  // early one at the score level, so flag it where Justin will see it.
+  if (isThinSubmission(input)) {
+    aiResult.internal.disqualification_flags = [
+      "Thin submission — low content; qualify before spending build time.",
+      ...aiResult.internal.disqualification_flags,
+    ]
+  }
+
   const token = crypto.randomUUID().replace(/-/g, "")
   const lead = await saveLead(input, score, aiResult, token)
   const mapToken = lead ? token : null
-  await notifyJustin(input, score, aiResult, lead?.id ?? null, mapToken)
-  if (mapToken) await emailProspectMap(input, score, aiResult, mapToken)
+
+  // Send the prospect email first so its outcome can be reported to Justin and
+  // recorded on the lead — a swallowed Resend failure must not stay invisible.
+  const prospectStatus: EmailStatus = mapToken ? await emailProspectMap(input, aiResult, mapToken) : "skipped"
+  const notifyStatus: EmailStatus = await notifyJustin(input, score, aiResult, lead?.id ?? null, mapToken, prospectStatus)
+  if (lead?.id) await updateLeadEmailStatus(lead.id, prospectStatus, notifyStatus)
 
   return Response.json({
     ok: true,
@@ -228,7 +245,7 @@ async function saveLead(
       stage: "Identified",
       pain_summary: aiResult.internal.crm_summary,
       world_model_notes: buildWorldModelNotes(input, score, aiResult),
-      tier_discussed: score.composite >= 6 ? "Discovery Sprint" : "Other",
+      tier_discussed: score.composite >= 6 ? "Discovery Sprint" : "Not Yet Discussed",
       signal_depth: score.signalDepth,
       signal_readiness: score.signalReadiness,
       imagination_gap: score.imaginationGap,
@@ -255,15 +272,24 @@ async function notifyJustin(
   aiResult: LeverageMapAiResult,
   leadId: string | null,
   mapToken: string | null,
-) {
+  prospectStatus: EmailStatus,
+): Promise<EmailStatus> {
   const resendKey = cleanEnv(process.env.RESEND_API_KEY)
-  if (!resendKey) return
+  if (!resendKey) return "skipped"
+
+  const prospectEmailLine =
+    prospectStatus === "sent"
+      ? "sent"
+      : prospectStatus === "failed"
+        ? "FAILED — the prospect did NOT receive their map; follow up manually"
+        : "not sent"
 
   const resend = new Resend(resendKey)
   const subject = `Praxis Leverage Map: ${input.company} · ${aiResult.pattern_label} · ${score.composite}/9`
   const rows: Array<[string, string | number | null | undefined]> = [
     ["Lead ID", leadId],
     ["Map link", mapToken ? `${SITE_URL}/check/map/${mapToken}` : null],
+    ["Prospect email", prospectEmailLine],
     ["Company", input.company],
     ["Name", input.name],
     ["Email", input.email],
@@ -286,7 +312,7 @@ async function notifyJustin(
   ]
 
   try {
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: "PRAXIS Leverage Map <noreply@gopraxis.ai>",
       to: NOTIFY_EMAILS,
       subject,
@@ -308,8 +334,14 @@ async function notifyJustin(
         </table>
       `,
     })
+    if (error) {
+      console.error("Resend notify error:", error)
+      return "failed"
+    }
+    return "sent"
   } catch (error) {
     console.error("Resend leverage map error:", error)
+    return "failed"
   }
 }
 
@@ -318,12 +350,11 @@ async function notifyJustin(
 // keeps working after they close the tab — this is what makes it shareable.
 async function emailProspectMap(
   input: LeverageMapInput,
-  score: LeverageMapScore,
   aiResult: LeverageMapAiResult,
   token: string,
-) {
+): Promise<EmailStatus> {
   const resendKey = cleanEnv(process.env.RESEND_API_KEY)
-  if (!resendKey || !input.email.includes("@")) return
+  if (!resendKey || !input.email.includes("@")) return "skipped"
 
   const mapUrl = `${SITE_URL}/check/map/${token}`
   const bookingUrl = cleanEnv(process.env.NEXT_PUBLIC_PRAXIS_BOOKING_URL)
@@ -331,7 +362,7 @@ async function emailProspectMap(
   const resend = new Resend(resendKey)
 
   try {
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: "PRAXIS Leverage Map <noreply@gopraxis.ai>",
       to: [input.email],
       replyTo: "Justin@gopraxis.ai",
@@ -354,9 +385,31 @@ async function emailProspectMap(
         </div>
       `,
     })
+    if (error) {
+      console.error("Resend prospect map error:", error)
+      return "failed"
+    }
+    return "sent"
   } catch (error) {
     console.error("Resend prospect map error:", error)
+    return "failed"
   }
+}
+
+// Record the per-send email outcome on the lead so a swallowed Resend failure
+// is visible in the CRM, not just lost in function logs.
+async function updateLeadEmailStatus(leadId: string, prospect: EmailStatus, notify: EmailStatus) {
+  const supabaseUrl = cleanEnv(process.env.SUPABASE_URL)
+  const supabaseKey = cleanEnv(process.env.SUPABASE_SERVICE_ROLE_KEY)
+  if (!supabaseUrl || !supabaseKey) return
+
+  const supabase = createClient(supabaseUrl, supabaseKey)
+  const { error } = await supabase
+    .from("praxis_leads")
+    .update({ email_status: { prospect, notify, at: new Date().toISOString() } })
+    .eq("id", leadId)
+
+  if (error) console.error("Supabase email_status update error:", error)
 }
 
 function buildWorldModelNotes(input: LeverageMapInput, score: LeverageMapScore, aiResult: LeverageMapAiResult) {
