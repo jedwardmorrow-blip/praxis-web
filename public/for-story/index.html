@@ -879,7 +879,7 @@
 
       .learning-system {
         display: grid;
-        grid-template-columns: minmax(280px, 0.75fr) minmax(0, 1.25fr);
+        grid-template-columns: 1fr;
         gap: 1px;
         margin-top: 1px;
         overflow: hidden;
@@ -910,6 +910,7 @@
       }
 
       .learning-lead h3 {
+        max-width: 920px;
         margin-top: 1rem;
         font-family: var(--serif);
         font-size: clamp(2.35rem, 4vw, 4.1rem);
@@ -920,6 +921,7 @@
       }
 
       .learning-lead p {
+        max-width: 820px;
         margin-top: 1rem;
         color: rgba(255, 248, 239, 0.72);
         font-size: 0.98rem;
@@ -934,7 +936,7 @@
       }
 
       .learning-step {
-        min-height: 230px;
+        min-height: 216px;
         padding: 1.2rem;
         background: rgba(17, 17, 17, 0.76);
       }
@@ -1330,6 +1332,12 @@
 
         .hero::before {
           inset: 42% 0 3rem 18%;
+        }
+      }
+
+      @media (max-width: 1480px) {
+        .roadmap {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
 
