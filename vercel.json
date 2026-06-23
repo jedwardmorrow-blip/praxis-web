@@ -30,6 +30,10 @@
       "destination": "/animation.html"
     },
     {
+      "source": "/for-story",
+      "destination": "/for-story/index.html"
+    },
+    {
       "source": "/sites/:slug",
       "destination": "/sites/:slug/index.html"
     }
@@ -91,6 +95,32 @@
     },
     {
       "source": "/aspire/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        }
+      ]
+    },
+    {
+      "source": "/for-story",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        }
+      ]
+    },
+    {
+      "source": "/for-story/(.*)",
       "headers": [
         {
           "key": "X-Robots-Tag",

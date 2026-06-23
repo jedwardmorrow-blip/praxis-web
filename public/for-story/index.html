@@ -1,0 +1,2059 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your Next Chapter in AI Enablement | Justin Morrow for Story</title>
+    <meta
+      name="description"
+      content="A private Story-native operating plan for AI adoption, workflow transformation, training, and measurable impact."
+    />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="icon" href="https://storycannabis.com/wp-content/uploads/2026/04/cropped-Favicon_Story_Icon_Red_S-32x32.png" sizes="32x32" />
+    <style>
+      :root {
+        --black: #111111;
+        --night: #171111;
+        --forest: #231d1a;
+        --forest-2: #38241f;
+        --green: #e4012c;
+        --green-soft: #ff405e;
+        --amber: #d98755;
+        --cream: #fff8ef;
+        --mist: rgba(17, 17, 17, 0.72);
+        --muted: rgba(17, 17, 17, 0.54);
+        --line: rgba(228, 1, 44, 0.22);
+        --line-warm: rgba(217, 135, 85, 0.34);
+        --panel: rgba(255, 248, 239, 0.88);
+        --panel-2: rgba(255, 255, 255, 0.9);
+        --rose: #e5b3ae;
+        --radius: 12px;
+        --shadow: 0 24px 90px rgba(17, 17, 17, 0.18);
+        --sans: Montserrat, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        --serif: Anton, Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+        color-scheme: light;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 82% 5%, rgba(228, 1, 44, 0.13), transparent 25rem),
+          radial-gradient(circle at 20% 74%, rgba(217, 135, 85, 0.14), transparent 30rem),
+          linear-gradient(135deg, #fffaf1 0%, #fffdf9 42%, #f6ede5 100%);
+        color: var(--black);
+        font-family: var(--sans);
+        overflow-x: hidden;
+      }
+
+      body::before {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        content: "";
+        opacity: 0.45;
+        background-image:
+          linear-gradient(rgba(228, 1, 44, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(17, 17, 17, 0.025) 1px, transparent 1px);
+        background-size: 64px 64px;
+        mask-image: linear-gradient(to bottom, #000, transparent 82%);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .page {
+        position: relative;
+        isolation: isolate;
+      }
+
+      .page::before,
+      .page::after {
+        position: fixed;
+        z-index: -1;
+        pointer-events: none;
+        content: "";
+        opacity: 0.32;
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+
+      .page::before {
+        top: 5rem;
+        left: 34%;
+        width: 30rem;
+        height: 30rem;
+        transform: rotate(-12deg);
+        background-image: url("data:image/svg+xml,%3Csvg width='600' height='600' viewBox='0 0 600 600' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23E4012C' stroke-opacity='.24' stroke-width='2'%3E%3Crect x='82' y='96' width='436' height='112' rx='12'/%3E%3Crect x='132' y='248' width='336' height='80' rx='10'/%3E%3Crect x='92' y='368' width='416' height='136' rx='12'/%3E%3Cpath d='M140 152h170M140 288h120M140 436h230' stroke-linecap='round'/%3E%3Cpath d='M454 96v408M518 152H454M468 288H404M508 436H454'/%3E%3C/g%3E%3C/svg%3E");
+      }
+
+      .page::after {
+        right: -7rem;
+        bottom: 7rem;
+        width: 24rem;
+        height: 24rem;
+        transform: rotate(18deg);
+        background-image: url("data:image/svg+xml,%3Csvg width='600' height='600' viewBox='0 0 600 600' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23111111' stroke-opacity='.12' stroke-width='2'%3E%3Ccircle cx='300' cy='300' r='206'/%3E%3Ccircle cx='300' cy='300' r='126'/%3E%3Cpath d='M300 94v412M94 300h412M154 154l292 292M446 154 154 446'/%3E%3C/g%3E%3C/svg%3E");
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        min-height: 84px;
+        padding: 0.95rem clamp(1.1rem, 4vw, 4.8rem);
+        border-bottom: 1px solid rgba(17, 17, 17, 0.1);
+        background:
+          linear-gradient(90deg, rgba(228, 1, 44, 0.12), transparent 38%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 248, 239, 0.9)),
+          rgba(255, 248, 239, 0.9);
+        backdrop-filter: blur(18px);
+      }
+
+      .site-header::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        content: "";
+        background: linear-gradient(90deg, var(--green), rgba(228, 1, 44, 0.1) 64%, transparent);
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.85rem;
+        font-size: 0.95rem;
+        font-weight: 760;
+        letter-spacing: 0;
+        white-space: nowrap;
+      }
+
+      .brand-mark {
+        position: relative;
+        display: grid;
+        width: 52px;
+        height: 52px;
+        place-items: center;
+        overflow: hidden;
+        border: 1px solid rgba(228, 1, 44, 0.18);
+        border-radius: 14px;
+        background:
+          linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 241, 238, 0.92)),
+          #ffffff;
+        box-shadow: 0 13px 34px rgba(228, 1, 44, 0.12);
+      }
+
+      .brand-mark::after {
+        position: absolute;
+        inset: 7px;
+        content: "";
+        border: 1px solid rgba(228, 1, 44, 0.18);
+        border-radius: 10px;
+      }
+
+      .brand-mark img {
+        position: relative;
+        z-index: 1;
+        width: 22px;
+        height: auto;
+        display: block;
+      }
+
+      .brand-copy {
+        display: grid;
+        gap: 0.12rem;
+      }
+
+      .brand-copy strong {
+        color: var(--black);
+        font-size: 0.98rem;
+        line-height: 1.05;
+      }
+
+      .brand-copy small {
+        color: rgba(228, 1, 44, 0.88);
+        font-size: 0.62rem;
+        font-weight: 800;
+        letter-spacing: 0;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .brand-slash {
+        color: var(--green);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: clamp(1rem, 2vw, 2.1rem);
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 760;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .nav a {
+        transition: color 180ms ease;
+      }
+
+      .nav a:hover {
+        color: var(--green);
+      }
+
+      .header-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 0 1rem;
+        border: 1px solid rgba(228, 1, 44, 0.54);
+        border-radius: 999px;
+        color: var(--black);
+        font-size: 0.76rem;
+        font-weight: 820;
+        letter-spacing: 0;
+        text-transform: uppercase;
+        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+      }
+
+      .header-action:hover {
+        transform: translateY(-1px);
+        border-color: rgba(228, 1, 44, 0.75);
+        background: rgba(228, 1, 44, 0.08);
+      }
+
+      main {
+        padding: 0 clamp(1.1rem, 4vw, 4.8rem) 4rem;
+      }
+
+      .hero {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(360px, 0.46fr) minmax(760px, 1.54fr);
+        gap: clamp(1.5rem, 3vw, 3.5rem);
+        align-items: center;
+        min-height: calc(100vh - 84px);
+        padding: clamp(2rem, 5vw, 4.6rem) 0 2.4rem;
+      }
+
+      .hero::before {
+        position: absolute;
+        inset: 5.2rem 0 4rem 43%;
+        z-index: -1;
+        content: "";
+        border-radius: 34px 0 0 34px;
+        background:
+          linear-gradient(90deg, rgba(228, 1, 44, 0.08), transparent 44%),
+          linear-gradient(135deg, rgba(17, 17, 17, 0.06), rgba(217, 135, 85, 0.06));
+      }
+
+      .hero-copy {
+        max-width: 640px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        max-width: 470px;
+        font-family: var(--serif);
+        font-size: clamp(4.5rem, 5.2vw, 5.6rem);
+        font-weight: 400;
+        line-height: 0.94;
+        letter-spacing: 0;
+        text-transform: uppercase;
+        text-wrap: balance;
+      }
+
+      h1 em,
+      .script {
+        color: var(--green-soft);
+        font-family: var(--serif);
+        font-style: normal;
+        font-weight: 400;
+      }
+
+      .hero-subhead {
+        max-width: 565px;
+        margin-top: 1.5rem;
+        color: var(--mist);
+        font-size: 1.12rem;
+        line-height: 1.46;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.9rem;
+        margin-top: 2rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        min-height: 52px;
+        padding: 0 1.35rem;
+        border: 1px solid rgba(17, 17, 17, 0.14);
+        border-radius: 999px;
+        color: var(--black);
+        font-size: 0.9rem;
+        font-weight: 760;
+        letter-spacing: 0;
+        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+      }
+
+      .btn svg {
+        width: 17px;
+        height: 17px;
+      }
+
+      .btn-primary {
+        border-color: rgba(228, 1, 44, 0.68);
+        background: var(--green);
+        color: #ffffff;
+        box-shadow: 0 16px 38px rgba(228, 1, 44, 0.2);
+      }
+
+      .btn-secondary {
+        border-color: rgba(17, 17, 17, 0.2);
+        background: rgba(255, 255, 255, 0.54);
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .proof-strip {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        max-width: 430px;
+        margin-top: 2rem;
+        overflow: hidden;
+        border: 1px solid rgba(17, 17, 17, 0.12);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.62);
+      }
+
+      .proof-item {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        min-height: 72px;
+        padding: 0.9rem 1.1rem;
+        border-bottom: 1px solid rgba(17, 17, 17, 0.09);
+        color: rgba(17, 17, 17, 0.78);
+        font-size: 0.86rem;
+        line-height: 1.25;
+      }
+
+      .proof-item:last-child {
+        border-bottom: 0;
+      }
+
+      .proof-icon,
+      .node-icon {
+        display: grid;
+        flex: 0 0 auto;
+        width: 32px;
+        height: 32px;
+        place-items: center;
+        color: var(--green);
+      }
+
+      .proof-icon svg,
+      .node-icon svg {
+        width: 24px;
+        height: 24px;
+        stroke-width: 1.6;
+      }
+
+      .atlas-shell {
+        display: grid;
+        grid-template-columns: 168px minmax(420px, 1fr) 280px;
+        min-height: 700px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 30px;
+        background:
+          linear-gradient(135deg, rgba(33, 24, 23, 0.98), rgba(17, 17, 17, 0.99)),
+          radial-gradient(circle at 55% 45%, rgba(228, 1, 44, 0.15), transparent 22rem);
+        box-shadow: var(--shadow), inset 0 0 0 1px rgba(248, 240, 217, 0.05);
+      }
+
+      .atlas-nav {
+        padding: 1.35rem 0.9rem;
+        border-right: 1px solid rgba(248, 240, 217, 0.1);
+        background:
+          linear-gradient(180deg, rgba(228, 1, 44, 0.09), transparent 38%),
+          rgba(255, 255, 255, 0.03);
+      }
+
+      .atlas-label {
+        margin: 0.3rem 0 1rem;
+        color: var(--rose);
+        font-size: 0.72rem;
+        font-weight: 820;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .atlas-tab {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        gap: 0.62rem;
+        min-height: 38px;
+        margin: 0.25rem 0;
+        padding: 0 0.7rem;
+        border: 1px solid transparent;
+        border-radius: 9px;
+        background: transparent;
+        color: rgba(255, 248, 239, 0.58);
+        font: 700 0.78rem/1 var(--sans);
+        cursor: pointer;
+        text-align: left;
+        transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+      }
+
+      .atlas-tab svg {
+        width: 16px;
+        height: 16px;
+        stroke-width: 1.7;
+      }
+
+      .atlas-tab.is-active,
+      .atlas-tab:hover {
+        border-color: rgba(228, 1, 44, 0.44);
+        background: linear-gradient(135deg, rgba(228, 1, 44, 0.3), rgba(228, 1, 44, 0.12));
+        color: var(--cream);
+      }
+
+      .atlas-stage {
+        position: relative;
+        min-height: 700px;
+        padding: 1.9rem;
+      }
+
+      .atlas-card {
+        position: relative;
+        height: 100%;
+        min-height: 638px;
+        overflow: hidden;
+        border: 1px solid rgba(229, 179, 174, 0.3);
+        border-radius: 26px;
+        background:
+          radial-gradient(circle at center, rgba(228, 1, 44, 0.22), transparent 14.5rem),
+          linear-gradient(90deg, transparent 49.8%, rgba(228, 1, 44, 0.34) 50%, transparent 50.2%),
+          linear-gradient(0deg, transparent 49.8%, rgba(229, 179, 174, 0.14) 50%, transparent 50.2%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(12, 10, 10, 0.86));
+      }
+
+      .atlas-card::before,
+      .atlas-card::after {
+        position: absolute;
+        inset: 50%;
+        content: "";
+        transform: translate(-50%, -50%);
+        border-radius: 999px;
+        pointer-events: none;
+      }
+
+      .atlas-card::before {
+        width: min(82%, 540px);
+        aspect-ratio: 1;
+        border: 1px dashed rgba(229, 179, 174, 0.34);
+      }
+
+      .atlas-card::after {
+        width: min(48%, 315px);
+        aspect-ratio: 1;
+        border: 1px solid rgba(228, 1, 44, 0.22);
+        box-shadow: 0 0 88px rgba(228, 1, 44, 0.16);
+      }
+
+      .orbit,
+      .atlas-line {
+        display: none;
+      }
+
+      .atlas-progress {
+        position: absolute;
+        left: 1.25rem;
+        right: 1.25rem;
+        bottom: 1.1rem;
+        z-index: 5;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 0.7rem;
+        align-items: center;
+        color: rgba(255, 248, 239, 0.68);
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .atlas-progress i {
+        position: relative;
+        height: 2px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 248, 239, 0.13);
+      }
+
+      .atlas-progress i::before {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: var(--progress, 14.285%);
+        content: "";
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--green), var(--rose));
+        transition: width 360ms ease;
+      }
+
+      .atlas-core {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        display: grid;
+        width: min(54%, 300px);
+        height: min(54%, 300px);
+        place-items: center;
+        transform: translate(-50%, -50%);
+        border: 1px solid rgba(248, 240, 217, 0.08);
+        border-radius: 999px;
+        background:
+          radial-gradient(circle, rgba(228, 1, 44, 0.22), rgba(228, 1, 44, 0.04) 56%, transparent 70%);
+        box-shadow: 0 0 55px rgba(228, 1, 44, 0.12);
+        pointer-events: none;
+      }
+
+      .story-core {
+        color: rgba(255, 248, 239, 0.1);
+        font-family: var(--serif);
+        font-size: 4.3rem;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .atlas-node {
+        position: absolute;
+        display: grid;
+        z-index: 3;
+        place-items: center;
+        width: 112px;
+        min-height: 112px;
+        padding: 0.82rem;
+        border: 1px solid rgba(248, 240, 217, 0.18);
+        border-radius: 18px;
+        background:
+          linear-gradient(180deg, rgba(255, 248, 239, 0.06), rgba(255, 248, 239, 0.015)),
+          rgba(17, 17, 17, 0.92);
+        color: var(--cream);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.24);
+        cursor: pointer;
+        transform: translate(-50%, -50%);
+        transition:
+          left 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
+          top 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
+          width 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
+          min-height 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
+          border-color 200ms ease,
+          background 200ms ease,
+          box-shadow 200ms ease,
+          opacity 200ms ease;
+      }
+
+      .atlas-node span {
+        margin-top: 0.28rem;
+        color: rgba(255, 248, 239, 0.76);
+        font-size: 0.74rem;
+        font-weight: 760;
+        line-height: 1.1;
+        text-align: center;
+      }
+
+      .atlas-node .node-icon {
+        color: rgba(255, 248, 239, 0.78);
+      }
+
+      .atlas-node:hover {
+        border-color: rgba(228, 1, 44, 0.36);
+        background:
+          linear-gradient(180deg, rgba(228, 1, 44, 0.13), rgba(255, 248, 239, 0.018)),
+          rgba(17, 17, 17, 0.94);
+        box-shadow: 0 18px 46px rgba(228, 1, 44, 0.12);
+      }
+
+      .atlas-node.is-active {
+        border-color: rgba(228, 1, 44, 0.8);
+        background:
+          radial-gradient(circle at 72% 14%, rgba(255, 255, 255, 0.22), transparent 30%),
+          linear-gradient(135deg, rgba(228, 1, 44, 0.96), rgba(130, 4, 28, 0.94));
+        box-shadow: 0 24px 70px rgba(228, 1, 44, 0.28);
+        z-index: 4;
+        width: 168px;
+        min-height: 168px;
+      }
+
+      .atlas-node.is-active .node-icon {
+        width: 46px;
+        height: 46px;
+        color: #ffffff;
+      }
+
+      .atlas-node.is-active span:last-child {
+        color: #ffffff;
+        font-size: 1rem;
+      }
+
+      .atlas-node[data-slot="0"] { left: 50%; top: 50%; }
+      .atlas-node[data-slot="1"] { left: 84%; top: 50%; }
+      .atlas-node[data-slot="2"] { left: 70%; top: 23%; }
+      .atlas-node[data-slot="3"] { left: 30%; top: 23%; }
+      .atlas-node[data-slot="4"] { left: 16%; top: 50%; }
+      .atlas-node[data-slot="5"] { left: 30%; top: 77%; }
+      .atlas-node[data-slot="6"] { left: 70%; top: 77%; }
+
+      .atlas-node[data-slot="3"],
+      .atlas-node[data-slot="4"],
+      .atlas-node[data-slot="5"],
+      .atlas-node[data-slot="6"] {
+        opacity: 0.86;
+      }
+
+      .signals {
+        padding: 1.7rem 1.35rem;
+        border-left: 1px solid rgba(248, 240, 217, 0.1);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 36%),
+          rgba(3, 7, 5, 0.2);
+        color: var(--cream);
+      }
+
+      .signals h3 {
+        margin-bottom: 1.15rem;
+        font-size: 1.16rem;
+        font-weight: 780;
+      }
+
+      .signal-card {
+        min-height: 92px;
+        margin-bottom: 1rem;
+        padding: 1.1rem;
+        border: 1px solid rgba(248, 240, 217, 0.11);
+        border-radius: 16px;
+        background: rgba(248, 240, 217, 0.045);
+      }
+
+      .signal-card strong {
+        display: block;
+        margin-bottom: 0.45rem;
+        color: var(--cream);
+        font-size: 0.96rem;
+      }
+
+      .signal-card span {
+        color: var(--rose);
+        font-size: 0.86rem;
+        font-weight: 780;
+        line-height: 1.44;
+      }
+
+      .signal-card.warning span {
+        color: var(--amber);
+      }
+
+      .note {
+        margin-top: 1.2rem;
+        padding: 1rem;
+        border: 1px solid rgba(228, 1, 44, 0.22);
+        border-radius: 5px 12px 12px 12px;
+        background:
+          linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(246, 224, 221, 0.9));
+        color: #182012;
+        font-family: var(--serif);
+        font-size: 0.92rem;
+        line-height: 1.28;
+        transform: rotate(-1.4deg);
+      }
+
+      .section {
+        padding: clamp(2.3rem, 5vw, 4.5rem) 0;
+        border-top: 1px solid rgba(17, 17, 17, 0.08);
+      }
+
+      #plan,
+      #fit,
+      #atlas,
+      #proof {
+        position: relative;
+        clip-path: inset(0 -100vmax);
+      }
+
+      #fit {
+        background:
+          radial-gradient(circle at 12% 20%, rgba(228, 1, 44, 0.12), transparent 24rem),
+          linear-gradient(180deg, #fffaf5 0%, #f6e7de 100%);
+        box-shadow: 0 0 0 100vmax #f9eee7;
+      }
+
+      #plan {
+        background:
+          radial-gradient(circle at 88% 18%, rgba(228, 1, 44, 0.11), transparent 24rem),
+          linear-gradient(180deg, #fff2ef, #fff8f4);
+        box-shadow: 0 0 0 100vmax #fff5f1;
+      }
+
+      #atlas {
+        background:
+          radial-gradient(circle at 80% 12%, rgba(228, 1, 44, 0.18), transparent 24rem),
+          radial-gradient(circle at 12% 76%, rgba(217, 135, 85, 0.12), transparent 28rem),
+          linear-gradient(135deg, #171111, #251817 74%, #111111);
+        box-shadow: 0 0 0 100vmax #171111;
+        color: var(--cream);
+      }
+
+      #proof {
+        background: linear-gradient(180deg, #fff8f1 0%, #f2e5db 100%);
+        box-shadow: 0 0 0 100vmax #f5e9df;
+      }
+
+      .section-grid {
+        display: grid;
+        grid-template-columns: 320px minmax(0, 1fr);
+        gap: clamp(1.4rem, 4vw, 4rem);
+        align-items: start;
+      }
+
+      .section-title {
+        position: sticky;
+        top: 104px;
+      }
+
+      .role-brief {
+        padding-top: clamp(2.8rem, 5vw, 5rem);
+      }
+
+      .role-brief-head {
+        display: grid;
+        grid-template-columns: minmax(260px, 0.52fr) minmax(0, 0.95fr);
+        gap: clamp(1.2rem, 4vw, 4rem);
+        align-items: end;
+        margin-bottom: clamp(1.3rem, 3vw, 2.2rem);
+      }
+
+      .role-eyebrow {
+        color: var(--green);
+        font-size: 0.72rem;
+        font-weight: 820;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .role-brief-head h2 {
+        grid-column: 1 / 2;
+      }
+
+      .role-brief-head p {
+        max-width: 760px;
+        color: var(--mist);
+        font-size: 1.02rem;
+        line-height: 1.68;
+      }
+
+      .role-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1px;
+        overflow: hidden;
+        border: 1px solid rgba(17, 17, 17, 0.12);
+        border-radius: 24px;
+        background: rgba(17, 17, 17, 0.12);
+        box-shadow: var(--shadow);
+      }
+
+      .role-card {
+        position: relative;
+        min-height: 370px;
+        padding: clamp(1.25rem, 2.4vw, 2rem);
+        overflow: hidden;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(255, 248, 239, 0.78)),
+          var(--cream);
+      }
+
+      .role-card::before {
+        position: absolute;
+        inset: 0 0 auto;
+        height: 4px;
+        content: "";
+        background: linear-gradient(90deg, var(--green), rgba(228, 1, 44, 0.04));
+      }
+
+      .role-card::after {
+        position: absolute;
+        right: -4rem;
+        bottom: -4rem;
+        width: 12rem;
+        height: 12rem;
+        content: "";
+        border: 1px dashed rgba(228, 1, 44, 0.18);
+        border-radius: 999px;
+      }
+
+      .role-card span {
+        display: inline-flex;
+        padding: 0.42rem 0.62rem;
+        border: 1px solid rgba(228, 1, 44, 0.24);
+        color: var(--green);
+        font-size: 0.62rem;
+        font-weight: 860;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .role-card h3 {
+        max-width: 420px;
+        margin-top: 1.35rem;
+        font-family: var(--serif);
+        font-size: clamp(2rem, 3.2vw, 3rem);
+        font-weight: 400;
+        line-height: 0.98;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .role-card p {
+        position: relative;
+        z-index: 1;
+        margin-top: 1rem;
+        color: var(--mist);
+        font-size: 0.92rem;
+        line-height: 1.62;
+      }
+
+      .role-card strong {
+        display: block;
+        margin-top: 1.3rem;
+        color: var(--black);
+        font-size: 0.7rem;
+        font-weight: 860;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .learning-system {
+        display: grid;
+        grid-template-columns: minmax(280px, 0.75fr) minmax(0, 1.25fr);
+        gap: 1px;
+        margin-top: 1px;
+        overflow: hidden;
+        border: 1px solid rgba(17, 17, 17, 0.12);
+        border-radius: 24px;
+        background: rgba(17, 17, 17, 0.12);
+        box-shadow: var(--shadow);
+      }
+
+      .learning-lead,
+      .learning-loop {
+        background:
+          radial-gradient(circle at 88% 16%, rgba(228, 1, 44, 0.18), transparent 18rem),
+          linear-gradient(135deg, #171111, #2a1918);
+        color: var(--cream);
+      }
+
+      .learning-lead {
+        padding: clamp(1.45rem, 3vw, 2.35rem);
+      }
+
+      .learning-lead span {
+        color: var(--rose);
+        font-size: 0.68rem;
+        font-weight: 860;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .learning-lead h3 {
+        margin-top: 1rem;
+        font-family: var(--serif);
+        font-size: clamp(2.35rem, 4vw, 4.1rem);
+        font-weight: 400;
+        line-height: 0.92;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .learning-lead p {
+        margin-top: 1rem;
+        color: rgba(255, 248, 239, 0.72);
+        font-size: 0.98rem;
+        line-height: 1.62;
+      }
+
+      .learning-loop {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 1px;
+        background: rgba(255, 248, 239, 0.1);
+      }
+
+      .learning-step {
+        min-height: 230px;
+        padding: 1.2rem;
+        background: rgba(17, 17, 17, 0.76);
+      }
+
+      .learning-step b {
+        display: block;
+        color: var(--green-soft);
+        font-size: 0.64rem;
+        font-weight: 860;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .learning-step strong {
+        display: block;
+        margin-top: 1.2rem;
+        color: var(--cream);
+        font-size: 0.95rem;
+        line-height: 1.15;
+      }
+
+      .learning-step p {
+        margin-top: 0.62rem;
+        color: rgba(255, 248, 239, 0.63);
+        font-size: 0.78rem;
+        line-height: 1.5;
+      }
+
+      .section-title .label {
+        margin-bottom: 0.95rem;
+        color: var(--green);
+        font-size: 0.72rem;
+        font-weight: 820;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        font-family: var(--serif);
+        font-size: 3.7rem;
+        font-weight: 400;
+        line-height: 1;
+        letter-spacing: 0;
+        text-transform: uppercase;
+        text-wrap: balance;
+      }
+
+      .roadmap {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+        padding: 1.1rem;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(250, 237, 232, 0.86));
+        box-shadow: inset 0 0 0 1px rgba(248, 240, 217, 0.04);
+      }
+
+      .roadmap::before {
+        position: absolute;
+        left: 9%;
+        right: 9%;
+        top: 50%;
+        height: 1px;
+        content: "";
+        background: linear-gradient(90deg, transparent, rgba(228, 1, 44, 0.42), transparent);
+      }
+
+      .stage-card {
+        position: relative;
+        min-height: 220px;
+        padding: 1.15rem;
+        border: 1px solid rgba(17, 17, 17, 0.12);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.62);
+        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+      }
+
+      .stage-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(228, 1, 44, 0.38);
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .stage-number {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--amber);
+        font-size: 0.72rem;
+        font-weight: 860;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .stage-number svg {
+        width: 34px;
+        height: 34px;
+        color: var(--green);
+      }
+
+      .stage-card h3 {
+        margin-top: 1.4rem;
+        font-size: 1.15rem;
+        line-height: 1.1;
+      }
+
+      .stage-card p {
+        margin-top: 0.8rem;
+        color: var(--mist);
+        font-size: 0.91rem;
+        line-height: 1.48;
+      }
+
+      .ops-layout {
+        display: grid;
+        grid-template-columns: 0.88fr 1.1fr 0.88fr;
+        gap: clamp(1rem, 2vw, 2rem);
+        align-items: stretch;
+      }
+
+      .focus-list,
+      .guardrails,
+      .credibility {
+        display: grid;
+        gap: 0.8rem;
+      }
+
+      .focus-card,
+      .guard-card,
+      .cred-card {
+        display: grid;
+        grid-template-columns: 42px minmax(0, 1fr) 24px;
+        gap: 0.75rem;
+        align-items: center;
+        padding: 1rem;
+        border: 1px solid rgba(17, 17, 17, 0.12);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.7);
+        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+      }
+
+      .focus-card:hover,
+      .guard-card:hover,
+      .cred-card:hover {
+        transform: translateX(4px);
+        border-color: rgba(228, 1, 44, 0.35);
+        background: rgba(228, 1, 44, 0.06);
+      }
+
+      .focus-card h3,
+      .guard-card h3,
+      .cred-card h3 {
+        color: var(--black);
+        font-size: 0.98rem;
+        line-height: 1.15;
+      }
+
+      .focus-card p,
+      .guard-card p,
+      .cred-card p {
+        margin-top: 0.28rem;
+        color: var(--muted);
+        font-size: 0.8rem;
+        line-height: 1.35;
+      }
+
+      .mini-atlas {
+        position: relative;
+        min-height: 360px;
+        border-left: 1px solid rgba(228, 1, 44, 0.18);
+        border-right: 1px solid rgba(228, 1, 44, 0.18);
+      }
+
+      .mini-atlas h3 {
+        color: var(--green);
+        font-size: 0.72rem;
+        font-weight: 820;
+        letter-spacing: 0;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .mini-orbit {
+        position: absolute;
+        left: 50%;
+        top: 52%;
+        width: min(72%, 380px);
+        aspect-ratio: 1;
+        transform: translate(-50%, -50%);
+        border: 1px dashed rgba(228, 1, 44, 0.32);
+        border-radius: 999px;
+      }
+
+      .mini-orbit::before,
+      .mini-orbit::after {
+        position: absolute;
+        inset: 15%;
+        content: "";
+        border: 1px dashed rgba(229, 179, 174, 0.52);
+        border-radius: inherit;
+      }
+
+      .mini-orbit::after {
+        inset: 34%;
+        border-style: solid;
+        border-color: rgba(248, 240, 217, 0.12);
+      }
+
+      .mini-core {
+        position: absolute;
+        left: 50%;
+        top: 52%;
+        display: grid;
+        width: 92px;
+        height: 92px;
+        place-items: center;
+        transform: translate(-50%, -50%);
+        border-radius: 8px;
+        background: var(--green);
+        color: #ffffff;
+      }
+
+      .mini-core span {
+        font-family: var(--serif);
+        font-size: 1.3rem;
+        line-height: 1;
+      }
+
+      .mini-point {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: var(--green);
+        box-shadow: 0 0 18px rgba(228, 1, 44, 0.34);
+      }
+
+      .mini-point:nth-of-type(1) { left: 28%; top: 28%; }
+      .mini-point:nth-of-type(2) { left: 58%; top: 18%; background: var(--amber); }
+      .mini-point:nth-of-type(3) { left: 77%; top: 44%; }
+      .mini-point:nth-of-type(4) { left: 63%; top: 75%; }
+      .mini-point:nth-of-type(5) { left: 37%; top: 78%; background: var(--amber); }
+      .mini-point:nth-of-type(6) { left: 18%; top: 50%; }
+
+      #atlas .section-title .label {
+        color: var(--rose);
+      }
+
+      #atlas h2 {
+        color: var(--cream);
+      }
+
+      #atlas .focus-card,
+      #atlas .guard-card {
+        border-color: rgba(255, 248, 239, 0.13);
+        background: rgba(255, 248, 239, 0.055);
+      }
+
+      #atlas .focus-card:hover,
+      #atlas .guard-card:hover {
+        border-color: rgba(228, 1, 44, 0.42);
+        background: rgba(228, 1, 44, 0.12);
+      }
+
+      #atlas .focus-card h3,
+      #atlas .guard-card h3 {
+        color: var(--cream);
+      }
+
+      #atlas .focus-card p,
+      #atlas .guard-card p {
+        color: rgba(255, 248, 239, 0.68);
+      }
+
+      #atlas .node-icon {
+        color: var(--rose);
+      }
+
+      #atlas .mini-atlas {
+        border-color: rgba(229, 179, 174, 0.22);
+        border-radius: 22px;
+        background:
+          radial-gradient(circle at center, rgba(228, 1, 44, 0.13), transparent 12rem),
+          rgba(255, 248, 239, 0.045);
+      }
+
+      #atlas .mini-atlas h3 {
+        color: var(--rose);
+      }
+
+      .guard-card {
+        grid-template-columns: 42px minmax(0, 1fr);
+      }
+
+      .closing {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(330px, 1.05fr);
+        gap: clamp(1.4rem, 4vw, 4rem);
+        align-items: center;
+        padding: clamp(2rem, 4vw, 3.5rem);
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background:
+          radial-gradient(circle at 80% 20%, rgba(228, 1, 44, 0.16), transparent 22rem),
+          linear-gradient(135deg, rgba(17, 17, 17, 0.96), rgba(45, 26, 24, 0.96));
+        box-shadow: var(--shadow);
+      }
+
+      .closing-copy h2 {
+        color: #ffffff;
+      }
+
+      .closing-copy p {
+        max-width: 620px;
+        margin-top: 1rem;
+        color: rgba(255, 248, 239, 0.74);
+        font-size: 1rem;
+        line-height: 1.58;
+      }
+
+      .closing .cred-card {
+        border-color: rgba(255, 248, 239, 0.12);
+        background: rgba(255, 255, 255, 0.07);
+      }
+
+      .closing .cred-card h3 {
+        color: #ffffff;
+      }
+
+      .closing .cred-card p {
+        color: rgba(255, 248, 239, 0.68);
+      }
+
+      .cred-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.8rem;
+      }
+
+      .cred-card {
+        grid-template-columns: 38px minmax(0, 1fr);
+        min-height: 104px;
+      }
+
+      .footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 2rem 0 0;
+        color: rgba(17, 17, 17, 0.52);
+        font-size: 0.82rem;
+      }
+
+      .footer a {
+        color: var(--green);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+
+      .fade-in {
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 700ms ease, transform 700ms ease;
+      }
+
+      .fade-in.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @keyframes pulse {
+        0%, 100% { box-shadow: 0 0 30px rgba(228, 1, 44, 0.14); }
+        50% { box-shadow: 0 0 62px rgba(228, 1, 44, 0.28); }
+      }
+
+      .atlas-core,
+      .mini-core {
+        animation: pulse 4.8s ease-in-out infinite;
+      }
+
+      @media (max-width: 1320px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          min-height: auto;
+        }
+
+        .hero::before {
+          inset: 42% 0 3rem 18%;
+        }
+      }
+
+      @media (max-width: 1240px) {
+        .closing {
+          grid-template-columns: 1fr;
+        }
+
+        .atlas-shell {
+          grid-template-columns: 184px minmax(0, 1fr);
+        }
+
+        .signals {
+          grid-column: 1 / -1;
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 0.75rem;
+          border-top: 1px solid rgba(248, 240, 217, 0.1);
+          border-left: 0;
+        }
+
+        .signals h3,
+        .note {
+          grid-column: 1 / -1;
+        }
+
+        .signal-card {
+          margin: 0;
+        }
+
+        .ops-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .mini-atlas {
+          min-height: 300px;
+          border: 1px solid rgba(228, 1, 44, 0.18);
+          border-radius: 18px;
+        }
+
+        .learning-system {
+          grid-template-columns: 1fr;
+        }
+
+        .learning-loop {
+          grid-template-columns: repeat(5, minmax(145px, 1fr));
+          overflow-x: auto;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .site-header {
+          position: relative;
+          align-items: flex-start;
+          flex-direction: column;
+          min-height: auto;
+        }
+
+        .brand {
+          align-items: flex-start;
+          flex-wrap: wrap;
+          white-space: normal;
+        }
+
+        .nav {
+          flex-wrap: wrap;
+          gap: 0.85rem 1.1rem;
+          font-size: 0.64rem;
+        }
+
+        .header-action {
+          width: 100%;
+        }
+
+        h1 {
+          max-width: 100%;
+          font-size: 3.15rem;
+          line-height: 0.94;
+          letter-spacing: 0;
+        }
+
+        h2 {
+          font-size: 2.75rem;
+        }
+
+        .hero-copy {
+          max-width: 100%;
+          overflow: hidden;
+        }
+
+        .proof-strip,
+        .roadmap,
+        .cred-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .proof-item {
+          border-right: 0;
+          border-bottom: 1px solid rgba(248, 240, 217, 0.09);
+        }
+
+        .proof-item:last-child {
+          border-bottom: 0;
+        }
+
+        .atlas-shell {
+          grid-template-columns: 1fr;
+          min-height: auto;
+        }
+
+        .atlas-nav {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.4rem;
+          border-right: 0;
+          border-bottom: 1px solid rgba(248, 240, 217, 0.1);
+        }
+
+        .atlas-label {
+          grid-column: 1 / -1;
+          margin-bottom: 0.3rem;
+        }
+
+        .atlas-card,
+        .atlas-stage {
+          min-height: 540px;
+        }
+
+        .atlas-node {
+          width: 70px;
+          min-height: 70px;
+          padding: 0.48rem;
+          border-radius: 12px;
+        }
+
+        .atlas-node.is-active {
+          width: 116px;
+          min-height: 116px;
+        }
+
+        .atlas-node.is-active .node-icon {
+          width: 34px;
+          height: 34px;
+        }
+
+        .atlas-node span {
+          font-size: 0.58rem;
+        }
+
+        .atlas-node.is-active span:last-child {
+          font-size: 0.78rem;
+        }
+
+        .story-core {
+          font-size: 2.8rem;
+        }
+
+        .atlas-node[data-slot="1"] { left: 88%; top: 50%; }
+        .atlas-node[data-slot="2"] { left: 75%; top: 24%; }
+        .atlas-node[data-slot="3"] { left: 25%; top: 24%; }
+        .atlas-node[data-slot="4"] { left: 12%; top: 50%; }
+        .atlas-node[data-slot="5"] { left: 25%; top: 76%; }
+        .atlas-node[data-slot="6"] { left: 75%; top: 76%; }
+
+        .atlas-progress {
+          left: 0.85rem;
+          right: 0.85rem;
+          bottom: 0.85rem;
+        }
+
+        .signals {
+          grid-template-columns: 1fr;
+        }
+
+        .section-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .section-title {
+          position: static;
+        }
+
+        .role-brief-head,
+        .role-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .learning-loop {
+          grid-template-columns: 1fr;
+          overflow-x: visible;
+        }
+
+        .learning-step {
+          min-height: 0;
+        }
+
+        .role-brief-head h2 {
+          grid-column: auto;
+        }
+
+        .roadmap::before {
+          display: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="site-header">
+        <a class="brand" href="#top" aria-label="Story AI enablement brief by Justin Morrow">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="https://storycannabis.com/wp-content/uploads/2025/08/logo-single-red.png" alt="" />
+          </span>
+          <span class="brand-copy">
+            <strong>Story AI Enablement</strong>
+            <small>Your next chapter awaits</small>
+          </span>
+          <span class="brand-slash">/ Justin Morrow</span>
+        </a>
+        <nav class="nav" aria-label="Page sections">
+          <a href="#fit">Fit</a>
+          <a href="#plan">Plan</a>
+          <a href="#atlas">Atlas</a>
+          <a href="#guardrails">Guardrails</a>
+          <a href="#proof">Proof</a>
+        </nav>
+        <a class="header-action" href="/for-story/Justin-Morrow-Story-AI-Enablement-One-Pager.pdf">Open PDF</a>
+      </header>
+
+      <main id="top">
+        <section class="hero">
+          <div class="hero-copy fade-in">
+            <h1>Your Next Chapter in <em>AI Enablement</em></h1>
+            <p class="hero-subhead">
+              A private Story-specific operating artifact connecting the AI Enablement and Accounting &amp; Finance AI Automation roles around one idea: the durable advantage is the learning system Story builds around real work.
+            </p>
+            <div class="actions" aria-label="Primary actions">
+              <a class="btn btn-primary" href="#plan">
+                Read the plan
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+              <a class="btn btn-secondary" href="/for-story/Justin-Morrow-Story-AI-Enablement-One-Pager.pdf">
+                Open PDF
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M14 3h7v7M21 3l-9 9M11 5H6a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
+            <div class="proof-strip" aria-label="Candidate fit signals">
+              <div class="proof-item">
+                <span class="proof-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5h16M4 12h16M4 17.5h10" stroke="currentColor" stroke-linecap="round"/><path d="M17 16.5 19 18l2.5-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                Workflow traces worth reusing
+              </div>
+              <div class="proof-item">
+                <span class="proof-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v5m0 8v5M3 12h5m8 0h5M6.3 6.3l3.5 3.5m4.4 4.4 3.5 3.5m0-11.4-3.5 3.5m-4.4 4.4-3.5 3.5" stroke="currentColor" stroke-linecap="round"/></svg>
+                </span>
+                Operator judgment captured safely
+              </div>
+              <div class="proof-item">
+                <span class="proof-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M16 11a4 4 0 1 0-8 0M5 20a7 7 0 0 1 14 0M18 8a3 3 0 0 1 3 3M21 20a5.5 5.5 0 0 0-3-4.9M6 8a3 3 0 0 0-3 3M3 20a5.5 5.5 0 0 1 3-4.9" stroke="currentColor" stroke-linecap="round"/></svg>
+                </span>
+                Controls, training, adoption proof
+              </div>
+            </div>
+          </div>
+
+          <aside class="atlas-shell fade-in" aria-label="Story operating atlas">
+            <div class="atlas-nav">
+              <div class="atlas-label">Story Operating Atlas</div>
+              <button class="atlas-tab" type="button" data-node="overview">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M4 10.5 12 4l8 6.5V20H6v-7h12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Overview
+              </button>
+              <button class="atlas-tab is-active" type="button" data-node="retail">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M6 8h12l-1 12H7L6 8Zm3 0a3 3 0 0 1 6 0" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Retail
+              </button>
+              <button class="atlas-tab" type="button" data-node="cultivation">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 21c0-5.6.1-11.2 0-18M12 11C8.6 9.7 6.3 7.4 4.7 4.1c3.7.7 6.1 2.7 7.3 6.9ZM12 11c3.4-1.3 5.7-3.6 7.3-6.9-3.7.7-6.1 2.7-7.3 6.9Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Cultivation
+              </button>
+              <button class="atlas-tab" type="button" data-node="production">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M10 3h4M11 3v6l-5 8a3 3 0 0 0 2.6 4.5h6.8A3 3 0 0 0 18 17l-5-8V3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Production
+              </button>
+              <button class="atlas-tab" type="button" data-node="inventory">
+                <svg viewBox="0 0 24 24" fill="none"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5" stroke="currentColor" stroke-linejoin="round"/></svg>
+                Inventory
+              </button>
+              <button class="atlas-tab" type="button" data-node="compliance">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.6 2.9 8.4 7 10 4.1-1.6 7-5.4 7-10V6l-7-3Zm-3 9 2 2 4-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Compliance
+              </button>
+              <button class="atlas-tab" type="button" data-node="finance">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M16 7.5c-.7-1-2-1.5-3.8-1.5-2.3 0-3.7 1-3.7 2.6 0 4.2 8 1.8 8 6.2 0 1.7-1.6 3.2-4.4 3.2-1.9 0-3.5-.6-4.4-1.8" stroke="currentColor" stroke-linecap="round"/></svg>
+                Finance
+              </button>
+              <button class="atlas-tab" type="button" data-node="training">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M4 7.5 12 4l8 3.5-8 3.5L4 7.5Zm3 3.2V16c2.8 2 7.2 2 10 0v-5.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Training
+              </button>
+            </div>
+
+            <div class="atlas-stage">
+              <div class="atlas-card">
+                <div class="orbit"></div>
+                <div class="orbit"></div>
+                <div class="orbit"></div>
+                <div class="atlas-line l1"></div>
+                <div class="atlas-line l2"></div>
+                <div class="atlas-line l3"></div>
+                <div class="atlas-line l4"></div>
+                <div class="atlas-line l5"></div>
+                <div class="atlas-line l6"></div>
+                <div class="atlas-core" aria-hidden="true">
+                  <span class="story-core">Story</span>
+                </div>
+                <button class="atlas-node node-retail is-active" type="button" data-node="retail" data-index="0" data-slot="0">
+                  <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 8h12l-1 12H7L6 8Zm3 0a3 3 0 0 1 6 0" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span>Retail</span>
+                </button>
+                <button class="atlas-node node-cultivation" type="button" data-node="cultivation" data-index="1" data-slot="1">
+                  <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21c0-5.6.1-11.2 0-18M12 11C8.6 9.7 6.3 7.4 4.7 4.1c3.7.7 6.1 2.7 7.3 6.9ZM12 11c3.4-1.3 5.7-3.6 7.3-6.9-3.7.7-6.1 2.7-7.3 6.9Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span>Cultivation</span>
+                </button>
+                <button class="atlas-node node-production" type="button" data-node="production" data-index="2" data-slot="2">
+                  <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M10 3h4M11 3v6l-5 8a3 3 0 0 0 2.6 4.5h6.8A3 3 0 0 0 18 17l-5-8V3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span>Production</span>
+                </button>
+                <button class="atlas-node node-inventory" type="button" data-node="inventory" data-index="3" data-slot="3">
+                  <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5" stroke="currentColor" stroke-linejoin="round"/></svg></span>
+                  <span>Inventory</span>
+                </button>
+                <button class="atlas-node node-compliance" type="button" data-node="compliance" data-index="4" data-slot="4">
+                  <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.6 2.9 8.4 7 10 4.1-1.6 7-5.4 7-10V6l-7-3Zm-3 9 2 2 4-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span>Compliance</span>
+                </button>
+                <button class="atlas-node node-finance" type="button" data-node="finance" data-index="5" data-slot="5">
+                  <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M16 7.5c-.7-1-2-1.5-3.8-1.5-2.3 0-3.7 1-3.7 2.6 0 4.2 8 1.8 8 6.2 0 1.7-1.6 3.2-4.4 3.2-1.9 0-3.5-.6-4.4-1.8" stroke="currentColor" stroke-linecap="round"/></svg></span>
+                  <span>Finance</span>
+                </button>
+                <button class="atlas-node node-training" type="button" data-node="training" data-index="6" data-slot="6">
+                  <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7.5 12 4l8 3.5-8 3.5L4 7.5Zm3 3.2V16c2.8 2 7.2 2 10 0v-5.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span>Training</span>
+                </button>
+                <div class="atlas-progress" aria-hidden="true">
+                  <span id="atlas-index">01</span>
+                  <i></i>
+                  <span>07</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="signals" aria-live="polite">
+              <h3>Enablement Signals</h3>
+              <div class="signal-card">
+                <strong id="signal-title">Retail handoffs</strong>
+                <span id="signal-status">Map customer, pickup, inventory, and team handoffs</span>
+              </div>
+              <div class="signal-card warning">
+                <strong id="signal-risk">Risk to watch</strong>
+                <span id="signal-risk-value">Store feedback not reaching enterprise decisions</span>
+              </div>
+              <div class="signal-card">
+                <strong id="signal-step">Next best step</strong>
+                <span id="signal-step-value">Review Arizona location workflows and service patterns</span>
+              </div>
+              <div class="note">AI should create a better chapter in the workday, not another tab to babysit.</div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="section role-brief fade-in" id="fit">
+          <div class="role-brief-head">
+            <div class="role-eyebrow">Role Signal</div>
+            <h2>Two postings. One learning system.</h2>
+            <p>
+              The postings do not read like novelty tooling. The job language points to the same core problem from two angles:
+              AI has to reduce manual work, improve decision quality, protect operating controls, and become usable team behavior.
+            </p>
+          </div>
+          <div class="role-grid">
+            <article class="role-card">
+              <span>AI Enablement Manager</span>
+              <h3>Adoption has to become operating behavior.</h3>
+              <p>
+                The posting centers on enterprise-wide adoption, internal consulting, workflow optimization,
+                responsible usage, documentation, training, and measurable operational impact.
+              </p>
+              <strong>My read</strong>
+              <p>
+                Start with high-friction workflows, pilot narrowly with the teams who own the work,
+                document the behavior, then measure whether speed, visibility, and execution actually improve.
+              </p>
+            </article>
+            <article class="role-card">
+              <span>Accounting &amp; Finance AI Automation</span>
+              <h3>Default-to-AI still needs audit discipline.</h3>
+              <p>
+                The finance role points at automation, data integrity, scalable reporting, faster decisions,
+                financial controls, close process improvement, and systems that can operate across entities.
+              </p>
+              <strong>My read</strong>
+              <p>
+                Use AI to surface exceptions, prepare evidence, and reduce cleanup work while keeping finance ownership,
+                source-of-truth discipline, and human review intact.
+              </p>
+            </article>
+            <article class="role-card">
+              <span>Why cannabis matters</span>
+              <h3>The hard part is the handoff.</h3>
+              <p>
+                In cannabis, the model is rarely the hardest part. The friction lives in cultivation reality,
+                inventory drift, retail execution, compliance nuance, finance pressure, and team adoption.
+              </p>
+              <strong>My read</strong>
+              <p>
+                Treat cultivation, production, inventory, retail, finance, and training as connected operating
+                signals instead of isolated tools or one-off automations.
+              </p>
+            </article>
+          </div>
+          <div class="learning-system" aria-label="Story AI learning system">
+            <div class="learning-lead">
+              <span>AI Daily Brief lens</span>
+              <h3>The tool is not the moat. The learning loop is.</h3>
+              <p>
+                The strongest AI program captures how work actually happens, turns repeated judgment into reusable memory,
+                and lets each pilot make the next pilot smarter without weakening controls.
+              </p>
+            </div>
+            <div class="learning-loop">
+              <article class="learning-step">
+                <b>01</b>
+                <strong>Workflow traces</strong>
+                <p>Where work starts, changes hands, stalls, gets corrected, and becomes a decision.</p>
+              </article>
+              <article class="learning-step">
+                <b>02</b>
+                <strong>Team judgment</strong>
+                <p>What managers know, what teams debate, and what never makes it into the system of record.</p>
+              </article>
+              <article class="learning-step">
+                <b>03</b>
+                <strong>Exception memory</strong>
+                <p>Recurring misses, compliance nuance, inventory drift, finance cleanup, and escalation patterns.</p>
+              </article>
+              <article class="learning-step">
+                <b>04</b>
+                <strong>SOP evolution</strong>
+                <p>Documentation that changes with the work instead of becoming a static file nobody trusts.</p>
+              </article>
+              <article class="learning-step">
+                <b>05</b>
+                <strong>Adoption proof</strong>
+                <p>Usage, quality, control gates, speed, visibility, and actual operating improvement.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section fade-in" id="plan">
+          <div class="section-grid">
+            <div class="section-title">
+              <div class="label">First 30 Days</div>
+              <h2>One plan. Four chapters.</h2>
+            </div>
+            <div class="roadmap">
+              <article class="stage-card">
+                <div class="stage-number">01 <svg viewBox="0 0 24 24" fill="none"><path d="M4 10a8 8 0 1 1 4 6.9L4 18l1.1-3.8A7.9 7.9 0 0 1 4 10Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <h3>Capture the workflow truth</h3>
+                <p>Partner with business leaders and teams to map actual workflow traces, workarounds, and where decisions stall.</p>
+              </article>
+              <article class="stage-card">
+                <div class="stage-number">02 <svg viewBox="0 0 24 24" fill="none"><path d="M12 21a9 9 0 1 0-9-9 9 9 0 0 0 9 9Zm0-5a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm5-9 3-3m-3 0h3v3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <h3>Rank the learning loops</h3>
+                <p>Prioritize improvements by operational impact, compliance sensitivity, data readiness, repeatability, and adoption potential.</p>
+              </article>
+              <article class="stage-card">
+                <div class="stage-number">03 <svg viewBox="0 0 24 24" fill="none"><path d="M10 3h4M11 3v6l-5 8a3 3 0 0 0 2.6 4.5h6.8A3 3 0 0 0 18 17l-5-8V3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <h3>Pilot with controls</h3>
+                <p>Implement practical AI workflows with clear success criteria, human review, source-of-truth discipline, and feedback loops.</p>
+              </article>
+              <article class="stage-card">
+                <div class="stage-number">04 <svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5m0 14h16M8 16v-5m4 5V8m4 8v-7m2-4 2 2-5 5-3-3-4 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <h3>Train, measure, compound</h3>
+                <p>Build resources, SOPs, and adoption metrics so each proven pilot improves speed, visibility, execution, and the next pilot.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section fade-in" id="atlas">
+          <div class="section-grid">
+            <div class="section-title">
+              <div class="label">Where I'd Look First</div>
+              <h2>Store work creates enterprise signals.</h2>
+            </div>
+            <div class="ops-layout">
+              <div class="focus-list">
+                <article class="focus-card">
+                  <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M9 8h6M9 16h6" stroke="currentColor" stroke-linecap="round"/></svg></span>
+                  <div><h3>SOP + training support</h3><p>Create, update, and reinforce resources for employees with different levels of technical comfort.</p></div>
+                  <span aria-hidden="true">→</span>
+                </article>
+                <article class="focus-card">
+                  <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M10.8 18.4a7.6 7.6 0 1 1 7.6-7.6M16.5 16.5 21 21M8 10.5h5M10.5 8v5" stroke="currentColor" stroke-linecap="round"/></svg></span>
+                  <div><h3>Exceptions + compliance</h3><p>Surface, triage, and document exceptions without weakening policy or human accountability.</p></div>
+                  <span aria-hidden="true">→</span>
+                </article>
+                <article class="focus-card">
+                  <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16v12H4V7Zm4 0V5h8v2M4 12h16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <div><h3>Retail + support handoffs</h3><p>Connect store, pickup, inventory, support, finance, and leadership context.</p></div>
+                  <span aria-hidden="true">→</span>
+                </article>
+                <article class="focus-card">
+                  <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 1 4 6.9L4 20l1.2-3.8A7.8 7.8 0 0 1 4 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <div><h3>Reporting + follow-up</h3><p>Track initiative outcomes, adoption, productivity gains, and operational impact.</p></div>
+                  <span aria-hidden="true">→</span>
+                </article>
+              </div>
+
+              <div class="mini-atlas" aria-label="Story retail operations atlas diagram">
+                <h3>Arizona Retail Footprint</h3>
+                <div class="mini-orbit"></div>
+                <div class="mini-core" aria-hidden="true">
+                  <span>AZ</span>
+                </div>
+                <i class="mini-point"></i>
+                <i class="mini-point"></i>
+                <i class="mini-point"></i>
+                <i class="mini-point"></i>
+                <i class="mini-point"></i>
+                <i class="mini-point"></i>
+              </div>
+
+              <div class="guardrails" id="guardrails">
+                <article class="guard-card">
+                  <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.6 2.9 8.4 7 10 4.1-1.6 7-5.4 7-10V6l-7-3Zm-3 9 2 2 4-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <div><h3>Workflow first</h3><p>Start with how work happens, then design AI around the operating reality.</p></div>
+                </article>
+                <article class="guard-card">
+                  <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M16 11a4 4 0 1 0-8 0M5 20a7 7 0 0 1 14 0M19 7v4m-2-2h4" stroke="currentColor" stroke-linecap="round"/></svg></span>
+                  <div><h3>Responsible usage</h3><p>AI recommends. People decide. Compliance and accountability stay with owners.</p></div>
+                </article>
+                <article class="guard-card">
+                  <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5m0 14h16M8 16v-5m4 5V8m4 8v-7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <div><h3>Adoption proof</h3><p>Every pilot ships with training, documentation, and a measurement plan.</p></div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section fade-in" id="proof">
+            <div class="closing">
+              <div class="closing-copy">
+              <h2>Built for the learning system Story is hiring into.</h2>
+              <p>
+                These roles are not just AI tooling. They are organizational enablement: finding high-friction workflows, translating business needs into practical systems, training teams, protecting controls, and turning repeated judgment into institutional memory.
+              </p>
+              <p>
+                Story's values point to the method: lead with operators, use data honestly, stay grounded with teams, build unity across functions, and grow only what proves useful.
+              </p>
+            </div>
+            <div class="cred-grid">
+              <article class="cred-card">
+                <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 13a8 8 0 0 0 16 0M6 13V7a6 6 0 0 1 12 0v6M9 9h6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <div><h3>Cannabis operating context</h3><p>Lived familiarity with the pace, constraints, finance pressure, and systems friction inside cannabis.</p></div>
+              </article>
+              <article class="cred-card">
+                <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v5m0 8v5M3 12h5m8 0h5M6.3 6.3l3.5 3.5m4.4 4.4 3.5 3.5m0-11.4-3.5 3.5m-4.4 4.4-3.5 3.5" stroke="currentColor" stroke-linecap="round"/></svg></span>
+                <div><h3>Hands-on AI systems work</h3><p>Not just prompting. Building workflows, interfaces, artifacts, and operating loops.</p></div>
+              </article>
+              <article class="cred-card">
+                <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M7 4h10v16H7V4Zm3 4h4M10 12h4M10 16h2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <div><h3>Operator translation</h3><p>Bridge executive goals, frontline constraints, and implementation details.</p></div>
+              </article>
+              <article class="cred-card">
+                <span class="node-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.6 2.9 8.4 7 10 4.1-1.6 7-5.4 7-10V6l-7-3Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <div><h3>Responsible adoption</h3><p>Build trust with guardrails, documentation, training, and human review.</p></div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <footer class="footer">
+          <span>Private application artifact for Story Cannabis AI roles.</span>
+          <span>
+            Relevant operating-systems work:
+            <a href="https://gopraxis.ai/cannabis">gopraxis.ai/cannabis</a>
+          </span>
+        </footer>
+      </main>
+    </div>
+
+    <script>
+      const nodeDetails = {
+        overview: {
+          title: "Next chapter map",
+          status: "Connect store reality to practical AI pilots",
+          risk: "Tool rollout without adoption rhythm",
+          step: "Interview business leaders and frontline managers",
+        },
+        retail: {
+          title: "Retail handoffs",
+          status: "Map customer, pickup, inventory, and team handoffs",
+          risk: "Store feedback not reaching enterprise decisions",
+          step: "Review Arizona location workflows and service patterns",
+        },
+        cultivation: {
+          title: "Cultivation context",
+          status: "Surface environment and labor decision loops",
+          risk: "Model answers without grower context",
+          step: "Map repeated questions and escalation patterns",
+        },
+        production: {
+          title: "Production workflows",
+          status: "Identify packaging, QA, and exception handoffs",
+          risk: "Automating before process stabilizes",
+          step: "Find one narrow pilot with visible rework",
+        },
+        inventory: {
+          title: "Inventory visibility",
+          status: "Track where data drifts from reality",
+          risk: "Bad inputs creating confident outputs",
+          step: "Start with exception intake and manager review",
+        },
+        compliance: {
+          title: "Compliance guardrails",
+          status: "Keep policy and audit context close to work",
+          risk: "Unreviewed outputs in regulated decisions",
+          step: "Define human approval gates before pilots",
+        },
+        finance: {
+          title: "Finance pressure",
+          status: "Reduce lag in reporting, vendors, and follow-up",
+          risk: "Margin work hidden in manual cleanup",
+          step: "Map weekly reporting and invoice friction",
+        },
+        training: {
+          title: "Training adoption",
+          status: "Turn known fixes into reusable job aids",
+          risk: "One-off coaching that disappears",
+          step: "Build a role-specific training loop",
+        },
+      };
+
+      const tabs = [...document.querySelectorAll(".atlas-tab")];
+      const nodes = [...document.querySelectorAll(".atlas-node")];
+      const nodeOrder = nodes.map((node) => node.dataset.node);
+      const atlasProgress = document.querySelector(".atlas-progress");
+      const atlasIndex = document.getElementById("atlas-index");
+      const signalTitle = document.getElementById("signal-title");
+      const signalStatus = document.getElementById("signal-status");
+      const signalRiskValue = document.getElementById("signal-risk-value");
+      const signalStepValue = document.getElementById("signal-step-value");
+
+      function setAtlasSlots(key) {
+        const activeIndex = nodeOrder.indexOf(key);
+        if (activeIndex < 0) {
+          nodes.forEach((node) => node.classList.remove("is-active"));
+          return;
+        }
+
+        nodes.forEach((node) => {
+          const index = Number(node.dataset.index);
+          const slot = (index - activeIndex + nodeOrder.length) % nodeOrder.length;
+          node.dataset.slot = String(slot);
+          node.classList.toggle("is-active", node.dataset.node === key);
+        });
+
+        if (atlasIndex && atlasProgress) {
+          atlasIndex.textContent = String(activeIndex + 1).padStart(2, "0");
+          atlasProgress.style.setProperty("--progress", `${((activeIndex + 1) / nodeOrder.length) * 100}%`);
+        }
+      }
+
+      function setActiveNode(key) {
+        const detail = nodeDetails[key] || nodeDetails.overview;
+        tabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.node === key));
+        setAtlasSlots(key);
+        signalTitle.textContent = detail.title;
+        signalStatus.textContent = detail.status;
+        signalRiskValue.textContent = detail.risk;
+        signalStepValue.textContent = detail.step;
+      }
+
+      [...tabs, ...nodes].forEach((el) => {
+        el.addEventListener("click", () => setActiveNode(el.dataset.node));
+      });
+
+      setActiveNode("retail");
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.16 }
+      );
+
+      document.querySelectorAll(".fade-in").forEach((el) => observer.observe(el));
+    </script>
+  </body>
+</html>
