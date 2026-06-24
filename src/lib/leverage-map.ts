@@ -411,6 +411,26 @@ export function firstNameOf(name: string): string {
   return name.trim().split(/\s+/)[0] || "there"
 }
 
+// Allowed values for praxis_leads.tier_discussed (DB CHECK constraint
+// praxis_leads_tier_discussed_check). Writing anything OUTSIDE this set makes the
+// lead INSERT fail the constraint silently — the exact bug that dropped every
+// Clarify-First lead before #778 (composite < 6 was hardcoded to "Other"). The
+// mapping is funneled through here so a regression test can prove every reachable
+// composite maps to a constraint-valid value.
+export const TIER_DISCUSSED_VALUES = [
+  "Discovery Sprint",
+  "Sprint",
+  "Build",
+  "Platform",
+  "Not Yet Discussed",
+] as const
+
+export type TierDiscussed = (typeof TIER_DISCUSSED_VALUES)[number]
+
+export function tierForComposite(composite: number): TierDiscussed {
+  return composite >= 6 ? "Discovery Sprint" : "Not Yet Discussed"
+}
+
 // A genuinely low-content submission. A completed quiz always floors at the
 // "Clarify First" band (we never tell an engaged prospect "Not Yet"), so the
 // real triage signal is INTERNAL: distinguish a thin/likely-junk lead from a
