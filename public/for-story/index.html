@@ -2105,6 +2105,44 @@
         },
       };
 
+      function storyRecipient() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get("r") || params.get("recipient") || "unknown";
+      }
+
+      function trackStoryEvent(event, extra = {}) {
+        const payload = {
+          event,
+          recipient: storyRecipient(),
+          path: window.location.pathname + window.location.search + window.location.hash,
+          href: window.location.href,
+          title: document.title,
+          referrer: document.referrer,
+          ts: new Date().toISOString(),
+          ...extra,
+        };
+
+        const body = JSON.stringify(payload);
+
+        try {
+          if (navigator.sendBeacon) {
+            const blob = new Blob([body], { type: "application/json" });
+            if (navigator.sendBeacon("/api/story-track", blob)) return;
+          }
+        } catch {
+          // Fall through to fetch.
+        }
+
+        fetch("/api/story-track", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body,
+          keepalive: true,
+        }).catch(() => {});
+      }
+
+      trackStoryEvent("view");
+
       const tabs = [...document.querySelectorAll(".atlas-tab")];
       const nodes = [...document.querySelectorAll(".atlas-node")];
       const nodeOrder = nodes.map((node) => node.dataset.node);
@@ -2146,10 +2184,37 @@
       }
 
       [...tabs, ...nodes].forEach((el) => {
-        el.addEventListener("click", () => setActiveNode(el.dataset.node));
+        el.addEventListener("click", () => {
+          setActiveNode(el.dataset.node);
+          trackStoryEvent("atlas_node", { section: el.dataset.node || "unknown" });
+        });
       });
 
       setActiveNode("retail");
+
+      document.querySelectorAll("a[href]").forEach((anchor) => {
+        anchor.addEventListener("click", () => {
+          const url = new URL(anchor.href, window.location.href);
+          const label = (anchor.textContent || "").trim().replace(/\s+/g, " ").slice(0, 120);
+
+          if (url.pathname.endsWith(".pdf")) {
+            trackStoryEvent("pdf_open", { href: url.href, section: label || "pdf" });
+            return;
+          }
+
+          if (url.hostname === window.location.hostname && url.pathname === window.location.pathname && url.hash) {
+            trackStoryEvent("section_click", { href: url.href, section: url.hash.replace("#", "") || label });
+            return;
+          }
+
+          if (url.hostname === "gopraxis.ai" && url.pathname === "/cannabis") {
+            trackStoryEvent("praxis_cannabis_click", { href: url.href, section: label || "cannabis" });
+            return;
+          }
+
+          trackStoryEvent("link_click", { href: url.href, section: label || "link" });
+        });
+      });
 
       const observer = new IntersectionObserver(
         (entries) => {
