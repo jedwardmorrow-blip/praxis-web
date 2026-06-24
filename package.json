@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test:tier": "node --experimental-strip-types scripts/test-lead-tier.ts",
+    "test:banned": "node --experimental-strip-types scripts/test-banned-phrases.ts",
+    "test:unit": "npm run test:tier && npm run test:banned",
+    "test:integration": "node --experimental-strip-types scripts/test-saveLead-integration.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
