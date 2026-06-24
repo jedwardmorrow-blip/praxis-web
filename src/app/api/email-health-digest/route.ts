@@ -33,6 +33,13 @@ type LeadRow = {
   email_status: { prospect?: string; notify?: string } | null
 }
 
+type IntakeFailureRow = {
+  company: string | null
+  contact_email: string | null
+  reason: string | null
+  created_at: string
+}
+
 export async function POST(req: Request) {
   return handle(req)
 }
@@ -73,20 +80,36 @@ async function handle(req: Request) {
   }
 
   const leads = (data ?? []) as LeadRow[]
+
+  // A submission whose INSERT failed writes NO praxis_leads row, so reading only
+  // praxis_leads is blind to the exact silent-failure class this digest exists
+  // to catch (the #778 tier-constraint bug). Read the dedicated failure table too.
+  const { data: ifData } = await supabase
+    .from("praxis_lead_intake_failures")
+    .select("company, contact_email, reason, created_at")
+    .gte("created_at", cutoff)
+    .order("created_at", { ascending: false })
+  const intakeFailures = (ifData ?? []) as IntakeFailureRow[]
+
   const failed = leads.filter(
     (l) => l.email_status?.prospect === "failed" || l.email_status?.notify === "failed",
   )
+  // A prospect send marked "skipped" (missing key, malformed email, or a null map
+  // token from a failed insert) is also a silent miss, not a success.
+  const skipped = leads.filter((l) => l.email_status?.prospect === "skipped")
   const summary = {
     window_hours: WINDOW_HOURS,
     submissions: leads.length,
     prospect_failed: leads.filter((l) => l.email_status?.prospect === "failed").length,
+    prospect_skipped: skipped.length,
     notify_failed: leads.filter((l) => l.email_status?.notify === "failed").length,
     failed_leads: failed.length,
+    intake_failures: intakeFailures.length,
   }
 
-  // No submissions in the window: nothing to report, no noise.
-  if (leads.length === 0) {
-    return Response.json({ ok: true, sent: false, reason: "no submissions in window", summary })
+  // Nothing happened in the window at all (no leads AND no intake failures): no noise.
+  if (leads.length === 0 && intakeFailures.length === 0) {
+    return Response.json({ ok: true, sent: false, reason: "no activity in window", summary })
   }
 
   const resendKey = cleanEnv(process.env.RESEND_API_KEY)
@@ -94,10 +117,21 @@ async function handle(req: Request) {
     return Response.json({ ok: true, sent: false, reason: "resend not configured", summary })
   }
 
-  const hasFailures = failed.length > 0
+  const problems = failed.length + skipped.length + intakeFailures.length
+  const hasFailures = problems > 0
   const subject = hasFailures
-    ? `⚠️ Leverage Map email health · ${failed.length} FAILED of ${leads.length} (24h)`
+    ? `⚠️ Leverage Map email health · ${problems} issue(s), ${leads.length} delivered-attempts (24h)`
     : `Leverage Map email health · ${leads.length} submissions, all sent (24h)`
+
+  const intakeRows = intakeFailures
+    .map(
+      (f) => `<tr>
+        <td style="padding:6px 10px;border-bottom:1px solid #eee">${escapeHtml(f.company ?? "—")}</td>
+        <td style="padding:6px 10px;border-bottom:1px solid #eee">${escapeHtml(f.contact_email ?? "—")}</td>
+        <td style="padding:6px 10px;border-bottom:1px solid #eee">${escapeHtml(f.reason ?? "insert failed")}</td>
+      </tr>`,
+    )
+    .join("")
 
   const failRows = failed
     .map((l) => {
@@ -111,21 +145,34 @@ async function handle(req: Request) {
     })
     .join("")
 
+  const redIf = (n: number) => (n ? "#C42130" : "#111")
   const html = `
     <div style="font-family:sans-serif;color:#111;max-width:640px">
       <h2 style="margin:0 0 8px">Leverage Map email health (last ${WINDOW_HOURS}h)</h2>
-      <p style="margin:0 0 4px">Submissions: <strong>${leads.length}</strong></p>
-      <p style="margin:0 0 4px">Prospect sends failed: <strong style="color:${summary.prospect_failed ? "#C42130" : "#111"}">${summary.prospect_failed}</strong></p>
-      <p style="margin:0 0 16px">Notify sends failed: <strong style="color:${summary.notify_failed ? "#C42130" : "#111"}">${summary.notify_failed}</strong></p>
+      <p style="margin:0 0 4px">Submissions saved: <strong>${leads.length}</strong></p>
+      <p style="margin:0 0 4px">Intake (insert) failures — never saved: <strong style="color:${redIf(summary.intake_failures)}">${summary.intake_failures}</strong></p>
+      <p style="margin:0 0 4px">Prospect sends failed: <strong style="color:${redIf(summary.prospect_failed)}">${summary.prospect_failed}</strong></p>
+      <p style="margin:0 0 4px">Prospect sends skipped: <strong style="color:${redIf(summary.prospect_skipped)}">${summary.prospect_skipped}</strong></p>
+      <p style="margin:0 0 16px">Notify sends failed: <strong style="color:${redIf(summary.notify_failed)}">${summary.notify_failed}</strong></p>
       ${
-        hasFailures
-          ? `<p style="margin:0 0 8px;color:#C42130"><strong>These prospects did NOT get their map — follow up manually:</strong></p>
+        intakeFailures.length
+          ? `<p style="margin:0 0 8px;color:#C42130"><strong>Submissions that FAILED to save (no lead, no map, no email) — the silent-drop class:</strong></p>
+             <table style="border-collapse:collapse;width:100%;font-size:13px;margin-bottom:16px">
+               <tr><th align="left" style="padding:6px 10px">Company</th><th align="left" style="padding:6px 10px">Email</th><th align="left" style="padding:6px 10px">Reason</th></tr>
+               ${intakeRows}
+             </table>`
+          : ""
+      }
+      ${
+        failed.length
+          ? `<p style="margin:0 0 8px;color:#C42130"><strong>Saved leads whose email send FAILED — follow up manually:</strong></p>
              <table style="border-collapse:collapse;width:100%;font-size:13px">
                <tr><th align="left" style="padding:6px 10px">Company</th><th align="left" style="padding:6px 10px">Email</th><th align="left" style="padding:6px 10px">Status</th><th align="left" style="padding:6px 10px">Map</th></tr>
                ${failRows}
              </table>`
-          : `<p style="margin:0;color:#1a7f37">All sends succeeded.</p>`
+          : ""
       }
+      ${hasFailures ? "" : `<p style="margin:0;color:#1a7f37">All sends succeeded.</p>`}
       <p style="font-size:12px;color:#888;margin:18px 0 0">PRAXIS · automated email-health digest</p>
     </div>`
 
