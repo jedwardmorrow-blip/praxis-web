@@ -342,6 +342,20 @@ async function saveLead(
 
   if (error) {
     console.error("Supabase leverage map insert error:", error)
+    // A failed insert writes no praxis_leads row, so the email-health digest
+    // (which reads praxis_leads) would be blind to it — the exact silent-failure
+    // class the #778 tier bug caused. Record it where the digest can see it.
+    // Best-effort: never let failure-logging mask the original failure.
+    try {
+      await supabase.from("praxis_lead_intake_failures").insert({
+        company: input.company || null,
+        contact_email: input.email || null,
+        reason: error.message ?? "insert failed",
+        detail: { code: error.code ?? null, composite: score.composite, tier_discussed: tierForComposite(score.composite) },
+      })
+    } catch (logError) {
+      console.error("Failed to record intake failure:", logError)
+    }
     return null
   }
 
