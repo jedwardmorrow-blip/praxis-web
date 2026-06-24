@@ -14,6 +14,7 @@ import {
   TRUTH_LOCATIONS,
   fallbackAiResult,
   firstNameOf,
+  guardReadoutBannedPhrases,
   isThinSubmission,
   scoreLeverageMap,
   tierForComposite,
@@ -131,7 +132,16 @@ export async function POST(req: Request) {
     })
   }
 
-  const aiResult = await generateAiResult(input, score)
+  const generated = await generateAiResult(input, score)
+
+  // Deterministic last line on the model's banned-phrase rule (no human reviews
+  // the readout before it reaches the prospect). Scrub any survivor across the
+  // public fields so a banned phrase can never reach the browser, stored map, or
+  // email; log what was scrubbed so the digest/logs surface model drift.
+  const { result: aiResult, hits: bannedHits } = guardReadoutBannedPhrases(generated)
+  if (bannedHits.length) {
+    console.warn(`[leverage-map] banned-phrase guard scrubbed: ${bannedHits.join(", ")} (company=${input.company})`)
+  }
 
   // Internal triage flag: a thin/likely-junk lead looks identical to a real
   // early one at the score level, so flag it where Justin will see it.
