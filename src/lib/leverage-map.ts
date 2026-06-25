@@ -372,24 +372,33 @@ function clampScore(n: number) {
   return Math.max(1, Math.min(3, n))
 }
 
-// The prospect-facing slice of the readout. The `internal` block (session
-// questions, sales angle, lead score) must NEVER reach the browser or the
-// shareable map page, so the public payload is built by stripping it.
-export type PublicLeverageResult = Omit<LeverageMapAiResult, "internal">
+// The prospect-facing slice of the readout. Two things are stripped:
+//   1. the `internal` block (session questions, sales angle, lead score) — never
+//      reaches the browser or the shareable map page;
+//   2. `what_an_intervention_looks_like` and `ninety_day_picture` — the full
+//      intervention design and the 90-day plan. These are HELD BACK behind the
+//      call: the free readout gives the mirror, the cost, and one falsifiable
+//      first fix; the session is where the full design and the path get built.
+//      (They are still generated for the internal brief Justin reads — see
+//      buildWorldModelNotes — just never shown to the prospect.) This is the fix
+//      for the give-away/withhold inversion: a slick free readout that handed
+//      over the whole consult gave a motivated owner no reason to book.
+export type PublicLeverageResult = Omit<
+  LeverageMapAiResult,
+  "internal" | "what_an_intervention_looks_like" | "ninety_day_picture"
+>
 
 export function toPublicResult(result: LeverageMapAiResult): PublicLeverageResult {
-  // Enumerate the public fields explicitly so the internal block can never leak,
-  // even if new internal keys are added later.
+  // Enumerate the public fields explicitly so neither the internal block nor the
+  // held-back intervention/90-day can leak, even if new keys are added later.
   return {
     pattern_label: result.pattern_label,
     result_title: result.result_title,
     operator_readout: result.operator_readout,
     what_you_are_already_doing_right: result.what_you_are_already_doing_right,
     where_it_costs_you: result.where_it_costs_you,
-    what_an_intervention_looks_like: result.what_an_intervention_looks_like,
     first_fix: result.first_fix,
     why_this_is_fixable: result.why_this_is_fixable,
-    ninety_day_picture: result.ninety_day_picture,
     what_the_session_unlocks: result.what_the_session_unlocks,
   }
 }
@@ -531,10 +540,8 @@ const PUBLIC_READOUT_FIELDS: Array<keyof PublicLeverageResult> = [
   "operator_readout",
   "what_you_are_already_doing_right",
   "where_it_costs_you",
-  "what_an_intervention_looks_like",
   "first_fix",
   "why_this_is_fixable",
-  "ninety_day_picture",
   "what_the_session_unlocks",
 ]
 
