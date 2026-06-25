@@ -23,7 +23,7 @@ import {
   type LeverageMapScore,
   type StoredLeverageMap,
 } from "@/lib/leverage-map"
-import { buildLeverageMessages } from "@/lib/leverage-map-prompt"
+import { applyDeslop, buildDeslopMessages, buildLeverageMessages, DESLOP_FIELDS } from "@/lib/leverage-map-prompt"
 
 export const dynamic = "force-dynamic"
 
@@ -77,7 +77,9 @@ export async function POST(req: Request) {
   // the readout before it reaches the prospect). Scrub any survivor across the
   // public fields so a banned phrase can never reach the browser, stored map, or
   // email; log what was scrubbed so the digest/logs surface model drift.
-  const { result: aiResult, hits: bannedHits } = guardReadoutBannedPhrases(generated)
+  const guarded = guardReadoutBannedPhrases(generated)
+  let aiResult = guarded.result
+  const bannedHits = guarded.hits
   if (bannedHits.length) {
     console.warn(`[leverage-map] banned-phrase guard scrubbed: ${bannedHits.join(", ")} (company=${input.company})`)
   }
@@ -90,6 +92,13 @@ export async function POST(req: Request) {
       ...aiResult.internal.disqualification_flags,
     ]
   }
+
+  // Post-generation de-tell pass: a focused second model call rewrites ONLY the
+  // public prose to strip the recurring "AI tells" the main prompt cannot suppress
+  // (quietly / "you'll finally see" / "not just X, also Y"), then re-guards. The
+  // internal block and the gated intervention/90-day are untouched, so saveLead,
+  // the prospect email, and the response all serve the same de-telled readout.
+  aiResult = await deslopReadout(aiResult)
 
   const token = crypto.randomUUID().replace(/-/g, "")
   const lead = await saveLead(input, score, aiResult, token)
@@ -172,6 +181,46 @@ async function generateAiResult(input: LeverageMapInput, score: LeverageMapScore
   } catch (error) {
     console.error("OpenAI leverage map parse error:", error)
     return fallback
+  }
+}
+
+// Second, focused model pass: rewrite ONLY the public prose to strip recurring
+// "AI tells" the main prompt cannot suppress, preserving every fact + the
+// give-away closure, then re-guard banned phrases. Best-effort — any failure
+// returns the input unchanged so the readout never breaks on the de-tell step.
+async function deslopReadout(aiResult: LeverageMapAiResult): Promise<LeverageMapAiResult> {
+  const apiKey = cleanEnv(process.env.OPENAI_API_KEY)
+  if (!apiKey) return aiResult
+  const model = cleanEnv(process.env.OPENAI_LEVERAGE_MAP_MODEL) || cleanEnv(process.env.OPENAI_MODEL) || "gpt-4.1"
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model,
+        temperature: 0.7,
+        response_format: { type: "json_object" },
+        messages: buildDeslopMessages(toPublicResult(aiResult)),
+      }),
+    })
+    if (!response.ok) {
+      console.error("OpenAI de-tell error:", response.status, await response.text())
+      return aiResult
+    }
+    const data = await response.json()
+    const parsed = JSON.parse(data?.choices?.[0]?.message?.content)
+    const deslopped = applyDeslop(toPublicResult(aiResult), parsed)
+    // Write the de-telled public prose back over the full result; internal block
+    // and the gated intervention/90-day stay exactly as generated.
+    const merged: LeverageMapAiResult = { ...aiResult }
+    for (const k of DESLOP_FIELDS) {
+      const v = (deslopped as Record<string, unknown>)[k]
+      if (typeof v === "string") (merged as Record<string, unknown>)[k] = v
+    }
+    return guardReadoutBannedPhrases(merged).result
+  } catch (error) {
+    console.error("OpenAI de-tell parse error:", error)
+    return aiResult
   }
 }
 

@@ -344,15 +344,15 @@ export function LeverageMapForm() {
                 </div>
                 <Field
                   label="What happened?"
-                  hint="Plain English is best. Name the handoff, delay, customer, report, or owner interruption."
+                  hint="A line or two is plenty. Borrow an example above if it is easier, then tweak it."
                 >
                   <textarea
                     value={form.momentStory}
                     onChange={(e) => update("momentStory", e.target.value)}
-                    rows={5}
-                    placeholder="Example: A quote request came in after hours, the details landed in voicemail, the owner had to ask two people what happened, and the customer was already talking to another company by the next morning."
+                    rows={4}
+                    placeholder="Example: A quote request came in after hours, landed in voicemail, and the customer was already talking to another company by morning."
                   />
-                  <TextStrength value={form.momentStory} ideal={80} />
+                  <TextStrength value={form.momentStory} ideal={60} />
                 </Field>
               </section>
             ) : null}
@@ -364,22 +364,9 @@ export function LeverageMapForm() {
                   <strong>{activeStep.title}</strong>
                 </div>
                 <p className="check-trace-copy">
-                  One question does most of the work here. Answer it, set the rough size, and you
-                  are done — or open the detail tags for an even sharper read. None of it is required.
+                  Two quick taps to size it, plus one optional question. None of it is required —
+                  your story already did the heavy lifting.
                 </p>
-
-                <Field
-                  label="If your best employee handled this perfectly, what would they know or do?"
-                  hint="This is the hidden-leverage question. It is the single most useful thing you can write here."
-                >
-                  <textarea
-                    value={form.perfectEmployee}
-                    onChange={(e) => update("perfectEmployee", e.target.value)}
-                    rows={4}
-                    placeholder="Describe the judgment, context, or sequence that a strong person already carries in their head."
-                  />
-                  <TextStrength value={form.perfectEmployee} ideal={60} />
-                </Field>
 
                 <div className="check-grid two compact">
                   <ChoiceGrid
@@ -395,6 +382,19 @@ export function LeverageMapForm() {
                     onChange={(value) => update("costBand", value)}
                   />
                 </div>
+
+                <Field
+                  label="Optional: if your best employee handled this perfectly, what would they know or do?"
+                  hint="Skip it if you are short on time. One line is plenty — and it is the sharpest signal you can give."
+                >
+                  <textarea
+                    value={form.perfectEmployee}
+                    onChange={(e) => update("perfectEmployee", e.target.value)}
+                    rows={3}
+                    placeholder="The judgment or sequence a strong person already carries in their head."
+                  />
+                  <TextStrength value={form.perfectEmployee} ideal={60} />
+                </Field>
 
                 <div className="check-trace-more">
                   <button
@@ -702,7 +702,7 @@ function TextStrength({ value, ideal }: { value: string; ideal: number }) {
 function validateStep(stepIndex: number, form: LeverageMapInput) {
   if (stepIndex === 0) {
     if (!form.brokenMoment) return "Pick the moment closest to what came up."
-    if (form.momentStory.trim().length < 20) return "Add a little more detail about what happened."
+    if (form.momentStory.trim().length < 12) return "A few words on what happened is enough to start."
   }
   // Act 2 (Trace it) is entirely optional — every chip sharpens the map, none gate it.
   if (stepIndex === 2) {

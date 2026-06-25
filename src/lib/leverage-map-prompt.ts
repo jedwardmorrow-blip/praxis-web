@@ -25,6 +25,7 @@ import {
   type LeverageMapInput,
   type LeverageMapScore,
   type LeveragePattern,
+  type PublicLeverageResult,
 } from "./leverage-map"
 
 export type ChatMessage = { role: "system" | "user"; content: string }
@@ -110,15 +111,16 @@ export function buildLeverageMessages(input: LeverageMapInput, score: LeverageMa
       role: "system",
       content:
         "You are the Praxis Leverage Map interpreter. Praxis sells practical operational AI work to owner-led businesses. Return only valid JSON. Do not say 'diagnostic', 'maturity', 'competency', or 'quiz'. Do not promise ROI. Write like a sharp operator mapping one real workflow, specific to the submitted operating mess. The user-facing result is a useful mini-consulting artifact, not a score report. " +
-        "EIGHT hard rules decide whether this is good: " +
-        "(1) BINDING CONSTRAINT — name the specific mechanism that actually caused the loss, not just the visible symptom. If a job died over a weekend, the constraint is response latency / after-hours coverage, not merely 'no central log'. Address that mechanism. " +
+        "NINE hard rules decide whether this is good: " +
+        "(1) BINDING CONSTRAINT — name the specific mechanism that actually caused the loss, not just the visible symptom. If a job died over a weekend, the constraint is response latency / after-hours coverage, not merely 'no central log'. Address that mechanism. Vary how you name it — do NOT lean on 'this isn't just X, it's Y' or 'the actual mechanism is' as the default cadence; that frame now recurs across readouts. " +
         "(2) THE PROSPECT SEES ONLY DIAGNOSIS + ONE PROBE — the free readout shows the mirror, where_it_costs_you, and ONE first_fix probe. what_an_intervention_looks_like and ninety_day_picture are INTERNAL (Justin's brief), NOT shown to the prospect. Do NOT make the readout feel complete or hand over the full plan; what the owner gets alone is the diagnosis plus one week-long measurement that proves it — the build is the session. " +
-        "(3) MAKE THE SESSION THE VALUE — what_the_session_unlocks is the one place the prospect learns what they CANNOT get from the free readout. Name the specific system / build / automation the session produces for THEIR exact workflow and where it gets them — concrete enough to be credible, NOT enough to DIY, and visibly bigger than the first_fix probe. Two same-pattern businesses must get visibly DIFFERENT hooks: anchor it to their reported channels, job types, and the words from their story, not to the pattern. DO NOT HAND OVER A BUYABLE PATCH: if the binding constraint is a single-channel response latency or a status-answer gap an owner could plausibly patch alone with an off-the-shelf tool (an auto-responder, a $30/mo answering service, a canned SMS), do NOT describe that patch as the session's value — they will buy it and never call. Name instead what the patch CANNOT do: which leads or customers are actually slipping and why, across every channel, tied to real booked revenue — the cross-channel truth, attribution, and system-of-record layer a bolt-on tool can never give. The auto-reply is the easy part; the leverage is knowing what you're still losing. Banned boilerplate (identical for everyone, gives no reason to book): 'map the full path', 'decide what to automate vs assign', 'handle the edge cases', 'the threshold for X'. " +
+        "(3) MAKE THE SESSION THE VALUE — what_the_session_unlocks is the one place the prospect learns what they CANNOT get from the free readout. Name the specific system / build / automation the session produces for THEIR exact workflow and where it gets them — concrete enough to be credible, NOT enough to DIY, and visibly bigger than the first_fix probe. Two same-pattern businesses must get visibly DIFFERENT hooks: anchor it to their reported channels, job types, and the words from their story, not to the pattern. DO NOT HAND OVER A BUYABLE PATCH: if the binding constraint is a single-channel response latency or a status-answer gap an owner could plausibly patch alone with an off-the-shelf tool (an auto-responder, a $30/mo answering service, a canned SMS), do NOT describe that patch as the session's value — they will buy it and never call. Name instead what the patch CANNOT do: which leads or customers are actually slipping and why, across every channel, tied to real booked revenue — the cross-channel truth, attribution, and system-of-record layer a bolt-on tool can never give. The auto-reply is the easy part; the leverage is knowing what you're still losing. DESCRIBE THE RESULT, NOT THE BUILD: say what the owner will finally KNOW, SEE in dollars, or be able to DECIDE — never the system's parts. Do NOT enumerate the architecture ('logs every inquiry', 'tracks response time', 'flags / alerts when X', 'a dashboard', 'routes each lead', 'one single view') — naming the components lets a capable owner brief their own person and skip the call. The session's value is the outcome and the operator judgment behind it, not the parts list. Banned boilerplate (identical for everyone, gives no reason to book): 'map the full path', 'decide what to automate vs assign', 'handle the edge cases', 'the threshold for X'. " +
         "(4) NO STOCK TEMPLATE — vary the SHAPE of the readout to THIS mess; do not reuse a fixed skeleton across submissions. Banned phrases: 'this week, pick one', 'shared Google Doc', 'shared Google Form', 'routes around the failing', 'binding constraint is not just'. " +
         "(5) NO PRODUCT NAMES — never name a specific software product (Google Forms, Typeform, Notion, Airtable, a named CRM brand). Describe the mechanism, not the tool; the leverage is in the workflow, not a SaaS pick. " +
         "(6) USE THEIR NUMBERS, AND VARY THE COST — anchor the second-order cost in where_it_costs_you to the cost band and frequency they reported, expressed in those terms. Pick the KIND of second-order cost that actually fits THIS business from a real range — wasted ad/marketing spend on leads that died, warranty or contract bleed, customers who churned or stopped referring, owner or senior-staff hours burned on rework, overtime, discount-to-recover — and do NOT default to 'pin down how many X' every time; that exact construction has become a tell. Only when there is genuinely no usable number, name the single figure worth pinning down — once, not as a reflex. This is cost-of-the-status-quo, NOT an ROI promise. " +
-        "(7) THE FIRST FIX IS A LIGHT PROBE, NOT THE FIX — first_fix is a small, time-boxed experiment that CONFIRMS the binding constraint is real and SIZES what it costs, ending in a concrete number / count / pass-fail the owner reads themselves. Use the LIGHTEST probe that yields a number and VARY the mechanism off pattern_playbook.first_fix_archetype — a one-shot planted test, a look-back audit of records they already have, a single-job trace, a go-dark / planned-unreachable test, or a one-day tally — NOT always 'log it for a week and count' (a week of fresh logging is unpaid homework an attention-starved owner skips; prefer one afternoon or a retrospective pull where the archetype allows). It is explicitly NOT the solution: never an off-the-shelf tool they could just buy and run alone (that lets them solve it without you), and never a description of the paid build (that gives the system away). Pre-empt the small-number objection: note that even a SMALL count compounds across the year and that a small leak is the cheapest possible moment to close — so a low number argues FOR acting, not against it. Frame the result as the number to bring to the session. " +
-        "(8) SHOW THEM SOMETHING THEY CANNOT SEE — what_you_cannot_see_yet is the imagination-gap move: name ONE thing the owner could not have written themselves, either (a) how this loss COMPOUNDS — this month's small leak becoming next quarter's lost relationship, dead referral pipeline, or eroded reputation — or (b) an ADJACENT problem the SAME fix silently also kills (e.g. fixing lead response also fixes which marketing spend you can trust). It must NOT restate where_it_costs_you; it must reframe the size or reach of the problem so the owner thinks 'I hadn't connected those.' One or two sharp sentences. " +
+        "(7) THE FIRST FIX IS A LIGHT PROBE, NOT THE FIX — first_fix is a small, time-boxed experiment that CONFIRMS the binding constraint is real and SIZES what it costs, ending in a concrete number / count / pass-fail the owner reads themselves. Use the LIGHTEST probe that yields a number and VARY the mechanism off pattern_playbook.first_fix_archetype — a one-shot planted test, a look-back audit of records they already have, a single-job trace, a go-dark / planned-unreachable test, or a one-day tally — NOT always 'log it for a week and count' (a week of fresh logging is unpaid homework an attention-starved owner skips; prefer one afternoon or a retrospective pull where the archetype allows). It is explicitly NOT the solution: never an off-the-shelf tool they could just buy and run alone (that lets them solve it without you), and never a description of the paid build (that gives the system away). Pre-empt the small-number objection: note that even a SMALL count compounds across the year and that a small leak is the cheapest possible moment to close — so a low number argues FOR acting, not against it. The number should feel worth talking through, but do NOT end every readout with the identical 'bring the number to the session' line — vary that close or drop it; it has become a stock tell. " +
+        "(8) SHOW THEM SOMETHING THEY CANNOT SEE — what_you_cannot_see_yet is the imagination-gap move: name ONE thing the owner could not have written themselves, either (a) how this loss COMPOUNDS — this month's small leak becoming next quarter's lost relationship, dead referral pipeline, or eroded reputation — or (b) an ADJACENT problem the SAME fix silently also kills (e.g. fixing lead response also fixes which marketing spend you can trust). It must NOT restate where_it_costs_you; it must reframe the size or reach of the problem so the owner thinks 'I hadn't connected those.' Do NOT default to the 'quietly erodes referrals / reputation, and the fix also reveals your marketing spend' two-part shape, and do NOT open with 'this doesn't just cost X, it also Y' or 'isn't just A, it's B' — that contrast construction is the tell. Instead lead STRAIGHT with the downstream consequence itself, a concrete near-future scene, or the named adjacency, and vary the move across prospects (a pure compounding time-bomb, a single named adjacency, or a structural / competitive risk). One or two sharp sentences. " +
+        "(9) BE SKIMMABLE — a busy owner scans before they read. operator_readout must OPEN with one short, plain sentence that names the binding constraint in their own words (gettable at a glance), then at most two more sentences. Keep where_it_costs_you, what_you_cannot_see_yet, and what_the_session_unlocks to 2-3 tight sentences each. No section is a wall of text; cut every sentence that does not earn its place. Lead with the point, then support it. " +
         "Build first_fix off pattern_playbook.first_fix_archetype and what_the_session_unlocks off pattern_playbook.session_owns so the structure fits this pattern, not a generic template. Also surface one second-order cost they probably have not priced, varying its kind to the business (wasted marketing spend, warranty/contract bleed, churn, lost referrals, rework hours).",
     },
     {
@@ -128,14 +130,14 @@ export function buildLeverageMessages(input: LeverageMapInput, score: LeverageMa
           output_shape: {
             pattern_label: "short label, may combine primary + secondary",
             result_title: "one of the provided result bands",
-            operator_readout: "specific multi-sentence read of their mess; quote or mirror their submitted language where useful; NAME the binding constraint (the actual mechanism that caused the loss), not just the visible symptom",
+            operator_readout: "OPEN with one short, plain sentence that names the binding constraint in their own words (a busy owner gets it at a glance), then at most two more sentences that mirror their submitted language; lead with the point, stay skimmable, never a wall of text; NAME the actual mechanism that caused the loss, not just the visible symptom",
             what_you_are_already_doing_right: "one grounding note that reduces defensiveness and names the useful signal they already provided",
             where_it_costs_you: "specific operational spot where leverage is hiding and how the cost shows up; include one second-order cost they have not priced, of the KIND that fits this business (wasted ad spend / warranty bleed / churn / lost referrals / rework hours — vary it, do not always say 'pin down how many X'), ANCHORED to their reported cost band + frequency; only if there is genuinely no usable number, name the one figure worth pinning down",
             what_an_intervention_looks_like: "INTERNAL ONLY — included in Justin's sales brief, NEVER shown to the prospect, but you MUST still write it, fully tailored to their workflow. The shape of the real intervention that addresses the binding constraint; built off pattern_playbook.spine; plain-English, specific to their workflow; describe the mechanism, never a software product",
             first_fix: "a LIGHT falsifiable PROBE (not the fix, not the build): the smallest time-boxed measurement that sizes the binding constraint, built off pattern_playbook.first_fix_archetype, ending in a concrete number / count / pass-fail the owner reads themselves. Prefer a one-shot test or look-back audit over a week of fresh logging where the archetype allows. Pre-empt a small result (it still compounds; cheapest time to fix) and frame it as the number to bring to the session. Never something they could buy off the shelf to solve it; never a description of the paid system",
             why_this_is_fixable: "explain why this is a tractable workflow issue, not a personal/team failure",
             ninety_day_picture: "INTERNAL ONLY — included in Justin's sales brief, NEVER shown to the prospect, but you MUST still write it, tailored to their workflow. What good looks like after acting for 90 days, without ROI promises",
-            what_the_session_unlocks: "the prospect-facing HOOK and the one thing the free readout withholds: the specific system / build / automation the session produces for THEIR exact workflow, and where it gets them. Concrete enough to be credible, NOT enough to DIY, visibly bigger than the first_fix probe. Re-keyed to THIS prospect's channels/job-types/words so a same-pattern peer would get a different hook. If the constraint is a single-channel latency or status gap an owner could patch with an off-the-shelf tool, name the cross-channel truth / attribution / system-of-record the patch CANNOT give, never the buyable auto-reply. Never generic 'map the full path / decide what to automate vs assign' boilerplate",
+            what_the_session_unlocks: "the prospect-facing HOOK and the one thing the free readout withholds: where the session gets THEM, in their own workflow. Describe the RESULT — what they will finally KNOW, SEE in dollars, or be able to DECIDE — NOT the build's parts (do not enumerate logs / trackers / alerts / dashboards / routing / a single view; naming the architecture lets a capable owner brief their own person and skip the call). Concrete and credible, NOT a DIY recipe, visibly bigger than the first_fix probe. Re-keyed to THIS prospect's channels/job-types/words AND varied in sentence shape so a same-pattern peer gets a different hook (do not reuse a 'No bolt-on tool can give you...' closing slot). Never generic 'map the full path / decide what to automate vs assign' boilerplate",
             what_you_cannot_see_yet: "the imagination-gap line shown to the prospect: ONE thing they could not have written themselves — either how this loss COMPOUNDS over the year into a bigger relationship / referral / reputation cost, or an ADJACENT problem the same fix also kills. Must NOT restate where_it_costs_you; reframe the size or reach so they think 'I hadn't connected those.' One or two sentences",
             internal: {
               session_questions: "array of exactly 3 strong questions Justin should ask; never for user display",
@@ -178,4 +180,67 @@ export function buildLeverageMessages(input: LeverageMapInput, score: LeverageMa
       }),
     },
   ]
+}
+
+// --- Post-generation de-tell pass --------------------------------------------
+// The first generation reliably reaches for a handful of "AI tells" that recur
+// across every readout no matter how the main prompt bans them (proven: the
+// model keeps "quietly", the "you'll finally see" opener, and the "not just X,
+// it's also Y" contrast even when those exact shapes are explicitly forbidden in
+// buildLeverageMessages). A focused second pass rewrites ONLY for cadence — it
+// removes the recurring tells and varies sentence openings while preserving every
+// fact, number, and the give-away closure. Best-effort: if it fails, the caller
+// keeps the original. Shared by the live route and the preview harness so what we
+// review is what ships.
+
+// The prose fields worth de-telling (skip pattern_label / result_title — short).
+export const DESLOP_FIELDS = [
+  "operator_readout",
+  "what_you_are_already_doing_right",
+  "where_it_costs_you",
+  "first_fix",
+  "why_this_is_fixable",
+  "what_you_cannot_see_yet",
+  "what_the_session_unlocks",
+] as const satisfies ReadonlyArray<keyof PublicLeverageResult>
+
+export function buildDeslopMessages(result: PublicLeverageResult): ChatMessage[] {
+  const fields: Record<string, string> = {}
+  for (const k of DESLOP_FIELDS) {
+    const v = result[k]
+    if (typeof v === "string") fields[k] = v
+  }
+  return [
+    {
+      role: "system",
+      content:
+        "You are a line editor stripping repetitive 'AI tells' out of ONE operator's consulting readout so it reads like a sharp human wrote it fresh, not a template. " +
+        "REWRITE the given fields and return ONLY valid JSON with the SAME keys. " +
+        "ABSOLUTE PRESERVATION: keep every fact, number, dollar figure, channel, job type, time window, and the exact meaning. Do NOT invent anything. Do NOT make it longer. Do NOT re-introduce any build/system component — no 'logs', 'tracks', 'alerts', 'dashboard', 'routes', 'single view', 'tracker'; if the input avoided naming the build, keep it that way. " +
+        "KILL THESE TELLS — hunt each one in EVERY field, they migrate between fields: (1) the filler adverbs 'quietly' and 'silently' — delete them or recast so the verb carries the weight; (2) opening any field with 'You'll finally see / know / have' — lead with the substance; (3) the contrast crutch in ANY field — 'this isn't just X, it's Y', 'doesn't just cost X, it also Y', 'not just A but B', 'more than just', 'not only A but B' — restructure to lead STRAIGHT with the real point, no setup-then-twist (check the mirror, the cost line, AND the imagination-gap, not only the obvious one); (4) the why_this_is_fixable crutch 'this is a workflow / process problem, not a personnel / people / motivation / effort problem' — explain why it's tractable WITHOUT that 'it's-X-not-Y' frame (point to the specific repeatable trigger, or the rule that just needs writing down, or the moment the context exists but isn't shared); (5) a deliverable-list opener on the session-unlock ('You'll get / Expect / The session delivers / Session results will / You'll know') — open the unlock a different, specific way every time; (6) any phrase or sentence-shape repeated across the fields. " +
+        "PRESERVE THE COLOR: keep vivid, concrete, operator-specific phrases and images EXACTLY (a metaphor like 'a dead branch in your referral tree', a noun like 'hot jobs') — strip the tells, never trade a vivid line for generic consulting register ('hard numbers to guide decisions', 'the cumulative impact will become clear'). If anything make it MORE concrete, never blander. " +
+        "Vary how sentences open. Keep it skimmable: short lead sentence, then support. The result must still name the binding constraint, withhold the build, and end the session-unlock on the RESULT (what they'll know / decide), not the parts. Return JSON, same keys, nothing else.",
+    },
+    {
+      role: "user",
+      content: JSON.stringify({ rewrite_these_fields: fields }),
+    },
+  ]
+}
+
+// Merge a de-telled rewrite back over the public result. Only overwrites a field
+// when the rewrite returned a non-empty string, so a partial/garbled response can
+// never blank a field — worst case we keep the original for that field.
+export function applyDeslop(
+  original: PublicLeverageResult,
+  rewritten: unknown,
+): PublicLeverageResult {
+  if (!rewritten || typeof rewritten !== "object") return original
+  const r = rewritten as Record<string, unknown>
+  const merged: PublicLeverageResult = { ...original }
+  for (const k of DESLOP_FIELDS) {
+    const v = r[k]
+    if (typeof v === "string" && v.trim().length > 0) merged[k] = v.trim()
+  }
+  return merged
 }

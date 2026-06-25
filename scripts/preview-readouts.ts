@@ -9,8 +9,8 @@
 // files live in /tmp/lmqa. Run: node --experimental-strip-types scripts/preview-readouts.ts
 
 import { readFileSync, writeFileSync } from "node:fs"
-import { scoreLeverageMap, type LeverageMapInput } from "../src/lib/leverage-map.ts"
-import { buildLeverageMessages } from "../src/lib/leverage-map-prompt.ts"
+import { scoreLeverageMap, toPublicResult, type LeverageMapInput } from "../src/lib/leverage-map.ts"
+import { applyDeslop, buildDeslopMessages, buildLeverageMessages } from "../src/lib/leverage-map-prompt.ts"
 
 function envFromDotenv(name: string): string {
   for (const line of readFileSync(".env.local", "utf8").split("\n")) {
@@ -40,17 +40,31 @@ function readJson(path: string): any {
   try { return JSON.parse(readFileSync(path, "utf8")) } catch { return null }
 }
 
-async function generate(input: LeverageMapInput) {
-  const score = scoreLeverageMap(input)
-  const messages = buildLeverageMessages(input, score)
+async function callOpenAi(messages: unknown, temperature: number) {
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ model, temperature: 0.5, response_format: { type: "json_object" }, messages }),
+    body: JSON.stringify({ model, temperature, response_format: { type: "json_object" }, messages }),
   })
   if (!res.ok) throw new Error(`openai ${res.status}: ${await res.text()}`)
   const data = await res.json()
-  return { score, parsed: JSON.parse(data.choices[0].message.content) }
+  return JSON.parse(data.choices[0].message.content)
+}
+
+async function generate(input: LeverageMapInput) {
+  const score = scoreLeverageMap(input)
+  const parsed = await callOpenAi(buildLeverageMessages(input, score), 0.5)
+  // Mirror the live route: run the post-generation de-tell pass over the public
+  // slice, so the harness shows the ACTUAL shipped readout (post de-slop).
+  const publicResult = toPublicResult(parsed)
+  let deslopped = publicResult
+  try {
+    const rewrite = await callOpenAi(buildDeslopMessages(publicResult), 0.7)
+    deslopped = applyDeslop(publicResult, rewrite)
+  } catch (e) {
+    console.error("de-tell failed, showing pre-deslop:", (e as Error).message)
+  }
+  return { score, parsed, deslopped }
 }
 
 const out: string[] = []
@@ -63,19 +77,21 @@ for (const c of CASES) {
   let gen
   try { gen = await generate(input) } catch (e) { log(`\n### ${c.label}\nERROR: ${(e as Error).message}`); continue }
   const r = gen.parsed
+  const d = gen.deslopped // what actually ships (post de-tell pass)
   log("\n" + "=".repeat(96))
   log(`### ${c.label}  —  Signal ${gen.score.composite}/9 · ${gen.score.resultBand}`)
   log("=".repeat(96))
 
-  log("\n--- WHAT THE PROSPECT SEES NOW (free readout) ---")
-  log(`PATTERN: ${r.pattern_label}`)
-  log(`\nOPERATOR READOUT (mirror):\n${r.operator_readout}`)
-  log(`\nWHERE IT COSTS YOU:\n${r.where_it_costs_you}`)
-  log(`\nTHE FIRST FIX  [NEW]:\n${r.first_fix}`)
-  if (priorResult?.first_fix) log(`  (OLD first fix was:\n   ${priorResult.first_fix})`)
-  log(`\nWHY THIS IS FIXABLE:\n${r.why_this_is_fixable}`)
-  log(`\nWHAT YOU CAN'T SEE YET  [NEW — imagination-gap beat]:\n${r.what_you_cannot_see_yet}`)
-  log(`\nWHAT THE SESSION UNLOCKS  [the booking hook]:\n${r.what_the_session_unlocks}`)
+  log("\n--- WHAT THE PROSPECT SEES NOW (free readout, POST de-tell) ---")
+  log(`PATTERN: ${d.pattern_label}`)
+  log(`\nOPERATOR READOUT (mirror):\n${d.operator_readout}`)
+  if (r.operator_readout !== d.operator_readout) log(`  (pre-deslop:\n   ${r.operator_readout})`)
+  log(`\nWHERE IT COSTS YOU:\n${d.where_it_costs_you}`)
+  log(`\nTHE FIRST FIX:\n${d.first_fix}`)
+  log(`\nWHY THIS IS FIXABLE:\n${d.why_this_is_fixable}`)
+  log(`\nWHAT YOU CAN'T SEE YET:\n${d.what_you_cannot_see_yet}`)
+  if (r.what_you_cannot_see_yet !== d.what_you_cannot_see_yet) log(`  (pre-deslop:\n   ${r.what_you_cannot_see_yet})`)
+  log(`\nWHAT THE SESSION UNLOCKS  [the booking hook]:\n${d.what_the_session_unlocks}`)
   if (priorResult?.what_the_session_unlocks) log(`  (OLD unlock was:\n   ${priorResult.what_the_session_unlocks})`)
 
   log("\n--- NOW HELD BACK (internal only, no longer shown to the prospect) ---")
