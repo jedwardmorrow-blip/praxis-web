@@ -1,11 +1,13 @@
 "use client"
 
+import { track } from "@/lib/track"
+
 const BOOKING_URL = (process.env.NEXT_PUBLIC_PRAXIS_BOOKING_URL ?? "").trim()
 
 // Actions for the persistent/shareable map page. No PII is available here (the
 // page renders from the public payload), so the booking link carries only the
 // pattern + first fix, never a name or email.
-export function MapActions({ patternLabel, firstFix }: { patternLabel: string; firstFix: string }) {
+export function MapActions({ patternLabel, firstFix, token }: { patternLabel: string; firstFix: string; token?: string }) {
   const notes = `Praxis Leverage Map — ${patternLabel}. First fix: ${firstFix}`
   const href = BOOKING_URL
     ? `${BOOKING_URL}${BOOKING_URL.includes("?") ? "&" : "?"}${new URLSearchParams({ notes }).toString()}`
@@ -17,6 +19,7 @@ export function MapActions({ patternLabel, firstFix }: { patternLabel: string; f
         className="hero-cta"
         href={href}
         {...(BOOKING_URL ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        onClick={() => track("booking_click", token, { surface: "map_page" })}
       >
         Book a 30-minute intro call <span className="arr">→</span>
       </a>
