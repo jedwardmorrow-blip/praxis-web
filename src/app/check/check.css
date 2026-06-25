@@ -1812,10 +1812,10 @@
 
 .lm-unseen {
   margin-top: 26px;
-  padding: 18px 0 18px 20px;
-  border-left: 2px solid var(--gold);
+  padding: 2px 0 2px 20px;
+  border-left: 1px solid var(--rule-soft);
   color: var(--paper);
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.6;
   max-width: 760px;
 }
@@ -1992,12 +1992,18 @@
   .check-map-page .lm-move-body p,
   .check-map-page .lm-fixable,
   .check-map-page .lm-unseen,
+  .check-map-page .lm-unlock p,
   .check-map-page .lm-signal {
     color: var(--light-ink) !important;
   }
 
   .check-map-page .lm,
   .check-map-page .lm-read {
+    border-color: #9a7d2e !important;
+  }
+
+  .check-map-page .lm-unlock {
+    background: rgba(154, 125, 46, 0.07) !important;
     border-color: #9a7d2e !important;
   }
 }
