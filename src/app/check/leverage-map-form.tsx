@@ -17,6 +17,7 @@ import {
   type PublicLeverageResult,
 } from "@/lib/leverage-map"
 import { LeverageMapReadout } from "./leverage-map-readout"
+import { track } from "@/lib/track"
 
 const STEPS = [
   { eyebrow: "01", title: "Name the mess", short: "The mess" },
@@ -104,9 +105,18 @@ export function LeverageMapForm() {
   const botRef = useRef<HTMLInputElement>(null)
   const stepBodyRef = useRef<HTMLDivElement>(null)
   const shouldFocusStep = useRef(false)
+  const startedRef = useRef(false)
 
   const activeStep = STEPS[stepIndex]
   const completion = useMemo(() => Math.round(((stepIndex + 1) / STEPS.length) * 100), [stepIndex])
+
+  // Top of funnel: reached the wizard. Fired once per mount (the pilot reads
+  // started -> completed -> booking_click from praxis_funnel_events).
+  useEffect(() => {
+    if (startedRef.current) return
+    startedRef.current = true
+    track("quiz_start")
+  }, [])
 
   // Restore in-progress answers (mobile users tab away constantly).
   useEffect(() => {
@@ -191,6 +201,7 @@ export function LeverageMapForm() {
         // ignore
       }
       setResult(payload)
+      track("quiz_complete", payload?.mapToken)
       window.setTimeout(() => {
         document.getElementById("leverage-result")?.scrollIntoView({ behavior: "smooth", block: "start" })
       }, 80)
@@ -532,7 +543,12 @@ export function LeverageMapForm() {
           </div>
 
           <div className="lm-actions">
-            <a className="hero-cta" href={primaryCtaHref(form, result.result)} {...primaryCtaTarget()}>
+            <a
+              className="hero-cta"
+              href={primaryCtaHref(form, result.result)}
+              {...primaryCtaTarget()}
+              onClick={() => track("booking_click", result.mapToken)}
+            >
               Book a 30-minute intro call <span className="arr">→</span>
             </a>
             {result.mapToken ? (

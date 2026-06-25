@@ -80,7 +80,7 @@ export default async function LeverageMapPage({
             </p>
           </div>
 
-          <MapActions patternLabel={map.result.pattern_label} firstFix={map.result.first_fix} />
+          <MapActions patternLabel={map.result.pattern_label} firstFix={map.result.first_fix} token={token} />
         </section>
       </main>
       <FooterV4 />

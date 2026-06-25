@@ -17,16 +17,17 @@ export function LeverageMapReadout({
   score: LeverageMapScore
   result: PublicLeverageResult
 }) {
+  // The free readout intentionally STOPS at one falsifiable proof step. The full
+  // intervention design and the 90-day plan are held back for the call (see
+  // toPublicResult) — the session is the value, not the readout.
   const moves: Array<{ no: string; label: string; body: string; sub?: string; key?: boolean }> = [
     { no: "01", label: "Where it costs you", body: result.where_it_costs_you },
     {
       no: "02",
-      label: "The first fix",
+      label: "Prove it in a week",
       body: result.first_fix,
-      sub: result.what_an_intervention_looks_like,
       key: true,
     },
-    { no: "03", label: "What 90 days looks like", body: result.ninety_day_picture },
   ]
 
   return (

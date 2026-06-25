@@ -6,7 +6,6 @@ import {
   COST_BANDS,
   FREQUENCIES,
   FRICTIONS,
-  LEVERAGE_PATTERNS,
   PAIN_STATEMENTS,
   PEOPLE_TOUCHES,
   SESSION_OPENNESS,
@@ -14,6 +13,7 @@ import {
   TRUTH_LOCATIONS,
   fallbackAiResult,
   firstNameOf,
+  guardReadoutBannedPhrases,
   isThinSubmission,
   scoreLeverageMap,
   tierForComposite,
@@ -21,78 +21,18 @@ import {
   type LeverageMapAiResult,
   type LeverageMapInput,
   type LeverageMapScore,
-  type LeveragePattern,
   type StoredLeverageMap,
 } from "@/lib/leverage-map"
+import { buildLeverageMessages } from "@/lib/leverage-map-prompt"
 
 export const dynamic = "force-dynamic"
 
 const NOTIFY_EMAILS = ["Justin@gopraxis.ai"]
 const SITE_URL = "https://gopraxis.ai"
 
-// Per-pattern scaffold. Each pattern gets a distinct structural spine, first-fix
-// archetype, and "what the session owns" so the readout varies its SHAPE to the
-// mess instead of filling one fixed template with different nouns. The first-fix
-// archetype removes one instance of the failing behavior (never relocates it);
-// session_owns is the open loop the DIY step deliberately leaves for the session.
-const PATTERN_PLAYBOOK: Record<LeveragePattern, { spine: string; first_fix_archetype: string; session_owns: string }> = {
-  owner_bottleneck: {
-    spine: "decisions routing back to one person",
-    first_fix_archetype:
-      "hand ONE narrow, bounded decision type to a named person with a written guardrail and a weekly look-back — not real-time approval; remove that one approval from the owner's phone this week",
-    session_owns:
-      "where the delegation thresholds actually sit, which decisions can be automated vs. which still need a human, and how to widen the band without losing control",
-  },
-  lead_leakage: {
-    spine: "demand arriving faster than the response can catch it",
-    first_fix_archetype:
-      "give ONE lead source a single owner and a same-day first-response commitment, with a visible record of who responded and when; close the silent drop for that one source this week",
-    session_owns:
-      "the full intake-to-quote path, what to automate in first response vs. who owns follow-up, and closing the after-hours gap",
-  },
-  handoff_fog: {
-    spine: "work crossing people without one shared source of truth",
-    first_fix_archetype:
-      "for ONE recurring handoff, have the receiving person update a single shared status the moment they take it, so status exists without anyone being asked",
-    session_owns:
-      "the standard handoff record, what auto-updates vs. who is accountable, and killing the status-chasing calls",
-  },
-  tribal_knowledge_risk: {
-    spine: "operating knowledge living in one person's head",
-    first_fix_archetype:
-      "capture the one person's recurring gotchas for a single job type into a reusable reference the next person sees automatically; start with the job type that stalls most when they're out",
-    session_owns:
-      "how to capture judgment at the moment of work rather than in a big offsite, what to make reusable vs. who to cross-train, and removing the single-vacation risk",
-  },
-  reporting_lag: {
-    spine: "learning what happened after the decision window had closed",
-    first_fix_archetype:
-      "define ONE trusted number and publish it on a fixed cadence from a single source, so one recurring decision stops running on stale or distrusted data",
-    session_owns:
-      "which numbers actually drive decisions, what to automate in the reporting path, and shrinking the lag to inside the decision window",
-  },
-  customer_status_gap: {
-    spine: "customers needing status before the team has an easy way to answer",
-    first_fix_archetype:
-      "for ONE common request type, give the team a standard status they can give before the customer asks — a single place that answers 'where is my X'",
-    session_owns:
-      "proactive status across request types, what to automate vs. who owns the update, and cutting the inbound 'any update?' volume",
-  },
-  tool_fragmentation: {
-    spine: "the truth scattered across disconnected places",
-    first_fix_archetype:
-      "pick the SINGLE authoritative place for one record type and stop the duplicate entry into it this week — one source, entered once",
-    session_owns:
-      "which system is the system of record, what to connect vs. consolidate, and ending the manual copying for good",
-  },
-  repeat_admin_drag: {
-    spine: "the same work redone because the context isn't reusable",
-    first_fix_archetype:
-      "capture the data ONCE at the point it first appears and feed it forward, eliminating one downstream re-entry — not relocating it to a new step",
-    session_owns:
-      "which re-entries to automate vs. eliminate, where the capture-once point should be, and reclaiming the compounding admin time",
-  },
-}
+// The model prompt and the per-pattern playbook now live in
+// src/lib/leverage-map-prompt.ts, shared verbatim by this route and the preview
+// harness so what we review is exactly what ships.
 
 type EmailStatus = "sent" | "failed" | "skipped"
 // A send returns its status plus the Resend message id, so delivery webhooks
@@ -131,7 +71,16 @@ export async function POST(req: Request) {
     })
   }
 
-  const aiResult = await generateAiResult(input, score)
+  const generated = await generateAiResult(input, score)
+
+  // Deterministic last line on the model's banned-phrase rule (no human reviews
+  // the readout before it reaches the prospect). Scrub any survivor across the
+  // public fields so a banned phrase can never reach the browser, stored map, or
+  // email; log what was scrubbed so the digest/logs surface model drift.
+  const { result: aiResult, hits: bannedHits } = guardReadoutBannedPhrases(generated)
+  if (bannedHits.length) {
+    console.warn(`[leverage-map] banned-phrase guard scrubbed: ${bannedHits.join(", ")} (company=${input.company})`)
+  }
 
   // Internal triage flag: a thin/likely-junk lead looks identical to a real
   // early one at the score level, so flag it where Justin will see it.
@@ -206,76 +155,7 @@ async function generateAiResult(input: LeverageMapInput, score: LeverageMapScore
       model,
       temperature: 0.5,
       response_format: { type: "json_object" },
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are the Praxis Leverage Map interpreter. Praxis sells practical operational AI work to owner-led businesses. Return only valid JSON. Do not say 'diagnostic', 'maturity', 'competency', or 'quiz'. Do not promise ROI. Write like a sharp operator mapping one real workflow, specific to the submitted operating mess. The user-facing result is a useful mini-consulting artifact, not a score report. " +
-            "SEVEN hard rules decide whether this is good: " +
-            "(1) BINDING CONSTRAINT — name the specific mechanism that actually caused the loss, not just the visible symptom. If a job died over a weekend, the constraint is response latency / after-hours coverage, not merely 'no central log'. Address that mechanism. " +
-            "(2) DO NOT HAND OVER THE WHOLE SOLUTION — first_fix is the single smallest useful PROOF step, never the complete fix, and never depends on the exact behavior that is already failing. " +
-            "(3) BRIDGE TO THE SESSION — what_the_session_unlocks names, specific to their workflow, the deeper leverage a 30-minute call plus a focused build opens that the DIY step will not. Concrete, honest, never a hard sell. " +
-            "(4) NO STOCK TEMPLATE — vary the SHAPE of the readout to THIS mess; do not reuse a fixed skeleton across submissions. Banned phrases: 'this week, pick one', 'shared Google Doc', 'shared Google Form', 'routes around the failing', 'binding constraint is not just'. " +
-            "(5) NO PRODUCT NAMES — never name a specific software product (Google Forms, Typeform, Notion, Airtable, a named CRM brand). Describe the mechanism, not the tool; the leverage is in the workflow, not a SaaS pick. " +
-            "(6) USE THEIR NUMBERS — anchor the second-order cost in where_it_costs_you to the cost band and frequency they reported, expressed in those terms. If cost is unknown, pose it as the number to pin down — never invent a precise figure. This is cost-of-the-status-quo, NOT an ROI promise. " +
-            "(7) OPEN A LOOP — first_fix removes ONE instance of the failing behavior this week and is falsifiable (the owner can tell within a week if it worked); it must NOT relocate the same work to a new step. Leave the higher-judgment decision (the threshold, what to automate vs. assign) unresolved — that is the session's job, named in what_the_session_unlocks. " +
-            "Build first_fix off pattern_playbook.first_fix_archetype and what_the_session_unlocks off pattern_playbook.session_owns so the structure fits this pattern, not a generic template. Also surface one second-order cost they probably have not priced (wasted marketing spend, warranty/contract bleed, owner time).",
-        },
-        {
-          role: "user",
-          content: JSON.stringify({
-            instructions: {
-              output_shape: {
-                pattern_label: "short label, may combine primary + secondary",
-                result_title: "one of the provided result bands",
-                operator_readout: "specific multi-sentence read of their mess; quote or mirror their submitted language where useful; NAME the binding constraint (the actual mechanism that caused the loss), not just the visible symptom",
-                what_you_are_already_doing_right: "one grounding note that reduces defensiveness and names the useful signal they already provided",
-                where_it_costs_you: "specific operational spot where leverage is hiding and how the cost shows up; include one second-order cost they have not priced, ANCHORED to their reported cost band + frequency (express the bleed in those terms); if cost is unknown, name the exact number to pin down rather than inventing one",
-                what_an_intervention_looks_like: "the shape of the real intervention that addresses the binding constraint; built off pattern_playbook.spine; plain-English, specific to their workflow; describe the mechanism, never name a software product; this is the direction, not the whole build",
-                first_fix: "the single smallest falsifiable PROOF step, built off pattern_playbook.first_fix_archetype; removes one instance of the failing behavior this week and does NOT relocate it to a new step; the owner can tell within a week whether it worked",
-                why_this_is_fixable: "explain why this is a tractable workflow issue, not a personal/team failure",
-                ninety_day_picture: "what good looks like after acting for 90 days, without ROI promises; consistent with the intervention (do not promise outcomes the prescribed change does not produce)",
-                what_the_session_unlocks: "built off pattern_playbook.session_owns: the deeper leverage a 30-minute intro call plus a focused build opens that the DIY first step will not; concrete and honest, never a hard sell",
-                internal: {
-                  session_questions: "array of exactly 3 strong questions Justin should ask; never for user display",
-                  follow_up_opener: "one natural follow-up opener using their mess",
-                  crm_summary: "one internal CRM summary sentence",
-                  confidence: "low | medium | high",
-                  lead_score: "integer 1-9 based on fit and urgency",
-                  likely_buyer_mindset: "what this buyer is probably thinking",
-                  recommended_offer: "AI Leverage Session | Discovery Sprint | Clarifying workflow call | Nurture",
-                  sales_angle: "specific sales angle Justin should take",
-                  urgency_reason: "why now, or why not yet",
-                  follow_up_subject: "short email subject",
-                  follow_up_sms: "short text-safe follow-up",
-                  disqualification_flags: "array of short flags, empty if none",
-                },
-              },
-              guardrails: [
-                "Mine momentStory and perfectEmployee hardest; those are the real signal.",
-                "Use the submitted answer language when useful so the readout feels personally observed.",
-                "Vary the readout's shape to this mess; never reuse a fixed skeleton or any banned phrase.",
-                "No product names; describe the mechanism, not the tool.",
-                "Anchor the second-order cost to their reported cost band + frequency; if unknown, name the number to pin down — never invent a figure.",
-                "Build first_fix off pattern_playbook.first_fix_archetype: it removes one instance of the failing behavior and is falsifiable within a week; it does not relocate the work.",
-                "Build what_the_session_unlocks off pattern_playbook.session_owns: leave that higher-judgment decision for the session.",
-                "Frame the business as capable; do not shame the owner or team for having lived with the friction.",
-                "If the answer is thin, keep confidence low and make the next step clarifying.",
-              ],
-            },
-            score,
-            pattern: LEVERAGE_PATTERNS[score.primaryPattern],
-            secondaryPattern: score.secondaryPattern ? LEVERAGE_PATTERNS[score.secondaryPattern] : null,
-            pattern_playbook: PATTERN_PLAYBOOK[score.primaryPattern],
-            economics: {
-              cost_band: input.costBand ? COST_BANDS[input.costBand] : "unknown",
-              frequency: input.frequency ? FREQUENCIES[input.frequency] : "unknown",
-              team_size: input.teamSize ? TEAM_SIZES[input.teamSize] : "unknown",
-            },
-            labels: labelInput(input),
-          }),
-        },
-      ],
+      messages: buildLeverageMessages(input, score),
     }),
   })
 
@@ -552,22 +432,6 @@ function buildWorldModelNotes(input: LeverageMapInput, score: LeverageMapScore, 
     `SMS: ${aiResult.internal.follow_up_sms}`,
     `Disqualification flags: ${aiResult.internal.disqualification_flags.join(", ") || "None"}`,
   ].join("\n")
-}
-
-function labelInput(input: LeverageMapInput) {
-  return {
-    ...input,
-    teamSize: input.teamSize ? TEAM_SIZES[input.teamSize] : "",
-    brokenMoment: input.brokenMoment ? BROKEN_MOMENTS[input.brokenMoment].label : "",
-    peopleTouches: input.peopleTouches.map((key) => PEOPLE_TOUCHES[key as keyof typeof PEOPLE_TOUCHES]),
-    truthLocations: input.truthLocations.map((key) => TRUTH_LOCATIONS[key as keyof typeof TRUTH_LOCATIONS]),
-    frictions: input.frictions.map((key) => FRICTIONS[key as keyof typeof FRICTIONS]),
-    consequences: input.consequences.map((key) => CONSEQUENCES[key as keyof typeof CONSEQUENCES]),
-    painStatement: input.painStatement ? PAIN_STATEMENTS[input.painStatement] : "",
-    frequency: input.frequency ? FREQUENCIES[input.frequency] : "",
-    costBand: input.costBand ? COST_BANDS[input.costBand] : "",
-    openToSession: input.openToSession ? SESSION_OPENNESS[input.openToSession] : "",
-  }
 }
 
 function normalizeAiResult(parsed: Record<string, unknown>, fallback: LeverageMapAiResult): LeverageMapAiResult {

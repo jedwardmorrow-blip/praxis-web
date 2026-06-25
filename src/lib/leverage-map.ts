@@ -372,24 +372,33 @@ function clampScore(n: number) {
   return Math.max(1, Math.min(3, n))
 }
 
-// The prospect-facing slice of the readout. The `internal` block (session
-// questions, sales angle, lead score) must NEVER reach the browser or the
-// shareable map page, so the public payload is built by stripping it.
-export type PublicLeverageResult = Omit<LeverageMapAiResult, "internal">
+// The prospect-facing slice of the readout. Two things are stripped:
+//   1. the `internal` block (session questions, sales angle, lead score) — never
+//      reaches the browser or the shareable map page;
+//   2. `what_an_intervention_looks_like` and `ninety_day_picture` — the full
+//      intervention design and the 90-day plan. These are HELD BACK behind the
+//      call: the free readout gives the mirror, the cost, and one falsifiable
+//      first fix; the session is where the full design and the path get built.
+//      (They are still generated for the internal brief Justin reads — see
+//      buildWorldModelNotes — just never shown to the prospect.) This is the fix
+//      for the give-away/withhold inversion: a slick free readout that handed
+//      over the whole consult gave a motivated owner no reason to book.
+export type PublicLeverageResult = Omit<
+  LeverageMapAiResult,
+  "internal" | "what_an_intervention_looks_like" | "ninety_day_picture"
+>
 
 export function toPublicResult(result: LeverageMapAiResult): PublicLeverageResult {
-  // Enumerate the public fields explicitly so the internal block can never leak,
-  // even if new internal keys are added later.
+  // Enumerate the public fields explicitly so neither the internal block nor the
+  // held-back intervention/90-day can leak, even if new keys are added later.
   return {
     pattern_label: result.pattern_label,
     result_title: result.result_title,
     operator_readout: result.operator_readout,
     what_you_are_already_doing_right: result.what_you_are_already_doing_right,
     where_it_costs_you: result.where_it_costs_you,
-    what_an_intervention_looks_like: result.what_an_intervention_looks_like,
     first_fix: result.first_fix,
     why_this_is_fixable: result.why_this_is_fixable,
-    ninety_day_picture: result.ninety_day_picture,
     what_the_session_unlocks: result.what_the_session_unlocks,
   }
 }
@@ -452,4 +461,104 @@ export type StoredLeverageMap = {
   score: LeverageMapScore
   result: PublicLeverageResult
   createdAt: string
+}
+
+// --- Banned-phrase guard -----------------------------------------------------
+// The system prompt forbids a set of stock-template tics (route rule 4), but the
+// model violates them anyway and there is NO human in the loop before the readout
+// reaches the prospect — a verbatim "this week, pick one" opener shipped live and
+// was only caught by an after-the-fact rating. This is the deterministic last
+// line: detect each banned phrase on the generated public text and rewrite any
+// survivor to a clean, meaning-preserving equivalent, so a banned phrase can
+// never reach the browser, the stored map, or the prospect email. Pure (no model
+// call, no network), so it is unit-testable and runs in CI.
+
+type BannedRule = { label: string; detect: RegExp; scrub: (text: string) => string }
+
+const BANNED_RULES: BannedRule[] = [
+  {
+    label: "this week, pick one",
+    detect: /\bthis week,\s*pick\s+one\b/i,
+    scrub: (text) =>
+      text
+        // Sentence-initial: keep a capital so the rewrite still reads as a sentence.
+        .replace(/(^|[.!?]\s+|\n\s*)this week,\s*pick\s+one\b/gi, (_m, pre: string) => `${pre}Pick one`)
+        // Mid-sentence.
+        .replace(/\bthis week,\s*pick\s+one\b/gi, "pick one"),
+  },
+  {
+    // Banned literal: "binding constraint is not just". Also catches the live
+    // variants ("binding constraint here isn't just"). Rewrites "just" -> "only"
+    // while preserving the negation and meaning ("isn't only X, it's Y").
+    label: "binding constraint is not just",
+    detect: /\bbinding constraint\b(?:\s+\w+)?\s+(?:is|are)(?:\s+not|\s*n['’]?t)?\s+just\b/i,
+    scrub: (text) =>
+      text.replace(
+        /\bbinding constraint\b((?:\s+\w+)?)\s+(is|are)(\s+not|\s*n['’]?t)?\s+just\b/gi,
+        (_m, mid: string, verb: string, neg: string | undefined) =>
+          `binding constraint${mid} ${verb}${neg ?? ""} only`,
+      ),
+  },
+  {
+    label: "routes around the failing",
+    detect: /\broutes?\s+around\s+the\s+failing\b/i,
+    scrub: (text) => text.replace(/\broutes?(\s+around\s+the\s+failing\b)/gi, "works$1"),
+  },
+  {
+    label: "shared Google Doc",
+    detect: /\bshared\s+google\s+docs?\b/i,
+    scrub: (text) => text.replace(/\bshared\s+google\s+docs?\b/gi, "shared document"),
+  },
+  {
+    label: "shared Google Form",
+    detect: /\bshared\s+google\s+forms?\b/i,
+    scrub: (text) => text.replace(/\bshared\s+google\s+forms?\b/gi, "shared intake form"),
+  },
+]
+
+// Labels of every banned rule whose phrase appears in the text (empty = clean).
+export function findBannedPhrases(text: string): string[] {
+  if (!text) return []
+  return BANNED_RULES.filter((rule) => rule.detect.test(text)).map((rule) => rule.label)
+}
+
+// Rewrite away every banned phrase. Idempotent: a scrubbed string is clean.
+export function scrubBannedPhrases(text: string): string {
+  if (!text) return text
+  let out = text
+  for (const rule of BANNED_RULES) {
+    if (rule.detect.test(out)) out = rule.scrub(out)
+  }
+  return out
+}
+
+// The public readout fields that actually reach the prospect (browser, stored
+// map, email). The internal sales block is never scrubbed here; it never ships.
+const PUBLIC_READOUT_FIELDS: Array<keyof PublicLeverageResult> = [
+  "pattern_label",
+  "result_title",
+  "operator_readout",
+  "what_you_are_already_doing_right",
+  "where_it_costs_you",
+  "first_fix",
+  "why_this_is_fixable",
+  "what_the_session_unlocks",
+]
+
+// Scrub every public field of a full AI result; returns the guarded result plus
+// the set of banned-phrase labels found (for logging / observability). The
+// internal block is passed through untouched.
+export function guardReadoutBannedPhrases(result: LeverageMapAiResult): {
+  result: LeverageMapAiResult
+  hits: string[]
+} {
+  const hits = new Set<string>()
+  const guarded: LeverageMapAiResult = { ...result }
+  for (const field of PUBLIC_READOUT_FIELDS) {
+    const value = result[field]
+    if (typeof value !== "string") continue
+    for (const label of findBannedPhrases(value)) hits.add(label)
+    guarded[field] = scrubBannedPhrases(value)
+  }
+  return { result: guarded, hits: [...hits] }
 }
