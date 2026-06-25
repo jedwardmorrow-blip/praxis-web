@@ -129,8 +129,12 @@ async function runCase(c) {
   assert(json.result && !("internal" in json.result), `internal sales block leaked into result`, fails)
   assert(json.result && typeof json.result.what_the_session_unlocks === "string" && json.result.what_the_session_unlocks.trim().length > 0,
     `what_the_session_unlocks missing/empty`, fails)
-  // every public field present and non-empty
-  for (const k of ["operator_readout", "where_it_costs_you", "what_an_intervention_looks_like", "first_fix", "why_this_is_fixable", "ninety_day_picture"]) {
+  // The full intervention design and 90-day plan are HELD BACK behind the call —
+  // they must NOT reach the public payload (the give-away/withhold fix).
+  assert(json.result && !("what_an_intervention_looks_like" in json.result), `intervention design leaked into public result`, fails)
+  assert(json.result && !("ninety_day_picture" in json.result), `90-day plan leaked into public result`, fails)
+  // every remaining public field present and non-empty
+  for (const k of ["operator_readout", "where_it_costs_you", "first_fix", "why_this_is_fixable"]) {
     assert(json.result && typeof json.result[k] === "string" && json.result[k].trim().length > 0, `field ${k} missing/empty`, fails)
   }
   if (c.expectBand) assert(json.score && json.score.resultBand === c.expectBand, `band ${json.score && json.score.resultBand} != ${c.expectBand}`, fails)
