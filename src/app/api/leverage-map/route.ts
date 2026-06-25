@@ -12,6 +12,7 @@ import {
   TEAM_SIZES,
   TRUTH_LOCATIONS,
   fallbackAiResult,
+  findGiveawayLeaks,
   firstNameOf,
   guardReadoutBannedPhrases,
   isThinSubmission,
@@ -100,8 +101,18 @@ export async function POST(req: Request) {
   // the prospect email, and the response all serve the same de-telled readout.
   aiResult = await deslopReadout(aiResult)
 
+  // Give-away drift observability (never blocks/rewrites): the give-away closure
+  // is probabilistic, so flag any readout whose prospect-facing prose names a
+  // build component and record it on the lead for the email-health digest.
+  const giveawayFlags = findGiveawayLeaks(
+    `${aiResult.what_the_session_unlocks} ${aiResult.where_it_costs_you} ${aiResult.operator_readout}`,
+  )
+  if (giveawayFlags.length) {
+    console.warn(`[leverage-map] give-away drift: readout names build component(s) ${giveawayFlags.join(", ")} (company=${input.company})`)
+  }
+
   const token = crypto.randomUUID().replace(/-/g, "")
-  const lead = await saveLead(input, score, aiResult, token)
+  const lead = await saveLead(input, score, aiResult, token, giveawayFlags)
   const mapToken = lead ? token : null
 
   // Send the prospect email first so its outcome can be reported to Justin and
@@ -229,6 +240,7 @@ async function saveLead(
   score: LeverageMapScore,
   aiResult: LeverageMapAiResult,
   token: string,
+  giveawayFlags: string[] = [],
 ) {
   const supabaseUrl = cleanEnv(process.env.SUPABASE_URL)
   const supabaseKey = cleanEnv(process.env.SUPABASE_SERVICE_ROLE_KEY)
@@ -265,6 +277,7 @@ async function saveLead(
       next_action: score.recommendedNextAction,
       public_token: token,
       leverage_map: storedMap,
+      giveaway_flags: giveawayFlags.length ? giveawayFlags : null,
     })
     .select("id")
     .single()

@@ -566,3 +566,43 @@ export function guardReadoutBannedPhrases(result: LeverageMapAiResult): {
   }
   return { result: guarded, hits: [...hits] }
 }
+
+// Give-away drift detector (OBSERVABILITY ONLY — never rewrites). The give-away
+// closure is a model instruction, not a deterministic guarantee: ~1 in N live
+// readouts names a build component in the prospect-facing prose, which lets a
+// capable owner infer the system and skip the call. This flags those so the
+// email-health digest can surface drift over real traffic.
+//
+// The hard part is context: a build word is a LEAK when it names the deliverable
+// ("the session tracks response time") but FINE when it names what the buyable
+// patch CANNOT do ("no bolt-on tool can track which leads slip"). So we scan
+// sentence by sentence and only flag a build word in a sentence that has no
+// negation / "can't" marker — the give-away-closing construction is exempt.
+const GIVEAWAY_BUILD_WORDS = [
+  "track",
+  "logs",
+  "a log of",
+  "dashboard",
+  "single view",
+  "routes each",
+  "auto-route",
+  "auto-update",
+  "alert",
+  "flags each",
+  "flags the",
+]
+
+const GIVEAWAY_NEGATION = /\b(no|not|never|isn'?t|aren'?t|won'?t|can'?t|cannot|without|instead of|beyond|more than|rather than)\b/i
+
+export function findGiveawayLeaks(text: string): string[] {
+  if (!text) return []
+  const hits = new Set<string>()
+  for (const sentence of text.split(/(?<=[.!?])\s+/)) {
+    if (GIVEAWAY_NEGATION.test(sentence)) continue // closing construction, not a leak
+    const lower = sentence.toLowerCase()
+    for (const w of GIVEAWAY_BUILD_WORDS) {
+      if (lower.includes(w)) hits.add(w)
+    }
+  }
+  return [...hits]
+}
