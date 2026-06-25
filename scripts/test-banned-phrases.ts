@@ -62,6 +62,7 @@ const dirty: LeverageMapAiResult = {
   why_this_is_fixable: "It has a clear shape.",
   ninety_day_picture: "A trusted daily number arrives before the decision window.",
   what_the_session_unlocks: "Which numbers actually drive the decisions.",
+  what_you_cannot_see_yet: "Each stale call quietly trains the team to stop trusting the numbers at all.",
   internal: {
     session_questions: ["a", "b", "c"],
     follow_up_opener: "x",

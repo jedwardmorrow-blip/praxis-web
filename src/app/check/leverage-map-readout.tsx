@@ -70,6 +70,13 @@ export function LeverageMapReadout({
         {result.why_this_is_fixable}
       </p>
 
+      {result.what_you_cannot_see_yet ? (
+        <p className="lm-unseen">
+          <span className="lm-label">What you can&rsquo;t see yet</span>
+          {result.what_you_cannot_see_yet}
+        </p>
+      ) : null}
+
       <div className="lm-unlock">
         <span className="lm-label">What a session unlocks</span>
         <p>{result.what_the_session_unlocks}</p>

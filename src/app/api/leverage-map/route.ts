@@ -452,6 +452,7 @@ function normalizeAiResult(parsed: Record<string, unknown>, fallback: LeverageMa
     why_this_is_fixable: asString(parsed.why_this_is_fixable) || fallback.why_this_is_fixable,
     ninety_day_picture: asString(parsed.ninety_day_picture) || fallback.ninety_day_picture,
     what_the_session_unlocks: asString(parsed.what_the_session_unlocks) || fallback.what_the_session_unlocks,
+    what_you_cannot_see_yet: asString(parsed.what_you_cannot_see_yet) || fallback.what_you_cannot_see_yet,
     internal: {
       session_questions: sessionQuestions.length ? sessionQuestions : fallback.internal.session_questions,
       follow_up_opener: asString(internal.follow_up_opener) || fallback.internal.follow_up_opener,
