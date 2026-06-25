@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test:tier": "node --experimental-strip-types scripts/test-lead-tier.ts",
     "test:banned": "node --experimental-strip-types scripts/test-banned-phrases.ts",
-    "test:unit": "npm run test:tier && npm run test:banned",
+    "test:giveaway": "node --experimental-strip-types scripts/test-giveaway-leaks.ts",
+    "test:unit": "npm run test:tier && npm run test:banned && npm run test:giveaway",
     "test:integration": "node --experimental-strip-types scripts/test-saveLead-integration.ts"
   },
   "dependencies": {
