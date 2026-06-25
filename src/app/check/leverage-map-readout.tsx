@@ -24,7 +24,7 @@ export function LeverageMapReadout({
     { no: "01", label: "Where it costs you", body: result.where_it_costs_you },
     {
       no: "02",
-      label: "The first fix",
+      label: "Prove it in a week",
       body: result.first_fix,
       key: true,
     },
