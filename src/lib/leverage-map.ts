@@ -196,6 +196,7 @@ export type LeverageMapAiResult = {
   why_this_is_fixable: string
   ninety_day_picture: string
   what_the_session_unlocks: string
+  what_you_cannot_see_yet: string
   internal: {
     session_questions: string[]
     follow_up_opener: string
@@ -347,6 +348,7 @@ export function fallbackAiResult(input: LeverageMapInput, score: LeverageMapScor
     why_this_is_fixable: "This is fixable because the issue has a shape: a trigger, a handoff, a source of truth, and a recurring next step. Those are the pieces a lightweight AI-assisted workflow can make visible before it becomes a bigger problem.",
     ninety_day_picture: "In 90 days, the goal is not a flashy AI rollout. The goal is one proven workflow where the team can see status faster, reuse the right context, and spend less time asking who has the answer.",
     what_the_session_unlocks: "The first fix proves the leverage; the session is where the harder part gets built — sequencing the change so it survives a busy week, deciding what to automate versus who to make accountable, and removing the dependency on one person remembering. That is the work that is hard to see from inside the day-to-day, and it is where most of the real leverage actually lives.",
+    what_you_cannot_see_yet: "The part that is hard to see from inside the day-to-day is how this compounds: each instance is small, but they stack into slower weeks, rework, and customers who quietly stop expecting better. The same fix usually closes an adjacent leak you have stopped noticing.",
     internal: {
       session_questions: [
         "Where does this workflow start, and who owns the next action when it arrives?",
@@ -400,6 +402,7 @@ export function toPublicResult(result: LeverageMapAiResult): PublicLeverageResul
     first_fix: result.first_fix,
     why_this_is_fixable: result.why_this_is_fixable,
     what_the_session_unlocks: result.what_the_session_unlocks,
+    what_you_cannot_see_yet: result.what_you_cannot_see_yet,
   }
 }
 
@@ -543,6 +546,7 @@ const PUBLIC_READOUT_FIELDS: Array<keyof PublicLeverageResult> = [
   "first_fix",
   "why_this_is_fixable",
   "what_the_session_unlocks",
+  "what_you_cannot_see_yet",
 ]
 
 // Scrub every public field of a full AI result; returns the guarded result plus

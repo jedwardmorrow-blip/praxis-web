@@ -101,6 +101,7 @@ export function LeverageMapForm() {
   const [loadingPhase, setLoadingPhase] = useState(0)
   const [hydrated, setHydrated] = useState(false)
   const [restored, setRestored] = useState(false)
+  const [showDetail, setShowDetail] = useState(false)
 
   const botRef = useRef<HTMLInputElement>(null)
   const stepBodyRef = useRef<HTMLDivElement>(null)
@@ -109,6 +110,15 @@ export function LeverageMapForm() {
 
   const activeStep = STEPS[stepIndex]
   const completion = useMemo(() => Math.round(((stepIndex + 1) / STEPS.length) * 100), [stepIndex])
+  // Act 2 leads with the high-signal free-text + economics; the chip taxonomy is
+  // collapsed behind a disclosure so the middle step stops greeting people with a
+  // ~50-chip wall. This counts what is hidden so a user knows detail is in there.
+  const detailSelectionCount =
+    form.peopleTouches.length +
+    form.truthLocations.length +
+    form.frictions.length +
+    form.consequences.length +
+    (form.painStatement ? 1 : 0)
 
   // Top of funnel: reached the wizard. Fired once per mount (the pilot reads
   // started -> completed -> booking_click from praxis_funnel_events).
@@ -132,6 +142,14 @@ export function LeverageMapForm() {
           if (parsed.form.brokenMoment || (parsed.form.momentStory ?? "").trim().length > 0) {
             setRestored(true)
           }
+          const f = parsed.form
+          const hadDetail =
+            (f.peopleTouches?.length ?? 0) +
+              (f.truthLocations?.length ?? 0) +
+              (f.frictions?.length ?? 0) +
+              (f.consequences?.length ?? 0) >
+              0 || Boolean(f.painStatement)
+          if (hadDetail) setShowDetail(true)
         }
       }
     } catch {
@@ -346,62 +364,9 @@ export function LeverageMapForm() {
                   <strong>{activeStep.title}</strong>
                 </div>
                 <p className="check-trace-copy">
-                  Tag the mess so the read gets sharper. Every chip helps, but skip anything that
-                  does not fit, none of this is required.
+                  One question does most of the work here. Answer it, set the rough size, and you
+                  are done — or open the detail tags for an even sharper read. None of it is required.
                 </p>
-
-                <div className="check-trace-cluster">
-                  <span className="check-cluster-label">Who and where</span>
-                  <MultiGrid
-                    title="Who usually touches this?"
-                    values={form.peopleTouches}
-                    options={PEOPLE_TOUCHES}
-                    onChange={(values) => update("peopleTouches", values)}
-                  />
-                  <MultiGrid
-                    title="Where does the truth live?"
-                    values={form.truthLocations}
-                    options={TRUTH_LOCATIONS}
-                    onChange={(values) => update("truthLocations", values)}
-                  />
-                  <MultiGrid
-                    title="What made it harder than it should have been?"
-                    values={form.frictions}
-                    options={FRICTIONS}
-                    onChange={(values) => update("frictions", values)}
-                  />
-                </div>
-
-                <div className="check-trace-cluster">
-                  <span className="check-cluster-label">What it cost</span>
-                  <MultiGrid
-                    title="What did it cost?"
-                    values={form.consequences}
-                    options={CONSEQUENCES}
-                    onChange={(values) => update("consequences", values)}
-                  />
-                  <ChoiceGrid
-                    title="Which sentence hits hardest?"
-                    value={form.painStatement}
-                    options={PAIN_STATEMENTS}
-                    onChange={(value) => update("painStatement", value)}
-                    large
-                  />
-                  <div className="check-grid two compact">
-                    <ChoiceGrid
-                      title="How often?"
-                      value={form.frequency}
-                      options={FREQUENCIES}
-                      onChange={(value) => update("frequency", value)}
-                    />
-                    <ChoiceGrid
-                      title="Rough monthly weight"
-                      value={form.costBand}
-                      options={COST_BANDS}
-                      onChange={(value) => update("costBand", value)}
-                    />
-                  </div>
-                </div>
 
                 <Field
                   label="If your best employee handled this perfectly, what would they know or do?"
@@ -415,6 +380,82 @@ export function LeverageMapForm() {
                   />
                   <TextStrength value={form.perfectEmployee} ideal={60} />
                 </Field>
+
+                <div className="check-grid two compact">
+                  <ChoiceGrid
+                    title="How often?"
+                    value={form.frequency}
+                    options={FREQUENCIES}
+                    onChange={(value) => update("frequency", value)}
+                  />
+                  <ChoiceGrid
+                    title="Rough monthly weight"
+                    value={form.costBand}
+                    options={COST_BANDS}
+                    onChange={(value) => update("costBand", value)}
+                  />
+                </div>
+
+                <div className="check-trace-more">
+                  <button
+                    type="button"
+                    className="check-trace-toggle"
+                    aria-expanded={showDetail}
+                    aria-controls="check-trace-detail"
+                    onClick={() => setShowDetail((open) => !open)}
+                  >
+                    {showDetail ? "Hide detail tags" : "Add detail tags"}
+                    <span aria-hidden="true">{showDetail ? "–" : "+"}</span>
+                  </button>
+                  {!showDetail && detailSelectionCount > 0 ? (
+                    <span className="check-trace-count">{detailSelectionCount} selected</span>
+                  ) : (
+                    <span className="check-trace-hint">Optional — who, where, and what it cost</span>
+                  )}
+                </div>
+
+                {showDetail ? (
+                  <div className="check-trace-detail" id="check-trace-detail">
+                    <div className="check-trace-cluster">
+                      <span className="check-cluster-label">Who and where</span>
+                      <MultiGrid
+                        title="Who usually touches this?"
+                        values={form.peopleTouches}
+                        options={PEOPLE_TOUCHES}
+                        onChange={(values) => update("peopleTouches", values)}
+                      />
+                      <MultiGrid
+                        title="Where does the truth live?"
+                        values={form.truthLocations}
+                        options={TRUTH_LOCATIONS}
+                        onChange={(values) => update("truthLocations", values)}
+                      />
+                      <MultiGrid
+                        title="What made it harder than it should have been?"
+                        values={form.frictions}
+                        options={FRICTIONS}
+                        onChange={(values) => update("frictions", values)}
+                      />
+                    </div>
+
+                    <div className="check-trace-cluster">
+                      <span className="check-cluster-label">What it cost</span>
+                      <MultiGrid
+                        title="What did it cost?"
+                        values={form.consequences}
+                        options={CONSEQUENCES}
+                        onChange={(values) => update("consequences", values)}
+                      />
+                      <ChoiceGrid
+                        title="Which sentence hits hardest?"
+                        value={form.painStatement}
+                        options={PAIN_STATEMENTS}
+                        onChange={(value) => update("painStatement", value)}
+                        large
+                      />
+                    </div>
+                  </div>
+                ) : null}
               </section>
             ) : null}
 
