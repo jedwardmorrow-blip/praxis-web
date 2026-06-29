@@ -60,7 +60,7 @@ export async function POST(req: Request) {
     return Response.json({ ok: true, alreadyClaimed: true })
   }
 
-  const { error: updateError } = await supabase
+  const { data: updated, error: updateError } = await supabase
     .from("praxis_leads")
     .update({
       contact_email: email,
@@ -70,10 +70,16 @@ export async function POST(req: Request) {
     })
     .eq("id", lead.id)
     .eq("is_anonymous", true) // guard against a race: only the first claim wins
+    .select("id")
 
   if (updateError) {
     console.error("claim update error:", updateError)
     return Response.json({ error: "could not save" }, { status: 500 })
+  }
+  // Lost the race to a concurrent claim (0 rows updated): the other request owns
+  // the emails. Return success without re-sending — keeps claim idempotent.
+  if (!updated || updated.length === 0) {
+    return Response.json({ ok: true, alreadyClaimed: true })
   }
 
   // Best-effort emails: the row is already upgraded, so a send failure must not
