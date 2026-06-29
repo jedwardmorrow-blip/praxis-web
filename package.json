@@ -11,7 +11,8 @@
     "test:tier": "node --experimental-strip-types scripts/test-lead-tier.ts",
     "test:banned": "node --experimental-strip-types scripts/test-banned-phrases.ts",
     "test:giveaway": "node --experimental-strip-types scripts/test-giveaway-leaks.ts",
-    "test:unit": "npm run test:tier && npm run test:banned && npm run test:giveaway",
+    "test:guards": "node --experimental-strip-types scripts/test-guards.ts",
+    "test:unit": "npm run test:tier && npm run test:banned && npm run test:giveaway && npm run test:guards",
     "test:integration": "node --experimental-strip-types scripts/test-saveLead-integration.ts"
   },
   "dependencies": {
