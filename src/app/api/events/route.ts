@@ -17,6 +17,12 @@ function asString(value: unknown, max: number): string | null {
   return typeof value === "string" && value.trim() ? value.trim().slice(0, max) : null
 }
 
+// Ungate A/B arm tag — only the two known values persist; anything else is null
+// (a bad value must never fail a best-effort beacon write).
+function asVariant(value: unknown): string | null {
+  return value === "gated" || value === "ungated" ? value : null
+}
+
 export async function POST(req: Request) {
   const noContent = () => new Response(null, { status: 204 })
 
@@ -41,6 +47,7 @@ export async function POST(req: Request) {
       event,
       session_id: asString(body.sessionId, 80),
       lead_token: asString(body.leadToken, 64),
+      variant: asVariant(body.variant),
       meta: body.meta && typeof body.meta === "object" ? body.meta : null,
     })
   } catch {
