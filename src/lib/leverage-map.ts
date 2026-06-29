@@ -606,3 +606,94 @@ export function findGiveawayLeaks(text: string): string[] {
   }
   return [...hits]
 }
+
+// --- Give-away + skeleton guard-or-fallback ----------------------------------
+// findGiveawayLeaks (above) is OBSERVABILITY ONLY. This is the deterministic last
+// line that actually ACTS on a leak. Two closures the model is only probabilistically
+// held to — the give-away closure and the "workflow X, not a personnel Y" skeleton
+// removal — still slip on ~1 in 7 live readouts despite the system prompt and the
+// post-generation de-tell pass. So any failing public field is REPLACED with the
+// give-away-closed deterministic prose from fallbackAiResult (per-pattern, already
+// withholds the build, skeleton-free).
+//
+// FALLBACK, not scrub-in-place: a build word is context-dependent — a LEAK in
+// "the session tracks response time", give-away-CLOSING in "no tool can track which
+// leads slip" — so a naive rewrite false-positives on the very lines that close the
+// give-away. Swapping the whole field for vetted prose sidesteps that entirely.
+// Pure (no model call, no network), so it is unit-testable and runs in CI.
+
+// Skeleton / stock-construction tells the prompt and the de-tell pass cannot kill.
+// The "this is a workflow X, NOT a personnel/effort/motivation Y" frame recurred in
+// 6/6 why_this_is_fixable fields in adversarial rating and still leaks live. Detected
+// with high-precision patterns (a people/effort noun bound to a problem noun, or
+// "failure of <effort>") so scanning every public field does not over-fire on
+// legitimate prose. A carrier field is replaced wholesale — the frame is the shape
+// of the sentence, not a swappable phrase.
+const SKELETON_PATTERNS: Array<{ label: string; detect: RegExp }> = [
+  {
+    label: "not-a-people-problem frame",
+    detect:
+      /\bnot\s+(?:a|an|the|your|merely a|simply a|just a)?\s*(?:personnel|people|staffing|motivation|effort|discipline|training|hiring|willpower|attitude|talent|character|management|skill)\s+(?:problem|issue|failure|gap|thing|matter|deficit|shortfall|question)\b/i,
+  },
+  {
+    label: "failure-of-effort frame",
+    detect: /\bnot\s+(?:a\s+)?failure\s+of\s+(?:effort|discipline|will|character|motivation|people|talent|management|skill)\b/i,
+  },
+]
+
+export function findSkeletonTells(text: string): string[] {
+  if (!text) return []
+  return SKELETON_PATTERNS.filter((p) => p.detect.test(text)).map((p) => p.label)
+}
+
+// The give-away-sensitive public fields: their prose must WITHHOLD the build, so a
+// build-component word here lets a capable owner infer the system and skip the call.
+// (operator_readout / where_it_costs_you are mirror/cost fields where a build word is
+// drift, not a give-away — left to findGiveawayLeaks observability, not nuked.)
+const GIVEAWAY_GUARDED_FIELDS: Array<keyof PublicLeverageResult> = ["first_fix", "what_the_session_unlocks"]
+
+// Public prose fields scanned for the skeleton frame (short label fields excluded).
+const SKELETON_GUARDED_FIELDS: Array<keyof PublicLeverageResult> = [
+  "operator_readout",
+  "where_it_costs_you",
+  "first_fix",
+  "why_this_is_fixable",
+  "what_the_session_unlocks",
+  "what_you_cannot_see_yet",
+]
+
+export type GuardEvent = { field: keyof PublicLeverageResult; reason: string }
+
+// Swap any leaking/skeletal public field for the deterministic fallback for that
+// field; returns the guarded result plus the events (field + reason) for logging.
+// `fallback` is fallbackAiResult(input, score) — the vetted, give-away-closed,
+// per-pattern prose. The internal block and the gated fields are passed through.
+export function guardReadoutGiveawayAndSkeleton(
+  result: LeverageMapAiResult,
+  fallback: LeverageMapAiResult,
+): { result: LeverageMapAiResult; events: GuardEvent[] } {
+  const events: GuardEvent[] = []
+  const guarded: LeverageMapAiResult = { ...result }
+  const replaced = new Set<keyof PublicLeverageResult>()
+
+  for (const field of GIVEAWAY_GUARDED_FIELDS) {
+    const leaks = findGiveawayLeaks(result[field])
+    if (leaks.length) {
+      guarded[field] = fallback[field]
+      replaced.add(field)
+      events.push({ field, reason: `giveaway:${leaks.join("/")}` })
+    }
+  }
+
+  for (const field of SKELETON_GUARDED_FIELDS) {
+    if (replaced.has(field)) continue // already swapped by the give-away pass
+    const tells = findSkeletonTells(guarded[field])
+    if (tells.length) {
+      guarded[field] = fallback[field]
+      replaced.add(field)
+      events.push({ field, reason: `skeleton:${tells.join("/")}` })
+    }
+  }
+
+  return { result: guarded, events }
+}

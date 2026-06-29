@@ -15,6 +15,7 @@ import {
   findGiveawayLeaks,
   firstNameOf,
   guardReadoutBannedPhrases,
+  guardReadoutGiveawayAndSkeleton,
   isThinSubmission,
   scoreLeverageMap,
   tierForComposite,
@@ -101,9 +102,25 @@ export async function POST(req: Request) {
   // the prospect email, and the response all serve the same de-telled readout.
   aiResult = await deslopReadout(aiResult)
 
-  // Give-away drift observability (never blocks/rewrites): the give-away closure
-  // is probabilistic, so flag any readout whose prospect-facing prose names a
-  // build component and record it on the lead for the email-health digest.
+  // Deterministic give-away + skeleton last line. The give-away closure and the
+  // "workflow X, not a personnel Y" skeleton removal are probabilistic model
+  // instructions — ~1 in 7 live readouts still leaks a build component in a
+  // withheld field or carries the skeleton frame despite the prompt and the de-tell
+  // pass. Replace any failing public field with the give-away-closed deterministic
+  // fallback so a leak can never reach the browser, the stored map, or the email.
+  // Fall back (not scrub): a build word is context-dependent, so swapping the field
+  // for vetted prose avoids false-positives on the give-away-CLOSING construction.
+  const guard = guardReadoutGiveawayAndSkeleton(aiResult, fallbackAiResult(input, score))
+  aiResult = guard.result
+  if (guard.events.length) {
+    console.warn(
+      `[leverage-map] guard fell back: ${guard.events.map((e) => `${e.field}(${e.reason})`).join(", ")} (company=${input.company})`,
+    )
+  }
+
+  // Give-away drift observability on the GUARDED readout (never blocks/rewrites):
+  // catches residual drift in the mirror/cost fields the guard leaves in place, and
+  // records it on the lead for the email-health digest.
   const giveawayFlags = findGiveawayLeaks(
     `${aiResult.what_the_session_unlocks} ${aiResult.where_it_costs_you} ${aiResult.operator_readout}`,
   )
