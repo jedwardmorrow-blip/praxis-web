@@ -61,7 +61,7 @@ export function LeverageMapReadout({
         <p className="lm-benchmark">
           <span className="lm-label">How this usually shows up across owner-led shops</span>
           {benchmark.text}
-          {benchmark.cited && benchmark.source ? (
+          {benchmark.cited && benchmark.source && benchmark.sourceUrl ? (
             <a
               className="lm-benchmark-src"
               href={benchmark.sourceUrl}
