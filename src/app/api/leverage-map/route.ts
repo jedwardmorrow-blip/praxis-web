@@ -20,6 +20,7 @@ import {
   scoreLeverageMap,
   tierForComposite,
   toPublicResult,
+  type GuardEvent,
   type LeverageMapAiResult,
   type LeverageMapInput,
   type LeverageMapScore,
@@ -129,7 +130,7 @@ export async function POST(req: Request) {
   }
 
   const token = crypto.randomUUID().replace(/-/g, "")
-  const lead = await saveLead(input, score, aiResult, token, giveawayFlags)
+  const lead = await saveLead(input, score, aiResult, token, giveawayFlags, guard.events)
   const mapToken = lead ? token : null
 
   // Send the prospect email first so its outcome can be reported to Justin and
@@ -258,6 +259,7 @@ async function saveLead(
   aiResult: LeverageMapAiResult,
   token: string,
   giveawayFlags: string[] = [],
+  guardEvents: GuardEvent[] = [],
 ) {
   const supabaseUrl = cleanEnv(process.env.SUPABASE_URL)
   const supabaseKey = cleanEnv(process.env.SUPABASE_SERVICE_ROLE_KEY)
@@ -295,6 +297,10 @@ async function saveLead(
       public_token: token,
       leverage_map: storedMap,
       giveaway_flags: giveawayFlags.length ? giveawayFlags : null,
+      // The guard ACTED: each event is a public field whose leaking/skeletal prose
+      // was replaced with deterministic fallback. Higher-signal than giveaway_flags
+      // (which is residual drift left in place) — surfaced in the email-health digest.
+      guard_events: guardEvents.length ? guardEvents : null,
     })
     .select("id")
     .single()

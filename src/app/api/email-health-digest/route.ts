@@ -32,6 +32,7 @@ type LeadRow = {
   created_at: string
   email_status: { prospect?: string; notify?: string } | null
   giveaway_flags: string[] | null
+  guard_events: Array<{ field: string; reason: string }> | null
 }
 
 type IntakeFailureRow = {
@@ -70,7 +71,7 @@ async function handle(req: Request) {
   const supabase = createClient(supabaseUrl, supabaseKey)
   const { data, error } = await supabase
     .from("praxis_leads")
-    .select("id, company, contact_email, signal_composite, public_token, created_at, email_status, giveaway_flags")
+    .select("id, company, contact_email, signal_composite, public_token, created_at, email_status, giveaway_flags, guard_events")
     .not("leverage_map", "is", null)
     .gte("created_at", cutoff)
     .order("created_at", { ascending: false })
@@ -102,6 +103,10 @@ async function handle(req: Request) {
   // (the closure is probabilistic, not deterministic). Quality signal, not an
   // email failure — surfaced so Justin can spot-check the give-away over real traffic.
   const drifted = leads.filter((l) => (l.giveaway_flags?.length ?? 0) > 0)
+  // Guard fallbacks: the deterministic guard CAUGHT a leak/skeleton and replaced the
+  // field with vetted prose (so nothing bad shipped). Higher-signal than drift — it
+  // measures how often the model still needs the safety net, i.e. prompt-quality pressure.
+  const guarded = leads.filter((l) => (l.guard_events?.length ?? 0) > 0)
   const summary = {
     window_hours: WINDOW_HOURS,
     submissions: leads.length,
@@ -111,6 +116,7 @@ async function handle(req: Request) {
     failed_leads: failed.length,
     intake_failures: intakeFailures.length,
     giveaway_drift: drifted.length,
+    guard_fallbacks: guarded.length,
   }
 
   // Nothing happened in the window at all (no leads AND no intake failures): no noise.
@@ -162,6 +168,18 @@ async function handle(req: Request) {
     })
     .join("")
 
+  const guardRows = guarded
+    .map((l) => {
+      const link = l.public_token ? `${SITE_URL}/check/map/${l.public_token}` : "—"
+      const detail = (l.guard_events ?? []).map((e) => `${e.field} (${e.reason})`).join(", ")
+      return `<tr>
+        <td style="padding:6px 10px;border-bottom:1px solid #eee">${escapeHtml(l.company ?? "—")}</td>
+        <td style="padding:6px 10px;border-bottom:1px solid #eee">${escapeHtml(detail)}</td>
+        <td style="padding:6px 10px;border-bottom:1px solid #eee"><a href="${escapeHtml(link)}">${l.public_token ? "map" : "—"}</a></td>
+      </tr>`
+    })
+    .join("")
+
   const redIf = (n: number) => (n ? "#C42130" : "#111")
   const amberIf = (n: number) => (n ? "#b8860b" : "#111")
   const html = `
@@ -172,7 +190,8 @@ async function handle(req: Request) {
       <p style="margin:0 0 4px">Prospect sends failed: <strong style="color:${redIf(summary.prospect_failed)}">${summary.prospect_failed}</strong></p>
       <p style="margin:0 0 4px">Prospect sends skipped: <strong style="color:${redIf(summary.prospect_skipped)}">${summary.prospect_skipped}</strong></p>
       <p style="margin:0 0 4px">Notify sends failed: <strong style="color:${redIf(summary.notify_failed)}">${summary.notify_failed}</strong></p>
-      <p style="margin:0 0 16px">Give-away drift (readout named a build component): <strong style="color:${amberIf(summary.giveaway_drift)}">${summary.giveaway_drift}</strong></p>
+      <p style="margin:0 0 4px">Give-away drift (readout named a build component): <strong style="color:${amberIf(summary.giveaway_drift)}">${summary.giveaway_drift}</strong></p>
+      <p style="margin:0 0 16px">Guard fallbacks (leak/skeleton caught and replaced): <strong style="color:${amberIf(summary.guard_fallbacks)}">${summary.guard_fallbacks}</strong></p>
       ${
         intakeFailures.length
           ? `<p style="margin:0 0 8px;color:#C42130"><strong>Submissions that FAILED to save (no lead, no map, no email) — the silent-drop class:</strong></p>
@@ -197,6 +216,15 @@ async function handle(req: Request) {
              <table style="border-collapse:collapse;width:100%;font-size:13px">
                <tr><th align="left" style="padding:6px 10px">Company</th><th align="left" style="padding:6px 10px">Flagged term(s)</th><th align="left" style="padding:6px 10px">Map</th></tr>
                ${driftRows}
+             </table>`
+          : ""
+      }
+      ${
+        guarded.length
+          ? `<p style="margin:16px 0 8px;color:#b8860b"><strong>Guard fallbacks — a leak/skeleton was caught and replaced with vetted prose (model still needs the net):</strong></p>
+             <table style="border-collapse:collapse;width:100%;font-size:13px">
+               <tr><th align="left" style="padding:6px 10px">Company</th><th align="left" style="padding:6px 10px">Field (reason)</th><th align="left" style="padding:6px 10px">Map</th></tr>
+               ${guardRows}
              </table>`
           : ""
       }
