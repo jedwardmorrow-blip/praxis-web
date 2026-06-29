@@ -36,10 +36,14 @@ const LOADING_PHASES = [
 
 const STORAGE_KEY = "praxis-leverage-map-v1"
 const BOOKING_URL = (process.env.NEXT_PUBLIC_PRAXIS_BOOKING_URL ?? "").trim()
-// Ungate rollout knob: percent of new visitors put in the ungated arm. "0" is the
-// emergency kill switch (everyone to control). Default 50/50. Public so the client
-// can self-assign without a server round-trip.
-const UNGATE_ROLLOUT_PCT = Number(process.env.NEXT_PUBLIC_UNGATE_ROLLOUT ?? "50")
+// Ungate rollout knob: percent of new visitors put in the ungated arm. Defaults
+// to 0 so an unconfigured build SHIPS DARK (everyone on the control arm) — ramping
+// is an explicit opt-in by setting NEXT_PUBLIC_UNGATE_ROLLOUT to a positive percent
+// in the Vercel env. NOTE: NEXT_PUBLIC_* is inlined at BUILD time, so set/raise this
+// before the build that should carry it and redeploy (a runtime env change alone
+// won't take). "0" is also the emergency kill switch. Public so the client
+// self-assigns without a server round-trip.
+const UNGATE_ROLLOUT_PCT = Number(process.env.NEXT_PUBLIC_UNGATE_ROLLOUT ?? "0")
 
 type ApiResult = {
   score: LeverageMapScore
