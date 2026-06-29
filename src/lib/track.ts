@@ -4,6 +4,8 @@
 // (clicked the call CTA), tied together by an anon client session id so the
 // funnel can be read from praxis_funnel_events. No PII is sent.
 
+import { readVariantCookie } from "@/lib/variant"
+
 const SID_KEY = "praxis-fm-sid"
 
 function sessionId(): string {
@@ -24,7 +26,15 @@ export type FunnelEvent = "quiz_start" | "quiz_complete" | "booking_click"
 export function track(event: FunnelEvent, leadToken?: string | null, meta?: Record<string, unknown>): void {
   if (typeof window === "undefined") return
   try {
-    const body = JSON.stringify({ event, sessionId: sessionId(), leadToken: leadToken ?? null, meta: meta ?? null })
+    // The ungate arm rides on every beacon so completion/conversion is comparable
+    // by variant. Read straight from the sticky cookie (set by the wizard on mount).
+    const body = JSON.stringify({
+      event,
+      sessionId: sessionId(),
+      leadToken: leadToken ?? null,
+      variant: readVariantCookie(),
+      meta: meta ?? null,
+    })
     // sendBeacon survives the navigation a booking click triggers; keepalive fetch is the fallback.
     if (navigator.sendBeacon) {
       navigator.sendBeacon("/api/events", new Blob([body], { type: "application/json" }))

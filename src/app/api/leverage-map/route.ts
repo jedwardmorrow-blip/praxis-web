@@ -27,11 +27,15 @@ import {
   type StoredLeverageMap,
 } from "@/lib/leverage-map"
 import { applyDeslop, buildDeslopMessages, buildLeverageMessages, DESLOP_FIELDS } from "@/lib/leverage-map-prompt"
+import { parseVariant, type LeverageVariant } from "@/lib/variant"
 
 export const dynamic = "force-dynamic"
 
 const NOTIFY_EMAILS = ["Justin@gopraxis.ai"]
 const SITE_URL = "https://gopraxis.ai"
+// How long an unclaimed anonymous (ungated, no-email) lead survives before the
+// nightly purge removes it. One number, encoded per-row in anon_purge_after.
+const ANON_TTL_DAYS = 14
 
 // The model prompt and the per-pattern playbook now live in
 // src/lib/leverage-map-prompt.ts, shared verbatim by this route and the preview
@@ -56,7 +60,18 @@ export async function POST(req: Request) {
 
   const input = sanitizeInput(raw)
 
-  const required = [input.company, input.name, input.email, input.brokenMoment]
+  // Ungate A/B arm comes from the POST body (the client assigns it). Defaults to
+  // "gated" so any other caller keeps today's behavior.
+  const variant = parseVariant(raw && typeof raw === "object" ? (raw as Record<string, unknown>).variant : undefined)
+  const hasEmail = input.email.includes("@")
+  // The ungated arm shows the map before asking for an email, so an email-less
+  // generation is expected; everything else is still required in both arms.
+  const isAnonymous = variant === "ungated" && !hasEmail
+
+  const required =
+    variant === "ungated"
+      ? [input.company, input.name, input.brokenMoment]
+      : [input.company, input.name, input.email, input.brokenMoment]
   if (required.some((value) => !value?.trim())) {
     return Response.json({ error: "Missing required fields" }, { status: 400 })
   }
@@ -130,15 +145,19 @@ export async function POST(req: Request) {
   }
 
   const token = crypto.randomUUID().replace(/-/g, "")
-  const lead = await saveLead(input, score, aiResult, token, giveawayFlags, guard.events)
+  const lead = await saveLead(input, score, aiResult, token, giveawayFlags, guard.events, variant, isAnonymous)
   const mapToken = lead ? token : null
 
   // Send the prospect email first so its outcome can be reported to Justin and
   // recorded on the lead — a swallowed Resend failure must not stay invisible.
+  // An anonymous ungated lead has no email yet, so emailProspectMap self-skips
+  // (it requires a valid address); the prospect emails themselves later via claim.
   const prospect: EmailSend = mapToken
     ? await emailProspectMap(input, aiResult, mapToken)
     : { status: "skipped", id: null }
-  const notify: EmailSend = await notifyJustin(input, score, aiResult, lead?.id ?? null, mapToken, prospect.status)
+  // Justin still gets notified for anonymous leads, but MUTED (subject + banner)
+  // so ungated volume is visible in real time without implying a contactable lead.
+  const notify: EmailSend = await notifyJustin(input, score, aiResult, lead?.id ?? null, mapToken, prospect.status, isAnonymous)
   if (lead?.id) await updateLeadEmailStatus(lead.id, prospect, notify)
 
   return Response.json({
@@ -146,6 +165,7 @@ export async function POST(req: Request) {
     leadId: lead?.id ?? null,
     mapToken,
     score,
+    variant,
     // Only the public slice reaches the browser — never the internal block.
     result: toPublicResult(aiResult),
     deterministicFallback: !process.env.OPENAI_API_KEY,
@@ -260,6 +280,8 @@ async function saveLead(
   token: string,
   giveawayFlags: string[] = [],
   guardEvents: GuardEvent[] = [],
+  variant: LeverageVariant = "gated",
+  isAnonymous = false,
 ) {
   const supabaseUrl = cleanEnv(process.env.SUPABASE_URL)
   const supabaseKey = cleanEnv(process.env.SUPABASE_SERVICE_ROLE_KEY)
@@ -301,6 +323,13 @@ async function saveLead(
       // was replaced with deterministic fallback. Higher-signal than giveaway_flags
       // (which is residual drift left in place) — surfaced in the email-health digest.
       guard_events: guardEvents.length ? guardEvents : null,
+      // Ungate A/B: the arm this lead came through, and the anonymous markers an
+      // ungated email-less generation carries until it is claimed (or purged).
+      variant,
+      is_anonymous: isAnonymous,
+      anon_purge_after: isAnonymous
+        ? new Date(Date.now() + ANON_TTL_DAYS * 24 * 60 * 60 * 1000).toISOString()
+        : null,
     })
     .select("id")
     .single()
@@ -334,19 +363,28 @@ async function notifyJustin(
   leadId: string | null,
   mapToken: string | null,
   prospectStatus: EmailStatus,
+  isAnonymous = false,
 ): Promise<EmailSend> {
   const resendKey = cleanEnv(process.env.RESEND_API_KEY)
   if (!resendKey) return { status: "skipped", id: null }
 
-  const prospectEmailLine =
-    prospectStatus === "sent"
+  // Anonymous ungated leads have no email yet — this is a MUTED heads-up so Justin
+  // sees ungated volume in real time; he's notified to follow up when they claim it.
+  const prospectEmailLine = isAnonymous
+    ? "n/a — anonymous (no email yet); you'll be notified to follow up if they claim it"
+    : prospectStatus === "sent"
       ? "sent"
       : prospectStatus === "failed"
         ? "FAILED — the prospect did NOT receive their map; follow up manually"
         : "not sent"
 
   const resend = new Resend(resendKey)
-  const subject = `Praxis Leverage Map: ${input.company} · ${aiResult.pattern_label} · ${score.composite}/9`
+  const subject = isAnonymous
+    ? `[ANON · ungated] Praxis Leverage Map: ${input.company} · ${aiResult.pattern_label} · ${score.composite}/9`
+    : `Praxis Leverage Map: ${input.company} · ${aiResult.pattern_label} · ${score.composite}/9`
+  const heading = isAnonymous
+    ? "New Praxis Leverage Map — ANONYMOUS (ungated, no contact info yet)"
+    : "New Praxis Leverage Map"
   const rows: Array<[string, string | number | null | undefined]> = [
     ["Lead ID", leadId],
     ["Map link", mapToken ? `${SITE_URL}/check/map/${mapToken}` : null],
@@ -378,7 +416,7 @@ async function notifyJustin(
       to: NOTIFY_EMAILS,
       subject,
       html: `
-        <h2 style="font-family:sans-serif;color:#111">New Praxis Leverage Map</h2>
+        <h2 style="font-family:sans-serif;color:#111">${escapeHtml(heading)}</h2>
         <p style="font-family:sans-serif;color:#333">${escapeHtml(aiResult.operator_readout)}</p>
         <table style="font-family:sans-serif;font-size:14px;border-collapse:collapse;width:100%">
           ${rows

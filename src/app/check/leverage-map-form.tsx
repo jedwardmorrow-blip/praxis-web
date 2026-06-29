@@ -18,6 +18,8 @@ import {
 } from "@/lib/leverage-map"
 import { LeverageMapReadout } from "./leverage-map-readout"
 import { track } from "@/lib/track"
+import { validateStep } from "@/lib/leverage-map-validate"
+import { decideVariant, readVariantCookie, writeVariantCookie, type LeverageVariant } from "@/lib/variant"
 
 const STEPS = [
   { eyebrow: "01", title: "Name the mess", short: "The mess" },
@@ -34,6 +36,10 @@ const LOADING_PHASES = [
 
 const STORAGE_KEY = "praxis-leverage-map-v1"
 const BOOKING_URL = (process.env.NEXT_PUBLIC_PRAXIS_BOOKING_URL ?? "").trim()
+// Ungate rollout knob: percent of new visitors put in the ungated arm. "0" is the
+// emergency kill switch (everyone to control). Default 50/50. Public so the client
+// can self-assign without a server round-trip.
+const UNGATE_ROLLOUT_PCT = Number(process.env.NEXT_PUBLIC_UNGATE_ROLLOUT ?? "50")
 
 type ApiResult = {
   score: LeverageMapScore
@@ -102,6 +108,13 @@ export function LeverageMapForm() {
   const [hydrated, setHydrated] = useState(false)
   const [restored, setRestored] = useState(false)
   const [showDetail, setShowDetail] = useState(false)
+  // Ungate A/B arm. Defaults to "gated" on the server / first paint; the effect
+  // below assigns the sticky arm on mount before any funnel beacon fires.
+  const [variant, setVariant] = useState<LeverageVariant>("gated")
+  // Post-readout email capture (ungated arm only): claim an anonymous map by email.
+  const [claimEmail, setClaimEmail] = useState("")
+  const [claimState, setClaimState] = useState<"idle" | "saving" | "done" | "error">("idle")
+  const [claimMessage, setClaimMessage] = useState("")
 
   const botRef = useRef<HTMLInputElement>(null)
   const stepBodyRef = useRef<HTMLDivElement>(null)
@@ -119,6 +132,25 @@ export function LeverageMapForm() {
     form.frictions.length +
     form.consequences.length +
     (form.painStatement ? 1 : 0)
+
+  // Assign the sticky ungate arm on mount (client-side, no middleware). Runs
+  // before the quiz_start beacon below so that beacon already carries the arm.
+  useEffect(() => {
+    try {
+      const existing = readVariantCookie()
+      const override = new URLSearchParams(window.location.search).get("v")
+      const assigned = decideVariant({
+        existing,
+        override,
+        rolloutPct: UNGATE_ROLLOUT_PCT,
+        rand: Math.random(),
+      })
+      if (assigned !== existing) writeVariantCookie(assigned)
+      setVariant(assigned)
+    } catch {
+      setVariant("gated")
+    }
+  }, [])
 
   // Top of funnel: reached the wizard. Fired once per mount (the pilot reads
   // started -> completed -> booking_click from praxis_funnel_events).
@@ -195,7 +227,7 @@ export function LeverageMapForm() {
       return
     }
 
-    const validationError = validateStep(stepIndex, form)
+    const validationError = validateStep(stepIndex, form, variant)
     if (validationError) {
       setError(validationError)
       return
@@ -209,7 +241,7 @@ export function LeverageMapForm() {
       const response = await fetch("/api/leverage-map", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, _hp: botRef.current?.value ?? "" }),
+        body: JSON.stringify({ ...form, variant, _hp: botRef.current?.value ?? "" }),
       })
       const payload = await response.json()
       if (!response.ok) throw new Error(payload?.error || "Could not create leverage map")
@@ -466,8 +498,9 @@ export function LeverageMapForm() {
                   <strong>{activeStep.title}</strong>
                 </div>
                 <p className="check-unlock-copy">
-                  Your leverage map is generated after this step, and a copy goes to your inbox. We
-                  ask for contact info last so you map the workflow first. Three fields unlock it.
+                  {variant === "ungated"
+                    ? "Your leverage map is generated after this step — no email needed to see it. Add a company and name so the read is grounded; you can have a copy sent to you once you've looked it over."
+                    : "Your leverage map is generated after this step, and a copy goes to your inbox. We ask for contact info last so you map the workflow first. Three fields unlock it."}
                 </p>
                 <div className="check-grid two">
                   <Field label="Company" required>
@@ -480,15 +513,17 @@ export function LeverageMapForm() {
                   <Field label="Your name" required>
                     <input autoComplete="name" value={form.name} onChange={(e) => update("name", e.target.value)} />
                   </Field>
-                  <Field label="Email" required>
-                    <input
-                      type="email"
-                      inputMode="email"
-                      autoComplete="email"
-                      value={form.email}
-                      onChange={(e) => update("email", e.target.value)}
-                    />
-                  </Field>
+                  {variant === "ungated" ? null : (
+                    <Field label="Email" required>
+                      <input
+                        type="email"
+                        inputMode="email"
+                        autoComplete="email"
+                        value={form.email}
+                        onChange={(e) => update("email", e.target.value)}
+                      />
+                    </Field>
+                  )}
                   <Field label="Phone">
                     <input
                       type="tel"
@@ -557,7 +592,9 @@ export function LeverageMapForm() {
             </button>
             <p>
               {stepIndex === STEPS.length - 1
-                ? "You get the map immediately and a copy by email. Justin gets the internal summary."
+                ? variant === "ungated"
+                  ? "You get the map immediately — no email needed. Save a copy to your inbox after you've seen it."
+                  : "You get the map immediately and a copy by email. Justin gets the internal summary."
                 : "No contact info yet. Build the map first, then unlock the result at the end."}
             </p>
           </div>
@@ -616,7 +653,35 @@ export function LeverageMapForm() {
           </div>
 
           {result.mapToken ? (
-            <p className="lm-emailed">A copy of your map is on its way to your inbox.</p>
+            form.email.includes("@") ? (
+              <p className="lm-emailed">A copy of your map is on its way to your inbox.</p>
+            ) : claimState === "done" ? (
+              <p className="lm-emailed">Saved. A copy of your map is on its way to {claimEmail}.</p>
+            ) : (
+              <div className="lm-claim">
+                <h4>Want this saved?</h4>
+                <p>Send yourself a copy you can come back to and share. No spam — just your map.</p>
+                <div className="lm-claim-row">
+                  <input
+                    type="email"
+                    inputMode="email"
+                    autoComplete="email"
+                    placeholder="you@company.com"
+                    value={claimEmail}
+                    onChange={(e) => setClaimEmail(e.target.value)}
+                    aria-label="Your email"
+                  />
+                  <button type="button" onClick={handleClaim} disabled={claimState === "saving"}>
+                    {claimState === "saving" ? "Sending…" : "Email me my map"}
+                  </button>
+                </div>
+                {claimState === "error" ? (
+                  <p className="lm-claim-error" role="alert">
+                    {claimMessage}
+                  </p>
+                ) : null}
+              </div>
+            )
           ) : null}
         </section>
       ) : null}
@@ -628,7 +693,7 @@ export function LeverageMapForm() {
   }
 
   function goNext() {
-    const validationError = validateStep(stepIndex, form)
+    const validationError = validateStep(stepIndex, form, variant)
     if (validationError) {
       setError(validationError)
       return
@@ -651,6 +716,33 @@ export function LeverageMapForm() {
     setStepIndex(0)
     setError("")
     setRestored(false)
+  }
+
+  // Ungated arm: the owner saw the map anonymously; this saves it to their email,
+  // upgrading the anonymous lead and sending their copy. Best-effort — a failure
+  // never removes the already-visible map.
+  async function handleClaim() {
+    const token = result?.mapToken
+    if (!token) return
+    if (!claimEmail.includes("@")) {
+      setClaimState("error")
+      setClaimMessage("Add a valid email and we'll send your map.")
+      return
+    }
+    setClaimState("saving")
+    setClaimMessage("")
+    try {
+      const response = await fetch("/api/leverage-map/claim", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mapToken: token, email: claimEmail, name: form.name || undefined }),
+      })
+      if (!response.ok) throw new Error("claim failed")
+      setClaimState("done")
+    } catch {
+      setClaimState("error")
+      setClaimMessage("Could not send it just now. Your map link above still works.")
+    }
   }
 }
 
@@ -697,20 +789,6 @@ function TextStrength({ value, ideal }: { value: string; ideal: number }) {
       <span>{message}</span>
     </div>
   )
-}
-
-function validateStep(stepIndex: number, form: LeverageMapInput) {
-  if (stepIndex === 0) {
-    if (!form.brokenMoment) return "Pick the moment closest to what came up."
-    if (form.momentStory.trim().length < 12) return "A few words on what happened is enough to start."
-  }
-  // Act 2 (Trace it) is entirely optional — every chip sharpens the map, none gate it.
-  if (stepIndex === 2) {
-    if (!form.company.trim()) return "Add the company name to unlock the map."
-    if (!form.name.trim()) return "Add your name."
-    if (!form.email.includes("@")) return "Add a valid email."
-  }
-  return ""
 }
 
 function mailtoHref(form: LeverageMapInput, result: PublicLeverageResult) {
