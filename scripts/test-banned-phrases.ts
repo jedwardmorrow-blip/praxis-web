@@ -27,6 +27,12 @@ const VIOLATIONS = [
   "Assign one owner so the fix routes around the failing handoff.",
   "Drop every lead into a shared Google Doc the whole team can see.",
   "Collect every inbound request in a shared Google Form.",
+  // Em dash (shipped live via the model + de-tell line editor).
+  "Leads die when after-hours calls sit ignored—often for days—before anyone replies.",
+  "Answer every channel, no matter what—day or night, weekend or not.",
+  "Find the slowest channel -- that is where live leads quietly die.",
+  // "you'll finally" mid-sentence (de-tell only catches it as an opener).
+  "You'll finally know which coverage gaps are worth closing.",
 ]
 
 for (const sample of VIOLATIONS) {
@@ -43,6 +49,10 @@ const CLEAN = [
   "Pick one lead source and give it a single owner with a same-day reply.",
   "The real constraint is response latency after hours, not the missing log.",
   "Publish one trusted number every morning before the decision is made.",
+  // En-dash numeric ranges and ordinary hyphens must be left exactly as-is — the
+  // em-dash scrub targets only the em dash, never the en dash or a hyphen.
+  "Losing weekend jobs costs $1K–$5K per week in after-hours, same-day work.",
+  "You will know the cost once you run the one-day tally.",
 ]
 for (const sample of CLEAN) {
   assert(findBannedPhrases(sample).length === 0, `false positive on clean copy: ${sample}`)
