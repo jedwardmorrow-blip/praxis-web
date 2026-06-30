@@ -517,6 +517,33 @@ const BANNED_RULES: BannedRule[] = [
     detect: /\bshared\s+google\s+forms?\b/i,
     scrub: (text) => text.replace(/\bshared\s+google\s+forms?\b/gi, "shared intake form"),
   },
+  {
+    // The em dash is a top "AI tell" and is against Praxis house style for
+    // client-facing copy. Both the main model call and the de-tell line editor
+    // keep emitting it no matter how the prompt is worded, and the prospect-facing
+    // readout IS a Praxis artifact. Replace an em dash (and the " -- " substitute)
+    // with a comma; collapse any doubled comma and drop a leading one. A comma is
+    // a best-effort, meaning-preserving swap (it can leave a comma splice; that
+    // reads fine and is acceptable for a deterministic scrub). Deliberately does
+    // NOT touch the en dash (U+2013) so numeric ranges like "$1K–$5K" stay intact.
+    label: "em dash",
+    detect: /—|\s--\s/,
+    scrub: (text) =>
+      text
+        .replace(/\s*—\s*/g, ", ")
+        .replace(/\s--\s/g, ", ")
+        .replace(/\s*,\s*,/g, ",")
+        .replace(/^\s*,\s*/, ""),
+  },
+  {
+    // "you'll finally see / know / have …" is a recurring hype tell. The de-tell
+    // model pass only strips it when it OPENS a field, so it survives mid-sentence
+    // (shipped live: "You'll finally know which coverage gaps are worth closing").
+    // Drop the "finally"; the rest, and the capitalization, are preserved.
+    label: "you'll finally",
+    detect: /\byou(?:['’]ll| will)\s+finally\b/i,
+    scrub: (text) => text.replace(/\b(you(?:['’]ll| will))\s+finally\b/gi, "$1"),
+  },
 ]
 
 // Labels of every banned rule whose phrase appears in the text (empty = clean).
