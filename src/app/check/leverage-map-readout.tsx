@@ -3,6 +3,7 @@ import {
   type LeverageMapScore,
   type PublicLeverageResult,
 } from "@/lib/leverage-map"
+import { benchmarkEnabled, benchmarkFor } from "@/lib/leverage-map-benchmark"
 
 // One editorial composition shared by the inline result (client form) and the
 // persistent /check/map/[token] page. Presentational only — no client hooks —
@@ -30,6 +31,10 @@ export function LeverageMapReadout({
     },
   ]
 
+  // Deterministic peer-benchmark line (off unless NEXT_PUBLIC_BENCHMARK_LINE is set).
+  // Subordinate to the prospect's own words — context, not the headline.
+  const benchmark = benchmarkEnabled() ? benchmarkFor(score.primaryPattern) : null
+
   return (
     <article className="lm" id="leverage-result">
       <header className="lm-head">
@@ -51,6 +56,23 @@ export function LeverageMapReadout({
       </p>
 
       <p className="lm-reframe">{reframeLine(score)}</p>
+
+      {benchmark ? (
+        <p className="lm-benchmark">
+          <span className="lm-label">How this usually shows up across owner-led shops</span>
+          {benchmark.text}
+          {benchmark.cited && benchmark.source && benchmark.sourceUrl ? (
+            <a
+              className="lm-benchmark-src"
+              href={benchmark.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {benchmark.source}
+            </a>
+          ) : null}
+        </p>
+      ) : null}
 
       <ol className="lm-moves">
         {moves.map((move) => (
