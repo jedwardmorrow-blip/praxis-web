@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Apache Review Package | Praxis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #071d35;
+      --ink: #020b15;
+      --paper: #f1e8d2;
+      --paper-soft: rgba(241,232,210,.78);
+      --muted: rgba(241,232,210,.58);
+      --gold: #c9a24b;
+      --gold-rule: rgba(201,162,75,.36);
+      --apache: #f26a1b;
+      --red: #c42130;
+      --font-display: "Big Shoulders Display", Impact, sans-serif;
+      --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--paper);
+      font-family: var(--font-sans);
+      line-height: 1.55;
+      background:
+        radial-gradient(780px 520px at 12% -10%, rgba(242,106,27,.16), transparent 64%),
+        radial-gradient(660px 420px at 92% 0%, rgba(201,162,75,.14), transparent 60%),
+        linear-gradient(180deg, var(--navy), var(--ink) 62%, #02070d);
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, rgba(241,232,210,.026) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(241,232,210,.026) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(180deg, #000, transparent 78%);
+    }
+    body::after {
+      content: "APACHE / REVIEW";
+      position: fixed;
+      right: clamp(18px, 5vw, 70px);
+      bottom: 24px;
+      z-index: 0;
+      color: rgba(241,232,210,.035);
+      font-family: var(--font-display);
+      font-size: clamp(84px, 15vw, 220px);
+      font-weight: 900;
+      line-height: .8;
+      letter-spacing: .035em;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    a { color: inherit; }
+    .shell { position: relative; z-index: 1; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 15px clamp(18px, 4vw, 48px);
+      border-bottom: 1px solid var(--gold-rule);
+      background: rgba(3,16,31,.9);
+      backdrop-filter: blur(16px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+    }
+    .wordmark {
+      font-family: var(--font-display);
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      line-height: 1;
+    }
+    nav {
+      display: flex;
+      gap: clamp(10px, 2vw, 22px);
+      align-items: center;
+      justify-content: flex-end;
+    }
+    nav a {
+      color: var(--paper-soft);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .07em;
+      text-decoration: none;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    nav a:hover { color: var(--gold); }
+    nav a:last-child {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border: 1px solid var(--gold-rule);
+      color: var(--gold);
+    }
+    .quick-map {
+      position: sticky;
+      top: 75px;
+      z-index: 8;
+      margin: 0 auto;
+      max-width: 1420px;
+      padding: 10px clamp(18px, 3vw, 36px);
+      display: none;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1px;
+      background: rgba(3,16,31,.82);
+      border-bottom: 1px solid var(--gold-rule);
+      backdrop-filter: blur(16px);
+    }
+    .quick-map a {
+      min-height: 44px;
+      padding: 9px 10px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      border: 1px solid rgba(201,162,75,.24);
+      background: rgba(7,29,53,.58);
+      color: var(--paper-soft);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .quick-map a:first-child {
+      border-color: rgba(242,106,27,.58);
+      color: #fff;
+    }
+    .quick-map b {
+      display: grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+      border: 1px solid rgba(242,106,27,.58);
+      color: #fff;
+      background: rgba(196,33,48,.18);
+      font-size: 10px;
+    }
+    main {
+      max-width: 1420px;
+      margin: 0 auto;
+      padding: clamp(30px, 5vw, 58px) clamp(18px, 3vw, 36px) 76px;
+    }
+    section { scroll-margin-top: 90px; }
+    .eyebrow {
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-weight: 900;
+      letter-spacing: .015em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 920px;
+      margin-top: 12px;
+      font-size: clamp(64px, 9vw, 126px);
+      line-height: .86;
+    }
+    h2 {
+      font-size: clamp(42px, 6vw, 76px);
+      line-height: .9;
+    }
+    h3 {
+      font-size: 34px;
+      line-height: .96;
+    }
+    p { margin: 0; color: var(--paper-soft); }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, .65fr) minmax(360px, .35fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .hero-main,
+    .side-panel,
+    .card,
+    .follow-panel {
+      border: 1px solid var(--gold-rule);
+      background:
+        linear-gradient(180deg, rgba(10,37,69,.88), rgba(3,16,31,.76)),
+        rgba(3,16,31,.72);
+      box-shadow: 0 26px 72px rgba(0,0,0,.24);
+    }
+    .hero-main {
+      position: relative;
+      min-height: 560px;
+      padding: clamp(24px, 3vw, 38px);
+      display: grid;
+      align-content: space-between;
+      gap: 30px;
+      overflow: hidden;
+    }
+    .hero-main::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent 0 48%, rgba(201,162,75,.34) 48.1% 48.25%, transparent 48.35% 100%),
+        repeating-linear-gradient(90deg, transparent 0 42px, rgba(241,232,210,.045) 43px 44px),
+        repeating-linear-gradient(0deg, transparent 0 34px, rgba(241,232,210,.035) 35px 36px);
+      mask-image: radial-gradient(circle at 68% 38%, #000, transparent 62%);
+      opacity: .38;
+      pointer-events: none;
+    }
+    .hero-main > * {
+      position: relative;
+      z-index: 1;
+    }
+    .dek {
+      max-width: 720px;
+      margin-top: 18px;
+      font-size: 19px;
+      line-height: 1.5;
+    }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 9px 13px;
+      border: 1px solid var(--gold-rule);
+      color: var(--paper);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: transform .16s ease, border-color .16s ease, color .16s ease, background .16s ease;
+    }
+    .button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(201,162,75,.78);
+      color: var(--gold);
+    }
+    .button.primary {
+      border-color: rgba(242,106,27,.7);
+      background: var(--apache);
+      color: #fff;
+    }
+    .button.primary:hover {
+      border-color: rgba(242,106,27,.92);
+      color: #fff;
+      background: #e95c12;
+    }
+    .button.secondary-link {
+      border-color: rgba(201,162,75,.24);
+      color: var(--muted);
+      background: rgba(3,16,31,.3);
+    }
+    .meta-rail {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 28px;
+      max-width: 820px;
+      border: 1px solid rgba(201,162,75,.28);
+      background: rgba(201,162,75,.28);
+    }
+    .meta-rail div {
+      padding: 13px 14px;
+      background: rgba(3,16,31,.66);
+    }
+    .meta-rail b {
+      display: block;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .meta-rail span {
+      display: block;
+      margin-top: 5px;
+      color: var(--paper-soft);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .side-panel {
+      padding: 24px;
+      display: grid;
+      align-content: start;
+      gap: 18px;
+    }
+    .side-panel > div:first-child {
+      padding: 14px;
+      border: 1px solid rgba(241,232,210,.14);
+      background: rgba(3,16,31,.44);
+    }
+    .side-panel img {
+      width: 100%;
+      margin-top: 12px;
+      border: 1px solid rgba(241,232,210,.16);
+      background: #fff7ef;
+    }
+    .side-panel .button {
+      width: fit-content;
+    }
+    .truths {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      border: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+    .truths div {
+      padding: 16px;
+      background: rgba(3,16,31,.8);
+    }
+    .truths b {
+      display: block;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .truths span {
+      display: block;
+      margin-top: 7px;
+      color: var(--paper-soft);
+      font-size: 14px;
+      line-height: 1.38;
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, .45fr) minmax(0, .55fr);
+      gap: 28px;
+      margin-top: 58px;
+      padding-top: 24px;
+      border-top: 1px solid var(--gold-rule);
+      align-items: end;
+    }
+    .flow-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 24px;
+      border: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+    .card {
+      position: relative;
+      min-height: 322px;
+      padding: 30px 26px 28px;
+      box-shadow: none;
+      display: grid;
+      align-content: space-between;
+      gap: 24px;
+      overflow: hidden;
+      transition: background .16s ease, transform .16s ease;
+    }
+    .card > div {
+      display: grid;
+      align-content: start;
+    }
+    .card::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 3px;
+      background: transparent;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      background:
+        linear-gradient(160deg, rgba(242,106,27,.18), rgba(3,16,31,.82) 54%),
+        rgba(3,16,31,.84);
+    }
+    .card:hover::after,
+    .card.primary-card::after {
+      background: var(--apache);
+    }
+    .card .num {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      margin: 0 0 22px;
+      border: 1px solid rgba(242,106,27,.7);
+      background: rgba(196,33,48,.18);
+      color: var(--paper);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .card h3 { max-width: 360px; }
+    .card p {
+      max-width: 360px;
+      margin-top: 18px;
+      font-size: 15px;
+    }
+    .card .button { align-self: end; width: fit-content; }
+    .follow-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .56fr) minmax(0, .44fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .follow-panel { padding: 24px; }
+    .follow-panel.highlight {
+      border-color: rgba(242,106,27,.62);
+      background:
+        linear-gradient(160deg, rgba(242,106,27,.2), rgba(3,16,31,.82) 48%),
+        rgba(3,16,31,.8);
+    }
+    ul {
+      display: grid;
+      gap: 9px;
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    li {
+      position: relative;
+      padding-left: 18px;
+      color: var(--paper-soft);
+      font-size: 15px;
+    }
+    li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .65em;
+      width: 7px;
+      height: 7px;
+      background: var(--gold);
+    }
+    .agenda-row {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 1px;
+      margin-top: 10px;
+      border: 1px solid rgba(241,232,210,.14);
+      background: rgba(241,232,210,.14);
+    }
+    .agenda-row b,
+    .agenda-row span {
+      display: block;
+      padding: 12px;
+      background: rgba(3,16,31,.7);
+    }
+    .agenda-row b {
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .agenda-row span { color: var(--paper-soft); font-size: 14px; }
+    .summary-grid,
+    .insight-grid,
+    .artifact-grid {
+      display: grid;
+      gap: 1px;
+      margin-top: 24px;
+      border: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+    .summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .insight-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .artifact-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .summary-panel,
+    .insight-panel,
+    .artifact-panel {
+      background:
+        linear-gradient(180deg, rgba(10,37,69,.82), rgba(3,16,31,.78)),
+        rgba(3,16,31,.72);
+      padding: 24px;
+    }
+    .summary-panel b,
+    .insight-panel b,
+    .artifact-panel b {
+      display: block;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .summary-panel h3,
+    .insight-panel h3,
+    .artifact-panel h3 {
+      margin-top: 12px;
+    }
+    .summary-panel p,
+    .insight-panel p,
+    .artifact-panel p {
+      margin-top: 12px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .insight-panel.feature-panel {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(260px, .36fr) minmax(0, .64fr);
+      gap: clamp(18px, 3vw, 34px);
+      align-items: start;
+      background:
+        linear-gradient(135deg, rgba(201,162,75,.16), rgba(3,16,31,.86) 44%),
+        rgba(3,16,31,.8);
+    }
+    .asset-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      border: 1px solid rgba(201,162,75,.28);
+      background: rgba(201,162,75,.28);
+    }
+    .asset-strip span {
+      min-height: 86px;
+      padding: 14px;
+      display: grid;
+      align-content: space-between;
+      background: rgba(3,16,31,.64);
+      color: var(--paper-soft);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .asset-strip strong {
+      display: block;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .recommendation {
+      margin-top: 24px;
+      padding: clamp(24px, 3vw, 36px);
+      border: 1px solid rgba(242,106,27,.55);
+      background:
+        linear-gradient(135deg, rgba(242,106,27,.2), rgba(3,16,31,.84) 56%),
+        rgba(3,16,31,.82);
+      display: grid;
+      grid-template-columns: minmax(0, .58fr) minmax(280px, .42fr);
+      gap: 28px;
+      align-items: end;
+    }
+    .recommendation h3 {
+      font-size: clamp(42px, 5vw, 74px);
+      line-height: .9;
+    }
+    .next-step {
+      margin-top: 18px;
+      padding: 16px;
+      border: 1px solid rgba(201,162,75,.28);
+      background: rgba(3,16,31,.52);
+    }
+    .next-step b {
+      display: block;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .next-step span {
+      display: block;
+      margin-top: 6px;
+      color: var(--paper-soft);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+    .priority-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .priority-list li {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 0;
+    }
+    .priority-list li::before { display: none; }
+    .priority-list b {
+      display: grid;
+      place-items: center;
+      min-height: 34px;
+      border: 1px solid rgba(242,106,27,.58);
+      color: #fff;
+      background: rgba(196,33,48,.18);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+    .priority-list span {
+      color: var(--paper-soft);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+    @media (max-width: 1040px) {
+      .hero,
+      .section-head,
+      .follow-grid,
+      .recommendation { grid-template-columns: 1fr; }
+      .flow-grid,
+      .artifact-grid,
+      .insight-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .insight-panel.feature-panel {
+        grid-template-columns: 1fr;
+      }
+      .asset-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .hero-main { min-height: 500px; }
+    }
+    @media (max-width: 680px) {
+      .topbar { position: relative; align-items: flex-start; flex-direction: column; }
+      nav { justify-content: flex-start; width: 100%; overflow-x: auto; padding-bottom: 4px; }
+      .quick-map {
+        position: relative;
+        top: auto;
+        grid-template-columns: 1fr;
+      }
+      .flow-grid,
+      .artifact-grid,
+      .summary-grid,
+      .insight-grid,
+      .meta-rail,
+      .truths { grid-template-columns: 1fr; }
+      .hero-main { min-height: auto; }
+      .asset-strip { grid-template-columns: 1fr; }
+      h1 { font-size: clamp(48px, 18vw, 76px); }
+      h2 { font-size: clamp(38px, 15vw, 58px); }
+      .card { min-height: 240px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <img src="assets/praxis-mark.svg" alt="Praxis">
+        <div>
+          <div class="wordmark">PRAXIS.</div>
+          <div class="eyebrow">Apache Review Package</div>
+        </div>
+      </div>
+      <nav aria-label="Review navigation">
+        <a href="#start">Start</a>
+        <a href="#summary">Summary</a>
+        <a href="#findings">Findings</a>
+        <a href="#artifacts">Artifacts</a>
+        <a href="#follow-up">Follow-Up</a>
+      </nav>
+    </header>
+
+    <div class="quick-map" aria-label="Recommended reading path">
+      <a href="#summary"><b>1</b><span>Read the summary</span></a>
+      <a href="#findings"><b>2</b><span>Review findings</span></a>
+      <a href="#recommendation"><b>3</b><span>See recommendation</span></a>
+      <a href="#artifacts"><b>4</b><span>Open detail pages</span></a>
+      <a href="#follow-up"><b>5</b><span>Schedule follow-up</span></a>
+    </div>
+
+    <main id="start">
+      <section class="hero">
+        <div class="hero-main">
+          <div>
+            <div class="eyebrow">Start here / Apache + Praxis</div>
+            <h1>Apache growth review and build path.</h1>
+            <p class="dek">This is the single walkthrough for the work Praxis has completed so far: the business model read, revenue opportunities, brand direction, website implications, and the decisions needed before we build public-facing assets.</p>
+            <div class="button-row">
+              <a class="button primary" href="#summary">Start the walkthrough</a>
+              <a class="button secondary-link" href="#artifacts">Skip to supporting pages</a>
+            </div>
+            <div class="meta-rail" aria-label="Review package status">
+              <div><b>What this is</b><span>One client-facing review site</span></div>
+              <div><b>What it covers</b><span>Revenue, offer strategy, brand, site direction</span></div>
+              <div><b>Desired outcome</b><span>Approve the first Phase 3 build package</span></div>
+            </div>
+          </div>
+          <div class="truths">
+            <div><b>Core read</b><span>Apache is not short on products. Apache is short on enough qualified conversations with the right buyer.</span></div>
+            <div><b>Challenge</b><span>Validate which lanes can move from roughly 1-2 real opportunities per week toward 5-10.</span></div>
+            <div><b>Decide</b><span>Choose the first build path: site, campaigns, lead engine, sales assets, or staged package.</span></div>
+          </div>
+        </div>
+
+        <aside class="side-panel">
+          <div>
+            <div class="eyebrow">Linked brand guide</div>
+            <img src="assets/logo-pass-1-equity-cleanup.png" alt="Apache Pass 1 logo direction">
+          </div>
+          <p>The brand system is a separate page inside this package. It explains how Apache should look and sound while the strategy review explains what Apache should focus on.</p>
+          <a class="button" href="apache-brand-system-2026-06-22.html">Open Brand System</a>
+        </aside>
+      </section>
+
+      <section id="summary">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Executive summary</div>
+            <h2>What We Think Is Happening</h2>
+          </div>
+          <p>Apache has real trust, local equity, and customer relationships. The near-term constraint is not a lack of things to sell. It is creating more legitimate opportunities with the right buyer, then giving Jon and Victor clearer assets to turn those conversations into revenue.</p>
+        </div>
+
+        <div class="summary-grid">
+          <article class="summary-panel">
+            <b>Business read</b>
+            <h3>Protect the core. Diversify the future.</h3>
+            <p>Mailing hardware still matters because it carries equipment, meter, maintenance, supplies, and renewal value. The risk is concentration: Quadient dependence, quota pressure, and declining mail volume.</p>
+          </article>
+          <article class="summary-panel">
+            <b>Revenue read</b>
+            <h3>More good shots on goal.</h3>
+            <p>The strongest near-term move is an opportunity engine: competitor mail takeovers, current-customer phone attach, transactional communications, better timing data, and targeted campaigns into current and local accounts.</p>
+          </article>
+          <article class="summary-panel">
+            <b>Brand read</b>
+            <h3>Modernize without pretending.</h3>
+            <p>Apache should not try to look like a generic AI startup or national MSP. The better move is a sharper local institution: established, useful, responsive, and easy to buy from.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="findings">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">What we identified</div>
+            <h2>The Main Findings</h2>
+          </div>
+          <p>These are not final truths until Apache validates the data. They are the working hypotheses we would use to focus the website, campaigns, and sales assets.</p>
+        </div>
+
+        <div class="insight-grid">
+          <article class="insight-panel">
+            <b>01</b>
+            <h3>The website should feed opportunity creation.</h3>
+            <p>It should not merely list offerings. It should help Apache create more qualified conversations, support the telemarketer, and give buyers clearer reasons to meet.</p>
+          </article>
+          <article class="insight-panel">
+            <b>02</b>
+            <h3>The installed base is the leverage.</h3>
+            <p>Only a minority of customers appear to buy more than one thing from Apache. Existing relationships can support phone attach, current-client drips, referral asks, supplies/service retention, and renewal timing plays.</p>
+          </article>
+          <article class="insight-panel">
+            <b>03</b>
+            <h3>Customers need education, not a catalog.</h3>
+            <p>Jon was clear: buyers often do not know what these products can fix. The site and sales assets need pain examples, business cases, labor savings, and simple explanations.</p>
+          </article>
+          <article class="insight-panel">
+            <b>04</b>
+            <h3>Some lanes need validation before emphasis.</h3>
+            <p>Parcel lockers have ticket size and excitement, but limited recurring value. Certified proof is useful, but should sit inside the broader transactional communications story until Apache validates demand.</p>
+          </article>
+          <article class="insight-panel feature-panel">
+            <div>
+              <b>05</b>
+              <h3>Apache already has sales knowledge scattered everywhere.</h3>
+              <p>Jon has company profiles, vendor videos, PDFs, proposals, business-case language, and objection handling spread across tools. Capturing those assets may be as important as writing new copy.</p>
+            </div>
+            <div class="asset-strip" aria-label="Sales assets to gather">
+              <span><strong>Vendor proof</strong>Quadient videos, PDFs, product sheets, and approved claims.</span>
+              <span><strong>Sales language</strong>Proposal templates, objection handling, business-case examples, and quote logic.</span>
+              <span><strong>Call reality</strong>Telemarketer notes, no-shows, stalled deals, common questions, and follow-up language.</span>
+              <span><strong>Customer proof</strong>Reviews, service stories, local wins, switcher examples, and renewal moments.</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="recommendation" id="recommendation">
+          <div>
+            <div class="eyebrow">Recommended direction</div>
+            <h3>Build an opportunity engine, not just a website.</h3>
+            <p class="dek">The website should become the front door to a sharper sales motion: protect the core mail/service base, grow recurring communication revenue, support the telemarketer, and use local trust to create more qualified conversations.</p>
+            <div class="next-step">
+              <b>Plain-English recommendation</b>
+              <span>Do not start with a broad redesign. Start by validating the offers, buyer timing, sales assets, and data needed to increase legitimate opportunities. Then build the site and campaigns around those lanes.</span>
+            </div>
+            <div class="button-row">
+              <a class="button primary" href="phase-2-strategy-review-2026-06-22.html">Open detailed strategy review</a>
+              <a class="button secondary-link" href="apache-brand-system-2026-06-22.html">Open brand system</a>
+            </div>
+          </div>
+          <ol class="priority-list" aria-label="Recommended priorities">
+            <li><b>1</b><span>Validate revenue, margin, quota pressure, and strategic necessity by offer lane.</span></li>
+            <li><b>2</b><span>Convert Jon's sales knowledge into pages, scripts, business cases, and proof assets.</span></li>
+            <li><b>3</b><span>Launch targeted campaigns: switcher, current-client phone attach, transactional communications, and referrals.</span></li>
+            <li><b>4</b><span>Use the brand system to make everything feel like one Apache, not a pile of vendor categories.</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="artifacts">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Supporting pages</div>
+            <h2>Open The Detail When Needed</h2>
+          </div>
+          <p>This page is the front door. The linked artifacts contain the deeper reasoning, interactive weighting, original map, and brand rules.</p>
+        </div>
+
+        <div class="artifact-grid">
+          <article class="artifact-panel">
+            <b>Main strategy artifact</b>
+            <h3>Phase 2 Strategy Review</h3>
+            <p>The most important supporting page. It turns the Revenue Map into decisions Apache can validate before the website and campaigns are built.</p>
+            <div class="button-row"><a class="button primary" href="phase-2-strategy-review-2026-06-22.html">Open Phase 2</a></div>
+          </article>
+          <article class="artifact-panel">
+            <b>Brand guide</b>
+            <h3>Apache Brand System</h3>
+            <p>The standalone brand page. It explains the story, positioning, logo direction, color, voice, applications, and rules for future collateral.</p>
+            <div class="button-row"><a class="button" href="apache-brand-system-2026-06-22.html">Open Brand System</a></div>
+          </article>
+          <article class="artifact-panel">
+            <b>Original map</b>
+            <h3>Phase 1 Revenue Map</h3>
+            <p>The original diagnostic map showing the business model, revenue-quality matrix, funnel constraints, and growth lanes that informed Phase 2.</p>
+            <div class="button-row"><a class="button" href="phase-1-revenue-map-2026-06-17.html">Open Revenue Map</a></div>
+          </article>
+          <article class="artifact-panel">
+            <b>Build appendix</b>
+            <h3>Data + Follow-Up Agenda</h3>
+            <p>The next conversation should confirm data access, validate priorities, and choose the first build package rather than reopen broad strategy.</p>
+            <div class="button-row"><a class="button" href="#follow-up">View Follow-Up</a></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="follow-up">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">After they review</div>
+            <h2>Schedule one focused follow-up.</h2>
+          </div>
+          <p>The next meeting should not be a broad brainstorm. It should confirm what Apache wants Praxis to build first and what data is needed to support that build.</p>
+        </div>
+
+        <div class="follow-grid">
+          <article class="follow-panel highlight">
+            <h3>45-Minute Validation Meeting</h3>
+            <div class="agenda-row"><b>0-5</b><span>Confirm Phase 2 is strategy validation, not final website approval.</span></div>
+            <div class="agenda-row"><b>5-15</b><span>Confirm the real goal: more legitimate opportunities with the right buyers.</span></div>
+            <div class="agenda-row"><b>15-25</b><span>Challenge the offer lanes and agree on the top 2-3 priorities.</span></div>
+            <div class="agenda-row"><b>25-35</b><span>Confirm data and asset access: revenue, margin, quota needs, customers, renewals, sales decks, vendor videos, proposals, proof.</span></div>
+            <div class="agenda-row"><b>35-45</b><span>Choose the Phase 3 build path: website, campaigns, lead engine, sales assets, or a staged combination.</span></div>
+          </article>
+
+          <article class="follow-panel">
+            <h3>What Apache Should Bring</h3>
+            <ul>
+              <li>Revenue by category for the last 12-24 months, even if rough.</li>
+              <li>Margin or profitability notes by offer lane.</li>
+              <li>Quota requirements and which sales protect the Quadient relationship.</li>
+              <li>Active customer list with product ownership and renewal dates.</li>
+              <li>Recent wins, lost deals, and common objections.</li>
+              <li>Current company profile, Quadient videos/PDFs, proposal templates, business-case examples, and telemarketer scripts or notes.</li>
+              <li>A decision on whether Pass 1 is approved as the working visual direction.</li>
+            </ul>
+            <div class="button-row">
+              <a class="button primary" href="phase-2-strategy-review-2026-06-22.html#data">Open Data Requests</a>
+              <a class="button" href="phase-2-strategy-review-2026-06-22.html#decisions">Open Decisions</a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

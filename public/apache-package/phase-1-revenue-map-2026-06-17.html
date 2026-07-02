@@ -1,0 +1,3300 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Revenue Map | Praxis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0a2545;
+      --ink: #03101f;
+      --blue: #12375f;
+      --paper: #f1e8d2;
+      --paper-soft: rgba(241,232,210,.78);
+      --muted: rgba(241,232,210,.58);
+      --gold: #c9a24b;
+      --gold-soft: rgba(201,162,75,.18);
+      --gold-rule: rgba(201,162,75,.36);
+      --red: #c42130;
+      --red-soft: rgba(196,33,48,.16);
+      --green: #5fc08a;
+      --glass: rgba(5,22,43,.68);
+      --font-display: "Big Shoulders Display", Impact, sans-serif;
+      --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+      --max: 1480px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--paper);
+      font-family: var(--font-sans);
+      line-height: 1.55;
+      background:
+        radial-gradient(780px 520px at 18% -8%, rgba(201,162,75,.18), transparent 62%),
+        radial-gradient(660px 420px at 100% 5%, rgba(196,33,48,.16), transparent 60%),
+        linear-gradient(132deg, transparent 0 46%, rgba(201,162,75,.045) 46.1% 46.35%, transparent 46.45% 100%),
+        linear-gradient(180deg, var(--navy), var(--ink) 56%, #020910);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, rgba(241,232,210,.026) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(241,232,210,.026) 1px, transparent 1px),
+        repeating-radial-gradient(ellipse at 18% 12%, rgba(201,162,75,.045) 0 1px, transparent 2px 18px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(180deg, #000, transparent 78%);
+    }
+
+    a { color: inherit; }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 16px clamp(20px, 4vw, 48px);
+      border-bottom: 1px solid var(--gold-rule);
+      background: rgba(3,16,31,.88);
+      backdrop-filter: blur(16px);
+    }
+
+    .lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      display: block;
+      width: 46px;
+      height: 46px;
+      flex: 0 0 auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 14px rgba(201,162,75,.18));
+    }
+
+    .wordmark {
+      font-family: var(--font-display);
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: .035em;
+    }
+
+    .topmeta {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-align: right;
+    }
+
+    .report-nav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: clamp(12px, 2vw, 24px);
+      min-width: 0;
+    }
+
+    .report-nav a,
+    .report-nav button {
+      position: relative;
+      border: 0;
+      background: transparent;
+      color: var(--paper-soft);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .07em;
+      text-decoration: none;
+      text-transform: uppercase;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .report-nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -12px;
+      height: 1px;
+      background: transparent;
+    }
+
+    .report-nav a:hover,
+    .report-nav a:first-child,
+    .report-nav button:hover {
+      color: var(--gold);
+    }
+
+    .report-nav a:first-child::after {
+      background: var(--gold);
+    }
+
+    .report-nav button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 8px 12px;
+      border: 1px solid var(--gold-rule);
+      color: var(--gold);
+    }
+
+    .hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(34px, 5vw, 58px) clamp(20px, 3vw, 36px) 26px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(500px, .9fr) minmax(590px, 1.1fr);
+      gap: clamp(18px, 2.4vw, 34px);
+      align-items: stretch;
+    }
+
+    .hero-intro {
+      position: relative;
+      min-height: 610px;
+      padding: clamp(24px, 3vw, 34px);
+      border: 1px solid var(--gold-rule);
+      background:
+        linear-gradient(90deg, rgba(3,16,31,.92), rgba(3,16,31,.7) 52%, rgba(3,16,31,.38)),
+        radial-gradient(circle at 70% 54%, rgba(196,33,48,.26), transparent 22%),
+        rgba(3,16,31,.7);
+      overflow: hidden;
+      box-shadow:
+        0 35px 90px rgba(0,0,0,.28),
+        inset 0 0 90px rgba(201,162,75,.04);
+    }
+
+    .hero-intro::after {
+      content: "PRAXIS / REVENUE MAP";
+      position: absolute;
+      right: 26px;
+      top: 24px;
+      z-index: 4;
+      color: rgba(241,232,210,.48);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .client-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .client-chip::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .deck-meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      max-width: 400px;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(201,162,75,.28);
+    }
+
+    .deck-meta span {
+      color: rgba(241,232,210,.62);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      line-height: 1.35;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .deck-meta strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--paper);
+      font-family: var(--font-display);
+      font-size: 23px;
+      line-height: .92;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 4;
+      max-width: 405px;
+      isolation: isolate;
+    }
+
+    .hero-copy::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: -18px -30px -24px -16px;
+      background: linear-gradient(100deg, rgba(3,16,31,.95), rgba(3,16,31,.82) 66%, transparent);
+      filter: blur(.2px);
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 455px;
+      font-family: var(--font-display);
+      font-size: clamp(64px, 7.1vw, 108px);
+      line-height: .84;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .red { color: var(--red); }
+    .gold { color: var(--gold); }
+
+    .dek {
+      max-width: 380px;
+      margin: 24px 0 0;
+      color: var(--paper-soft);
+      font-size: clamp(18px, 2vw, 23px);
+      line-height: 1.36;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 11px 16px;
+      border: 1px solid var(--gold-rule);
+      color: var(--paper);
+      background: rgba(241,232,210,.05);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-decoration: none;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      border-color: rgba(196,33,48,.76);
+      background: linear-gradient(180deg, #d2323d, #a91b27);
+      box-shadow: 0 12px 32px rgba(196,33,48,.26);
+    }
+
+    .tucson-field {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      min-height: 0;
+      border: 0;
+      background:
+        radial-gradient(circle at 66% 52%, rgba(196,33,48,.3), transparent 4%, transparent 100%),
+        radial-gradient(circle at 58% 54%, rgba(201,162,75,.18), transparent 20%),
+        linear-gradient(118deg, transparent 0 55%, rgba(201,162,75,.15) 55.2% 55.55%, transparent 55.75%),
+        rgba(2,9,16,.42);
+      overflow: hidden;
+      box-shadow: inset 0 0 80px rgba(201,162,75,.04);
+    }
+
+    .tucson-field .tucson-map-svg {
+      opacity: .72;
+      transform: translate(5%, 2%) scale(1.02);
+      transform-origin: center;
+    }
+
+    .tucson-field::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 58% 54%, transparent 0 34%, rgba(241,232,210,.05) 34.3% 34.7%, transparent 35%),
+        radial-gradient(ellipse at 58% 54%, transparent 0 48%, rgba(201,162,75,.08) 48.3% 48.7%, transparent 49%),
+        linear-gradient(to right, rgba(241,232,210,.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(241,232,210,.05) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 38px 38px, 38px 38px;
+      opacity: .66;
+      transform: skewY(-5deg) scale(1.08);
+    }
+
+    .tucson-field::after {
+      content: "TUCSON";
+      position: absolute;
+      left: 68%;
+      top: 62%;
+      transform: translate(-50%, -50%);
+      color: rgba(241,232,210,.065);
+      font-family: var(--font-mono);
+      font-size: clamp(28px, 5vw, 62px);
+      letter-spacing: .34em;
+      text-transform: uppercase;
+    }
+
+    .tucson-map-svg {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      opacity: .92;
+      pointer-events: none;
+    }
+
+    .map-city-fill {
+      fill: rgba(10,37,69,.46);
+      stroke: rgba(201,162,75,.24);
+      stroke-width: 1.1;
+      filter: drop-shadow(0 0 24px rgba(201,162,75,.08));
+    }
+
+    .map-city-outline {
+      fill: none;
+      stroke: rgba(241,232,210,.28);
+      stroke-width: 1.2;
+      stroke-linejoin: round;
+    }
+
+    .map-coordinate {
+      fill: none;
+      stroke: rgba(241,232,210,.075);
+      stroke-width: .8;
+      stroke-dasharray: 4 14;
+    }
+
+    .map-service-fill {
+      fill: rgba(196,33,48,.055);
+      stroke: rgba(196,33,48,.2);
+      stroke-width: 1;
+    }
+
+    .map-service-ring {
+      fill: none;
+      stroke: rgba(201,162,75,.26);
+      stroke-width: 1;
+      stroke-dasharray: 5 12;
+    }
+
+    .map-service-ring.hot {
+      stroke: rgba(196,33,48,.36);
+      stroke-dasharray: 2 8;
+    }
+
+    .map-hq-crosshair {
+      fill: none;
+      stroke: rgba(241,232,210,.38);
+      stroke-width: 1;
+      stroke-linecap: round;
+    }
+
+    .map-hq-ray {
+      fill: none;
+      stroke: rgba(201,162,75,.22);
+      stroke-width: 1;
+      stroke-dasharray: 3 10;
+    }
+
+    .map-origin {
+      fill: var(--red);
+      stroke: rgba(241,232,210,.58);
+      stroke-width: 1.4;
+      filter: drop-shadow(0 0 12px rgba(196,33,48,.48));
+    }
+
+    .tucson-pin {
+      position: absolute;
+      z-index: 2;
+      display: grid;
+      gap: 4px;
+      width: 166px;
+      padding: 12px 13px;
+      border: 1px solid rgba(201,162,75,.74);
+      background:
+        linear-gradient(155deg, rgba(196,33,48,.32), transparent 62%),
+        rgba(3,16,31,.88);
+      color: var(--paper);
+      text-align: left;
+      box-shadow: 0 18px 40px rgba(0,0,0,.24);
+    }
+
+    .tucson-pin::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 0 6px rgba(196,33,48,.16), 0 0 22px rgba(196,33,48,.62);
+    }
+
+    .tucson-pin strong {
+      font-family: var(--font-display);
+      font-size: 25px;
+      line-height: .9;
+      text-transform: uppercase;
+    }
+
+    .tucson-pin span {
+      color: var(--paper-soft);
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .pin-apache {
+      left: auto;
+      right: 34px;
+      top: 52%;
+      bottom: auto;
+      transform: translateY(-50%);
+    }
+
+    .tucson-compass {
+      position: absolute;
+      right: 38px;
+      bottom: 128px;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 88px;
+      height: 88px;
+      border: 1px solid rgba(201,162,75,.3);
+      border-radius: 50%;
+      color: rgba(241,232,210,.42);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .tucson-compass::before {
+      content: "";
+      position: absolute;
+      inset: 13px;
+      border: 1px dashed rgba(201,162,75,.28);
+      border-radius: 50%;
+    }
+
+    .tucson-compass::after {
+      content: "";
+      position: absolute;
+      top: 12px;
+      width: 2px;
+      height: 28px;
+      background: linear-gradient(var(--red), transparent);
+    }
+
+    .tucson-detail {
+      position: absolute;
+      z-index: 3;
+      left: auto;
+      right: 24px;
+      bottom: 22px;
+      width: min(282px, calc(100% - 48px));
+      display: grid;
+      gap: 8px;
+      align-items: start;
+      padding: 12px 14px;
+      border: 1px solid rgba(201,162,75,.32);
+      background: rgba(2,9,16,.9);
+      backdrop-filter: blur(10px);
+    }
+
+    .tucson-detail strong {
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .tucson-detail span {
+      color: rgba(241,232,210,.82);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .map-card {
+      position: relative;
+      min-height: 610px;
+      border: 1px solid var(--gold-rule);
+      background:
+        linear-gradient(135deg, rgba(241,232,210,.07), transparent 33%),
+        radial-gradient(circle at 50% 50%, rgba(201,162,75,.24), transparent 31%),
+        radial-gradient(circle at 50% 50%, transparent 0 34%, rgba(196,33,48,.12) 35%, transparent 53%),
+        rgba(3,16,31,.78);
+      overflow: hidden;
+      box-shadow:
+        0 35px 90px rgba(0,0,0,.34),
+        inset 0 0 80px rgba(201,162,75,.045);
+    }
+
+    .map-card::before {
+      content: "";
+      position: absolute;
+      inset: 24px;
+      border: 1px solid rgba(201,162,75,.14);
+      background:
+        repeating-linear-gradient(115deg, transparent 0 21px, rgba(241,232,210,.035) 22px, transparent 23px),
+        repeating-linear-gradient(24deg, transparent 0 36px, rgba(201,162,75,.025) 37px, transparent 38px),
+        radial-gradient(circle at 51% 48%, transparent 0 106px, rgba(201,162,75,.15) 107px, transparent 108px 180px, rgba(201,162,75,.13) 181px, transparent 182px 238px, rgba(196,33,48,.14) 239px, transparent 240px);
+    }
+
+    .map-card::after {
+      content: "PRAXIS REVENUE TERRAIN / APACHE BUSINESS SYSTEMS";
+      position: absolute;
+      left: 28px;
+      bottom: 22px;
+      color: rgba(241,232,210,.38);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .map-svg {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      opacity: .86;
+    }
+
+    .map-svg path {
+      fill: none;
+      stroke: rgba(201,162,75,.62);
+      stroke-width: 1;
+      stroke-dasharray: 6 7;
+    }
+
+    .map-svg .hot {
+      stroke: rgba(196,33,48,.72);
+      stroke-width: 1.25;
+      stroke-dasharray: 2 5;
+    }
+
+    .center-node,
+    .node {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border: 1px solid var(--gold-rule);
+      background:
+        linear-gradient(155deg, rgba(241,232,210,.08), transparent 36%),
+        rgba(10,37,69,.92);
+      box-shadow: 0 22px 52px rgba(0,0,0,.32);
+    }
+
+    .center-node {
+      inset: 50% auto auto 50%;
+      width: 158px;
+      height: 158px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      padding: 24px;
+      z-index: 5;
+      border-color: rgba(201,162,75,.78);
+      box-shadow:
+        0 0 0 12px rgba(201,162,75,.045),
+        0 0 0 38px rgba(196,33,48,.035),
+        0 24px 62px rgba(0,0,0,.44);
+    }
+
+    .center-node b {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 31px;
+      line-height: .9;
+      text-transform: uppercase;
+    }
+
+    .center-node span {
+      display: block;
+      margin-top: 10px;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1.3;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .node {
+      width: 142px;
+      min-height: 72px;
+      padding: 12px 11px;
+    }
+
+    .node b {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 21px;
+      line-height: .96;
+      text-transform: uppercase;
+    }
+
+    .node span {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .n1 { top: 50px; left: calc(50% - 71px); }
+    .n2 { top: 152px; right: 34px; }
+    .n3 { bottom: 126px; right: 34px; }
+    .n4 { bottom: 50px; left: calc(50% - 71px); }
+    .n5 { bottom: 126px; left: 34px; }
+    .n6 { top: 152px; left: 34px; }
+
+    .axis {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 1px;
+      height: 230px;
+      transform-origin: top center;
+      background: linear-gradient(180deg, var(--gold-rule), transparent);
+      opacity: .8;
+    }
+
+    .a1 { transform: rotate(0deg); }
+    .a2 { transform: rotate(60deg); }
+    .a3 { transform: rotate(120deg); }
+    .a4 { transform: rotate(180deg); }
+    .a5 { transform: rotate(240deg); }
+    .a6 { transform: rotate(300deg); }
+
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 clamp(20px, 4vw, 36px) 44px;
+      gap: 10px;
+    }
+
+    .stat {
+      position: relative;
+      padding: 22px 22px 20px;
+      border: 1px solid var(--gold-rule);
+      background:
+        linear-gradient(145deg, rgba(201,162,75,.08), transparent 40%),
+        rgba(3,16,31,.58);
+      overflow: hidden;
+    }
+
+    .stat::after {
+      content: "";
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 12px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--red), var(--gold), transparent);
+      opacity: .7;
+    }
+
+    .stat:last-child { border-right: 1px solid var(--gold-rule); }
+
+    .stat strong {
+      display: block;
+      color: var(--gold);
+      font-family: var(--font-display);
+      font-size: 41px;
+      line-height: .9;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 7px;
+      color: var(--paper-soft);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1.35;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(42px, 7vw, 78px) clamp(20px, 4vw, 36px);
+      scroll-margin-top: 92px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, .72fr) minmax(280px, .28fr);
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 25px;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(42px, 6vw, 78px);
+      line-height: .88;
+      text-transform: uppercase;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--paper-soft);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .matrix {
+      display: grid;
+      border: 1px solid var(--gold-rule);
+      background: rgba(201,162,75,.1);
+    }
+
+    .matrix-row {
+      display: grid;
+      grid-template-columns: 1.2fr .74fr .74fr .74fr .74fr .74fr .82fr;
+      border-bottom: 1px solid var(--gold-rule);
+      background: rgba(3,16,31,.68);
+    }
+
+    .matrix-row:last-child { border-bottom: 0; }
+
+    .matrix-cell {
+      min-height: 60px;
+      padding: 13px 12px;
+      border-right: 1px solid var(--gold-rule);
+      color: var(--paper-soft);
+      font-size: 13px;
+    }
+
+    .matrix-cell:last-child { border-right: 0; }
+
+    .matrix-head .matrix-cell {
+      min-height: auto;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      background: rgba(3,16,31,.9);
+    }
+
+    .matrix-cell b {
+      color: var(--paper);
+      font-weight: 700;
+    }
+
+    .score {
+      display: flex;
+      gap: 3px;
+      margin-top: 3px;
+    }
+
+    .tick {
+      width: 12px;
+      height: 12px;
+      border: 1px solid rgba(201,162,75,.55);
+      background: rgba(241,232,210,.04);
+    }
+
+    .tick.on { background: var(--gold); }
+    .tick.redon { background: var(--red); border-color: rgba(196,33,48,.76); }
+
+    .priority {
+      display: inline-flex;
+      min-width: 72px;
+      justify-content: center;
+      padding: 5px 7px;
+      color: var(--paper);
+      background: var(--red-soft);
+      border: 1px solid rgba(196,33,48,.42);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .opportunity-lab {
+      display: grid;
+      gap: 18px;
+    }
+
+    .lab-top {
+      display: grid;
+      grid-template-columns: minmax(0, .74fr) minmax(300px, .26fr);
+      gap: 1px;
+      border: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+
+    .weight-panel,
+    .rank-panel {
+      padding: 22px;
+      background:
+        linear-gradient(155deg, rgba(241,232,210,.07), transparent 44%),
+        rgba(3,16,31,.78);
+    }
+
+    .lab-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .lab-title h3,
+    .opportunity-card h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 34px;
+      line-height: .9;
+      text-transform: uppercase;
+    }
+
+    .lab-title span {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .weight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .weight-control,
+    .rating-control {
+      display: grid;
+      gap: 7px;
+    }
+
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .control-label output {
+      color: var(--gold);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--gold);
+    }
+
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .preset-row button,
+    .snapshot-btn {
+      cursor: pointer;
+      border: 1px solid var(--gold-rule);
+      background: rgba(3,16,31,.82);
+      color: var(--paper);
+      padding: 9px 12px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .preset-row button:hover,
+    .snapshot-btn:hover {
+      border-color: rgba(201,162,75,.72);
+      background: rgba(201,162,75,.16);
+    }
+
+    .rank-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .rank-item {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      color: var(--paper-soft);
+      font-size: 13px;
+    }
+
+    .rank-num {
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .rank-bar {
+      position: relative;
+      height: 7px;
+      background: rgba(241,232,210,.09);
+      overflow: hidden;
+    }
+
+    .rank-bar i {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+    }
+
+    .rank-score {
+      color: var(--paper);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(230px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+
+    .opportunity-card {
+      position: relative;
+      min-height: 520px;
+      padding: 24px 18px 18px;
+      background:
+        linear-gradient(155deg, rgba(241,232,210,.075), transparent 36%),
+        radial-gradient(circle at 16% 0%, rgba(201,162,75,.13), transparent 38%),
+        rgba(3,16,31,.78);
+      overflow: hidden;
+    }
+
+    .opportunity-card::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 16px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red), var(--gold), transparent 86%);
+      opacity: .74;
+    }
+
+    .opportunity-card p {
+      min-height: 66px;
+      margin: 12px 0 16px;
+      color: var(--paper-soft);
+      font-size: 14px;
+    }
+
+    .rating-stack {
+      display: grid;
+      gap: 9px;
+    }
+
+    .score-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 15px 0 13px;
+      padding-top: 13px;
+      border-top: 1px solid var(--gold-rule);
+    }
+
+    .score-line strong {
+      color: var(--paper);
+      font-family: var(--font-display);
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    .score-line span {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .opportunity-card textarea {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      min-height: 86px;
+      resize: vertical;
+      border: 1px solid rgba(201,162,75,.3);
+      background: rgba(2,9,16,.56);
+      color: var(--paper);
+      padding: 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .opportunity-card textarea::placeholder {
+      color: rgba(241,232,210,.42);
+    }
+
+    .calibration-note {
+      padding: 16px 18px;
+      border: 1px solid var(--gold-rule);
+      background: rgba(201,162,75,.08);
+      color: var(--paper-soft);
+      font-size: 14px;
+    }
+
+    .calibration-note strong {
+      color: var(--paper);
+    }
+
+    .strategy-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1px;
+      border: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+
+    .strategy-panel,
+    .market-panel {
+      background:
+        linear-gradient(155deg, rgba(241,232,210,.075), transparent 36%),
+        rgba(3,16,31,.76);
+    }
+
+    .strategy-panel {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--gold-rule);
+    }
+
+    .strategy-card {
+      min-height: 210px;
+      padding: 22px;
+      background: rgba(3,16,31,.78);
+    }
+
+    .strategy-card h3,
+    .market-detail h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 31px;
+      line-height: .9;
+      text-transform: uppercase;
+    }
+
+    .strategy-card p,
+    .market-detail p {
+      margin: 12px 0 0;
+      color: var(--paper-soft);
+      font-size: 14px;
+    }
+
+    .decision-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      margin-top: 15px;
+    }
+
+    .decision-strip span {
+      padding: 8px;
+      border: 1px solid rgba(201,162,75,.26);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: .08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .market-panel {
+      display: grid;
+      grid-template-columns: minmax(360px, .42fr) minmax(500px, .58fr);
+      gap: 1px;
+      min-height: 460px;
+    }
+
+    .tucson-map {
+      position: relative;
+      min-height: 460px;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 53% 54%, rgba(196,33,48,.28), transparent 4%, transparent 100%),
+        radial-gradient(circle at 52% 52%, rgba(201,162,75,.2), transparent 22%),
+        linear-gradient(30deg, transparent 0 47%, rgba(201,162,75,.14) 47.2% 47.8%, transparent 48%),
+        rgba(2,9,16,.42);
+      overflow: hidden;
+    }
+
+    .tucson-map::before {
+      content: "";
+      position: absolute;
+      inset: 34px;
+      border: 1px solid rgba(201,162,75,.2);
+      background:
+        linear-gradient(to right, rgba(241,232,210,.045) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(241,232,210,.045) 1px, transparent 1px);
+      background-size: 40px 40px;
+      transform: skewY(-5deg);
+      opacity: .78;
+    }
+
+    .tucson-map::after {
+      content: "TUCSON";
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      transform: translate(-50%, -50%);
+      color: rgba(241,232,210,.08);
+      font-family: var(--font-mono);
+      font-size: clamp(36px, 6vw, 82px);
+      letter-spacing: .42em;
+      text-transform: uppercase;
+    }
+
+    .map-line {
+      position: absolute;
+      border-color: rgba(201,162,75,.3);
+      border-style: solid;
+      pointer-events: none;
+    }
+
+    .map-line.one {
+      left: 15%;
+      top: 22%;
+      width: 66%;
+      height: 54%;
+      border-width: 1px 0 0;
+      transform: rotate(19deg);
+    }
+
+    .map-line.two {
+      left: 41%;
+      top: 10%;
+      width: 1px;
+      height: 82%;
+      border-width: 0 0 0 1px;
+      transform: rotate(-11deg);
+    }
+
+    .map-line.three {
+      left: 10%;
+      top: 57%;
+      width: 80%;
+      height: 1px;
+      border-width: 1px 0 0;
+      transform: rotate(-8deg);
+    }
+
+    .map-pin {
+      position: absolute;
+      z-index: 2;
+      display: grid;
+      gap: 4px;
+      min-width: 116px;
+      border: 1px solid rgba(201,162,75,.42);
+      background: rgba(10,37,69,.86);
+      color: var(--paper);
+      padding: 10px;
+      cursor: pointer;
+      text-align: left;
+      box-shadow: 0 18px 40px rgba(0,0,0,.2);
+    }
+
+    .map-pin::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 0 5px rgba(196,33,48,.16);
+    }
+
+    .map-pin strong {
+      font-family: var(--font-display);
+      font-size: 21px;
+      line-height: .9;
+      text-transform: uppercase;
+    }
+
+    .map-pin span {
+      color: var(--paper-soft);
+      font-size: 11px;
+      line-height: 1.25;
+    }
+
+    .map-pin.active,
+    .map-pin:hover {
+      border-color: var(--gold);
+      background: rgba(196,33,48,.25);
+    }
+
+    .pin-hq {
+      left: 43%;
+      top: 47%;
+      transform: translate(18px, 18px);
+    }
+    .pin-law { left: 44%; top: 27%; }
+    .pin-health { left: 62%; top: 37%; }
+    .pin-property { left: 20%; top: 32%; }
+    .pin-school { left: 26%; top: 64%; }
+    .pin-industrial { left: 56%; top: 70%; }
+
+    .market-detail {
+      padding: 24px;
+      background: rgba(3,16,31,.82);
+    }
+
+    .local-proof-card {
+      position: absolute;
+      z-index: 3;
+      left: 30px;
+      right: 30px;
+      bottom: 30px;
+      display: grid;
+      gap: 11px;
+      padding: 18px;
+      border: 1px solid rgba(201,162,75,.34);
+      background: rgba(2,9,16,.84);
+      box-shadow: 0 24px 55px rgba(0,0,0,.28);
+    }
+
+    .local-proof-card strong {
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .local-proof-card p {
+      margin: 0;
+      color: var(--paper-soft);
+      font-size: 14px;
+    }
+
+    .segment-selector {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 18px 0 20px;
+    }
+
+    .segment-option {
+      cursor: pointer;
+      min-height: 72px;
+      padding: 11px;
+      border: 1px solid rgba(201,162,75,.3);
+      background: rgba(2,9,16,.5);
+      color: var(--paper-soft);
+      text-align: left;
+    }
+
+    .segment-option strong {
+      display: block;
+      color: var(--paper);
+      font-family: var(--font-display);
+      font-size: 22px;
+      line-height: .9;
+      text-transform: uppercase;
+    }
+
+    .segment-option span {
+      display: block;
+      margin-top: 6px;
+      font-size: 11px;
+      line-height: 1.25;
+    }
+
+    .segment-option.active,
+    .segment-option:hover {
+      border-color: var(--gold);
+      background: rgba(196,33,48,.22);
+    }
+
+    .market-detail dl {
+      display: grid;
+      gap: 13px;
+      margin: 20px 0 0;
+    }
+
+    .market-detail dt {
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .market-detail dd {
+      margin: 4px 0 0;
+      color: var(--paper-soft);
+      font-size: 14px;
+    }
+
+    .matrix {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1px;
+      border: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+
+    .matrix-row {
+      position: relative;
+      display: block;
+      min-height: 258px;
+      padding: 22px 18px 18px;
+      border: 0;
+      background:
+        linear-gradient(155deg, rgba(241,232,210,.075), transparent 36%),
+        radial-gradient(circle at 16% 0%, rgba(201,162,75,.13), transparent 38%),
+        rgba(3,16,31,.76);
+      overflow: hidden;
+    }
+
+    .matrix-row::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 16px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red), var(--gold), transparent 86%);
+      opacity: .74;
+    }
+
+    .matrix-row.matrix-head { display: none; }
+
+    .matrix-cell {
+      min-height: 0;
+      padding: 0;
+      border: 0;
+      color: var(--paper-soft);
+      font-size: 13px;
+    }
+
+    .matrix-cell:first-child {
+      min-height: 104px;
+    }
+
+    .matrix-cell:first-child b {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--paper);
+      font-family: var(--font-display);
+      font-size: 31px;
+      line-height: .9;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .matrix-cell:not(:first-child):not(:last-child) {
+      display: grid;
+      grid-template-columns: 78px 1fr;
+      align-items: center;
+      gap: 8px;
+      margin-top: 9px;
+    }
+
+    .matrix-cell:nth-child(2)::before { content: "Growth"; }
+    .matrix-cell:nth-child(3)::before { content: "Margin"; }
+    .matrix-cell:nth-child(4)::before { content: "Recurring"; }
+    .matrix-cell:nth-child(5)::before { content: "Diff."; }
+    .matrix-cell:nth-child(6)::before { content: "Difficulty"; }
+
+    .matrix-cell:not(:first-child):not(:last-child)::before {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .matrix-cell:last-child {
+      position: absolute;
+      top: auto;
+      bottom: 24px;
+      right: 16px;
+    }
+
+    .score {
+      gap: 4px;
+      margin: 0;
+    }
+
+    .tick {
+      width: 15px;
+      height: 7px;
+      border: 0;
+      background: rgba(241,232,210,.11);
+    }
+
+    .panels {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      border: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+
+    .panel {
+      min-height: 220px;
+      padding: 24px;
+      background: rgba(3,16,31,.72);
+    }
+
+    .panel h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 34px;
+      line-height: .92;
+      text-transform: uppercase;
+    }
+
+    .panel p {
+      margin: 13px 0 0;
+      color: var(--paper-soft);
+      font-size: 14.5px;
+    }
+
+    .panel ul {
+      display: grid;
+      gap: 8px;
+      margin: 15px 0 0;
+      padding: 0;
+      list-style: none;
+      color: var(--paper-soft);
+      font-size: 14px;
+    }
+
+    .panel li {
+      position: relative;
+      padding-left: 16px;
+    }
+
+    .panel li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .63em;
+      width: 6px;
+      height: 6px;
+      border: 1px solid var(--gold);
+      background: var(--red-soft);
+      transform: rotate(45deg);
+    }
+
+    .funnel {
+      position: relative;
+      display: grid;
+      gap: 18px;
+      padding: 18px 0 8px;
+    }
+
+    .funnel::before {
+      content: "";
+      position: absolute;
+      left: 196px;
+      top: 38px;
+      bottom: 44px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--red), var(--gold), rgba(201,162,75,.12));
+      box-shadow: 0 0 22px rgba(196,33,48,.28);
+    }
+
+    .funnel-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: 184px minmax(0, 1fr) 280px;
+      gap: 16px;
+      align-items: stretch;
+      padding-left: 0;
+    }
+
+    .funnel-row::before {
+      content: "";
+      position: absolute;
+      left: 187px;
+      top: 22px;
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--gold);
+      background: var(--ink);
+      transform: rotate(45deg);
+      z-index: 2;
+      display: none;
+    }
+
+    .stage,
+    .problem,
+    .praxis-move {
+      border: 1px solid var(--gold-rule);
+      background:
+        linear-gradient(135deg, rgba(241,232,210,.055), transparent 44%),
+        rgba(3,16,31,.7);
+      padding: 16px;
+    }
+
+    .stage {
+      color: var(--gold);
+      font-family: var(--font-display);
+      font-size: 34px;
+      line-height: .95;
+      text-transform: uppercase;
+      padding-left: 28px;
+    }
+
+    .problem {
+      color: var(--paper-soft);
+      font-size: 15px;
+      padding: 18px 20px;
+    }
+
+    .praxis-move {
+      color: var(--paper);
+      background:
+        linear-gradient(135deg, rgba(196,33,48,.22), rgba(3,16,31,.78)),
+        rgba(3,16,31,.72);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.45;
+      border-color: rgba(196,33,48,.38);
+    }
+
+    .blueprint {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .blue-card {
+      border: 1px solid var(--gold-rule);
+      background: rgba(3,16,31,.72);
+      padding: 26px;
+    }
+
+    .blue-card h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 42px;
+      line-height: .9;
+      text-transform: uppercase;
+    }
+
+    .blue-card p {
+      margin: 15px 0 0;
+      color: var(--paper-soft);
+    }
+
+    .io-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      border: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+
+    .io {
+      padding: 21px;
+      background: rgba(3,16,31,.72);
+    }
+
+    .io h4 {
+      margin: 0 0 14px;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .io ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+      color: var(--paper-soft);
+      font-size: 14px;
+    }
+
+    .revenue-os {
+      display: grid;
+      gap: 1px;
+      border: 1px solid rgba(201,162,75,.58);
+      background: var(--gold-rule);
+      box-shadow:
+        0 34px 90px rgba(0,0,0,.28),
+        inset 0 0 0 1px rgba(241,232,210,.035);
+    }
+
+    .os-top {
+      display: grid;
+      grid-template-columns: minmax(460px, .47fr) minmax(0, .53fr);
+      gap: 1px;
+      background: var(--gold-rule);
+    }
+
+    .os-core,
+    .os-loop,
+    .os-proof,
+    .os-stack-item {
+      background:
+        linear-gradient(155deg, rgba(241,232,210,.075), transparent 38%),
+        radial-gradient(circle at 14% 0%, rgba(201,162,75,.11), transparent 38%),
+        rgba(3,16,31,.84);
+    }
+
+    .os-core {
+      position: relative;
+      min-height: 560px;
+      padding: 30px;
+      overflow: hidden;
+    }
+
+    .os-core::before {
+      content: "";
+      position: absolute;
+      inset: 26px;
+      border: 1px solid rgba(201,162,75,.16);
+      background:
+        radial-gradient(circle at 50% 50%, transparent 0 92px, rgba(201,162,75,.2) 93px, transparent 94px 162px, rgba(196,33,48,.14) 163px, transparent 164px 238px, rgba(201,162,75,.16) 239px, transparent 240px),
+        linear-gradient(to right, rgba(241,232,210,.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(241,232,210,.03) 1px, transparent 1px),
+        repeating-linear-gradient(115deg, transparent 0 22px, rgba(241,232,210,.035) 23px, transparent 24px);
+      background-size: 100% 100%, 42px 42px, 42px 42px, 100% 100%;
+    }
+
+    .os-core::after {
+      content: "PIPELINE CONTROL / APACHE REVENUE OS";
+      position: absolute;
+      left: 30px;
+      bottom: 20px;
+      color: rgba(241,232,210,.36);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .os-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 2;
+      width: 216px;
+      height: 216px;
+      transform: translate(-50%, -50%);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border: 1px solid rgba(201,162,75,.75);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(201,162,75,.18), transparent 48%),
+        rgba(10,37,69,.94);
+      box-shadow:
+        0 0 0 14px rgba(201,162,75,.05),
+        0 0 0 48px rgba(196,33,48,.035),
+        0 0 0 86px rgba(201,162,75,.026),
+        0 24px 70px rgba(0,0,0,.38);
+    }
+
+    .os-center b {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 40px;
+      line-height: .86;
+      text-transform: uppercase;
+    }
+
+    .os-center span {
+      display: block;
+      margin-top: 10px;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1.3;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .os-orbit {
+      position: absolute;
+      z-index: 3;
+      width: 176px;
+      min-height: 96px;
+      padding: 14px;
+      border: 1px solid rgba(201,162,75,.46);
+      background:
+        linear-gradient(155deg, rgba(196,33,48,.12), transparent 58%),
+        rgba(3,16,31,.9);
+      box-shadow: 0 18px 42px rgba(0,0,0,.24);
+    }
+
+    .os-orbit::before {
+      content: "";
+      display: block;
+      width: 8px;
+      height: 8px;
+      margin-bottom: 9px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 0 5px rgba(196,33,48,.16), 0 0 18px rgba(196,33,48,.52);
+    }
+
+    .os-orbit b {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 26px;
+      line-height: .92;
+      text-transform: uppercase;
+    }
+
+    .os-orbit span {
+      display: block;
+      margin-top: 6px;
+      color: var(--paper-soft);
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .os-o1 { left: 32px; top: 38px; }
+    .os-o2 { right: 32px; top: 38px; }
+    .os-o3 { left: 32px; bottom: 52px; }
+    .os-o4 { right: 32px; bottom: 52px; }
+
+    .os-connector {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 1px;
+      height: 238px;
+      transform-origin: top center;
+      background: linear-gradient(180deg, rgba(201,162,75,.45), transparent);
+      opacity: .75;
+    }
+
+    .os-c1 { transform: rotate(315deg); }
+    .os-c2 { transform: rotate(45deg); }
+    .os-c3 { transform: rotate(225deg); }
+    .os-c4 { transform: rotate(135deg); }
+
+    .os-loops {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--gold-rule);
+    }
+
+    .os-loop {
+      position: relative;
+      min-height: 279px;
+      padding: 28px 26px;
+      overflow: hidden;
+    }
+
+    .os-loop::after {
+      content: "";
+      position: absolute;
+      left: 26px;
+      right: 26px;
+      bottom: 18px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red), var(--gold), transparent 86%);
+      opacity: .7;
+    }
+
+    .os-loop .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      margin-bottom: 22px;
+      border: 1px solid rgba(196,33,48,.7);
+      border-radius: 50%;
+      background: rgba(196,33,48,.22);
+      color: var(--paper);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .os-loop h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(32px, 3vw, 43px);
+      line-height: .86;
+      text-transform: uppercase;
+    }
+
+    .os-loop p {
+      margin: 12px 0 0;
+      color: var(--paper-soft);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .os-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 18px;
+      padding-bottom: 16px;
+    }
+
+    .os-tags span {
+      padding: 6px 8px;
+      border: 1px solid rgba(201,162,75,.26);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .os-proof-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--gold-rule);
+    }
+
+    .os-proof {
+      min-height: 184px;
+      padding: 24px;
+    }
+
+    .os-proof h4,
+    .os-stack-item h4 {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .os-proof p,
+    .os-stack-item p {
+      margin: 0;
+      color: var(--paper-soft);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .os-proof strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--paper);
+      font-family: var(--font-display);
+      font-size: 38px;
+      line-height: .9;
+      text-transform: uppercase;
+    }
+
+    .os-stack {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--gold-rule);
+    }
+
+    .os-stack-item {
+      padding: 18px;
+    }
+
+    .roadmap {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      border: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+
+    .road {
+      padding: 24px 20px;
+      background: rgba(3,16,31,.76);
+    }
+
+    .road .num {
+      color: var(--red);
+      font-family: var(--font-display);
+      font-size: 50px;
+      line-height: .8;
+      font-weight: 900;
+    }
+
+    .road h3 {
+      margin: 17px 0 0;
+      font-family: var(--font-display);
+      font-size: 31px;
+      line-height: .93;
+      text-transform: uppercase;
+    }
+
+    .road p {
+      margin: 12px 0 0;
+      color: var(--paper-soft);
+      font-size: 14px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      border: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+
+    .fit {
+      padding: clamp(24px, 4vw, 34px);
+      background: rgba(3,16,31,.76);
+    }
+
+    .fit h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 38px;
+      line-height: .9;
+      text-transform: uppercase;
+    }
+
+    .fit ul {
+      display: grid;
+      gap: 10px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+      color: var(--paper-soft);
+    }
+
+    .data-list {
+      columns: 2;
+      column-gap: 34px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--paper-soft);
+    }
+
+    .data-list li {
+      break-inside: avoid;
+      margin: 0 0 10px;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .data-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .68em;
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+    }
+
+    .closing {
+      margin-bottom: 58px;
+      border: 1px solid rgba(196,33,48,.45);
+      background:
+        linear-gradient(135deg, rgba(196,33,48,.18), transparent 38%),
+        rgba(3,16,31,.78);
+    }
+
+    .closing h2 { max-width: 900px; }
+
+    .closing p {
+      max-width: 850px;
+      color: var(--paper-soft);
+      font-size: 19px;
+    }
+
+    footer {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 26px clamp(20px, 4vw, 36px) 44px;
+      border-top: 1px solid var(--gold-rule);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .section-head,
+      .blueprint,
+      .split,
+      .lab-top,
+      .strategy-grid,
+      .market-panel,
+      .os-top {
+        grid-template-columns: 1fr;
+      }
+
+      .strategy-panel,
+      .segment-selector,
+      .os-proof-grid,
+      .os-stack {
+        grid-template-columns: 1fr;
+      }
+
+      .os-loops {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .map-card { min-height: 620px; }
+      .tucson-map { min-height: 520px; }
+      .stat-strip,
+      .panels,
+      .roadmap,
+      .matrix,
+      .matrix-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .matrix {
+        overflow-x: visible;
+      }
+
+      .matrix-row {
+        min-width: 0;
+      }
+
+      .funnel-row {
+        grid-template-columns: 1fr;
+        padding-left: 44px;
+      }
+
+      .funnel::before {
+        left: 10px;
+      }
+
+      .funnel-row::before {
+        left: 0;
+        top: 19px;
+      }
+
+      .stage {
+        padding-left: 0;
+      }
+    }
+
+    @media (max-width: 680px) {
+      body {
+        overflow-x: hidden;
+      }
+
+      .shell,
+      .topbar,
+      .hero,
+      section,
+      footer {
+        max-width: 100vw;
+        overflow-x: hidden;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .topmeta { text-align: left; }
+
+      .report-nav {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        gap: 10px 8px;
+      }
+
+      .report-nav a,
+      .report-nav button {
+        font-size: 8px;
+      }
+
+      .deck-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 38px;
+        scroll-margin-top: 190px;
+      }
+
+      .hero-grid,
+      .hero-intro,
+      .hero-copy,
+      .market-panel,
+      .tucson-field {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .client-chip {
+        max-width: 100%;
+        white-space: normal;
+        font-size: 9px;
+        letter-spacing: .08em;
+      }
+
+      .client-chip::before {
+        flex: 0 0 20px;
+        width: 20px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .hero-actions .btn {
+        width: 100%;
+      }
+
+      .hero-intro {
+        min-height: auto;
+        padding: 20px;
+      }
+
+      .hero-copy,
+      .deck-meta,
+      .dek,
+      h1 {
+        max-width: 100%;
+      }
+
+      h1 {
+        font-size: clamp(56px, 15vw, 64px);
+      }
+
+      .dek {
+        font-size: 18px;
+      }
+
+      .tucson-field {
+        position: relative;
+        inset: auto;
+        min-height: auto;
+        display: grid;
+        gap: 8px;
+        padding: 18px;
+        margin-top: 24px;
+        border: 1px solid var(--gold-rule);
+      }
+
+      .tucson-field::before,
+      .tucson-field::after,
+      .tucson-road,
+      .tucson-compass {
+        display: none;
+      }
+
+      .tucson-pin,
+      .pin-apache,
+      .pin-law,
+      .pin-health,
+      .pin-property,
+      .pin-industrial,
+      .tucson-detail {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        transform: none;
+      }
+
+      .tucson-detail {
+        grid-template-columns: 1fr;
+      }
+
+      .map-card {
+        min-height: auto;
+        padding: 18px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .map-card::before,
+      .axis,
+      .map-svg {
+        display: none;
+      }
+
+      .center-node,
+      .node {
+        position: relative;
+        inset: auto;
+        transform: none;
+        width: 100%;
+        min-height: auto;
+        border-radius: 0;
+      }
+
+      .center-node {
+        height: auto;
+        padding: 24px;
+      }
+
+      .os-core {
+        min-height: auto;
+        display: grid;
+        gap: 10px;
+        padding: 18px;
+      }
+
+      .os-core::before,
+      .os-connector {
+        display: none;
+      }
+
+      .os-center,
+      .os-orbit {
+        position: relative;
+        inset: auto;
+        transform: none;
+        width: 100%;
+        min-height: auto;
+        border-radius: 0;
+      }
+
+      .os-center {
+        height: auto;
+        padding: 24px;
+      }
+
+      .n1,
+      .n2,
+      .n3,
+      .n4,
+      .n5,
+      .n6 {
+        inset: auto;
+      }
+
+      .stat-strip,
+      .panels,
+      .roadmap,
+      .matrix,
+      .matrix-grid,
+      .weight-grid,
+      .io-grid,
+      .os-loops {
+        grid-template-columns: 1fr;
+      }
+
+      .stat,
+      .stat:last-child {
+        border: 1px solid var(--gold-rule);
+        border-bottom: 0;
+      }
+
+      .stat:last-child { border-bottom: 1px solid var(--gold-rule); }
+
+      .data-list {
+        columns: 1;
+      }
+
+      footer {
+        flex-direction: column;
+      }
+    }
+
+    @media print {
+      body {
+        color: #061a33;
+        background: #fff;
+      }
+
+      body::before,
+      .topbar,
+      .hero-actions {
+        display: none;
+      }
+
+      .hero,
+      section,
+      footer {
+        max-width: none;
+        padding: 22px;
+      }
+
+      .map-card,
+      .panel,
+      .matrix-row,
+      .stage,
+      .problem,
+      .praxis-move,
+      .blue-card,
+      .io,
+      .road,
+      .fit,
+      .closing,
+      .stat {
+        color: #061a33;
+        background: #fff;
+        border-color: #c9a24b;
+      }
+
+      .paper,
+      .paper-soft,
+      p,
+      li,
+      .problem,
+      .matrix-cell,
+      .io ul,
+      .fit ul,
+      .data-list,
+      footer {
+        color: #061a33;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="lockup">
+        <img class="brand-mark" src="assets/praxis-mark.svg" alt="Praxis">
+        <div>
+          <div class="wordmark">PRAXIS.</div>
+          <div class="topmeta" style="text-align:left;">Revenue systems / operator intelligence.</div>
+        </div>
+      </div>
+      <nav class="report-nav" aria-label="Report sections">
+        <a href="apache-review-package-2026-06-22.html">Review Home</a>
+        <a href="#summary">Executive Summary</a>
+        <a href="#model">Business Model</a>
+        <a href="#matrix">Revenue Quality</a>
+        <a href="#funnel">Funnel Map</a>
+        <a href="#strategy-map">Growth Lanes</a>
+        <a href="#roadmap">Roadmap</a>
+        <button type="button" onclick="window.print()">Print Report</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="summary">
+        <div class="hero-grid">
+          <div class="hero-intro">
+            <div class="hero-copy">
+              <span class="client-chip">Prepared for Apache Business Systems</span>
+              <h1>Revenue <span class="red">Map</span></h1>
+              <p class="dek">A Praxis operating map for revenue paths, funnel constraints, and long-term fit. This turns Apache's current business model into a working decision board for what to protect, what to grow, and what to validate next.</p>
+              <div class="deck-meta" aria-label="Presentation metadata">
+                <span>Artifact<strong>Strategy Map</strong></span>
+                <span>Focus<strong>Revenue</strong></span>
+                <span>Mode<strong>Discovery</strong></span>
+              </div>
+              <div class="hero-actions">
+                <a class="btn primary" href="#matrix">Calibrate Priorities</a>
+                <a class="btn" href="#engine">Opportunity Engine</a>
+              </div>
+            </div>
+
+            <div class="tucson-field" aria-label="Tucson opportunity field">
+              <svg class="tucson-map-svg" viewBox="0 0 800 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <path class="map-coordinate" d="M120 58 V562"></path>
+                <path class="map-coordinate" d="M240 58 V562"></path>
+                <path class="map-coordinate" d="M360 58 V562"></path>
+                <path class="map-coordinate" d="M480 58 V562"></path>
+                <path class="map-coordinate" d="M600 58 V562"></path>
+                <path class="map-coordinate" d="M58 140 H742"></path>
+                <path class="map-coordinate" d="M58 260 H742"></path>
+                <path class="map-coordinate" d="M58 380 H742"></path>
+                <path class="map-coordinate" d="M58 500 H742"></path>
+                <path class="map-service-fill" d="M339.0 289.9 m-118 0 a118 118 0 1 0 236 0 a118 118 0 1 0 -236 0"></path>
+                <path class="map-service-ring" d="M339.0 289.9 m-74 0 a74 74 0 1 0 148 0 a74 74 0 1 0 -148 0"></path>
+                <path class="map-service-ring hot" d="M339.0 289.9 m-118 0 a118 118 0 1 0 236 0 a118 118 0 1 0 -236 0"></path>
+                <path class="map-service-ring" d="M339.0 289.9 m-182 0 a182 182 0 1 0 364 0 a182 182 0 1 0 -364 0"></path>
+                <path class="map-hq-ray" d="M339 290 L214 150"></path>
+                <path class="map-hq-ray" d="M339 290 L564 226"></path>
+                <path class="map-hq-ray" d="M339 290 L604 452"></path>
+                <path class="map-hq-ray" d="M339 290 L206 500"></path>
+                <path class="map-city-fill" d="M58.0 232.5 L66.8 243.4 L81.4 243.4 L81.6 265.3 L140.7 265.1 L149.1 281.7 L166.4 281.4 L162.4 288.4 L150.6 287.7 L150.0 293.4 L159.6 294.2 L146.2 321.1 L148.8 352.4 L165.7 343.3 L162.4 365.4 L250.6 365.0 L249.4 348.6 L266.6 342.9 L291.6 342.8 L289.0 354.0 L296.0 354.0 L299.7 365.3 L348.9 359.3 L348.6 342.6 L374.0 341.3 L355.9 333.2 L361.0 329.4 L341.2 308.9 L333.2 315.7 L348.7 323.3 L342.6 331.5 L316.1 332.2 L315.8 292.3 L332.7 292.7 L315.7 287.1 L315.6 267.4 L333.2 259.1 L327.6 254.2 L349.1 250.4 L350.9 278.7 L374.2 291.7 L374.3 298.7 L351.5 294.9 L352.5 305.3 L382.6 319.8 L385.1 298.5 L416.2 320.7 L416.3 342.8 L424.5 342.9 L424.3 360.0 L432.0 364.8 L399.2 359.6 L399.1 365.3 L382.4 365.3 L382.4 390.3 L490.6 386.1 L509.2 397.7 L509.9 382.0 L482.4 364.4 L482.7 343.8 L468.1 344.3 L459.2 331.2 L449.4 331.2 L449.4 318.8 L459.1 315.6 L494.9 332.9 L492.2 367.4 L501.1 345.4 L516.1 344.7 L515.8 378.9 L542.7 390.7 L543.7 401.8 L554.4 402.0 L553.6 420.2 L526.5 409.9 L416.2 409.6 L414.0 456.6 L448.0 456.6 L448.7 472.4 L479.0 472.7 L470.5 483.6 L447.6 478.2 L447.4 500.3 L346.4 500.7 L347.2 453.7 L413.0 456.6 L405.5 431.7 L382.1 431.8 L380.9 439.3 L381.0 431.7 L366.0 431.8 L374.3 409.8 L349.1 409.6 L349.4 387.3 L325.0 387.1 L337.3 395.1 L327.3 400.8 L286.4 378.4 L250.7 378.2 L257.4 385.2 L251.2 386.9 L253.7 429.6 L313.5 432.0 L313.9 456.6 L263.6 456.3 L263.4 465.2 L271.3 478.9 L279.6 479.0 L279.9 511.8 L288.2 511.7 L287.5 522.7 L313.7 522.7 L313.2 545.0 L447.2 545.5 L447.0 561.9 L616.9 562.0 L614.0 512.0 L546.3 517.5 L547.5 472.1 L563.1 472.2 L563.2 461.9 L609.7 462.0 L613.8 495.7 L741.4 495.6 L742.0 483.2 L711.4 480.7 L711.4 466.9 L701.0 466.9 L701.2 461.1 L660.6 451.3 L653.3 442.0 L629.0 445.8 L629.6 434.3 L615.2 434.3 L615.8 422.7 L628.3 422.4 L633.7 432.7 L679.8 432.3 L680.1 440.3 L696.1 443.8 L696.3 451.3 L727.0 453.6 L719.2 432.4 L711.3 432.5 L712.2 399.3 L697.6 398.9 L684.4 353.9 L667.5 349.1 L667.6 328.1 L675.9 324.2 L663.3 321.3 L663.2 314.6 L690.5 314.2 L649.8 307.6 L649.1 299.1 L668.7 299.3 L668.7 292.8 L649.2 288.2 L649.3 277.2 L616.0 277.1 L616.0 257.7 L649.3 251.9 L653.0 198.6 L652.6 188.3 L616.0 188.3 L617.5 158.2 L592.9 163.9 L574.8 157.0 L575.1 148.3 L558.3 148.1 L558.2 141.8 L520.3 151.3 L482.3 144.1 L482.7 162.0 L449.4 165.1 L416.6 137.3 L398.8 137.9 L365.5 123.9 L339.5 126.7 L339.3 137.5 L348.3 141.0 L336.3 142.9 L319.2 130.4 L314.4 116.4 L298.3 111.1 L291.4 117.6 L291.6 110.1 L286.0 114.7 L279.2 105.1 L258.9 100.5 L261.5 87.0 L256.5 93.7 L240.7 91.4 L244.3 103.4 L230.8 102.3 L231.8 88.6 L222.5 88.4 L225.6 103.2 L214.3 98.2 L218.9 88.1 L211.0 88.7 L197.7 101.1 L197.9 110.4 L210.0 110.5 L206.2 121.5 L174.2 115.6 L173.3 121.2 L137.0 120.7 L93.5 82.0 L91.6 74.8 L114.6 78.9 L115.3 71.0 L98.3 71.0 L97.7 63.0 L85.7 58.0 L81.9 65.5 L90.0 74.7 L73.7 82.2 L72.9 93.5 L81.8 93.4 L107.4 122.7 L98.8 126.0 L98.5 137.5 L115.6 149.8 L114.9 165.5 L100.2 169.9 L100.0 209.8 L83.3 210.0 L84.7 218.2 L70.3 215.5 L66.8 232.5 L58.0 232.5 Z"></path>
+                <path class="map-city-outline" d="M58.0 232.5 L66.8 243.4 L81.4 243.4 L81.6 265.3 L140.7 265.1 L149.1 281.7 L166.4 281.4 L162.4 288.4 L150.6 287.7 L150.0 293.4 L159.6 294.2 L146.2 321.1 L148.8 352.4 L165.7 343.3 L162.4 365.4 L250.6 365.0 L249.4 348.6 L266.6 342.9 L291.6 342.8 L289.0 354.0 L296.0 354.0 L299.7 365.3 L348.9 359.3 L348.6 342.6 L374.0 341.3 L355.9 333.2 L361.0 329.4 L341.2 308.9 L333.2 315.7 L348.7 323.3 L342.6 331.5 L316.1 332.2 L315.8 292.3 L332.7 292.7 L315.7 287.1 L315.6 267.4 L333.2 259.1 L327.6 254.2 L349.1 250.4 L350.9 278.7 L374.2 291.7 L374.3 298.7 L351.5 294.9 L352.5 305.3 L382.6 319.8 L385.1 298.5 L416.2 320.7 L416.3 342.8 L424.5 342.9 L424.3 360.0 L432.0 364.8 L399.2 359.6 L399.1 365.3 L382.4 365.3 L382.4 390.3 L490.6 386.1 L509.2 397.7 L509.9 382.0 L482.4 364.4 L482.7 343.8 L468.1 344.3 L459.2 331.2 L449.4 331.2 L449.4 318.8 L459.1 315.6 L494.9 332.9 L492.2 367.4 L501.1 345.4 L516.1 344.7 L515.8 378.9 L542.7 390.7 L543.7 401.8 L554.4 402.0 L553.6 420.2 L526.5 409.9 L416.2 409.6 L414.0 456.6 L448.0 456.6 L448.7 472.4 L479.0 472.7 L470.5 483.6 L447.6 478.2 L447.4 500.3 L346.4 500.7 L347.2 453.7 L413.0 456.6 L405.5 431.7 L382.1 431.8 L380.9 439.3 L381.0 431.7 L366.0 431.8 L374.3 409.8 L349.1 409.6 L349.4 387.3 L325.0 387.1 L337.3 395.1 L327.3 400.8 L286.4 378.4 L250.7 378.2 L257.4 385.2 L251.2 386.9 L253.7 429.6 L313.5 432.0 L313.9 456.6 L263.6 456.3 L263.4 465.2 L271.3 478.9 L279.6 479.0 L279.9 511.8 L288.2 511.7 L287.5 522.7 L313.7 522.7 L313.2 545.0 L447.2 545.5 L447.0 561.9 L616.9 562.0 L614.0 512.0 L546.3 517.5 L547.5 472.1 L563.1 472.2 L563.2 461.9 L609.7 462.0 L613.8 495.7 L741.4 495.6 L742.0 483.2 L711.4 480.7 L711.4 466.9 L701.0 466.9 L701.2 461.1 L660.6 451.3 L653.3 442.0 L629.0 445.8 L629.6 434.3 L615.2 434.3 L615.8 422.7 L628.3 422.4 L633.7 432.7 L679.8 432.3 L680.1 440.3 L696.1 443.8 L696.3 451.3 L727.0 453.6 L719.2 432.4 L711.3 432.5 L712.2 399.3 L697.6 398.9 L684.4 353.9 L667.5 349.1 L667.6 328.1 L675.9 324.2 L663.3 321.3 L663.2 314.6 L690.5 314.2 L649.8 307.6 L649.1 299.1 L668.7 299.3 L668.7 292.8 L649.2 288.2 L649.3 277.2 L616.0 277.1 L616.0 257.7 L649.3 251.9 L653.0 198.6 L652.6 188.3 L616.0 188.3 L617.5 158.2 L592.9 163.9 L574.8 157.0 L575.1 148.3 L558.3 148.1 L558.2 141.8 L520.3 151.3 L482.3 144.1 L482.7 162.0 L449.4 165.1 L416.6 137.3 L398.8 137.9 L365.5 123.9 L339.5 126.7 L339.3 137.5 L348.3 141.0 L336.3 142.9 L319.2 130.4 L314.4 116.4 L298.3 111.1 L291.4 117.6 L291.6 110.1 L286.0 114.7 L279.2 105.1 L258.9 100.5 L261.5 87.0 L256.5 93.7 L240.7 91.4 L244.3 103.4 L230.8 102.3 L231.8 88.6 L222.5 88.4 L225.6 103.2 L214.3 98.2 L218.9 88.1 L211.0 88.7 L197.7 101.1 L197.9 110.4 L210.0 110.5 L206.2 121.5 L174.2 115.6 L173.3 121.2 L137.0 120.7 L93.5 82.0 L91.6 74.8 L114.6 78.9 L115.3 71.0 L98.3 71.0 L97.7 63.0 L85.7 58.0 L81.9 65.5 L90.0 74.7 L73.7 82.2 L72.9 93.5 L81.8 93.4 L107.4 122.7 L98.8 126.0 L98.5 137.5 L115.6 149.8 L114.9 165.5 L100.2 169.9 L100.0 209.8 L83.3 210.0 L84.7 218.2 L70.3 215.5 L66.8 232.5 L58.0 232.5 Z"></path>
+                <path class="map-hq-crosshair" d="M339 268 V312 M317 290 H361"></path>
+                <circle class="map-origin" cx="339" cy="290" r="7"></circle>
+              </svg>
+              <div class="tucson-pin pin-apache"><strong>Apache HQ</strong><span>4560 S Coach Dr / 32.1689 N, 110.9144 W</span></div>
+              <div class="tucson-compass">North</div>
+            </div>
+          </div>
+
+          <div class="map-card" aria-label="Apache business model map">
+            <svg class="map-svg" viewBox="0 0 600 610" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M300 305 C300 210 300 160 300 88"></path>
+              <path class="hot" d="M300 305 C394 262 456 202 520 182"></path>
+              <path class="hot" d="M300 305 C390 340 438 430 500 475"></path>
+              <path d="M300 305 C300 390 300 474 300 552"></path>
+              <path d="M300 305 C208 350 160 430 92 475"></path>
+              <path d="M300 305 C210 262 148 202 80 182"></path>
+              <path d="M92 475 C205 560 384 560 500 475"></path>
+              <path d="M80 182 C202 70 398 70 520 182"></path>
+            </svg>
+            <div class="axis a1"></div>
+            <div class="axis a2"></div>
+            <div class="axis a3"></div>
+            <div class="axis a4"></div>
+            <div class="axis a5"></div>
+            <div class="axis a6"></div>
+            <div class="center-node"><div><b>Opportunity Engine</b><span>More qualified conversations</span></div></div>
+            <div class="node n1"><b>Core Mail Base</b><span>Defend renewals and service trust</span></div>
+            <div class="node n2"><b>Competitive Takeovers</b><span>Win when Apache gets in the room</span></div>
+            <div class="node n3"><b>Transactional Comms</b><span>Statements, notices, portals, archiving</span></div>
+            <div class="node n4"><b>Certified Proof</b><span>Legal record and retrieval value</span></div>
+            <div class="node n5"><b>Business Phones</b><span>Recurring attach into the base</span></div>
+            <div class="node n6"><b>Parcel Lockers</b><span>Selective multifamily growth lane</span></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="stat-strip" aria-label="Key transcript findings">
+        <div class="stat"><strong>90%</strong><span>Approximate current dependency on Quadient overall</span></div>
+        <div class="stat"><strong>350+</strong><span>Active contract/service base to protect and mine</span></div>
+        <div class="stat"><strong>10-15%</strong><span>Estimated multi-category customer attach rate</span></div>
+        <div class="stat"><strong>5-10</strong><span>Weekly legit opportunities Jon says would change the business</span></div>
+      </div>
+
+      <section id="matrix">
+        <div class="section-head">
+          <div>
+            <span class="label">Revenue quality matrix</span>
+            <h2>Grow what compounds. Protect what funds it.</h2>
+          </div>
+          <p>These directional ratings come from the transcript. They should be validated with Apache's actual revenue, margin, renewal, and close-rate data before Phase 2 implementation.</p>
+        </div>
+
+        <div class="opportunity-lab" id="opportunity-lab">
+          <div class="lab-top">
+            <div class="weight-panel">
+              <div class="lab-title">
+                <h3>Weight the decision</h3>
+                <span>Praxis calibration</span>
+              </div>
+              <div class="weight-grid" id="weight-controls"></div>
+              <div class="preset-row" aria-label="Weight presets">
+                <button type="button" data-preset="growth">Growth mode</button>
+                <button type="button" data-preset="margin">Margin mode</button>
+                <button type="button" data-preset="recurring">Recurring mode</button>
+                <button type="button" data-preset="reset">Reset</button>
+              </div>
+            </div>
+            <aside class="rank-panel" aria-live="polite">
+              <div class="lab-title">
+                <h3>Focus now</h3>
+                <span>Live ranking</span>
+              </div>
+              <div class="rank-list" id="rank-list"></div>
+              <button class="snapshot-btn" type="button" id="copy-opportunity-snapshot">Copy meeting snapshot</button>
+            </aside>
+          </div>
+
+          <div class="calibration-note">
+            <strong>Use this live with Jon and Victor:</strong> treat every number as a hypothesis. Adjust the scales based on what Apache actually knows about revenue, margin, install base, renewal timing, sales effort, vendor economics, and service burden.
+          </div>
+
+          <div class="matrix-grid" id="opportunity-cards" aria-label="Weighted opportunity cards"></div>
+        </div>
+      </section>
+
+      <section id="strategy-map">
+        <div class="section-head">
+          <div>
+            <span class="label">Strategy enrichment layer</span>
+            <h2>Make the website a local revenue instrument.</h2>
+          </div>
+          <p>The next UI pass should not just look better. It should help Apache route different Tucson buyers toward the most relevant revenue path, then give Jon and Victor a way to decide what deserves follow-up.</p>
+        </div>
+
+        <div class="strategy-grid">
+          <div class="strategy-panel">
+            <article class="strategy-card">
+              <h3>Replace open questions with decisions</h3>
+              <p>Each opportunity should ask Jon and Victor to choose a rating, a confidence level, and a next action. That keeps the session concrete.</p>
+              <div class="decision-strip">
+                <span>Grow</span>
+                <span>Validate</span>
+                <span>Hold</span>
+              </div>
+            </article>
+            <article class="strategy-card">
+              <h3>Turn local proof into navigation</h3>
+              <p>Use Tucson geography, verticals, service response, and real customer types to make Apache feel present, not generic.</p>
+              <div class="decision-strip">
+                <span>Area</span>
+                <span>Buyer</span>
+                <span>Offer</span>
+              </div>
+            </article>
+            <article class="strategy-card">
+              <h3>Let the site collect signal</h3>
+              <p>The mockup should include tools that classify visitors: current customer, service need, quote request, renewal risk, phone prospect, mail/compliance buyer.</p>
+              <div class="decision-strip">
+                <span>Intent</span>
+                <span>Fit</span>
+                <span>Next step</span>
+              </div>
+            </article>
+          </div>
+
+          <div class="market-panel">
+            <div class="tucson-map" aria-label="Decorative Tucson map showing Apache location">
+              <svg class="tucson-map-svg" viewBox="0 0 800 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <path class="map-coordinate" d="M120 58 V562"></path>
+                <path class="map-coordinate" d="M240 58 V562"></path>
+                <path class="map-coordinate" d="M360 58 V562"></path>
+                <path class="map-coordinate" d="M480 58 V562"></path>
+                <path class="map-coordinate" d="M600 58 V562"></path>
+                <path class="map-coordinate" d="M58 140 H742"></path>
+                <path class="map-coordinate" d="M58 260 H742"></path>
+                <path class="map-coordinate" d="M58 380 H742"></path>
+                <path class="map-coordinate" d="M58 500 H742"></path>
+                <path class="map-service-fill" d="M339.0 289.9 m-118 0 a118 118 0 1 0 236 0 a118 118 0 1 0 -236 0"></path>
+                <path class="map-service-ring" d="M339.0 289.9 m-74 0 a74 74 0 1 0 148 0 a74 74 0 1 0 -148 0"></path>
+                <path class="map-service-ring hot" d="M339.0 289.9 m-118 0 a118 118 0 1 0 236 0 a118 118 0 1 0 -236 0"></path>
+                <path class="map-service-ring" d="M339.0 289.9 m-182 0 a182 182 0 1 0 364 0 a182 182 0 1 0 -364 0"></path>
+                <path class="map-hq-ray" d="M339 290 L214 150"></path>
+                <path class="map-hq-ray" d="M339 290 L564 226"></path>
+                <path class="map-hq-ray" d="M339 290 L604 452"></path>
+                <path class="map-hq-ray" d="M339 290 L206 500"></path>
+                <path class="map-city-fill" d="M58.0 232.5 L66.8 243.4 L81.4 243.4 L81.6 265.3 L140.7 265.1 L149.1 281.7 L166.4 281.4 L162.4 288.4 L150.6 287.7 L150.0 293.4 L159.6 294.2 L146.2 321.1 L148.8 352.4 L165.7 343.3 L162.4 365.4 L250.6 365.0 L249.4 348.6 L266.6 342.9 L291.6 342.8 L289.0 354.0 L296.0 354.0 L299.7 365.3 L348.9 359.3 L348.6 342.6 L374.0 341.3 L355.9 333.2 L361.0 329.4 L341.2 308.9 L333.2 315.7 L348.7 323.3 L342.6 331.5 L316.1 332.2 L315.8 292.3 L332.7 292.7 L315.7 287.1 L315.6 267.4 L333.2 259.1 L327.6 254.2 L349.1 250.4 L350.9 278.7 L374.2 291.7 L374.3 298.7 L351.5 294.9 L352.5 305.3 L382.6 319.8 L385.1 298.5 L416.2 320.7 L416.3 342.8 L424.5 342.9 L424.3 360.0 L432.0 364.8 L399.2 359.6 L399.1 365.3 L382.4 365.3 L382.4 390.3 L490.6 386.1 L509.2 397.7 L509.9 382.0 L482.4 364.4 L482.7 343.8 L468.1 344.3 L459.2 331.2 L449.4 331.2 L449.4 318.8 L459.1 315.6 L494.9 332.9 L492.2 367.4 L501.1 345.4 L516.1 344.7 L515.8 378.9 L542.7 390.7 L543.7 401.8 L554.4 402.0 L553.6 420.2 L526.5 409.9 L416.2 409.6 L414.0 456.6 L448.0 456.6 L448.7 472.4 L479.0 472.7 L470.5 483.6 L447.6 478.2 L447.4 500.3 L346.4 500.7 L347.2 453.7 L413.0 456.6 L405.5 431.7 L382.1 431.8 L380.9 439.3 L381.0 431.7 L366.0 431.8 L374.3 409.8 L349.1 409.6 L349.4 387.3 L325.0 387.1 L337.3 395.1 L327.3 400.8 L286.4 378.4 L250.7 378.2 L257.4 385.2 L251.2 386.9 L253.7 429.6 L313.5 432.0 L313.9 456.6 L263.6 456.3 L263.4 465.2 L271.3 478.9 L279.6 479.0 L279.9 511.8 L288.2 511.7 L287.5 522.7 L313.7 522.7 L313.2 545.0 L447.2 545.5 L447.0 561.9 L616.9 562.0 L614.0 512.0 L546.3 517.5 L547.5 472.1 L563.1 472.2 L563.2 461.9 L609.7 462.0 L613.8 495.7 L741.4 495.6 L742.0 483.2 L711.4 480.7 L711.4 466.9 L701.0 466.9 L701.2 461.1 L660.6 451.3 L653.3 442.0 L629.0 445.8 L629.6 434.3 L615.2 434.3 L615.8 422.7 L628.3 422.4 L633.7 432.7 L679.8 432.3 L680.1 440.3 L696.1 443.8 L696.3 451.3 L727.0 453.6 L719.2 432.4 L711.3 432.5 L712.2 399.3 L697.6 398.9 L684.4 353.9 L667.5 349.1 L667.6 328.1 L675.9 324.2 L663.3 321.3 L663.2 314.6 L690.5 314.2 L649.8 307.6 L649.1 299.1 L668.7 299.3 L668.7 292.8 L649.2 288.2 L649.3 277.2 L616.0 277.1 L616.0 257.7 L649.3 251.9 L653.0 198.6 L652.6 188.3 L616.0 188.3 L617.5 158.2 L592.9 163.9 L574.8 157.0 L575.1 148.3 L558.3 148.1 L558.2 141.8 L520.3 151.3 L482.3 144.1 L482.7 162.0 L449.4 165.1 L416.6 137.3 L398.8 137.9 L365.5 123.9 L339.5 126.7 L339.3 137.5 L348.3 141.0 L336.3 142.9 L319.2 130.4 L314.4 116.4 L298.3 111.1 L291.4 117.6 L291.6 110.1 L286.0 114.7 L279.2 105.1 L258.9 100.5 L261.5 87.0 L256.5 93.7 L240.7 91.4 L244.3 103.4 L230.8 102.3 L231.8 88.6 L222.5 88.4 L225.6 103.2 L214.3 98.2 L218.9 88.1 L211.0 88.7 L197.7 101.1 L197.9 110.4 L210.0 110.5 L206.2 121.5 L174.2 115.6 L173.3 121.2 L137.0 120.7 L93.5 82.0 L91.6 74.8 L114.6 78.9 L115.3 71.0 L98.3 71.0 L97.7 63.0 L85.7 58.0 L81.9 65.5 L90.0 74.7 L73.7 82.2 L72.9 93.5 L81.8 93.4 L107.4 122.7 L98.8 126.0 L98.5 137.5 L115.6 149.8 L114.9 165.5 L100.2 169.9 L100.0 209.8 L83.3 210.0 L84.7 218.2 L70.3 215.5 L66.8 232.5 L58.0 232.5 Z"></path>
+                <path class="map-city-outline" d="M58.0 232.5 L66.8 243.4 L81.4 243.4 L81.6 265.3 L140.7 265.1 L149.1 281.7 L166.4 281.4 L162.4 288.4 L150.6 287.7 L150.0 293.4 L159.6 294.2 L146.2 321.1 L148.8 352.4 L165.7 343.3 L162.4 365.4 L250.6 365.0 L249.4 348.6 L266.6 342.9 L291.6 342.8 L289.0 354.0 L296.0 354.0 L299.7 365.3 L348.9 359.3 L348.6 342.6 L374.0 341.3 L355.9 333.2 L361.0 329.4 L341.2 308.9 L333.2 315.7 L348.7 323.3 L342.6 331.5 L316.1 332.2 L315.8 292.3 L332.7 292.7 L315.7 287.1 L315.6 267.4 L333.2 259.1 L327.6 254.2 L349.1 250.4 L350.9 278.7 L374.2 291.7 L374.3 298.7 L351.5 294.9 L352.5 305.3 L382.6 319.8 L385.1 298.5 L416.2 320.7 L416.3 342.8 L424.5 342.9 L424.3 360.0 L432.0 364.8 L399.2 359.6 L399.1 365.3 L382.4 365.3 L382.4 390.3 L490.6 386.1 L509.2 397.7 L509.9 382.0 L482.4 364.4 L482.7 343.8 L468.1 344.3 L459.2 331.2 L449.4 331.2 L449.4 318.8 L459.1 315.6 L494.9 332.9 L492.2 367.4 L501.1 345.4 L516.1 344.7 L515.8 378.9 L542.7 390.7 L543.7 401.8 L554.4 402.0 L553.6 420.2 L526.5 409.9 L416.2 409.6 L414.0 456.6 L448.0 456.6 L448.7 472.4 L479.0 472.7 L470.5 483.6 L447.6 478.2 L447.4 500.3 L346.4 500.7 L347.2 453.7 L413.0 456.6 L405.5 431.7 L382.1 431.8 L380.9 439.3 L381.0 431.7 L366.0 431.8 L374.3 409.8 L349.1 409.6 L349.4 387.3 L325.0 387.1 L337.3 395.1 L327.3 400.8 L286.4 378.4 L250.7 378.2 L257.4 385.2 L251.2 386.9 L253.7 429.6 L313.5 432.0 L313.9 456.6 L263.6 456.3 L263.4 465.2 L271.3 478.9 L279.6 479.0 L279.9 511.8 L288.2 511.7 L287.5 522.7 L313.7 522.7 L313.2 545.0 L447.2 545.5 L447.0 561.9 L616.9 562.0 L614.0 512.0 L546.3 517.5 L547.5 472.1 L563.1 472.2 L563.2 461.9 L609.7 462.0 L613.8 495.7 L741.4 495.6 L742.0 483.2 L711.4 480.7 L711.4 466.9 L701.0 466.9 L701.2 461.1 L660.6 451.3 L653.3 442.0 L629.0 445.8 L629.6 434.3 L615.2 434.3 L615.8 422.7 L628.3 422.4 L633.7 432.7 L679.8 432.3 L680.1 440.3 L696.1 443.8 L696.3 451.3 L727.0 453.6 L719.2 432.4 L711.3 432.5 L712.2 399.3 L697.6 398.9 L684.4 353.9 L667.5 349.1 L667.6 328.1 L675.9 324.2 L663.3 321.3 L663.2 314.6 L690.5 314.2 L649.8 307.6 L649.1 299.1 L668.7 299.3 L668.7 292.8 L649.2 288.2 L649.3 277.2 L616.0 277.1 L616.0 257.7 L649.3 251.9 L653.0 198.6 L652.6 188.3 L616.0 188.3 L617.5 158.2 L592.9 163.9 L574.8 157.0 L575.1 148.3 L558.3 148.1 L558.2 141.8 L520.3 151.3 L482.3 144.1 L482.7 162.0 L449.4 165.1 L416.6 137.3 L398.8 137.9 L365.5 123.9 L339.5 126.7 L339.3 137.5 L348.3 141.0 L336.3 142.9 L319.2 130.4 L314.4 116.4 L298.3 111.1 L291.4 117.6 L291.6 110.1 L286.0 114.7 L279.2 105.1 L258.9 100.5 L261.5 87.0 L256.5 93.7 L240.7 91.4 L244.3 103.4 L230.8 102.3 L231.8 88.6 L222.5 88.4 L225.6 103.2 L214.3 98.2 L218.9 88.1 L211.0 88.7 L197.7 101.1 L197.9 110.4 L210.0 110.5 L206.2 121.5 L174.2 115.6 L173.3 121.2 L137.0 120.7 L93.5 82.0 L91.6 74.8 L114.6 78.9 L115.3 71.0 L98.3 71.0 L97.7 63.0 L85.7 58.0 L81.9 65.5 L90.0 74.7 L73.7 82.2 L72.9 93.5 L81.8 93.4 L107.4 122.7 L98.8 126.0 L98.5 137.5 L115.6 149.8 L114.9 165.5 L100.2 169.9 L100.0 209.8 L83.3 210.0 L84.7 218.2 L70.3 215.5 L66.8 232.5 L58.0 232.5 Z"></path>
+                <path class="map-hq-crosshair" d="M339 268 V312 M317 290 H361"></path>
+                <circle class="map-origin" cx="339" cy="290" r="7"></circle>
+              </svg>
+              <div class="map-pin pin-hq"><strong>Apache HQ</strong><span>4560 S Coach Dr / Tucson operating base</span></div>
+              <div class="local-proof-card">
+                <strong>Why the map matters</strong>
+                <p>This should be emotional proof, not a targeting gimmick: Apache is physically here, answers here, and can show up faster than distant vendors.</p>
+              </div>
+            </div>
+            <aside class="market-detail" aria-live="polite">
+              <span class="label" id="market-kicker">Buyer lane module</span>
+              <h3 id="market-title">Legal & finance</h3>
+              <p id="market-summary">Proof-heavy businesses are a strong place to test certified mail, document retrieval, and transactional communications because the pain is concrete and expensive.</p>
+              <div class="segment-selector" aria-label="Buyer lane selector">
+                <button class="segment-option active" type="button" data-market="law"><strong>Legal</strong><span>Proof, records, certified workflows</span></button>
+                <button class="segment-option" type="button" data-market="health"><strong>Healthcare</strong><span>Records, notices, patient communications</span></button>
+                <button class="segment-option" type="button" data-market="property"><strong>Property</strong><span>Packages, notices, resident comms</span></button>
+                <button class="segment-option" type="button" data-market="school"><strong>Schools</strong><span>Service trust, supplies, print, mail</span></button>
+                <button class="segment-option" type="button" data-market="industrial"><strong>Industrial</strong><span>Shipping, tracking, phones</span></button>
+                <button class="segment-option" type="button" data-market="hq"><strong>Core Base</strong><span>Existing customers and renewal timing</span></button>
+              </div>
+              <dl>
+                <div>
+                  <dt>Likely pain</dt>
+                  <dd id="market-pain">Manual proof, retrieval friction, deadline risk, disconnected customer communications, and staff time spent chasing records.</dd>
+                </div>
+                <div>
+                  <dt>Apache offer</dt>
+                  <dd id="market-offer">Certified mail workflows, document proof, transactional communications, and local support around operational mail.</dd>
+                </div>
+                <div>
+                  <dt>Website interaction</dt>
+                  <dd id="market-interaction">A buyer-lane selector that routes visitors into their workflow pain, then asks for volume, current process, urgency, and next step.</dd>
+                </div>
+                <div>
+                  <dt>Data to collect</dt>
+                  <dd id="market-data">Document volume, proof requirements, current provider, retrieval process, risk level, and buying timeline.</dd>
+                </div>
+              </dl>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section id="model">
+        <div class="section-head">
+          <div>
+            <span class="label">Business model read</span>
+            <h2>The old core is not dead. It is the bridge.</h2>
+          </div>
+          <p>Mailing hardware is shrinking as a category, but Apache's current mail base creates layered revenue and trusted relationships. The pivot should use that trust to sell modern communications, not pretend the old business never existed.</p>
+        </div>
+
+        <div class="panels">
+          <article class="panel">
+            <h3>Protect the base</h3>
+            <p>Mailing equipment still creates multiple revenue layers: equipment, meter, maintenance, supplies, and renewal timing.</p>
+            <ul>
+              <li>Renew before competitors intervene.</li>
+              <li>Use service trust as a sales asset.</li>
+              <li>Turn every renewal into a cross-sell checkpoint.</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <h3>Modernize the story</h3>
+            <p>Apache needs to explain the move from mail equipment to business communications in plain operational language.</p>
+            <ul>
+              <li>Send statements without a mailroom.</li>
+              <li>Find proof when it matters later.</li>
+              <li>Support phones, documents, and service locally.</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <h3>Systematize opportunity</h3>
+            <p>The highest-leverage system is not a chatbot. It is a campaign and follow-up engine that creates more legitimate sales conversations.</p>
+            <ul>
+              <li>Segment by next best offer.</li>
+              <li>Score product fit and timing.</li>
+              <li>Feed Zoho with cleaner actions.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="funnel">
+        <div class="section-head">
+          <div>
+            <span class="label">Funnel bottleneck map</span>
+            <h2>Apache wins after the room. The issue is getting there.</h2>
+          </div>
+          <p>The call points to opportunity creation as the constraint. The website, telemarketing, Zoho, and sales assets should all be aligned around getting better conversations with the right buyer.</p>
+        </div>
+
+        <div class="funnel">
+          <div class="funnel-row">
+            <div class="stage">Awareness</div>
+            <div class="problem">The current public story undersells what Apache does now. Buyers may see old office equipment instead of local communications infrastructure.</div>
+            <div class="praxis-move">Rebuild positioning, homepage, SEO structure, and offer hierarchy.</div>
+          </div>
+          <div class="funnel-row">
+            <div class="stage">Targeting</div>
+            <div class="problem">Prospecting is split across existing database work, vendor leads, ZoomInfo, GPO lists, and manual telemarketing without a unified opportunity model.</div>
+            <div class="praxis-move">Create campaign lists, account segmentation, and product-fit scoring.</div>
+          </div>
+          <div class="funnel-row">
+            <div class="stage">Education</div>
+            <div class="problem">Customers do not know what they do not know, especially around transactional communications and certified proof workflows.</div>
+            <div class="praxis-move">Build buyer-specific landing pages, ROI tools, and plain-English business cases.</div>
+          </div>
+          <div class="funnel-row">
+            <div class="stage">Follow-up</div>
+            <div class="problem">Good opportunities can depend too much on human memory, scattered assets, and manual next steps.</div>
+            <div class="praxis-move">Tie scripts, pages, assets, and Zoho-ready actions to each campaign.</div>
+          </div>
+          <div class="funnel-row">
+            <div class="stage">Expansion</div>
+            <div class="problem">Only a minority of customers appear to buy across multiple categories, despite a large active base.</div>
+            <div class="praxis-move">Create current-customer attach campaigns for phones, software, proof, and renewal protection.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="engine">
+        <div class="section-head">
+          <div>
+            <span class="label">Opportunity Engine</span>
+            <h2>Turn the website into a revenue operating system.</h2>
+          </div>
+          <p>The rebuild should not stop at pages. The bigger play is a system that finds the right accounts, chooses the right offer, launches the right follow-up, and gives Apache a reason to call before competitors own the timing.</p>
+        </div>
+
+        <div class="revenue-os">
+          <div class="os-top">
+            <div class="os-core" aria-label="Apache Opportunity Engine diagram">
+              <div class="os-connector os-c1"></div>
+              <div class="os-connector os-c2"></div>
+              <div class="os-connector os-c3"></div>
+              <div class="os-connector os-c4"></div>
+              <div class="os-center"><div><b>Opportunity Engine</b><span>More qualified conversations</span></div></div>
+              <div class="os-orbit os-o1"><b>Customer Base</b><span>Revenue already inside trust.</span></div>
+              <div class="os-orbit os-o2"><b>Competitor Radar</b><span>Evidence-ranked takeover targets.</span></div>
+              <div class="os-orbit os-o3"><b>Tracked Demand</b><span>Mailer, QR, landing page, visitor signal.</span></div>
+              <div class="os-orbit os-o4"><b>Partner Channels</b><span>Deals sourced before search intent.</span></div>
+            </div>
+
+            <div class="os-loops">
+              <article class="os-loop">
+                <span class="num">01</span>
+                <h3>Protect and mine the base</h3>
+                <p>Map every current customer by category ownership, renewal timing, machine age, service history, cross-sell gap, and relationship owner.</p>
+                <div class="os-tags"><span>Renewals</span><span>Attach</span><span>Retention</span></div>
+              </article>
+              <article class="os-loop">
+                <span class="num">02</span>
+                <h3>Steal from competitors</h3>
+                <p>Build a postage-focused takeover radar using public contracts, check registers, private-sector propensity, and technician field intelligence.</p>
+                <div class="os-tags"><span>Pitney Bowes</span><span>FP</span><span>Lease timing</span></div>
+              </article>
+              <article class="os-loop">
+                <span class="num">03</span>
+                <h3>Create tracked demand</h3>
+                <p>Dogfood Apache's own category: targeted mailers, QR codes, vertical landing pages, call tracking, visitor identification, and follow-up tasks.</p>
+                <div class="os-tags"><span>Mailers</span><span>QR</span><span>RB2B</span></div>
+              </article>
+              <article class="os-loop">
+                <span class="num">04</span>
+                <h3>Compound through partners</h3>
+                <p>Use GCs, property managers, MSPs, print shops, CPAs, and office vendors as earlier, cheaper paths into the right accounts.</p>
+                <div class="os-tags"><span>Channels</span><span>Referrals</span><span>Co-op</span></div>
+              </article>
+            </div>
+          </div>
+
+          <div class="os-proof-grid">
+            <div class="os-proof">
+              <h4>Near-term wedge</h4>
+              <strong>Customer mining</strong>
+              <p>Fastest path to revenue because Apache already has trust, account history, and service touchpoints.</p>
+            </div>
+            <div class="os-proof">
+              <h4>Acquisition wedge</h4>
+              <strong>Postage takeovers</strong>
+              <p>Use competitor evidence and high-mail-volume propensity to create a focused second-opinion campaign.</p>
+            </div>
+            <div class="os-proof">
+              <h4>Positioning wedge</h4>
+              <strong>Dogfood mail</strong>
+              <p>Apache proves its own message by using mail, tracking, landing pages, and follow-up to create pipeline.</p>
+            </div>
+          </div>
+
+          <div class="os-stack">
+            <div class="os-stack-item">
+              <h4>Inputs</h4>
+              <p>Zoho exports, customer inventory, renewal dates, service tickets, vendor records, public contracts, lead sweeps.</p>
+            </div>
+            <div class="os-stack-item">
+              <h4>Scoring</h4>
+              <p>Product fit, urgency, margin, recurrence, relationship strength, competitor signal, confidence, and timing.</p>
+            </div>
+            <div class="os-stack-item">
+              <h4>Campaigns</h4>
+              <p>Vertical SEO pages, mailers, referral scripts, renewal plays, second-opinion offers, and partner packets.</p>
+            </div>
+            <div class="os-stack-item">
+              <h4>Outputs</h4>
+              <p>Ranked account lists, next-best action, page/asset links, follow-up tasks, and campaign performance view.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="fit">
+        <div class="section-head">
+          <div>
+            <span class="label">Praxis fit assessment</span>
+            <h2>Strong fit if Apache wants a revenue systems partner.</h2>
+          </div>
+          <p>Praxis is strongest when the project is a revenue-first rebuild that touches positioning, data, sales assets, campaigns, and lightweight tooling.</p>
+        </div>
+
+        <div class="split">
+          <div class="fit">
+            <h3>Strong fit</h3>
+            <ul>
+              <li>Apache wants the website to support revenue, not just look better.</li>
+              <li>They are open to validating product/margin priorities with data.</li>
+              <li>They want help making complex offers easier to sell.</li>
+              <li>They will let Praxis work around Zoho, lead lists, campaign structure, and sales assets.</li>
+              <li>They see AI as behind-the-scenes leverage, not the headline.</li>
+            </ul>
+          </div>
+          <div class="fit">
+            <h3>Weak fit</h3>
+            <ul>
+              <li>They only want a basic low-scope site refresh.</li>
+              <li>They do not want to share customer/product/renewal data.</li>
+              <li>They are unwilling to prioritize revenue paths.</li>
+              <li>They want generic SEO without sales process changes.</li>
+              <li>They expect the website alone to fix opportunity creation.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="roadmap">
+        <div class="section-head">
+          <div>
+            <span class="label">Phased path</span>
+            <h2>Validate the strategy. Then build.</h2>
+          </div>
+          <p>Phase 1 gives us the map. Phase 2 should validate the strategy, offer priorities, and data needs. Phase 3 can turn the approved direction into the website, campaigns, and repeatable revenue motion.</p>
+        </div>
+
+        <div class="roadmap">
+          <div class="road">
+            <div class="num">01</div>
+            <h3>Revenue Map</h3>
+            <p>Map the business, revenue paths, constraints, and Praxis fit. This deliverable completes Phase 1.</p>
+          </div>
+          <div class="road">
+            <div class="num">02</div>
+            <h3>Strategy Review</h3>
+            <p>Validate offer priorities, assumptions, data needs, brand direction, and what should be built first.</p>
+          </div>
+          <div class="road">
+            <div class="num">03</div>
+            <h3>Website + Campaign Build</h3>
+            <p>Build public pages, landing pages, campaign copy, inquiry paths, and sales assets around approved priorities.</p>
+          </div>
+          <div class="road">
+            <div class="num">04</div>
+            <h3>Productized Tools</h3>
+            <p>Add calculators, assessments, sales asset library, and vertical campaigns that Apache can use repeatedly.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <div>
+            <span class="label">Validation needed</span>
+            <h2>The next ask should be a focused data review.</h2>
+          </div>
+          <p>We can complete the strategic map now. To validate the implementation plan, Apache needs to share enough data to confirm priorities and campaign sequencing.</p>
+        </div>
+
+        <ul class="data-list">
+          <li>Revenue by category for the last 12-24 months</li>
+          <li>Gross margin by category if available</li>
+          <li>Active customer list with product ownership</li>
+          <li>Lease and renewal dates</li>
+          <li>Service contract list</li>
+          <li>Top customers by revenue</li>
+          <li>Lost customers or non-renewals from the last 24 months</li>
+          <li>Current Zoho export fields</li>
+          <li>Telemarketer scripts and call categories</li>
+          <li>Existing vendor/product decks and videos</li>
+          <li>Three customer stories or testimonials</li>
+          <li>Team, truck, install, and local service photos</li>
+        </ul>
+      </section>
+
+      <section class="closing">
+        <span class="label">Phase 1 conclusion</span>
+        <h2>Apache should become the local business communications partner, not just a mailing equipment reseller.</h2>
+        <p>Praxis can help by turning Apache's business knowledge into a sharper website, a clearer sales story, and a repeatable opportunity engine. The project is a strong fit if Apache wants growth infrastructure, not just a visual refresh.</p>
+      </section>
+    </main>
+
+    <footer>
+      <span>Praxis Revenue Map / Prepared for Apache Business Systems</span>
+      <span><a href="apache-review-package-2026-06-22.html">Open Review Package</a> / <a href="phase-2-strategy-review-2026-06-22.html">Open Phase 2 Strategy Review</a></span>
+    </footer>
+  </div>
+  <script>
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    window.addEventListener("load", () => {
+      if (!window.location.hash) window.scrollTo(0, 0);
+    });
+
+    const opportunityCriteria = [
+      { key: "growth", label: "Growth", helper: "How much can this expand revenue?" },
+      { key: "margin", label: "Margin", helper: "How attractive is the gross margin?" },
+      { key: "recurring", label: "Recurring", helper: "How repeatable is the revenue?" },
+      { key: "diff", label: "Differentiation", helper: "How hard is this for competitors to match?" },
+      { key: "ease", label: "Ease", helper: "How manageable is sales and delivery?" },
+      { key: "confidence", label: "Confidence", helper: "How much evidence does Apache already have?" }
+    ];
+
+    const defaultWeights = {
+      growth: 4,
+      margin: 5,
+      recurring: 5,
+      diff: 4,
+      ease: 3,
+      confidence: 3
+    };
+
+    const presets = {
+      growth: { growth: 5, margin: 4, recurring: 4, diff: 4, ease: 3, confidence: 3 },
+      margin: { growth: 3, margin: 5, recurring: 4, diff: 3, ease: 4, confidence: 4 },
+      recurring: { growth: 3, margin: 4, recurring: 5, diff: 3, ease: 4, confidence: 4 },
+      reset: defaultWeights
+    };
+
+    const opportunityDefaults = [
+      {
+        key: "takeovers",
+        title: "Competitive mail takeovers",
+        description: "Steal existing meter users with better local service.",
+        growth: 4,
+        margin: 4,
+        recurring: 4,
+        diff: 5,
+        ease: 3,
+        confidence: 3,
+        prompt: "Add: competitor targets, lease timing, win triggers, and average deal value."
+      },
+      {
+        key: "transactional",
+        title: "Transactional communications",
+        description: "Statement, invoice, notice, archive, portal, print-to-mail.",
+        growth: 5,
+        margin: 3,
+        recurring: 3,
+        diff: 4,
+        ease: 2,
+        confidence: 2,
+        prompt: "Add: real customer demand, buyer type, Quadient economics, and implementation burden."
+      },
+      {
+        key: "phones",
+        title: "Business phones",
+        description: "Recurring monthly offer attached to current customers.",
+        growth: 4,
+        margin: 4,
+        recurring: 5,
+        diff: 3,
+        ease: 3,
+        confidence: 3,
+        prompt: "Add: current provider data, contract timing, MRR, support burden, and close rate."
+      },
+      {
+        key: "certified",
+        title: "Certified / proof add-on",
+        description: "Compliance proof module inside transaction workflows unless demand proves standalone.",
+        growth: 3,
+        margin: 3,
+        recurring: 3,
+        diff: 3,
+        ease: 3,
+        confidence: 2,
+        prompt: "Add: best verticals, urgent use cases, pricing model, and whether this belongs inside transactional communications."
+      },
+      {
+        key: "lockers",
+        title: "Parcel lockers",
+        description: "Large-ticket multifamily opportunity, less recurring.",
+        growth: 4,
+        margin: 2,
+        recurring: 1,
+        diff: 3,
+        ease: 2,
+        confidence: 2,
+        prompt: "Add: property manager pipeline, hardware margin, install complexity, and service risk."
+      }
+    ];
+
+    const marketSegments = {
+      hq: {
+        kicker: "Local proof module",
+        title: "Apache HQ",
+        summary: "The next UI pass can anchor Apache at its actual Tucson base, then radiate outward into buyer-specific pathways.",
+        pain: "Downtime, scattered vendors, unclear support ownership.",
+        offer: "Local service response, current customer expansion, and one accountable business systems partner.",
+        interaction: "Clickable Tucson map, buyer selector, and offer-specific call-to-action paths.",
+        data: "Business type, current systems, service pain, renewal timing, and preferred next step."
+      },
+      law: {
+        kicker: "High-proof vertical",
+        title: "Legal & finance",
+        summary: "This segment makes certified proof and transactional records easier to understand because the risk is obvious.",
+        pain: "Missed notices, weak audit trails, manual certified mail records, and difficulty retrieving proof later.",
+        offer: "Certified proof workflows, address validation, records retrieval, and print-to-mail support.",
+        interaction: "A compliance-proof assessment that routes legal and finance buyers to certified mail, document, and proof workflows.",
+        data: "Monthly certified volume, pain around proof retrieval, current process, and cost of failed delivery."
+      },
+      health: {
+        kicker: "Records and notices",
+        title: "Healthcare",
+        summary: "Healthcare buyers need operational reliability, records discipline, and local support when equipment slows down admin work.",
+        pain: "Patient notices, billing mail, records workflows, front-office phones, and downtime sensitivity.",
+        offer: "Transactional communications, document systems, business phones, mailing equipment, and local service.",
+        interaction: "A healthcare pathway that asks whether the buyer needs patient communications, records, phones, or equipment service.",
+        data: "Notice volume, print/mail process, current phone provider, compliance constraints, and service history."
+      },
+      property: {
+        kicker: "Property operators",
+        title: "Property management",
+        summary: "This is where parcel lockers may belong, but only if Apache can validate pipeline, margin, and install complexity.",
+        pain: "Resident package handling, notices, leasing communications, office phones, and staff time spent on manual follow-up.",
+        offer: "Parcel lockers where justified, certified notices, business phones, and outbound resident communications.",
+        interaction: "A property workflow selector: packages, notices, phones, or mailroom modernization.",
+        data: "Door count, package volume, current package process, notice volume, budget owner, and install constraints."
+      },
+      school: {
+        kicker: "Trust-heavy buyers",
+        title: "Schools & nonprofits",
+        summary: "This segment may care less about flash and more about dependability, service, budget fit, and vendor trust.",
+        pain: "Aging equipment, limited admin capacity, budget cycles, urgent service needs, and multiple small vendors.",
+        offer: "Mailing, print, supplies, service, and practical local support across departments.",
+        interaction: "A plain-English support pathway that helps them request service, supplies, equipment, or a budget quote.",
+        data: "Budget timing, equipment age, department ownership, service pain, supplies usage, and renewal windows."
+      },
+      industrial: {
+        kicker: "Operations buyers",
+        title: "Industrial & logistics",
+        summary: "This segment is likely more operational: shipping, tracking, phones, labels, forms, and reliable service.",
+        pain: "Outbound shipping friction, package tracking, label workflows, front-office coordination, and equipment downtime.",
+        offer: "Shipping systems, tracking, phone systems, mailing equipment, and service response.",
+        interaction: "A workflow map that starts with shipping volume, tracking pain, customer communication, and equipment needs.",
+        data: "Shipment volume, carrier mix, tracking process, phone system status, and recurring service needs."
+      }
+    };
+
+    const storageKey = "apache-opportunity-matrix-v1";
+    const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+    const state = {
+      weights: { ...defaultWeights, ...(saved.weights || {}) },
+      opportunities: opportunityDefaults.map((item) => ({
+        ...item,
+        ...(saved.opportunities?.[item.key] || {})
+      }))
+    };
+
+    const weightControls = document.getElementById("weight-controls");
+    const opportunityCards = document.getElementById("opportunity-cards");
+    const rankList = document.getElementById("rank-list");
+    const snapshotButton = document.getElementById("copy-opportunity-snapshot");
+    const marketKicker = document.getElementById("market-kicker");
+    const marketTitle = document.getElementById("market-title");
+    const marketSummary = document.getElementById("market-summary");
+    const marketPain = document.getElementById("market-pain");
+    const marketOffer = document.getElementById("market-offer");
+    const marketInteraction = document.getElementById("market-interaction");
+    const marketData = document.getElementById("market-data");
+    const heroMarketTitle = document.getElementById("hero-market-title");
+    const heroMarketCopy = document.getElementById("hero-market-copy");
+
+    function persist() {
+      const opportunities = {};
+      state.opportunities.forEach((item) => {
+        opportunities[item.key] = {};
+        opportunityCriteria.forEach((criterion) => {
+          opportunities[item.key][criterion.key] = Number(item[criterion.key]);
+        });
+        opportunities[item.key].notes = item.notes || "";
+      });
+      localStorage.setItem(storageKey, JSON.stringify({ weights: state.weights, opportunities }));
+    }
+
+    function scoreOpportunity(item) {
+      const weighted = opportunityCriteria.reduce((sum, criterion) => {
+        return sum + Number(item[criterion.key]) * Number(state.weights[criterion.key]);
+      }, 0);
+      const max = opportunityCriteria.reduce((sum, criterion) => {
+        return sum + 5 * Number(state.weights[criterion.key]);
+      }, 0);
+      return Math.round((weighted / max) * 100);
+    }
+
+    function ratingLabel(score) {
+      if (score >= 80) return "Focus";
+      if (score >= 68) return "Validate";
+      if (score >= 55) return "Test";
+      return "Hold";
+    }
+
+    function renderWeights() {
+      weightControls.innerHTML = opportunityCriteria.map((criterion) => `
+        <label class="weight-control">
+          <span class="control-label">
+            <span>${criterion.label}</span>
+            <output id="weight-${criterion.key}">${state.weights[criterion.key]}</output>
+          </span>
+          <input type="range" min="1" max="5" value="${state.weights[criterion.key]}" data-weight="${criterion.key}" aria-label="${criterion.label} weight">
+        </label>
+      `).join("");
+    }
+
+    function renderCards() {
+      opportunityCards.innerHTML = state.opportunities.map((item) => {
+        const score = scoreOpportunity(item);
+        return `
+          <article class="opportunity-card" data-card="${item.key}">
+            <h3>${item.title}</h3>
+            <p>${item.description}</p>
+            <div class="rating-stack">
+              ${opportunityCriteria.map((criterion) => `
+                <label class="rating-control">
+                  <span class="control-label">
+                    <span>${criterion.label}</span>
+                    <output>${item[criterion.key]}</output>
+                  </span>
+                  <input type="range" min="1" max="5" value="${item[criterion.key]}" data-opportunity="${item.key}" data-criterion="${criterion.key}" aria-label="${item.title} ${criterion.label}">
+                </label>
+              `).join("")}
+            </div>
+            <div class="score-line">
+              <div>
+                <strong>${score}</strong>
+                <span>Weighted score</span>
+              </div>
+              <span class="priority">${ratingLabel(score)}</span>
+            </div>
+            <textarea data-notes="${item.key}" placeholder="${item.prompt}">${item.notes || ""}</textarea>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderRankings() {
+      const ranked = [...state.opportunities]
+        .map((item) => ({ ...item, score: scoreOpportunity(item) }))
+        .sort((a, b) => b.score - a.score);
+      rankList.innerHTML = ranked.map((item, index) => `
+        <div class="rank-item">
+          <span class="rank-num">${String(index + 1).padStart(2, "0")}</span>
+          <div>
+            <div>${item.title}</div>
+            <div class="rank-bar"><i style="width:${item.score}%"></i></div>
+          </div>
+          <span class="rank-score">${item.score}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderAll() {
+      renderWeights();
+      renderCards();
+      renderRankings();
+      persist();
+    }
+
+    document.addEventListener("input", (event) => {
+      const weightKey = event.target.dataset.weight;
+      const opportunityKey = event.target.dataset.opportunity;
+      const criterionKey = event.target.dataset.criterion;
+      const notesKey = event.target.dataset.notes;
+
+      if (weightKey) {
+        state.weights[weightKey] = Number(event.target.value);
+        document.getElementById(`weight-${weightKey}`).value = event.target.value;
+        renderCards();
+        renderRankings();
+        persist();
+      }
+
+      if (opportunityKey && criterionKey) {
+        const item = state.opportunities.find((candidate) => candidate.key === opportunityKey);
+        item[criterionKey] = Number(event.target.value);
+        renderCards();
+        renderRankings();
+        persist();
+      }
+
+      if (notesKey) {
+        const item = state.opportunities.find((candidate) => candidate.key === notesKey);
+        item.notes = event.target.value;
+        persist();
+      }
+    });
+
+    document.addEventListener("click", async (event) => {
+      const preset = event.target.dataset.preset;
+      const marketKey = event.target.closest("[data-market]")?.dataset.market;
+      if (preset) {
+        state.weights = { ...presets[preset] };
+        renderAll();
+      }
+
+      if (marketKey) {
+        const item = marketSegments[marketKey];
+        document.querySelectorAll("[data-market]").forEach((button) => button.classList.toggle("active", button.dataset.market === marketKey));
+        if (heroMarketTitle && heroMarketCopy) {
+          heroMarketTitle.textContent = item.title;
+          heroMarketCopy.textContent = item.summary;
+        }
+        marketKicker.textContent = item.kicker;
+        marketTitle.textContent = item.title;
+        marketSummary.textContent = item.summary;
+        marketPain.textContent = item.pain;
+        marketOffer.textContent = item.offer;
+        marketInteraction.textContent = item.interaction;
+        marketData.textContent = item.data;
+      }
+
+      if (event.target === snapshotButton) {
+        const ranked = [...state.opportunities]
+          .map((item) => ({ ...item, score: scoreOpportunity(item) }))
+          .sort((a, b) => b.score - a.score);
+        const summary = [
+          "Apache opportunity matrix snapshot",
+          "",
+          "Weights:",
+          ...opportunityCriteria.map((criterion) => `- ${criterion.label}: ${state.weights[criterion.key]}`),
+          "",
+          "Ranked opportunities:",
+          ...ranked.map((item, index) => `${index + 1}. ${item.title}: ${item.score} (${ratingLabel(item.score)})${item.notes ? ` - Notes: ${item.notes}` : ""}`)
+        ].join("\n");
+        try {
+          await navigator.clipboard.writeText(summary);
+          snapshotButton.textContent = "Copied snapshot";
+          setTimeout(() => { snapshotButton.textContent = "Copy meeting snapshot"; }, 1400);
+        } catch {
+          snapshotButton.textContent = "Copy unavailable";
+          setTimeout(() => { snapshotButton.textContent = "Copy meeting snapshot"; }, 1400);
+        }
+      }
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Return to sender — Apache Business Systems</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon-32.png">
+<link rel="preload" href="assets/fonts/source-serif-4-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/public-sans-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .dead-letter { min-height: 82vh; display: flex; align-items: center; }
+  .dl-card {
+    position: relative;
+    max-width: 720px; margin: 0 auto;
+    background: var(--white);
+    border: 2px solid var(--navy);
+    border-radius: var(--r);
+    box-shadow: var(--lift);
+    padding: clamp(32px, 5vw, 60px);
+    transform: rotate(-1deg);
+  }
+  .dl-card h1 { font-size: clamp(36px, 5vw, 58px); line-height: 1.02; letter-spacing: -0.018em; }
+  .dl-card h1 em { font-style: italic; color: var(--orange); }
+  .dl-card p { color: var(--ink-soft); margin-top: 18px; max-width: 46ch; }
+  .dl-stamp {
+    position: absolute; top: 26px; right: 26px;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--orange);
+    border: 3px double var(--orange);
+    border-radius: 3px;
+    padding: 8px 14px;
+    transform: rotate(8deg);
+  }
+  .dl-code {
+    font-family: var(--serif); font-weight: 700;
+    font-size: clamp(72px, 10vw, 120px);
+    color: var(--neutral);
+    -webkit-text-stroke: 2px var(--navy);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+<main class="dead-letter tex-grid">
+  <div class="wrap" style="width:100%">
+    <div class="dl-card">
+      <span class="dl-stamp">Return to sender</span>
+      <div class="dl-code">404</div>
+      <h1>This page came back <em>address unknown.</em></h1>
+      <p>
+        The dead-letter office checked twice — nothing at this address. The page
+        may have moved, or the link had a typo. Either way, the trail picks
+        back up at the front desk.
+      </p>
+      <div class="hero-actions" style="margin-top:28px">
+        <a class="btn btn--primary" href="index.html">Back to the site <span class="arr">→</span></a>
+        <a class="btn btn--ghost" href="tel:+15205195000">Call (520) 519-5000</a>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

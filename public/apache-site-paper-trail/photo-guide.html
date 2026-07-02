@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apache Photo Shot List — internal guide</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon-32.png">
+<link rel="preload" href="assets/fonts/source-serif-4-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/public-sans-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .guide-hero { padding: clamp(40px, 5vw, 64px) 0 clamp(30px, 4vw, 48px); border-bottom: 2px solid var(--navy); }
+  .guide-hero h1 { font-size: clamp(34px, 4.6vw, 58px); line-height: 1.02; letter-spacing: -0.018em; max-width: 20ch; }
+  .guide-hero h1 em { font-style: italic; color: var(--orange); }
+  .howto {
+    border: 2px solid var(--orange); border-radius: var(--r);
+    background: var(--white); padding: 22px 26px; margin-top: 30px;
+    max-width: 860px; box-shadow: var(--lift-sm);
+  }
+  .howto b { color: var(--navy); }
+  .howto code {
+    font-family: ui-monospace, Menlo, monospace; font-size: 13px;
+    background: var(--neutral); border: 1px solid var(--hairline);
+    border-radius: 3px; padding: 2px 6px; color: var(--navy);
+  }
+  .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .shot {
+    background: var(--white); border: 2px solid var(--navy); border-radius: var(--r);
+    box-shadow: var(--lift-sm); padding: 20px 22px; display: flex; flex-direction: column;
+  }
+  .shot.is-bonus { border-style: dashed; box-shadow: none; }
+  .shot-top { display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    padding-bottom: 12px; margin-bottom: 14px; border-bottom: 2px solid var(--navy); }
+  .shot-top .fname { font-family: ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700; color: var(--orange); }
+  .shot h3 { font-size: 20px; margin-bottom: 8px; }
+  .shot .where { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--navy-soft); margin-bottom: 10px; }
+  .shot p { font-size: 14px; color: var(--ink-soft); flex: 1; }
+  .shot .specs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  @media (max-width: 1000px) { .shots { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 680px) { .shots { grid-template-columns: 1fr; } }
+  @media print { .howto { break-inside: avoid; } .shot { break-inside: avoid; box-shadow: none; } }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="topbar">
+  <div class="wrap topbar-inner">
+    <span><i>●</i> Internal — photo gathering guide</span>
+    <span class="tb-right"><a href="index.html">← Back to the site draft</a></span>
+  </div>
+</div>
+
+<main id="main">
+  <section class="guide-hero tex-grid">
+    <div class="wrap">
+      <span class="label label--tick" style="display:block;margin-bottom:16px">Apache website · shot list</span>
+      <h1>Nine photos make this site <em>unmistakably Apache.</em></h1>
+      <p class="sec-sub" style="margin-top:20px;font-size:17px;color:var(--ink-soft);max-width:64ch">
+        Shoot on a phone in good light — honest beats polished for a 60-year local
+        business. Landscape orientation for everything. Avoid vendor logos filling
+        the frame; the subject is always Apache people, Apache equipment, Apache Tucson.
+      </p>
+      <div class="howto">
+        <b>How the swap works:</b> save each photo as a JPG named exactly like its slot
+        (for example <code>slot-01-team.jpg</code>) and drop it into
+        <code>assets/photos/</code> inside the site folder. Every placeholder on the
+        site finds its photo and replaces itself automatically — no code edits, no
+        rebuild. Shots 1–6 are wired today; shots 7–9 are worth capturing on the same
+        visit for launch and Google Business Profile use.
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="shots">
+
+        <article class="shot">
+          <div class="shot-top"><span class="chip chip--solid">Shot 01</span><span class="fname">slot-01-team.jpg</span></div>
+          <h3>The Apache team</h3>
+          <div class="where">Home · polaroid row, slot 1</div>
+          <p>Everyone, in front of the shop or the counter. Doesn't need to be formal — a real team beats a posed one. This is the single highest-value photo on the list.</p>
+          <div class="specs"><span class="chip">Landscape</span><span class="chip">People, faces visible</span><span class="chip">Priority ★★★</span></div>
+        </article>
+
+        <article class="shot">
+          <div class="shot-top"><span class="chip chip--solid">Shot 02</span><span class="fname">slot-02-vehicle.jpg</span></div>
+          <h3>Service vehicle in the field</h3>
+          <div class="where">Home · polaroid row, slot 2</div>
+          <p>The van or truck parked at a customer stop or on a recognizable Tucson street. If there's signage on the vehicle, get it readable in frame.</p>
+          <div class="specs"><span class="chip">Landscape</span><span class="chip">Tucson context</span><span class="chip">Priority ★★★</span></div>
+        </article>
+
+        <article class="shot">
+          <div class="shot-top"><span class="chip chip--solid">Shot 03</span><span class="fname">slot-03-install.jpg</span></div>
+          <h3>A customer install</h3>
+          <div class="where">Home · polaroid row, slot 3</div>
+          <p>Apache equipment working in a real office — a meter, folder/inserter, or phone system, ideally with a customer's space visible around it. Ask the customer first.</p>
+          <div class="specs"><span class="chip">Landscape</span><span class="chip">Real office</span><span class="chip">Priority ★★</span></div>
+        </article>
+
+        <article class="shot">
+          <div class="shot-top"><span class="chip chip--solid">Shot 04</span><span class="fname">slot-04-hero.jpg</span></div>
+          <h3>Hands at the workbench</h3>
+          <div class="where">Home · hero collage, top-right card</div>
+          <p>Close-up detail: hands servicing a meter, loading an inserter, or testing a phone. This one sets the craft tone for the whole site — shoot several and pick the sharpest.</p>
+          <div class="specs"><span class="chip">Landscape, tight crop</span><span class="chip">Detail shot</span><span class="chip">Priority ★★★</span></div>
+        </article>
+
+        <article class="shot">
+          <div class="shot-top"><span class="chip chip--solid">Shot 05</span><span class="fname">slot-05-equipment.jpg</span></div>
+          <h3>Mailing equipment, presentable</h3>
+          <div class="where">Mail systems page · renewal-window card</div>
+          <p>The cleanest meter or mailing system in the shop or showroom, straight-on, uncluttered background. This sits next to the lease timeline, so it should look dependable, not glamorous.</p>
+          <div class="specs"><span class="chip">Landscape</span><span class="chip">Clean background</span><span class="chip">Priority ★★</span></div>
+        </article>
+
+        <article class="shot">
+          <div class="shot-top"><span class="chip chip--solid">Shot 06</span><span class="fname">slot-06-front-office.jpg</span></div>
+          <h3>The front office, answering</h3>
+          <div class="where">Service &amp; supplies page · service log card</div>
+          <p>Someone actually on the phone at the front desk. This is the "a person answers" proof shot — candid, mid-call, natural.</p>
+          <div class="specs"><span class="chip">Landscape</span><span class="chip">Candid</span><span class="chip">Priority ★★</span></div>
+        </article>
+
+        <article class="shot is-bonus">
+          <div class="shot-top"><span class="chip">Shot 07 · bonus</span><span class="fname">slot-07-building.jpg</span></div>
+          <h3>Building exterior with signage</h3>
+          <div class="where">Future: story section, contact page, Google Business Profile</div>
+          <p>The Coach Dr building, morning light, sign legible. GBP currently has one photo — this shot alone improves the Google listing.</p>
+          <div class="specs"><span class="chip">Landscape</span><span class="chip">Also for GBP</span></div>
+        </article>
+
+        <article class="shot is-bonus">
+          <div class="shot-top"><span class="chip">Shot 08 · bonus</span><span class="fname">slot-08-proof.jpg</span></div>
+          <h3>Certified proof workflow</h3>
+          <div class="where">Future: certified proof page</div>
+          <p>The e-Certify screen or a prepared certified mail run — anything that makes "proof you can find later" concrete without showing customer data.</p>
+          <div class="specs"><span class="chip">Landscape</span><span class="chip">No customer data</span></div>
+        </article>
+
+        <article class="shot is-bonus">
+          <div class="shot-top"><span class="chip">Shot 09 · bonus</span><span class="fname">slot-09-lockers.jpg</span></div>
+          <h3>Parcel locker install</h3>
+          <div class="where">Future: parcel lockers page</div>
+          <p>An installed locker bank at a property, ideally with a resident or carrier mid-pickup. Ask the property manager first.</p>
+          <div class="specs"><span class="chip">Landscape</span><span class="chip">Permission needed</span></div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="perf" aria-hidden="true"></div>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-base" style="border-top:0">
+      <span>Apache Business Systems website draft · internal photo guide</span>
+      <span><a href="index.html" style="color:var(--orange)">Back to the site</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

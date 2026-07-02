@@ -1,0 +1,1598 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Apache Phase 2 Strategy Review | Praxis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #071d35;
+      --ink: #020b15;
+      --blue: #12375f;
+      --paper: #f1e8d2;
+      --paper-soft: rgba(241,232,210,.78);
+      --muted: rgba(241,232,210,.58);
+      --gold: #c9a24b;
+      --gold-rule: rgba(201,162,75,.36);
+      --gold-soft: rgba(201,162,75,.16);
+      --red: #c42130;
+      --red-soft: rgba(196,33,48,.18);
+      --apache: #f26a1b;
+      --apache-soft: rgba(242,106,27,.18);
+      --green: #64c28f;
+      --glass: rgba(5,22,43,.74);
+      --font-display: "Big Shoulders Display", Impact, sans-serif;
+      --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+      --max: 1480px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--paper);
+      font-family: var(--font-sans);
+      line-height: 1.55;
+      background:
+        radial-gradient(850px 520px at 12% -10%, rgba(242,106,27,.16), transparent 64%),
+        radial-gradient(700px 420px at 92% 0%, rgba(201,162,75,.14), transparent 60%),
+        linear-gradient(132deg, transparent 0 49%, rgba(201,162,75,.055) 49.1% 49.35%, transparent 49.45% 100%),
+        linear-gradient(180deg, var(--navy), var(--ink) 60%, #02070d);
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, rgba(241,232,210,.026) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(241,232,210,.026) 1px, transparent 1px),
+        repeating-radial-gradient(ellipse at 20% 10%, rgba(201,162,75,.045) 0 1px, transparent 2px 18px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(180deg, #000, transparent 78%);
+    }
+    a { color: inherit; }
+    button, input { font: inherit; }
+
+    .shell { position: relative; z-index: 1; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 15px clamp(18px, 4vw, 48px);
+      border-bottom: 1px solid var(--gold-rule);
+      background: rgba(3,16,31,.9);
+      backdrop-filter: blur(16px);
+    }
+    .lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 14px rgba(201,162,75,.18));
+    }
+    .wordmark {
+      color: var(--paper);
+      font-family: var(--font-display);
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .04em;
+    }
+    .report-nav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: clamp(10px, 2vw, 22px);
+      min-width: 0;
+    }
+    .report-nav a,
+    .report-nav button {
+      border: 0;
+      background: transparent;
+      color: var(--paper-soft);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .07em;
+      text-decoration: none;
+      text-transform: uppercase;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .report-nav a:hover,
+    .report-nav button:hover { color: var(--gold); }
+    .report-nav a:first-child {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border: 1px solid var(--gold-rule);
+      color: var(--gold);
+    }
+    .report-nav button {
+      min-height: 34px;
+      padding: 8px 12px;
+      border: 1px solid var(--gold-rule);
+      color: var(--gold);
+    }
+
+    main {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(28px, 5vw, 54px) clamp(18px, 3vw, 36px) 72px;
+    }
+    section { scroll-margin-top: 88px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .86fr) minmax(420px, .52fr);
+      gap: clamp(18px, 2.5vw, 34px);
+      align-items: stretch;
+    }
+    .hero-panel,
+    .artifact-panel,
+    .panel,
+    .lane,
+    .data-card,
+    .decision-card {
+      border: 1px solid var(--gold-rule);
+      background: linear-gradient(180deg, rgba(10,37,69,.84), rgba(3,16,31,.74));
+      box-shadow: 0 26px 72px rgba(0,0,0,.24);
+    }
+    .hero-panel {
+      position: relative;
+      min-height: 590px;
+      padding: clamp(24px, 3vw, 36px);
+      overflow: hidden;
+    }
+    .hero-panel::after {
+      content: "PRAXIS / PHASE 2";
+      position: absolute;
+      top: 24px;
+      right: 26px;
+      color: rgba(241,232,210,.42);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .map-ghost {
+      position: absolute;
+      inset: 0;
+      opacity: .35;
+      background:
+        linear-gradient(90deg, transparent 0 48%, rgba(201,162,75,.5) 48.1% 48.35%, transparent 48.45% 100%),
+        linear-gradient(0deg, transparent 0 55%, rgba(201,162,75,.26) 55.1% 55.25%, transparent 55.35% 100%),
+        repeating-linear-gradient(92deg, transparent 0 38px, rgba(241,232,210,.08) 39px 40px),
+        repeating-linear-gradient(2deg, transparent 0 32px, rgba(241,232,210,.055) 33px 34px);
+      mask-image: radial-gradient(circle at 44% 46%, #000, transparent 62%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      min-height: 520px;
+      align-content: space-between;
+      gap: 30px;
+    }
+    .eyebrow {
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3, h4 { margin: 0; }
+    h1, h2 {
+      font-family: var(--font-display);
+      font-weight: 900;
+      letter-spacing: .015em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 760px;
+      margin-top: 12px;
+      color: var(--paper);
+      font-size: clamp(64px, 8.5vw, 126px);
+      line-height: .86;
+    }
+    h2 {
+      color: var(--paper);
+      font-size: clamp(42px, 5.6vw, 78px);
+      line-height: .9;
+    }
+    h3 {
+      color: var(--paper);
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 900;
+      line-height: .96;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+    h4 {
+      color: var(--paper);
+      font-size: 17px;
+      line-height: 1.25;
+    }
+    p { margin: 0; }
+    .dek {
+      max-width: 680px;
+      margin-top: 18px;
+      color: var(--paper-soft);
+      font-size: 19px;
+      line-height: 1.52;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 9px 13px;
+      border: 1px solid var(--gold-rule);
+      color: var(--paper);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: transform .16s ease, border-color .16s ease, color .16s ease, background .16s ease;
+    }
+    .button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(201,162,75,.78);
+      color: var(--gold);
+    }
+    .button.primary {
+      border-color: rgba(242,106,27,.7);
+      background: var(--apache);
+      color: #fff;
+    }
+    .button.primary:hover {
+      color: #fff;
+      background: #e95c12;
+      border-color: rgba(242,106,27,.92);
+    }
+    .truth-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border: 1px solid var(--gold-rule);
+      background: rgba(3,16,31,.66);
+    }
+    .truth-strip div {
+      min-height: 96px;
+      padding: 16px;
+      border-right: 1px solid var(--gold-rule);
+    }
+    .truth-strip div:last-child { border-right: 0; }
+    .truth-strip b {
+      display: block;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .truth-strip span {
+      display: block;
+      margin-top: 7px;
+      color: var(--paper-soft);
+      font-size: 14px;
+      line-height: 1.36;
+    }
+    .reader-map {
+      margin-top: 28px;
+      border: 1px solid var(--gold-rule);
+      background: rgba(3,16,31,.68);
+      box-shadow: 0 26px 72px rgba(0,0,0,.2);
+    }
+    .reader-top {
+      display: grid;
+      grid-template-columns: minmax(0, .42fr) minmax(0, .58fr);
+      gap: 1px;
+      border-bottom: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+    .reader-top > div {
+      padding: clamp(18px, 2.4vw, 24px);
+      background: rgba(3,16,31,.88);
+    }
+    .reader-top p {
+      color: var(--paper-soft);
+      font-size: 16px;
+    }
+    .reader-steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--gold-rule);
+    }
+    .reader-step {
+      position: relative;
+      min-height: 220px;
+      padding: 18px;
+      background: rgba(3,16,31,.82);
+      transition: background .16s ease, transform .16s ease;
+    }
+    .reader-step:hover {
+      transform: translateY(-2px);
+      background:
+        linear-gradient(160deg, rgba(242,106,27,.16), rgba(3,16,31,.82) 58%),
+        rgba(3,16,31,.82);
+    }
+    .reader-step a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .reader-step .step-num {
+      display: inline-grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(242,106,27,.7);
+      background: var(--apache-soft);
+      color: var(--paper);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .reader-step b {
+      display: block;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .reader-step strong {
+      display: block;
+      margin-top: 7px;
+      color: var(--paper);
+      font-size: 17px;
+      line-height: 1.18;
+    }
+    .reader-step span {
+      display: block;
+      margin-top: 9px;
+      color: var(--paper-soft);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .reader-roles {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      border-top: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+    .reader-role {
+      padding: 17px;
+      background: rgba(3,16,31,.86);
+    }
+    .reader-role b {
+      display: block;
+      color: var(--paper);
+      font-size: 15px;
+    }
+    .reader-role span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.38;
+    }
+    .artifact-panel {
+      display: grid;
+      align-content: space-between;
+      gap: 18px;
+      padding: clamp(20px, 2.7vw, 28px);
+    }
+    .artifact-panel img {
+      display: block;
+      width: 100%;
+      border: 1px solid rgba(241,232,210,.16);
+      background: #fff7ef;
+    }
+    .artifact-panel .caption {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .artifact-callout {
+      border-left: 4px solid var(--apache);
+      padding-left: 16px;
+    }
+    .artifact-callout strong {
+      display: block;
+      color: var(--paper);
+      font-size: 18px;
+      line-height: 1.25;
+    }
+    .artifact-callout p {
+      margin-top: 8px;
+      color: var(--paper-soft);
+      font-size: 15px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, .48fr) minmax(0, .52fr);
+      gap: clamp(18px, 4vw, 54px);
+      align-items: end;
+      margin-top: 58px;
+      padding-top: 22px;
+      border-top: 1px solid var(--gold-rule);
+    }
+    .section-head p {
+      color: var(--paper-soft);
+      font-size: 17px;
+    }
+    .phase-flow {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 22px;
+      border: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+    .phase {
+      min-height: 210px;
+      padding: 22px;
+      background: rgba(3,16,31,.8);
+    }
+    .phase.active {
+      background:
+        linear-gradient(160deg, rgba(242,106,27,.28), rgba(3,16,31,.82) 48%),
+        rgba(3,16,31,.8);
+    }
+    .phase .num {
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .phase h3 { margin-top: 12px; font-size: 32px; }
+    .phase p {
+      margin-top: 12px;
+      color: var(--paper-soft);
+      font-size: 15px;
+    }
+    .not-yet {
+      display: grid;
+      grid-template-columns: minmax(0, .42fr) minmax(0, .58fr);
+      gap: 1px;
+      margin-top: 18px;
+      border: 1px solid rgba(196,33,48,.44);
+      background: rgba(196,33,48,.44);
+    }
+    .not-yet > div {
+      padding: 20px;
+      background: rgba(3,16,31,.88);
+    }
+    .not-yet strong {
+      color: var(--red);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .not-yet p {
+      margin-top: 8px;
+      color: var(--paper-soft);
+    }
+
+    .lanes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .lane {
+      display: grid;
+      gap: 16px;
+      min-height: 360px;
+      padding: 20px;
+      transition: transform .16s ease, border-color .16s ease, background .16s ease;
+    }
+    .lane:hover {
+      transform: translateY(-2px);
+      border-color: rgba(201,162,75,.62);
+      background:
+        linear-gradient(160deg, rgba(201,162,75,.13), rgba(3,16,31,.82) 54%),
+        rgba(3,16,31,.82);
+    }
+    .lane-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .rank {
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(242,106,27,.75);
+      background: var(--red-soft);
+      color: var(--paper);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .lane h3 { font-size: 31px; }
+    .lane p {
+      color: var(--paper-soft);
+      font-size: 15px;
+    }
+    .lane ul,
+    .decision-card ul,
+    .data-card ul,
+    .panel ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+    .lane li,
+    .decision-card li,
+    .data-card li,
+    .panel li {
+      position: relative;
+      padding-left: 18px;
+      color: var(--paper-soft);
+      font-size: 14px;
+      line-height: 1.38;
+    }
+    .lane li::before,
+    .decision-card li::before,
+    .data-card li::before,
+    .panel li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .65em;
+      width: 7px;
+      height: 7px;
+      background: var(--gold);
+    }
+    .lane-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      align-self: end;
+    }
+    .pill {
+      border: 1px solid rgba(241,232,210,.18);
+      padding: 8px 9px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .pill b {
+      display: block;
+      color: var(--paper);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .matrix {
+      margin-top: 22px;
+      border: 1px solid var(--gold-rule);
+      overflow: hidden;
+    }
+    .matrix-head,
+    .opp-row {
+      display: grid;
+      grid-template-columns: minmax(190px, 1.15fr) repeat(4, minmax(120px, .78fr)) minmax(92px, .45fr);
+      gap: 1px;
+      background: var(--gold-rule);
+    }
+    .matrix-head div,
+    .opp-row > div {
+      padding: 13px 14px;
+      background: rgba(3,16,31,.86);
+    }
+    .matrix-head div {
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .opp-row h4 {
+      font-family: var(--font-sans);
+      font-size: 15px;
+    }
+    .opp-row p {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .slider-wrap label {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--paper-soft);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--apache);
+    }
+    .score {
+      display: grid;
+      place-items: center;
+      min-height: 52px;
+      color: var(--gold);
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .score small {
+      display: block;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .priority-note {
+      padding: 14px;
+      border-top: 1px solid var(--gold-rule);
+      background: rgba(3,16,31,.86);
+      color: var(--paper-soft);
+      font-size: 14px;
+    }
+    .review-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding: 14px;
+      border-top: 1px solid rgba(201,162,75,.3);
+      background: rgba(3,16,31,.86);
+    }
+    .review-tools button {
+      min-height: 34px;
+      padding: 8px 12px;
+      border: 1px solid rgba(201,162,75,.42);
+      background: rgba(7,29,53,.72);
+      color: var(--paper);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .review-tools button:hover {
+      border-color: rgba(242,106,27,.72);
+      color: #fff;
+    }
+    .review-tools .danger {
+      border-color: rgba(196,33,48,.54);
+      color: rgba(241,232,210,.72);
+    }
+    .save-status {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .priority-stack {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1px;
+      margin-top: 22px;
+      border: 1px solid var(--gold-rule);
+      background: var(--gold-rule);
+    }
+    .priority-card {
+      display: grid;
+      grid-template-columns: 72px minmax(220px, .82fr) minmax(0, 1.18fr) minmax(180px, .52fr);
+      gap: 1px;
+      background: var(--gold-rule);
+    }
+    .priority-card > div {
+      padding: 18px;
+      background: rgba(3,16,31,.86);
+    }
+    .priority-rank {
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .priority-card h3 {
+      font-size: 30px;
+      line-height: .95;
+    }
+    .priority-card p {
+      margin-top: 8px;
+      color: var(--paper-soft);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .priority-label {
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .priority-score {
+      display: grid;
+      align-content: center;
+      gap: 6px;
+      color: var(--paper-soft);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .priority-score b {
+      color: var(--paper);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .validation-note {
+      padding: 16px 18px;
+      background:
+        linear-gradient(135deg, rgba(201,162,75,.14), rgba(3,16,31,.86) 48%),
+        rgba(3,16,31,.86);
+      color: var(--paper-soft);
+      font-size: 15px;
+    }
+    .meeting-cta {
+      display: grid;
+      grid-template-columns: minmax(0, .58fr) minmax(260px, .42fr);
+      gap: 1px;
+      margin-top: 24px;
+      border: 1px solid rgba(242,106,27,.58);
+      background: rgba(242,106,27,.58);
+    }
+    .meeting-cta > div {
+      padding: 22px;
+      background:
+        linear-gradient(160deg, rgba(242,106,27,.18), rgba(3,16,31,.86) 58%),
+        rgba(3,16,31,.86);
+    }
+    .meeting-cta h3 { font-size: 30px; }
+    .meeting-cta p {
+      margin-top: 10px;
+      color: var(--paper-soft);
+      font-size: 15px;
+    }
+
+    .data-grid,
+    .decision-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .data-card,
+    .decision-card,
+    .panel { padding: 20px; }
+    .data-card h3,
+    .decision-card h3,
+    .panel h3 { font-size: 29px; }
+    .data-card p,
+    .decision-card p,
+    .panel p {
+      margin-top: 10px;
+      color: var(--paper-soft);
+      font-size: 15px;
+    }
+    .check-list { margin-top: 14px; }
+    .check {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-top: 1px solid rgba(241,232,210,.12);
+      color: var(--paper-soft);
+      font-size: 14px;
+    }
+    .check input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--apache);
+    }
+    .architecture {
+      display: grid;
+      grid-template-columns: minmax(280px, .42fr) minmax(0, .58fr);
+      gap: 16px;
+      margin-top: 22px;
+    }
+    .ladder {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .ladder-step {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 13px;
+      border: 1px solid rgba(241,232,210,.16);
+      background: rgba(3,16,31,.54);
+    }
+    .ladder-step b {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--gold-rule);
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+    .ladder-step strong {
+      display: block;
+      color: var(--paper);
+      line-height: 1.22;
+    }
+    .ladder-step span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .build-map {
+      display: grid;
+      gap: 12px;
+    }
+    .build-row {
+      display: grid;
+      grid-template-columns: minmax(140px, .3fr) minmax(0, .7fr);
+      gap: 1px;
+      border: 1px solid rgba(241,232,210,.14);
+      background: rgba(241,232,210,.14);
+    }
+    .build-row b,
+    .build-row span {
+      display: block;
+      padding: 13px;
+      background: rgba(3,16,31,.7);
+    }
+    .build-row b {
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .build-row span {
+      color: var(--paper-soft);
+      font-size: 14px;
+    }
+    .agenda {
+      display: grid;
+      grid-template-columns: minmax(0, .55fr) minmax(0, .45fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+      padding-top: 22px;
+      border-top: 1px solid var(--gold-rule);
+    }
+
+    @media (max-width: 1120px) {
+      .hero-grid,
+      .section-head,
+      .reader-top,
+      .not-yet,
+      .architecture,
+      .meeting-cta,
+      .agenda {
+        grid-template-columns: 1fr;
+      }
+      .hero-panel { min-height: auto; }
+      .hero-content { min-height: 500px; }
+      .lanes-grid,
+      .reader-steps,
+      .reader-roles,
+      .data-grid,
+      .decision-grid,
+      .phase-flow {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .matrix,
+      .priority-stack { overflow-x: auto; }
+      .matrix-head,
+      .opp-row,
+      .priority-card { min-width: 980px; }
+    }
+    @media (max-width: 720px) {
+      .topbar {
+        position: relative;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .report-nav {
+        justify-content: flex-start;
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+      .hero-content { min-height: auto; }
+      .truth-strip,
+      .reader-steps,
+      .reader-roles,
+      .lanes-grid,
+      .data-grid,
+      .decision-grid,
+      .phase-flow,
+      .priority-card,
+      .lane-meta {
+        grid-template-columns: 1fr;
+      }
+      .priority-card { min-width: 0; }
+      .truth-strip div { border-right: 0; border-bottom: 1px solid var(--gold-rule); }
+      .truth-strip div:last-child { border-bottom: 0; }
+    }
+    @media print {
+      body { background: #071d35; }
+      body::before,
+      .topbar,
+      .hero-actions,
+      input[type="range"] { display: none; }
+      main { max-width: none; padding: 20px; }
+      .hero-panel,
+      .artifact-panel,
+      .panel,
+      .lane,
+      .data-card,
+      .decision-card { box-shadow: none; break-inside: avoid; }
+      section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="lockup">
+        <img class="brand-mark" src="assets/praxis-mark.svg" alt="Praxis">
+        <div>
+          <div class="wordmark">PRAXIS</div>
+          <div class="eyebrow">Apache Strategy Review</div>
+        </div>
+      </div>
+      <nav class="report-nav" aria-label="Report sections">
+        <a href="apache-review-package-2026-06-22.html">Review Home</a>
+        <a href="#read">Read This</a>
+        <a href="#purpose">Purpose</a>
+        <a href="#offers">Offers</a>
+        <a href="#matrix">Priorities</a>
+        <a href="#data">Data</a>
+        <a href="#handoff">Build</a>
+        <button type="button" onclick="window.print()">Print Report</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero-grid" id="top">
+        <div class="hero-panel">
+          <div class="map-ghost" aria-hidden="true"></div>
+          <div class="hero-content">
+            <div>
+              <div class="eyebrow">Phase 2 / Strategy review artifact</div>
+              <h1>Apache Opportunity Architecture</h1>
+              <p class="dek">This is the review layer between the Revenue Map and the public website build. It turns the Phase 1 thesis into decisions Jon and Victor can validate: which offers can create more qualified conversations, what proof is needed, and what gets built after approval.</p>
+              <div class="hero-actions">
+                <a class="button primary" href="#read">Start the review path</a>
+                <a class="button" href="#matrix">Review priority order</a>
+                <a class="button" href="#data">Review data requests</a>
+                <a class="button" href="phase-1-revenue-map-2026-06-17.html">Open Phase 1 map</a>
+              </div>
+            </div>
+            <div class="truth-strip">
+              <div><b>Not yet</b><span>This is not the final website redesign.</span></div>
+              <div><b>Now</b><span>Validate the revenue strategy and opportunity architecture.</span></div>
+              <div><b>Next</b><span>Build the site, campaigns, sales assets, and lead engine around approved priorities.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="artifact-panel">
+          <div>
+            <div class="caption">Working visual direction</div>
+            <img src="assets/logo-pass-1-equity-cleanup.png" alt="Apache Pass 1 logo direction">
+          </div>
+          <div class="artifact-callout">
+            <strong>Pass 1 is the working brand direction.</strong>
+            <p>Use it as the visual reference for the strategy and future site. Production logo assets remain unchanged until Apache approves the direction.</p>
+          </div>
+          <div class="artifact-callout">
+            <strong>The site build is a separate workstream.</strong>
+            <p>Phase 2 should produce agreement. Once Apache validates the priorities, the website and campaigns can be built with less guesswork.</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="reader-map" id="read">
+        <div class="reader-top">
+          <div>
+            <div class="eyebrow">How Apache should read this</div>
+            <h3>Read it as a decision document, not a website preview.</h3>
+          </div>
+          <div>
+            <p>This document is meant to guide one focused review conversation. Apache should move through it in order, challenge the assumptions, validate the recommended priorities, and leave with a clear answer about what Praxis should build next.</p>
+          </div>
+        </div>
+
+        <div class="reader-steps" aria-label="Recommended reading path">
+          <article class="reader-step">
+            <a href="#purpose">
+              <span class="step-num">1</span>
+              <b>Orient</b>
+              <strong>Confirm what Phase 2 is.</strong>
+              <span>Start by separating the strategy review from the future website build.</span>
+            </a>
+          </article>
+          <article class="reader-step">
+            <a href="#offers">
+              <span class="step-num">2</span>
+              <b>Challenge</b>
+              <strong>Validate the six offer lanes.</strong>
+              <span>Tell us which lanes are real, wrong, overstated, or missing.</span>
+            </a>
+          </article>
+          <article class="reader-step">
+            <a href="#matrix">
+              <span class="step-num">3</span>
+              <b>Prioritize</b>
+              <strong>Review the recommended order.</strong>
+              <span>React to the Praxis ranking and correct what the transcript does not capture.</span>
+            </a>
+          </article>
+          <article class="reader-step">
+            <a href="#data">
+              <span class="step-num">4</span>
+              <b>Validate</b>
+              <strong>Identify the data needed.</strong>
+            <span>Confirm what revenue, margin, quota, customer, renewal, and sales-asset inputs can be shared.</span>
+            </a>
+          </article>
+          <article class="reader-step">
+            <a href="#handoff">
+              <span class="step-num">5</span>
+              <b>Decide</b>
+              <strong>Approve the Phase 3 build path.</strong>
+              <span>Translate the approved strategy into site, campaign, lead-engine, and sales assets.</span>
+            </a>
+          </article>
+        </div>
+
+        <div class="reader-roles">
+          <div class="reader-role"><b>Jon</b><span>Challenge the revenue assumptions, margin logic, buyer realities, and which offers Apache can actually sell harder.</span></div>
+          <div class="reader-role"><b>Victor</b><span>Validate what the team can support, what customers ask for, and what information is or is not captured today.</span></div>
+          <div class="reader-role"><b>Praxis</b><span>Capture corrections, identify build priorities, and translate approved decisions into the website and campaign workstream.</span></div>
+        </div>
+      </section>
+
+      <section id="purpose">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">01 / Engagement shape</div>
+            <h2>What Phase 2 Is</h2>
+          </div>
+          <p>Phase 2 is the strategy-review artifact Apache can react to before public pages are built. It should make assumptions visible, turn product categories into buyer-facing revenue motions, and identify the minimum data needed to decide where to focus.</p>
+        </div>
+
+        <div class="phase-flow">
+          <article class="phase">
+            <div class="num">Phase 1 / Complete</div>
+            <h3>Revenue Map</h3>
+            <p>Maps the business model, growth lanes, funnel constraints, brand posture, and assumptions from the first discovery call.</p>
+          </article>
+          <article class="phase active">
+            <div class="num">Phase 2 / Current</div>
+            <h3>Strategy Review</h3>
+            <p>Gives Jon and Victor a concrete artifact to validate: priorities, offers, quota pressure, campaigns, data needs, sales assets, and build sequence.</p>
+          </article>
+          <article class="phase">
+            <div class="num">Phase 3 / After approval</div>
+            <h3>Website + Campaign Build</h3>
+            <p>Turns the approved strategy into homepage, service pages, landing pages, campaign copy, lead forms, and handoff assets.</p>
+          </article>
+        </div>
+
+        <div class="not-yet">
+          <div>
+            <strong>Do not pitch this as a redesign yet</strong>
+            <p>The site is the outcome. The current job is alignment: what Apache should sell harder, how to explain it, what sales material already exists, and what revenue data confirms the bet.</p>
+          </div>
+          <div>
+            <strong>Primary question</strong>
+            <p>If Apache wants to move from roughly 1-2 legitimate opportunities per week to 5-10, which offer lanes, customer segments, and follow-up systems should carry that increase?</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="offers">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">02 / Offer architecture</div>
+            <h2>Six Lanes To Validate</h2>
+          </div>
+          <p>These are not finished public pages. They are proposed revenue lanes. The numbering below reflects the current Praxis read: what should create the clearest path to more qualified revenue conversations after Apache validates the assumptions.</p>
+        </div>
+
+        <div class="lanes-grid">
+          <article class="lane">
+            <div class="lane-top"><h3>Competitive Mail Takeovers</h3><span class="rank">01</span></div>
+            <p>Win unhappy competitor customers when Apache can get in the room with a better local-service story.</p>
+            <ul>
+              <li>Validate last 12-18 months of switcher wins.</li>
+              <li>Confirm best lease-window timing.</li>
+              <li>Build talk tracks by vertical and competitor pain.</li>
+            </ul>
+            <div class="lane-meta"><span class="pill">Role <b>Grow core</b></span><span class="pill">Build later <b>Switcher campaign</b></span></div>
+          </article>
+
+          <article class="lane">
+            <div class="lane-top"><h3>Business Phones Attach</h3><span class="rank">02</span></div>
+            <p>Recurring revenue attached to current Apache customers who already trust the service relationship.</p>
+            <ul>
+              <li>Validate current active phone base and margins.</li>
+              <li>Start with current customers before broad cold acquisition.</li>
+              <li>Identify contract-end and dissatisfaction triggers.</li>
+            </ul>
+            <div class="lane-meta"><span class="pill">Role <b>Attach offer</b></span><span class="pill">Build later <b>Current-client campaign</b></span></div>
+          </article>
+
+          <article class="lane">
+            <div class="lane-top"><h3>Parcel Lockers</h3><span class="rank">03</span></div>
+            <p>The strongest visible new-category wedge if Apache can build a channel into multifamily, GCs, property managers, HOAs, campuses, and commercial buildings.</p>
+            <ul>
+              <li>Validate margin, ticket size, cycle, and support load.</li>
+              <li>Clarify property-manager and GC decision paths.</li>
+              <li>Pursue with channel partners if economics hold.</li>
+            </ul>
+            <div class="lane-meta"><span class="pill">Role <b>Expansion wedge</b></span><span class="pill">Build later <b>Property campaign</b></span></div>
+          </article>
+
+          <article class="lane">
+            <div class="lane-top"><h3>Transactional Communications</h3><span class="rank">04</span></div>
+            <p>The bridge from mail into workflow: statements, invoices, notices, portals, email/SMS, archive, print-to-mail, and delivery proof.</p>
+            <ul>
+              <li>Do not frame as direct-mail marketing first.</li>
+              <li>Use Quadient Impress / Distribute as proof, not as the whole story.</li>
+              <li>Validate deal economics and sales cycle.</li>
+              <li>Convert Jon's verbal business case, Quadient assets, and proposal examples into pages and tools.</li>
+            </ul>
+            <div class="lane-meta"><span class="pill">Role <b>Modernize</b></span><span class="pill">Build later <b>Business-case pages</b></span></div>
+          </article>
+
+          <article class="lane">
+            <div class="lane-top"><h3>Protect the Mail Base</h3><span class="rank">05</span></div>
+            <p>Keep the cash engine healthy: equipment, meters, maintenance, supplies, and upgrade timing.</p>
+            <ul>
+              <li>Validate renewal calendar quality.</li>
+              <li>Protect the four-part revenue stack: equipment, meter, maintenance, and supplies.</li>
+              <li>Confirm attach rates for maintenance and supplies.</li>
+              <li>Identify next-best-offer moments at renewal.</li>
+            </ul>
+            <div class="lane-meta"><span class="pill">Role <b>Defend base</b></span><span class="pill">Build later <b>Mail base dashboard</b></span></div>
+          </article>
+
+          <article class="lane">
+            <div class="lane-top"><h3>Certified / Proof Add-On</h3><span class="rank">06</span></div>
+            <p>Potential compliance wedge inside transactional communications, including tools like e-Certify, but it should be validated before becoming a headline offer.</p>
+            <ul>
+              <li>Validate which verticals feel urgent proof pain.</li>
+              <li>Gather examples Apache can safely share.</li>
+              <li>Bundle into transaction/compliance messaging unless demand proves standalone.</li>
+            </ul>
+            <div class="lane-meta"><span class="pill">Role <b>Validate wedge</b></span><span class="pill">Build later <b>Proof module</b></span></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="matrix">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">03 / Praxis recommendation</div>
+            <h2>Where Apache Should Focus First</h2>
+          </div>
+          <p>Apache should not have to score the strategy from scratch. Based on the discovery call, this is the current recommended order. The follow-up should validate the assumptions, especially margin, buyer access, channel fit, and urgency.</p>
+        </div>
+
+        <div class="priority-stack" aria-label="Recommended revenue priorities">
+          <article class="priority-card" data-priority>
+            <div class="priority-rank">01</div>
+            <div><div class="priority-label">Core growth</div><h3>Competitive Mail Takeovers</h3><p>Win customers already spending with meter competitors by using Apache's local service edge.</p></div>
+            <div><div class="priority-label">Why it ranks here</div><p>This protects the core business while creating near-term sales conversations Apache already understands how to service.</p></div>
+            <div class="priority-score"><span>Build first</span><b>Switcher campaign + lease-timing list</b></div>
+          </article>
+
+          <article class="priority-card" data-priority>
+            <div class="priority-rank">02</div>
+            <div><div class="priority-label">Relationship leverage</div><h3>Business Phones Attach</h3><p>Sell recurring communications infrastructure into customers who already trust Apache.</p></div>
+            <div><div class="priority-label">Why it ranks here</div><p>The trust barrier is lower with current customers, and the recurring revenue profile is stronger than most hardware-only lanes.</p></div>
+            <div class="priority-score"><span>Build second</span><b>Current-client attach campaign</b></div>
+          </article>
+
+          <article class="priority-card" data-priority>
+            <div class="priority-rank">03</div>
+            <div><div class="priority-label">Expansion wedge</div><h3>Parcel Locker Channel</h3><p>Use parcel lockers as Apache's most visible new-category wedge into property-driven buyers.</p></div>
+            <div><div class="priority-label">Why it ranks here</div><p>It may not be the best recurring lane, but it gives Apache a sharper growth story and a natural channel partnership path with property managers, GCs, HOAs, campuses, and multifamily operators.</p></div>
+            <div class="priority-score"><span>Build third</span><b>Property + partner campaign</b></div>
+          </article>
+
+          <article class="priority-card" data-priority>
+            <div class="priority-rank">04</div>
+            <div><div class="priority-label">Strategic bridge</div><h3>Transactional Communications</h3><p>Statements, invoices, notices, portals, email/SMS, archive, print-to-mail, and delivery proof.</p></div>
+            <div><div class="priority-label">Why it ranks here</div><p>This is where Quadient Impress / Distribute fits. It could be strategically important, but Apache needs clearer packaging, economics, and buyer education before it leads the story.</p></div>
+            <div class="priority-score"><span>Validate next</span><b>Business-case page + proof assets</b></div>
+          </article>
+
+          <article class="priority-card" data-priority>
+            <div class="priority-rank">05</div>
+            <div><div class="priority-label">Defensive system</div><h3>Protect the Mail Base</h3><p>Keep equipment, meters, maintenance, supplies, leases, and service retention healthy.</p></div>
+            <div><div class="priority-label">Why it ranks here</div><p>Mail still matters because each account can carry multiple revenue streams. It is critical infrastructure, but more of a retention and timing system than the clearest public growth headline.</p></div>
+            <div class="priority-score"><span>Build into ops</span><b>Mail base timing + retention plays</b></div>
+          </article>
+
+          <article class="priority-card" data-priority>
+            <div class="priority-rank">06</div>
+            <div><div class="priority-label">Supporting wedge</div><h3>Certified / Proof Add-On</h3><p>Compliance proof, retrieval, legal defensibility, record confidence, and e-Certify-style workflows.</p></div>
+            <div><div class="priority-label">Why it ranks here</div><p>Useful message, but likely stronger as a module inside transactional communications than a standalone lead offer unless Apache can prove urgent demand.</p></div>
+            <div class="priority-score"><span>Keep secondary</span><b>Proof module, not headline</b></div>
+          </article>
+
+          <div class="validation-note">Software clarification: Apache should not lead with "we sell software." The buyer-facing story should be specific workflow pain: reduce manual statement, invoice, notice, certified-mail, shipping, portal, and archive work. Quadient products can support that proof, but the strategy should stay focused on the business problem.</div>
+          <div class="validation-note" id="priority-note">Current Praxis read: Phase 3 should start with competitive mail takeovers, current-customer phone attach, and parcel lockers as the visible expansion wedge. Apache should validate the margin and sales-cycle assumptions before final build.</div>
+          <div class="review-tools" aria-label="Review save tools">
+            <button type="button" id="copy-review-snapshot">Copy meeting snapshot</button>
+            <button type="button" class="danger" id="reset-review-state">Reset saved checklist</button>
+            <span class="save-status" id="save-status">Saved in this browser only.</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="data">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">04 / What Apache needs to validate</div>
+            <h2>Data Requests</h2>
+          </div>
+          <p>The strategy should not pretend to know what only Apache knows. These are the minimum inputs needed to turn the Phase 2 review into a confident build plan.</p>
+        </div>
+
+        <div class="data-grid">
+          <article class="data-card">
+            <h3>Revenue + Margin</h3>
+            <p>Confirms which offers deserve public emphasis and campaign investment.</p>
+            <div class="check-list">
+              <label class="check"><input type="checkbox"> Revenue by category, last 12-24 months</label>
+              <label class="check"><input type="checkbox"> Gross margin by category</label>
+              <label class="check"><input type="checkbox"> Recurring vs one-time split</label>
+              <label class="check"><input type="checkbox"> Average ticket / deal size by offer</label>
+              <label class="check"><input type="checkbox"> Quadient quota / required run-rate by line</label>
+            </div>
+          </article>
+
+          <article class="data-card">
+            <h3>Customer + Renewal</h3>
+            <p>Shows where the warmest expansion opportunities already exist.</p>
+            <div class="check-list">
+              <label class="check"><input type="checkbox"> Active customer export from Zoho</label>
+              <label class="check"><input type="checkbox"> Product ownership by customer</label>
+              <label class="check"><input type="checkbox"> Lease / renewal dates</label>
+              <label class="check"><input type="checkbox"> Service contract and supplies status</label>
+            </div>
+          </article>
+
+          <article class="data-card">
+            <h3>Sales + Proof</h3>
+            <p>Turns strategy into persuasive pages and scripts.</p>
+            <div class="check-list">
+              <label class="check"><input type="checkbox"> Recent wins, lost deals, no-shows, and stalled opportunities</label>
+              <label class="check"><input type="checkbox"> Current company profile, pitch decks, vendor assets, and Quadient videos / PDFs</label>
+              <label class="check"><input type="checkbox"> Proposal templates and business-case examples</label>
+              <label class="check"><input type="checkbox"> Reviews, photos, customer stories</label>
+              <label class="check"><input type="checkbox"> Telemarketer scripts, notes, call outcomes, and follow-up language</label>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="decisions">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">05 / Review meeting decisions</div>
+            <h2>What We Need From Jon + Victor</h2>
+          </div>
+          <p>The review should not become an open-ended brainstorm. It should produce decisions that unlock the public build.</p>
+        </div>
+
+        <div class="decision-grid">
+          <article class="decision-card">
+            <h3>Focus</h3>
+            <ul>
+              <li>Which 2-3 lanes should the next build emphasize first?</li>
+              <li>Which lane is real but should stay secondary?</li>
+              <li>Which offers should be de-emphasized or hidden?</li>
+              <li>What counts as a legitimate opportunity for Apache?</li>
+            </ul>
+          </article>
+          <article class="decision-card">
+            <h3>Positioning</h3>
+            <ul>
+              <li>Approve the working story: local business systems, communication, mail, proof, phones, and service.</li>
+              <li>Approve Pass 1 as the working logo direction.</li>
+              <li>Decide whether "Because Connections Matter" remains the tagline.</li>
+            </ul>
+          </article>
+          <article class="decision-card">
+            <h3>Build Access</h3>
+            <ul>
+              <li>Approve what data can be exported from Zoho.</li>
+              <li>Share usable sales assets, vendor materials, proposals, and customer proof.</li>
+              <li>Name who reviews website and campaign drafts.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="handoff">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">06 / After approval</div>
+            <h2>What Gets Built Separately</h2>
+          </div>
+          <p>Once Apache validates the strategy, Phase 3 can move into public-facing execution. This keeps the website from becoming a polished guess.</p>
+        </div>
+
+        <div class="architecture">
+          <article class="panel">
+            <h3>Offer Ladder</h3>
+            <p>Apache should not present 21 scattered services. The site and campaigns should guide buyers from familiar needs into higher-value conversations.</p>
+            <div class="ladder">
+              <div class="ladder-step"><b>1</b><div><strong>Trust anchor</strong><span>Mailing equipment, meters, service, supplies, and upgrade timing.</span></div></div>
+              <div class="ladder-step"><b>2</b><div><strong>Revenue expansion</strong><span>Competitive takeovers and current-customer cross-sell.</span></div></div>
+              <div class="ladder-step"><b>3</b><div><strong>Workflow bridge</strong><span>Transactional communications and certified proof.</span></div></div>
+              <div class="ladder-step"><b>4</b><div><strong>Recurring attach</strong><span>Phones and support relationships into the installed base.</span></div></div>
+              <div class="ladder-step"><b>5</b><div><strong>Selective growth</strong><span>Parcel lockers where buyer path and margin justify the effort.</span></div></div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <h3>Phase 3 Build Map</h3>
+            <div class="build-map">
+              <div class="build-row"><b>Website</b><span>Homepage, priority service pages, vertical pages, proof sections, quote/review/contact paths.</span></div>
+              <div class="build-row"><b>Campaigns</b><span>Switcher campaign, current-client phone attach, transactional communications business case, and selective proof modules.</span></div>
+              <div class="build-row"><b>Lead engine</b><span>Places-led lead lists, Zoho-ready fields, scoring logic, talk tracks, follow-up cadence, and timing triggers.</span></div>
+              <div class="build-row"><b>Sales assets</b><span>One-pagers, scripts, ROI prompts, email/drip copy, mailer templates, referral asks, proposal polish, and vendor-asset repackaging.</span></div>
+              <div class="build-row"><b>Measurement</b><span>Qualified opportunities per week, campaign response, close rate, attach rate, mail-base protection, margin by lane.</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="agenda">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">07 / Suggested call flow</div>
+            <h2>How To Present It</h2>
+          </div>
+          <p>Keep the tone practical and revenue-focused. Avoid making this feel like a design critique or an operations audit. The cleanest frame is: "We mapped the business. Now we want to validate where the next build should focus."</p>
+        </div>
+
+        <div class="agenda">
+          <article class="panel">
+            <h3>30-Minute Review</h3>
+            <ul>
+              <li>5 min: clarify Phase 2 is strategy review, not final website.</li>
+              <li>8 min: review six revenue lanes and challenge the assumptions.</li>
+              <li>8 min: validate the recommended priority order.</li>
+              <li>5 min: confirm data access, quota pressure, and sales assets.</li>
+              <li>4 min: decide what Phase 3 should build first.</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <h3>Recommended Opening</h3>
+            <p>"We are not trying to make Apache look like a different business. We are trying to make the business easier to buy from. This artifact is the bridge between the Revenue Map and the actual website/campaign build. If the priorities are wrong, this is where we correct them."</p>
+          </article>
+        </div>
+
+        <div class="footer-links">
+          <a class="button primary" href="apache-review-package-2026-06-22.html">Review Package Home</a>
+          <a class="button" href="phase-1-revenue-map-2026-06-17.html">Phase 1 Revenue Map</a>
+          <a class="button" href="apache-brand-system-2026-06-22.html">Brand System</a>
+          <a class="button" href="apache-brand-system-2026-06-22.html">Logo Direction</a>
+          <a class="button" href="apache-brand-system-2026-06-22.html">AI Build Brief</a>
+          <a class="button" href="apache-review-package-2026-06-22.html#follow-up">Schedule Follow-Up</a>
+        </div>
+
+        <div class="meeting-cta">
+          <div>
+            <div class="eyebrow">Recommended next action</div>
+            <h3>Schedule one validation meeting.</h3>
+            <p>Apache should review this package first, then use the follow-up to confirm offer priorities, data access, Pass 1 brand direction, and the first Phase 3 build package.</p>
+          </div>
+          <div>
+            <div class="eyebrow">Meeting output</div>
+            <p>A clear build decision: website pages, campaign assets, lead engine, sales collateral, or a staged combination tied to the validated revenue lanes.</p>
+            <div class="hero-actions">
+              <a class="button primary" href="apache-review-package-2026-06-22.html#follow-up">Open follow-up agenda</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const storageKey = "apache-phase-2-review-state-v2";
+    const priorities = Array.from(document.querySelectorAll("[data-priority]"));
+    const status = document.getElementById("save-status");
+    const copyButton = document.getElementById("copy-review-snapshot");
+    const resetButton = document.getElementById("reset-review-state");
+    const checkboxes = Array.from(document.querySelectorAll(".check input[type='checkbox']"));
+
+    function setStatus(message) {
+      if (!status) return;
+      status.textContent = message;
+    }
+
+    function readState() {
+      try {
+        return JSON.parse(localStorage.getItem(storageKey) || "{}");
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function collectState() {
+      return {
+        savedAt: new Date().toISOString(),
+        checks: checkboxes.map((input) => ({
+          label: input.closest(".check").textContent.trim().replace(/\s+/g, " "),
+          checked: input.checked
+        }))
+      };
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(collectState()));
+        setStatus("Saved in this browser only.");
+      } catch (error) {
+        setStatus("Could not save in this browser.");
+      }
+    }
+
+    function applySavedState() {
+      const saved = readState();
+      if (!saved.checks) return;
+
+      if (Array.isArray(saved.checks)) {
+        saved.checks.forEach((savedCheck) => {
+          const input = checkboxes.find((candidate) => candidate.closest(".check").textContent.trim().replace(/\s+/g, " ") === savedCheck.label);
+          if (input) input.checked = Boolean(savedCheck.checked);
+        });
+      }
+
+      setStatus("Restored saved inputs from this browser.");
+    }
+
+    function buildSnapshot() {
+      const state = collectState();
+      const recommended = priorities.map((card) => {
+        const rank = card.querySelector(".priority-rank").textContent.trim();
+        const title = card.querySelector("h3").textContent.trim();
+        const build = card.querySelector(".priority-score b").textContent.trim();
+        return `${rank}. ${title} — ${build}`;
+      });
+      const checked = state.checks.filter((item) => item.checked).map((item) => item.label);
+      const unchecked = state.checks.filter((item) => !item.checked).map((item) => item.label);
+
+      return [
+        "Apache Phase 2 Review Snapshot",
+        `Saved: ${new Date(state.savedAt).toLocaleString()}`,
+        "",
+        "Praxis recommended priority order:",
+        ...recommended,
+        "",
+        "Data/assets marked available:",
+        ...(checked.length ? checked.map((item) => `- ${item}`) : ["- None marked yet"]),
+        "",
+        "Still needed / not checked:",
+        ...(unchecked.length ? unchecked.map((item) => `- ${item}`) : ["- None"])
+      ].join("\n");
+    }
+
+    async function copySnapshot() {
+      const snapshot = buildSnapshot();
+      try {
+        await navigator.clipboard.writeText(snapshot);
+        setStatus("Snapshot copied. Paste it into notes or an email.");
+      } catch (error) {
+        const textarea = document.createElement("textarea");
+        textarea.value = snapshot;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+        setStatus("Snapshot copied. Paste it into notes or an email.");
+      }
+    }
+
+    function resetState() {
+      localStorage.removeItem(storageKey);
+      checkboxes.forEach((input) => {
+        input.checked = false;
+      });
+      saveState();
+      setStatus("Checklist reset.");
+    }
+
+    applySavedState();
+    checkboxes.forEach((input) => {
+      input.addEventListener("change", saveState);
+    });
+    copyButton?.addEventListener("click", copySnapshot);
+    resetButton?.addEventListener("click", resetState);
+    saveState();
+  </script>
+</body>
+</html>
