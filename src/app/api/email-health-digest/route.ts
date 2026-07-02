@@ -33,6 +33,7 @@ type LeadRow = {
   email_status: { prospect?: string; notify?: string } | null
   giveaway_flags: string[] | null
   guard_events: Array<{ field: string; reason: string }> | null
+  specificity: { entities: string[]; missing: string[] } | null
 }
 
 type IntakeFailureRow = {
@@ -71,7 +72,7 @@ async function handle(req: Request) {
   const supabase = createClient(supabaseUrl, supabaseKey)
   const { data, error } = await supabase
     .from("praxis_leads")
-    .select("id, company, contact_email, signal_composite, public_token, created_at, email_status, giveaway_flags, guard_events")
+    .select("id, company, contact_email, signal_composite, public_token, created_at, email_status, giveaway_flags, guard_events, specificity")
     .not("leverage_map", "is", null)
     .gte("created_at", cutoff)
     .order("created_at", { ascending: false })
@@ -107,6 +108,10 @@ async function handle(req: Request) {
   // field with vetted prose (so nothing bad shipped). Higher-signal than drift — it
   // measures how often the model still needs the safety net, i.e. prompt-quality pressure.
   const guarded = leads.filter((l) => (l.guard_events?.length ?? 0) > 0)
+  // Specificity gaps: readouts that echoed NONE of the owner's own extracted
+  // words in one of the key conversion fields — the strongest template-drift
+  // signal (the artifact passed every ban but does not read as THEIRS).
+  const unspecific = leads.filter((l) => (l.specificity?.missing?.length ?? 0) > 0)
   const summary = {
     window_hours: WINDOW_HOURS,
     submissions: leads.length,
@@ -117,6 +122,7 @@ async function handle(req: Request) {
     intake_failures: intakeFailures.length,
     giveaway_drift: drifted.length,
     guard_fallbacks: guarded.length,
+    specificity_gaps: unspecific.length,
   }
 
   // Nothing happened in the window at all (no leads AND no intake failures): no noise.
@@ -180,6 +186,17 @@ async function handle(req: Request) {
     })
     .join("")
 
+  const specificityRows = unspecific
+    .map((l) => {
+      const link = l.public_token ? `${SITE_URL}/check/map/${l.public_token}` : "—"
+      return `<tr>
+        <td style="padding:6px 10px;border-bottom:1px solid #eee">${escapeHtml(l.company ?? "—")}</td>
+        <td style="padding:6px 10px;border-bottom:1px solid #eee">${escapeHtml((l.specificity?.missing ?? []).join(", "))}</td>
+        <td style="padding:6px 10px;border-bottom:1px solid #eee"><a href="${escapeHtml(link)}">${l.public_token ? "map" : "—"}</a></td>
+      </tr>`
+    })
+    .join("")
+
   const redIf = (n: number) => (n ? "#C42130" : "#111")
   const amberIf = (n: number) => (n ? "#b8860b" : "#111")
   const html = `
@@ -191,7 +208,8 @@ async function handle(req: Request) {
       <p style="margin:0 0 4px">Prospect sends skipped: <strong style="color:${redIf(summary.prospect_skipped)}">${summary.prospect_skipped}</strong></p>
       <p style="margin:0 0 4px">Notify sends failed: <strong style="color:${redIf(summary.notify_failed)}">${summary.notify_failed}</strong></p>
       <p style="margin:0 0 4px">Give-away drift (readout named a build component): <strong style="color:${amberIf(summary.giveaway_drift)}">${summary.giveaway_drift}</strong></p>
-      <p style="margin:0 0 16px">Guard fallbacks (leak/skeleton caught and replaced): <strong style="color:${amberIf(summary.guard_fallbacks)}">${summary.guard_fallbacks}</strong></p>
+      <p style="margin:0 0 4px">Guard fallbacks (leak/skeleton caught and replaced): <strong style="color:${amberIf(summary.guard_fallbacks)}">${summary.guard_fallbacks}</strong></p>
+      <p style="margin:0 0 16px">Specificity gaps (readout echoed none of the owner's words): <strong style="color:${amberIf(summary.specificity_gaps)}">${summary.specificity_gaps}</strong></p>
       ${
         intakeFailures.length
           ? `<p style="margin:0 0 8px;color:#C42130"><strong>Submissions that FAILED to save (no lead, no map, no email) — the silent-drop class:</strong></p>
@@ -225,6 +243,15 @@ async function handle(req: Request) {
              <table style="border-collapse:collapse;width:100%;font-size:13px">
                <tr><th align="left" style="padding:6px 10px">Company</th><th align="left" style="padding:6px 10px">Field (reason)</th><th align="left" style="padding:6px 10px">Map</th></tr>
                ${guardRows}
+             </table>`
+          : ""
+      }
+      ${
+        unspecific.length
+          ? `<p style="margin:16px 0 8px;color:#b8860b"><strong>Specificity gaps — a key field echoed none of the owner's own words (reads as a template to its one reader):</strong></p>
+             <table style="border-collapse:collapse;width:100%;font-size:13px">
+               <tr><th align="left" style="padding:6px 10px">Company</th><th align="left" style="padding:6px 10px">Fields with no echo</th><th align="left" style="padding:6px 10px">Map</th></tr>
+               ${specificityRows}
              </table>`
           : ""
       }

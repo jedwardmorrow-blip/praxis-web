@@ -11,6 +11,7 @@ import {
   SESSION_OPENNESS,
   TEAM_SIZES,
   TRUTH_LOCATIONS,
+  extractOwnerEntities,
   fallbackAiResult,
   findGiveawayLeaks,
   firstNameOf,
@@ -18,9 +19,11 @@ import {
   guardReadoutGiveawayAndSkeleton,
   isThinSubmission,
   scoreLeverageMap,
+  specificityReport,
   tierForComposite,
   toPublicResult,
   type GuardEvent,
+  type SpecificityReport,
   type LeverageMapAiResult,
   type LeverageMapInput,
   type LeverageMapScore,
@@ -89,7 +92,13 @@ export async function POST(req: Request) {
     })
   }
 
-  const generated = await generateAiResult(input, score)
+  // Specificity anchors: the owner's own distinctive words, extracted
+  // deterministically and seeded into the prompt as required anchors. Verified
+  // after all guards run (specificityReport below) — the gate measures whether
+  // the FINAL readout the prospect sees still echoes their telling.
+  const entities = extractOwnerEntities(input)
+
+  const generated = await generateAiResult(input, score, entities)
 
   // Deterministic last line on the model's banned-phrase rule (no human reviews
   // the readout before it reaches the prospect). Scrub any survivor across the
@@ -144,8 +153,19 @@ export async function POST(req: Request) {
     console.warn(`[leverage-map] give-away drift: readout names build component(s) ${giveawayFlags.join(", ")} (company=${input.company})`)
   }
 
+  // Specificity gate (measure, never block): does the final guarded readout echo
+  // the owner's own words in the fields that decide whether it reads as THEIRS?
+  // Recorded on the lead + surfaced in the digest; a miss on the two conversion
+  // fields is the strongest template-drift signal we have.
+  const specificity = specificityReport(toPublicResult(aiResult), entities)
+  if (specificity.missing.length) {
+    console.warn(
+      `[leverage-map] specificity gap: no owner-entity echo in ${specificity.missing.join(", ")} (company=${input.company})`,
+    )
+  }
+
   const token = crypto.randomUUID().replace(/-/g, "")
-  const lead = await saveLead(input, score, aiResult, token, giveawayFlags, guard.events, variant, isAnonymous)
+  const lead = await saveLead(input, score, aiResult, token, giveawayFlags, guard.events, variant, isAnonymous, specificity)
   const mapToken = lead ? token : null
 
   // Send the prospect email first so its outcome can be reported to Justin and
@@ -196,7 +216,11 @@ function sanitizeInput(raw: unknown): LeverageMapInput {
   }
 }
 
-async function generateAiResult(input: LeverageMapInput, score: LeverageMapScore): Promise<LeverageMapAiResult> {
+async function generateAiResult(
+  input: LeverageMapInput,
+  score: LeverageMapScore,
+  entities: string[] = [],
+): Promise<LeverageMapAiResult> {
   const fallback = fallbackAiResult(input, score)
   const apiKey = cleanEnv(process.env.OPENAI_API_KEY)
   if (!apiKey) return fallback
@@ -213,7 +237,7 @@ async function generateAiResult(input: LeverageMapInput, score: LeverageMapScore
       model,
       temperature: 0.5,
       response_format: { type: "json_object" },
-      messages: buildLeverageMessages(input, score),
+      messages: buildLeverageMessages(input, score, entities),
     }),
   })
 
@@ -282,6 +306,7 @@ async function saveLead(
   guardEvents: GuardEvent[] = [],
   variant: LeverageVariant = "gated",
   isAnonymous = false,
+  specificity: SpecificityReport | null = null,
 ) {
   const supabaseUrl = cleanEnv(process.env.SUPABASE_URL)
   const supabaseKey = cleanEnv(process.env.SUPABASE_SERVICE_ROLE_KEY)
@@ -334,6 +359,9 @@ async function saveLead(
       anon_purge_after: isAnonymous
         ? new Date(Date.now() + ANON_TTL_DAYS * 24 * 60 * 60 * 1000).toISOString()
         : null,
+      // Specificity gate result: which owner entities were extracted and which
+      // key fields failed to echo any. Read by the email-health digest.
+      specificity: specificity && specificity.entities.length ? specificity : null,
     })
     .select("id")
     .single()

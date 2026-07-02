@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js"
 import { Resend } from "resend"
-import { priceProbeResult, type StoredLeverageMap } from "@/lib/leverage-map"
+import { FREQUENCIES, priceProbeResult, type StoredLeverageMap } from "@/lib/leverage-map"
 
 // Probe return: the readout's first_fix ends in a number the owner reads
 // themselves ("count how many...", "the length of that list..."). This is where
@@ -64,11 +64,18 @@ export async function POST(req: Request) {
   }
 
   const map = lead.leverage_map as StoredLeverageMap
-  const response = priceProbeResult(value, map)
+
+  // The owner can correct the cadence on the map (the quiz answer was a first
+  // guess; the probe is the measurement). Only a known chip key is accepted;
+  // anything else falls back to what they reported in the quiz.
+  const rawFreq = asString(body.frequency)
+  const frequency = rawFreq in FREQUENCIES ? (rawFreq as keyof typeof FREQUENCIES) : map.frequency
+  const response = priceProbeResult(value, { costBand: map.costBand, frequency })
 
   const probeResult = {
     value,
     note: note || null,
+    frequency: frequency || null,
     response,
     at: new Date().toISOString(),
   }
