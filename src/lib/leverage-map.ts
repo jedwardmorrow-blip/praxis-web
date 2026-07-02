@@ -496,6 +496,113 @@ export type StoredLeverageMap = {
   frequency?: keyof typeof FREQUENCIES | ""
 }
 
+// --- Specificity gate -----------------------------------------------------------
+// The banned-phrase / de-tell / give-away layers only BAN generic output; nothing
+// REQUIRES specific output, so a readout can pass every guard while echoing zero
+// of the owner's own words — indistinguishable from a template to the one reader
+// who matters. This makes specificity measurable: extract the distinctive entities
+// from the owner's own free text (their dollar figures, counted units, time
+// windows, proper nouns, trade vocabulary), seed them into the prompt as required
+// anchors, then deterministically verify the key conversion fields echo at least
+// one. Pure string work (no model call), so it is unit-testable and cheap.
+
+// Words that appear constantly in the pattern templates and generic ops prose —
+// echoing one of these proves nothing about specificity.
+const ENTITY_STOPWORDS = new Set([
+  "the", "and", "that", "this", "with", "from", "have", "has", "had", "was", "were",
+  "will", "would", "could", "should", "when", "where", "what", "which", "then",
+  "them", "they", "their", "there", "here", "your", "you", "our", "ours", "its",
+  "it's", "into", "onto", "over", "under", "about", "after", "before", "because",
+  "someone", "something", "anything", "everything", "nothing", "every", "each",
+  "workflow", "system", "systems", "status", "team", "owner", "owners", "business",
+  "customer", "customers", "client", "clients", "problem", "problems", "question",
+  "questions", "answer", "answers", "person", "people", "work", "time", "times",
+  "thing", "things", "week", "weeks", "day", "days", "month", "months", "year",
+  "years", "hour", "hours", "minute", "minutes", "still", "just", "really", "very",
+  "always", "never", "sometimes", "usually", "often", "company", "getting", "keeps",
+])
+
+// Trade / channel vocabulary worth counting as an entity WHEN it appears in the
+// owner's own text (presence in their story is the filter that keeps it theirs).
+const DOMAIN_ENTITY_PATTERN =
+  /\b(?:voicemails?|texts?|emails?|portals?|invoices?|quotes?|tickets?|referrals?|walk-?ins?|dispatch(?:es)?|crews?|trucks?|routes?|installs?|estimates?|warrant(?:y|ies)|inspections?|permits?|batches?|shipments?|deliver(?:y|ies)|spreadsheets?|whiteboards?|clipboards?|binders?|sticky notes?|paper(?:work)?)\b/gi
+
+export type SpecificityReport = {
+  entities: string[]
+  echoes: Record<string, string[]>
+  missing: string[]
+}
+
+// The fields whose specificity decides whether the artifact reads as THEIRS.
+const SPECIFICITY_FIELDS: Array<keyof PublicLeverageResult> = [
+  "operator_readout",
+  "where_it_costs_you",
+  "first_fix",
+  "what_the_session_unlocks",
+]
+
+export function extractOwnerEntities(input: LeverageMapInput): string[] {
+  const text = `${input.momentStory ?? ""} ${input.perfectEmployee ?? ""}`
+  const out = new Set<string>()
+
+  // Dollar figures ("$1,200", "$5k", "$1K-$5K") — the highest-value anchors.
+  for (const m of text.matchAll(/\$\s?[\d,.]+\s?[kKmM]?(?:\s?-\s?\$?[\d,.]+\s?[kKmM]?)?/g)) {
+    out.add(m[0].replace(/\s+/g, ""))
+  }
+
+  // Counted units in their own telling ("12 calls", "3 crews", "45 minutes").
+  for (const m of text.matchAll(
+    /\b\d+\+?\s+(?:minutes?|mins?|hours?|days?|weeks?|months?|calls?|texts?|emails?|jobs?|leads?|cases?|orders?|quotes?|invoices?|customers?|clients?|crews?|trucks?|locations?|stores?|techs?|employees?)\b/gi,
+  )) {
+    out.add(m[0].toLowerCase())
+  }
+
+  // Time windows that place the mess ("after hours", "weekends", "Mondays").
+  for (const m of text.matchAll(
+    /\b(?:mondays?|tuesdays?|wednesdays?|thursdays?|fridays?|saturdays?|sundays?|after[- ]hours|weekends?|overnight|end of (?:day|week|month)|lunch rush|morning rush)\b/gi,
+  )) {
+    out.add(m[0].toLowerCase())
+  }
+
+  // Their trade/channel vocabulary (filter = it appears in THEIR text).
+  for (const m of text.matchAll(DOMAIN_ENTITY_PATTERN)) {
+    out.add(m[0].toLowerCase())
+  }
+
+  // Proper-ish nouns mid-sentence (a person, a system they named, a place) —
+  // skip sentence starts so ordinary capitalization does not pollute the set.
+  for (const sentence of text.split(/(?<=[.!?])\s+/)) {
+    const words = sentence.split(/\s+/)
+    for (let i = 1; i < words.length; i++) {
+      const w = words[i].replace(/[^A-Za-z'-]/g, "")
+      if (/^[A-Z][a-z'-]{2,}$/.test(w) && !ENTITY_STOPWORDS.has(w.toLowerCase())) out.add(w)
+    }
+  }
+
+  // Their trade itself, from businessKind ("dental restoration lab" -> dental, lab).
+  for (const w of (input.businessKind ?? "").toLowerCase().split(/[^a-z]+/)) {
+    if (w.length >= 4 && !ENTITY_STOPWORDS.has(w)) out.add(w)
+  }
+
+  return [...out].slice(0, 12)
+}
+
+// No entities extracted (a terse story) never fails the gate — the gate measures
+// whether the model USED what the owner gave; it cannot manufacture specificity
+// the input did not contain.
+export function specificityReport(result: PublicLeverageResult, entities: string[]): SpecificityReport {
+  if (!entities.length) return { entities, echoes: {}, missing: [] }
+  const echoes: Record<string, string[]> = {}
+  const missing: string[] = []
+  for (const field of SPECIFICITY_FIELDS) {
+    const text = (result[field] ?? "").toLowerCase()
+    const hits = entities.filter((e) => text.includes(e.toLowerCase()))
+    echoes[field] = hits
+    if (!hits.length) missing.push(field)
+  }
+  return { entities, echoes, missing }
+}
+
 // --- Probe-return pricing ------------------------------------------------------
 // The readout's first_fix ends in a number the owner reads themselves. The map
 // page invites them to bring that number back; this prices it. Deterministic on
@@ -531,7 +638,9 @@ export type ProbeResponse = {
 // value is whatever the owner typed ("7", "7 missed calls", "about 12"); the
 // leading number is enough. A non-numeric entry still gets a real response —
 // the point is to keep the conversation going, never to bounce them.
-export function priceProbeResult(value: string, map: StoredLeverageMap): ProbeResponse {
+// Takes only the pricing slice of the stored map so the client-side live
+// preview (probe-return.tsx) can call it without the full payload.
+export function priceProbeResult(value: string, map: Pick<StoredLeverageMap, "costBand" | "frequency">): ProbeResponse {
   const numMatch = value.replace(/,/g, "").match(/(\d+(?:\.\d+)?)/)
   const n = numMatch ? parseFloat(numMatch[1]) : null
   const perYear = map.frequency ? FREQUENCY_PER_YEAR[map.frequency as keyof typeof FREQUENCIES] : 52

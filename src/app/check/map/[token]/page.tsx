@@ -84,7 +84,7 @@ export default async function LeverageMapPage({
 
           <LeverageMapReadout company={map.company} score={map.score} result={map.result} />
 
-          <ProbeReturn token={token} existing={probe} />
+          <ProbeReturn token={token} existing={probe} costBand={map.costBand} frequency={map.frequency} />
 
           <div className="lm-session-next">
             <span>Recommended next step</span>
