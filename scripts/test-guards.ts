@@ -11,6 +11,7 @@ import {
   findSkeletonTells,
   guardReadoutGiveawayAndSkeleton,
   scoreLeverageMap,
+  LEVERAGE_PATTERNS,
   type LeverageMapAiResult,
   type LeverageMapInput,
 } from "../src/lib/leverage-map.ts"
@@ -87,6 +88,54 @@ assert(g3.events.some((e) => e.field === "why_this_is_fixable" && e.reason.start
 const g4 = guardReadoutGiveawayAndSkeleton(fallback, fallback)
 assert(g4.events.length === 0, "clean readout: no guard events")
 assert(g4.result.first_fix === fallback.first_fix && g4.result.why_this_is_fixable === fallback.why_this_is_fixable, "clean readout unchanged")
+
+// --- guard: measurement vocabulary in first_fix is NOT a leak ----------------
+// first_fix is a measurement probe by design (prompt rule 7); "track", "log",
+// "count", "tally", "clock" are its native vocabulary. Treating them as leaks
+// swapped the personalized probe for generic fallback on 2 of the first 2 real
+// live leads (guard_events "giveaway:track") — the regression this pins down.
+const measuring: LeverageMapAiResult = {
+  ...fallback,
+  first_fix:
+    "For one representative day, track every after-hours call and log how long each waited for a real reply. Count how many waited more than 15 minutes; that count is the leak, measured.",
+}
+const g5 = guardReadoutGiveawayAndSkeleton(measuring, fallback)
+assert(g5.result.first_fix === measuring.first_fix, "measurement-verb probe left untouched in first_fix")
+assert(g5.events.length === 0, "no guard events for a measurement probe")
+
+// A buyable patch or build component in first_fix is still a leak.
+const buyable: LeverageMapAiResult = {
+  ...fallback,
+  first_fix: "Set up an auto-responder on your main line so every missed call gets an instant text back.",
+}
+const g6 = guardReadoutGiveawayAndSkeleton(buyable, fallback)
+assert(g6.result.first_fix === fallback.first_fix, "buyable-patch first_fix replaced with fallback")
+assert(g6.events.some((e) => e.field === "first_fix" && e.reason.startsWith("giveaway")), "give-away event recorded for buyable patch")
+
+// The same measurement verbs in what_the_session_unlocks REMAIN a leak there —
+// the unlock must withhold the build, and "tracks response time" names it.
+const unlockLeak: LeverageMapAiResult = {
+  ...fallback,
+  what_the_session_unlocks: "The session builds a system that tracks response time on every channel and logs each lead as it lands.",
+}
+const g7 = guardReadoutGiveawayAndSkeleton(unlockLeak, fallback)
+assert(g7.result.what_the_session_unlocks === fallback.what_the_session_unlocks, "unlock naming the build still replaced")
+assert(g7.events.some((e) => e.field === "what_the_session_unlocks" && e.reason.startsWith("giveaway")), "give-away event recorded for unlock")
+
+// --- fallback probes: per-pattern, distinct, and guard-clean ------------------
+// The fallback first_fix is what a prospect sees when the guard fires, so it must
+// itself be a real probe (not the old shared "map the path" sentence) and must be
+// distinct per pattern — a guard fire must never reintroduce template-sameness.
+const probeTexts = new Set<string>()
+for (const pattern of Object.keys(LEVERAGE_PATTERNS) as Array<keyof typeof LEVERAGE_PATTERNS>) {
+  const patScore = { ...score, primaryPattern: pattern, secondaryPattern: null }
+  const fb = fallbackAiResult(baseInput, patScore)
+  probeTexts.add(fb.first_fix)
+  const check = guardReadoutGiveawayAndSkeleton(fb, fb)
+  assert(check.events.length === 0, `fallback probe for ${pattern} is guard-clean`)
+  assert(/count|tally|clock|list|trace|per job/i.test(fb.first_fix), `fallback probe for ${pattern} ends in something to count`)
+}
+assert(probeTexts.size === Object.keys(LEVERAGE_PATTERNS).length, "all fallback probes are distinct per pattern")
 
 if (fails === 0) {
   console.log("PASS — guard replaces give-away leaks and the skeleton frame with the fallback, exempts give-away-closing and clean prose")

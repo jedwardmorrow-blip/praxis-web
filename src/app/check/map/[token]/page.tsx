@@ -9,7 +9,8 @@ import { Nav } from "@/components/v4/nav"
 import { FooterV4 } from "@/components/v4/footer"
 import { LeverageMapReadout } from "../../leverage-map-readout"
 import { MapActions } from "./map-actions"
-import type { StoredLeverageMap } from "@/lib/leverage-map"
+import { ProbeReturn } from "./probe-return"
+import type { ProbeResponse, StoredLeverageMap } from "@/lib/leverage-map"
 
 export const dynamic = "force-dynamic"
 
@@ -17,7 +18,16 @@ function cleanEnv(value: string | undefined) {
   return (value ?? "").trim().replace(/^"|"$/g, "").replace(/\\n/g, "").replace(/\n/g, "")
 }
 
-async function fetchMap(token: string): Promise<StoredLeverageMap | null> {
+type StoredProbe = {
+  value: string
+  note: string | null
+  response: ProbeResponse | null
+  at: string
+}
+
+type MapRow = { map: StoredLeverageMap; probe: StoredProbe | null }
+
+async function fetchMap(token: string): Promise<MapRow | null> {
   if (!token || token.length < 16) return null
   const url = cleanEnv(process.env.SUPABASE_URL)
   const key = cleanEnv(process.env.SUPABASE_SERVICE_ROLE_KEY)
@@ -26,12 +36,15 @@ async function fetchMap(token: string): Promise<StoredLeverageMap | null> {
   const supabase = createClient(url, key)
   const { data, error } = await supabase
     .from("praxis_leads")
-    .select("leverage_map")
+    .select("leverage_map, probe_result")
     .eq("public_token", token)
     .maybeSingle()
 
   if (error || !data?.leverage_map) return null
-  return data.leverage_map as StoredLeverageMap
+  return {
+    map: data.leverage_map as StoredLeverageMap,
+    probe: (data.probe_result as StoredProbe | null) ?? null,
+  }
 }
 
 export async function generateMetadata({
@@ -40,11 +53,11 @@ export async function generateMetadata({
   params: Promise<{ token: string }>
 }): Promise<Metadata> {
   const { token } = await params
-  const map = await fetchMap(token)
-  if (!map) return { title: "Leverage Map", robots: { index: false } }
+  const row = await fetchMap(token)
+  if (!row) return { title: "Leverage Map", robots: { index: false } }
   return {
-    title: `${map.company} · Leverage Map`,
-    description: `${map.result.pattern_label} — a Praxis Leverage Map.`,
+    title: `${row.map.company} · Leverage Map`,
+    description: `${row.map.result.pattern_label} — a Praxis Leverage Map.`,
     robots: { index: false, follow: false },
     alternates: { canonical: `https://gopraxis.ai/check/map/${token}` },
   }
@@ -56,8 +69,9 @@ export default async function LeverageMapPage({
   params: Promise<{ token: string }>
 }) {
   const { token } = await params
-  const map = await fetchMap(token)
-  if (!map) notFound()
+  const row = await fetchMap(token)
+  if (!row) notFound()
+  const { map, probe } = row
 
   return (
     <div className="v4-page check-page check-map-page">
@@ -69,6 +83,8 @@ export default async function LeverageMapPage({
           </Link>
 
           <LeverageMapReadout company={map.company} score={map.score} result={map.result} />
+
+          <ProbeReturn token={token} existing={probe} />
 
           <div className="lm-session-next">
             <span>Recommended next step</span>

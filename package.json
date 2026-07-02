@@ -14,7 +14,8 @@
     "test:guards": "node --experimental-strip-types scripts/test-guards.ts",
     "test:variant": "node --experimental-strip-types scripts/test-variant.ts",
     "test:benchmark": "node --experimental-strip-types scripts/test-benchmark.ts",
-    "test:unit": "npm run test:tier && npm run test:banned && npm run test:giveaway && npm run test:guards && npm run test:variant && npm run test:benchmark",
+    "test:probe": "node --experimental-strip-types scripts/test-probe-price.ts",
+    "test:unit": "npm run test:tier && npm run test:banned && npm run test:giveaway && npm run test:guards && npm run test:variant && npm run test:benchmark && npm run test:probe",
     "test:integration": "node --experimental-strip-types scripts/test-saveLead-integration.ts"
   },
   "dependencies": {

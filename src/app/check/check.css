@@ -1897,6 +1897,116 @@
   max-width: 880px;
 }
 
+/* Probe return — the loop-closer under the readout. Quieter than the unlock
+   card (gold stays the unlock's crescendo, red stays the booking CTA); the one
+   loud element is the returned number itself. */
+.lm-probe {
+  margin-top: 30px;
+  border: 1px solid var(--rule);
+  background: rgba(3, 16, 31, 0.32);
+  padding: 26px 28px;
+}
+
+.lm-probe-label {
+  display: block;
+  color: var(--gold);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.lm-probe h3 {
+  font-family: var(--font-big-shoulders), "Big Shoulders Display", sans-serif;
+  font-weight: 800;
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 0.94;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+
+.lm-probe p {
+  color: var(--paper-dim);
+  font-size: 16px;
+  line-height: 1.58;
+  margin-top: 12px;
+  max-width: 760px;
+}
+
+.lm-probe-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 18px;
+  max-width: 560px;
+}
+
+.lm-probe-fields input {
+  background: rgba(3, 16, 31, 0.5);
+  border: 1px solid var(--rule);
+  color: var(--paper);
+  padding: 13px 14px;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.lm-probe-fields input::placeholder {
+  color: var(--paper-dim);
+  opacity: 0.7;
+}
+
+.lm-probe-fields input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.lm-probe-fields button {
+  align-self: flex-start;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  cursor: pointer;
+}
+
+.lm-probe-fields button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.lm-probe-hp {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.lm-probe-error {
+  color: var(--red);
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.lm-probe-number {
+  font-family: var(--font-big-shoulders), "Big Shoulders Display", sans-serif;
+  font-weight: 800;
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 0.9;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-top: 6px;
+}
+
+.lm-probe-returned h3 {
+  margin-top: 16px;
+}
+
 .lm-actions {
   display: flex;
   align-items: center;
@@ -2058,8 +2168,29 @@
   .check-map-page nav,
   .check-map-page .check-back-link,
   .check-map-page .lm-session-next,
+  .check-map-page form.lm-probe,
   .check-map-page .lm-actions {
     display: none !important;
+  }
+
+  /* A returned probe number is part of the artifact: print it in light ink.
+     (The empty form above is UI, not artifact, and stays hidden.) */
+  .check-map-page .lm-probe-returned {
+    background: rgba(154, 125, 46, 0.05) !important;
+    border-color: #9a7d2e !important;
+  }
+
+  .check-map-page .lm-probe-returned h3,
+  .check-map-page .lm-probe-returned p {
+    color: var(--light-ink) !important;
+  }
+
+  .check-map-page .lm-probe-returned .lm-probe-label {
+    color: #9a7d2e !important;
+  }
+
+  .check-map-page .lm-probe-returned .lm-probe-number {
+    color: #8f1622 !important;
   }
 
   .check-map-page,

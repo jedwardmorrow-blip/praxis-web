@@ -295,6 +295,10 @@ async function saveLead(
     score,
     result: toPublicResult(aiResult),
     createdAt: new Date().toISOString(),
+    // Lets the probe-return response price the owner's number against their own
+    // reported band and cadence. Chip keys, not prose — no new PII on the map.
+    costBand: input.costBand,
+    frequency: input.frequency,
   }
 
   const supabase = createClient(supabaseUrl, supabaseKey)
