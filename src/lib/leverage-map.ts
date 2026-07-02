@@ -330,6 +330,31 @@ export function scoreLeverageMap(input: LeverageMapInput): LeverageMapScore {
   }
 }
 
+// Deterministic per-pattern fallback probes. These are what a prospect sees when
+// the guard swaps out a leaking model first_fix, so they must BE real probes: a
+// light, time-boxed measurement ending in a number the owner reads themselves,
+// with the small-number pre-empt. One per pattern (never the old shared "map the
+// path" sentence, which was a generic non-probe and identical for everyone).
+// Written to pass the banned-phrase rules and the first_fix give-away guard.
+const FALLBACK_PROBES: Record<LeveragePattern, string> = {
+  owner_bottleneck:
+    "Run a three-day go-dark test: pick one category of routine question that normally comes to you and decline to decide it for three days. Count what the team resolved on their own and what genuinely stalled. The size of the stalled pile is the bottleneck, measured. Even a small pile repeats every week of the year, and small is the cheapest moment to fix it.",
+  lead_leakage:
+    "Run a planted-lead test: over the next couple of days, send yourself a handful of test inquiries at the worst moments, after hours, the weekend, mid-rush, on each channel you take leads from, and clock how long each one waits for a real human reply. The slowest channel and the longest wait is where live leads are dying. Even one slow channel compounds across a year of inquiries.",
+  handoff_fog:
+    "Trace one live job from intake to done and mark every point where the next person had to stop and ask for something that should have travelled with the work. The count of re-asks on that single job is the fog, measured; multiply by your weekly job volume for the real tax. A small count still repeats on every job you run.",
+  tribal_knowledge_risk:
+    "Run a planned-unreachable test: have your key person block off a half-day where they are genuinely unreachable, and have everyone park the questions they would have asked on one list. The length of that list is how often the business stalls on one head. Even a short list is the start of the operating manual that does not exist yet.",
+  reporting_lag:
+    "Pull your last five decisions that were made off a report and ask, with hindsight, whether the number was current and trusted at the time. Count how many ran on stale or unverifiable data. That count is the size of the reporting blind spot, and even one stale-data call a month compounds into real money over a year.",
+  customer_status_gap:
+    "Pick one representative busy day and tally every 'where is my order?' or 'when will you get here?' that comes in, plus roughly how long each took to answer for real. One day sizes the daily tax; multiply by your open days for the yearly drag. A low count on a quiet day still means hundreds of interruptions a year.",
+  tool_fragmentation:
+    "Take one new record, an order, client, or job, and trace it through every place its details get entered. Count each spot where someone re-keys a fact that already existed somewhere else. The re-entry count for that single record is the duplication tax, and it repeats on every record you touch.",
+  repeat_admin_drag:
+    "Pull your last ten completed jobs and count, per job, how many fields someone re-typed that already existed upstream. The average per job, times your monthly volume, is the compounding admin cost, measured from work you already finished. Even one re-typed field per job adds up across a year.",
+}
+
 export function fallbackAiResult(input: LeverageMapInput, score: LeverageMapScore): LeverageMapAiResult {
   const pattern = LEVERAGE_PATTERNS[score.primaryPattern]
   const second = score.secondaryPattern ? LEVERAGE_PATTERNS[score.secondaryPattern].label : null
@@ -344,7 +369,7 @@ export function fallbackAiResult(input: LeverageMapInput, score: LeverageMapScor
     what_you_are_already_doing_right: "You already have a real operating moment to inspect. That is better than starting with a vague AI idea because the leverage can be tied to work people already recognize.",
     where_it_costs_you: `The visible symptom is ${consequence.toLowerCase()}, but the cost is probably hiding in the moments when context has to be rebuilt, ownership is unclear, or the next step waits on a person instead of a system.`,
     what_an_intervention_looks_like: "A useful first intervention would capture the request, the current owner, the needed context, and the next customer or team update in one reusable workflow, with a human review step before anything sensitive goes out.",
-    first_fix: "Map the first request, handoff, decision point, and customer/team update around the selected messy moment.",
+    first_fix: FALLBACK_PROBES[score.primaryPattern],
     why_this_is_fixable: "This is fixable because the issue has a shape: a trigger, a handoff, a source of truth, and a recurring next step. Those are the pieces a lightweight AI-assisted workflow can make visible before it becomes a bigger problem.",
     ninety_day_picture: "In 90 days, the goal is not a flashy AI rollout. The goal is one proven workflow where the team can see status faster, reuse the right context, and spend less time asking who has the answer.",
     what_the_session_unlocks: "The first fix proves the leverage; the session is where the harder part gets built — sequencing the change so it survives a busy week, deciding what to automate versus who to make accountable, and removing the dependency on one person remembering. That is the work that is hard to see from inside the day-to-day, and it is where most of the real leverage actually lives.",
@@ -458,12 +483,92 @@ export function isThinSubmission(input: LeverageMapInput): boolean {
 }
 
 // Shape stored in praxis_leads.leverage_map and rendered by /check/map/[token].
+// costBand/frequency (added with the probe-return loop) let the map price a
+// returned probe number deterministically; both are optional so maps stored
+// before the change keep rendering (they just get the qualitative response).
 export type StoredLeverageMap = {
   company: string
   firstName: string
   score: LeverageMapScore
   result: PublicLeverageResult
   createdAt: string
+  costBand?: keyof typeof COST_BANDS | ""
+  frequency?: keyof typeof FREQUENCIES | ""
+}
+
+// --- Probe-return pricing ------------------------------------------------------
+// The readout's first_fix ends in a number the owner reads themselves. The map
+// page invites them to bring that number back; this prices it. Deterministic on
+// purpose (no model call): the response must never leak, never template-drift,
+// and must render instantly. It annualizes the count by the frequency the owner
+// reported and anchors it to their own cost band when one exists, so the output
+// is arithmetic on THEIR numbers, not generated prose.
+
+const COST_BAND_ANNUAL: Partial<Record<keyof typeof COST_BANDS, { low: number; high: number | null }>> = {
+  under_1k: { low: 0, high: 12_000 },
+  one_to_five: { low: 12_000, high: 60_000 },
+  five_to_twenty: { low: 60_000, high: 240_000 },
+  twenty_plus: { low: 240_000, high: null },
+}
+
+const FREQUENCY_PER_YEAR: Record<keyof typeof FREQUENCIES, number> = {
+  daily: 250,
+  weekly: 52,
+  monthly: 12,
+  occasional: 6,
+}
+
+function formatDollars(n: number): string {
+  if (n >= 1000) return `$${Math.round(n / 1000)}K`
+  return `$${n}`
+}
+
+export type ProbeResponse = {
+  headline: string
+  body: string
+}
+
+// value is whatever the owner typed ("7", "7 missed calls", "about 12"); the
+// leading number is enough. A non-numeric entry still gets a real response —
+// the point is to keep the conversation going, never to bounce them.
+export function priceProbeResult(value: string, map: StoredLeverageMap): ProbeResponse {
+  const numMatch = value.replace(/,/g, "").match(/(\d+(?:\.\d+)?)/)
+  const n = numMatch ? parseFloat(numMatch[1]) : null
+  const perYear = map.frequency ? FREQUENCY_PER_YEAR[map.frequency as keyof typeof FREQUENCIES] : 52
+  const band = map.costBand ? COST_BAND_ANNUAL[map.costBand as keyof typeof COST_BANDS] : undefined
+
+  if (n === null) {
+    return {
+      headline: "That is the picture the probe was built to surface.",
+      body: "Most owners never get this far: the mess stays a feeling instead of a fact. What you just wrote down is the starting line for the session, where it gets sized in dollars and the fix gets designed around your actual workflow.",
+    }
+  }
+
+  const annual = Math.round(n * perYear)
+  const annualLine =
+    map.frequency === "daily"
+      ? `${n} on a typical day is roughly ${annual.toLocaleString()} instances a year.`
+      : map.frequency === "monthly"
+        ? `${n} a month is roughly ${annual.toLocaleString()} a year.`
+        : map.frequency === "occasional"
+          ? `Even occasionally, ${n} per occurrence stacks up across a year.`
+          : `${n} a week is roughly ${annual.toLocaleString()} a year.`
+
+  const costLine = band
+    ? band.high
+      ? ` Against the ${COST_BANDS[map.costBand as keyof typeof COST_BANDS]} cost you reported, that is ${formatDollars(band.low)} to ${formatDollars(band.high)} a year already walking out the door, and now you know which door.`
+      : ` Against the ${COST_BANDS[map.costBand as keyof typeof COST_BANDS]} cost you reported, that is ${formatDollars(band.low)}+ a year already walking out the door, and now you know which door.`
+    : " Put your own cost on each instance and multiply: that is the yearly number this mess has been quietly charging you."
+
+  const smallLine =
+    n <= 2
+      ? " A small count is not an all-clear: it compounds every cycle, and small is the cheapest moment to close it."
+      : ""
+
+  return {
+    headline: n <= 2 ? "A small number that compounds is still a leak." : "You just turned a feeling into a number.",
+    body: `${annualLine}${costLine}${smallLine} This is exactly the number the 30-minute call is built around: not whether the leak exists, you just proved it, but what closing it is worth and what to build first.`,
+  }
 }
 
 // --- Banned-phrase guard -----------------------------------------------------
@@ -619,15 +724,41 @@ const GIVEAWAY_BUILD_WORDS = [
   "flags the",
 ]
 
+// first_fix is a MEASUREMENT PROBE by design (prompt rule 7: "a time-boxed
+// measurement... ending in a concrete number"), so measurement verbs — track,
+// log, count, tally, clock — are its native vocabulary, NOT a give-away. Treating
+// them as leaks made the guard swap the personalized probe for generic fallback
+// prose on 2 of the first 2 real live leads (guard_events reason "giveaway:track"),
+// reintroducing the exact template-sameness the guard exists to prevent, on the
+// most conversion-critical field. The give-away in a probe is different in kind:
+// naming a BUYABLE PATCH ("set up an auto-responder") or a BUILD COMPONENT
+// ("a dashboard that..."), so first_fix gets its own list without the
+// measurement verbs.
+const GIVEAWAY_PROBE_WORDS = [
+  "dashboard",
+  "single view",
+  "routes each",
+  "auto-route",
+  "auto-update",
+  "auto-reply",
+  "auto-responder",
+  "auto-text",
+  "answering service",
+  "off-the-shelf",
+  "alert",
+  "flags each",
+  "flags the",
+]
+
 const GIVEAWAY_NEGATION = /\b(no|not|never|isn'?t|aren'?t|won'?t|can'?t|cannot|without|instead of|beyond|more than|rather than)\b/i
 
-export function findGiveawayLeaks(text: string): string[] {
+export function findGiveawayLeaks(text: string, words: readonly string[] = GIVEAWAY_BUILD_WORDS): string[] {
   if (!text) return []
   const hits = new Set<string>()
   for (const sentence of text.split(/(?<=[.!?])\s+/)) {
     if (GIVEAWAY_NEGATION.test(sentence)) continue // closing construction, not a leak
     const lower = sentence.toLowerCase()
-    for (const w of GIVEAWAY_BUILD_WORDS) {
+    for (const w of words) {
       if (lower.includes(w)) hits.add(w)
     }
   }
@@ -677,7 +808,13 @@ export function findSkeletonTells(text: string): string[] {
 // build-component word here lets a capable owner infer the system and skip the call.
 // (operator_readout / where_it_costs_you are mirror/cost fields where a build word is
 // drift, not a give-away — left to findGiveawayLeaks observability, not nuked.)
-const GIVEAWAY_GUARDED_FIELDS: Array<keyof PublicLeverageResult> = ["first_fix", "what_the_session_unlocks"]
+// Per-field word lists: what_the_session_unlocks must withhold the build, so any
+// un-negated build word is a leak; first_fix is a measurement probe, so only
+// buyable-patch / build-component words count (measurement verbs are its job).
+const GIVEAWAY_GUARDED_FIELDS: Array<{ field: keyof PublicLeverageResult; words: readonly string[] }> = [
+  { field: "first_fix", words: GIVEAWAY_PROBE_WORDS },
+  { field: "what_the_session_unlocks", words: GIVEAWAY_BUILD_WORDS },
+]
 
 // Public prose fields scanned for the skeleton frame (short label fields excluded).
 const SKELETON_GUARDED_FIELDS: Array<keyof PublicLeverageResult> = [
@@ -703,8 +840,8 @@ export function guardReadoutGiveawayAndSkeleton(
   const guarded: LeverageMapAiResult = { ...result }
   const replaced = new Set<keyof PublicLeverageResult>()
 
-  for (const field of GIVEAWAY_GUARDED_FIELDS) {
-    const leaks = findGiveawayLeaks(result[field])
+  for (const { field, words } of GIVEAWAY_GUARDED_FIELDS) {
+    const leaks = findGiveawayLeaks(result[field], words)
     if (leaks.length) {
       guarded[field] = fallback[field]
       replaced.add(field)
