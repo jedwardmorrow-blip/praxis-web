@@ -105,7 +105,16 @@ function labelInput(input: LeverageMapInput) {
   }
 }
 
-export function buildLeverageMessages(input: LeverageMapInput, score: LeverageMapScore): ChatMessage[] {
+// entities: the owner's own distinctive words (dollar figures, counted units,
+// time windows, proper nouns, trade vocabulary) extracted deterministically by
+// extractOwnerEntities. Seeded as REQUIRED anchors so the key conversion fields
+// echo the owner's telling, then verified after generation by specificityReport.
+export function buildLeverageMessages(input: LeverageMapInput, score: LeverageMapScore, entities: string[] = []): ChatMessage[] {
+  const anchorRule = entities.length
+    ? ` ANCHOR RULE — THE OWNER'S OWN WORDS: these exact terms come verbatim from the owner's story: ${entities
+        .map((e) => `"${e}"`)
+        .join(", ")}. Each of operator_readout, where_it_costs_you, first_fix, and what_the_session_unlocks MUST naturally work in at least one of these verbatim (different ones across fields where possible). Weave them in as a sharp operator would quote the owner back to themselves — never as a list, never forced. A readout that echoes none of the owner's own words reads as a template no matter how well it is written.`
+    : ""
   return [
     {
       role: "system",
@@ -121,7 +130,8 @@ export function buildLeverageMessages(input: LeverageMapInput, score: LeverageMa
         "(7) THE FIRST FIX IS A LIGHT PROBE, NOT THE FIX — first_fix is a small, time-boxed experiment that CONFIRMS the binding constraint is real and SIZES what it costs, ending in a concrete number / count / pass-fail the owner reads themselves. Use the LIGHTEST probe that yields a number and VARY the mechanism off pattern_playbook.first_fix_archetype — a one-shot planted test, a look-back audit of records they already have, a single-job trace, a go-dark / planned-unreachable test, or a one-day tally — NOT always 'log it for a week and count' (a week of fresh logging is unpaid homework an attention-starved owner skips; prefer one afternoon or a retrospective pull where the archetype allows). It is explicitly NOT the solution: never an off-the-shelf tool they could just buy and run alone (that lets them solve it without you), and never a description of the paid build (that gives the system away). Pre-empt the small-number objection: note that even a SMALL count compounds across the year and that a small leak is the cheapest possible moment to close — so a low number argues FOR acting, not against it. The number should feel worth talking through, but do NOT end every readout with the identical 'bring the number to the session' line — vary that close or drop it; it has become a stock tell. " +
         "(8) SHOW THEM SOMETHING THEY CANNOT SEE — what_you_cannot_see_yet is the imagination-gap move: name ONE thing the owner could not have written themselves, either (a) how this loss COMPOUNDS — this month's small leak becoming next quarter's lost relationship, dead referral pipeline, or eroded reputation — or (b) an ADJACENT problem the SAME fix silently also kills (e.g. fixing lead response also fixes which marketing spend you can trust). It must NOT restate where_it_costs_you; it must reframe the size or reach of the problem so the owner thinks 'I hadn't connected those.' Do NOT default to the 'quietly erodes referrals / reputation, and the fix also reveals your marketing spend' two-part shape, and do NOT open with 'this doesn't just cost X, it also Y' or 'isn't just A, it's B' — that contrast construction is the tell. Instead lead STRAIGHT with the downstream consequence itself, a concrete near-future scene, or the named adjacency, and vary the move across prospects (a pure compounding time-bomb, a single named adjacency, or a structural / competitive risk). One or two sharp sentences. " +
         "(9) BE SKIMMABLE — a busy owner scans before they read. operator_readout must OPEN with one short, plain sentence that names the binding constraint in their own words (gettable at a glance), then at most two more sentences. Keep where_it_costs_you, what_you_cannot_see_yet, and what_the_session_unlocks to 2-3 tight sentences each. No section is a wall of text; cut every sentence that does not earn its place. Lead with the point, then support it. " +
-        "Build first_fix off pattern_playbook.first_fix_archetype and what_the_session_unlocks off pattern_playbook.session_owns so the structure fits this pattern, not a generic template. Also surface one second-order cost they probably have not priced, varying its kind to the business (wasted marketing spend, warranty/contract bleed, churn, lost referrals, rework hours).",
+        "Build first_fix off pattern_playbook.first_fix_archetype and what_the_session_unlocks off pattern_playbook.session_owns so the structure fits this pattern, not a generic template. Also surface one second-order cost they probably have not priced, varying its kind to the business (wasted marketing spend, warranty/contract bleed, churn, lost referrals, rework hours)." +
+        anchorRule,
     },
     {
       role: "user",

@@ -1979,6 +1979,42 @@
   cursor: default;
 }
 
+.lm-probe-freq {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lm-probe-freq span {
+  color: var(--gold);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.lm-probe-freq select {
+  background: rgba(3, 16, 31, 0.5);
+  border: 1px solid var(--rule);
+  color: var(--paper);
+  padding: 12px 14px;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.lm-probe-freq select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.lm-probe-preview {
+  color: var(--gold);
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
 .lm-probe-hp {
   position: absolute !important;
   left: -9999px !important;
